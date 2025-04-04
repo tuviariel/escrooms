@@ -1,10 +1,10 @@
-// import React, { Suspense } from "react";
+import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router";
-import CryptoDashboard from "../pages/CryptoDashboard";
+import Dashboard from "../pages/Dashboard";
 import { route_paths } from "../util/config";
 const DASHBOARD = route_paths["DASHBOARD"];
-// const DETAIL = route_paths['DETAIL'];
-// const Detail = React.lazy(() => import("../pages/...."));
+const ROOM = route_paths["ESCROOM"];
+const Room = React.lazy(() => import("../pages/Room"));
 // import Add from "./pages/....";
 /**
  * the app's router center- currently only one main route ('/')
@@ -15,13 +15,13 @@ const DASHBOARD = route_paths["DASHBOARD"];
 export default function AppRoutes() {
     return (
         <Router>
-            {/* <Suspense fallback={<div>Loading...</div>}> */}
-            <Routes>
-                {/* <Route path="/add" element={<Add />} /> */}
-                {/* <Route path={DETAIL} element={<Detail />} /> */}
-                <Route path={DASHBOARD} element={<CryptoDashboard />} />
-            </Routes>
-            {/* </Suspense> */}
+            <Suspense fallback={<div>Loading...</div>}>
+                <Routes>
+                    {/* <Route path="/add" element={<Add />} /> */}
+                    <Route path={ROOM} element={<Room />} />
+                    <Route path={DASHBOARD} element={<Dashboard />} />
+                </Routes>
+            </Suspense>
         </Router>
     );
 }

@@ -1,6 +1,6 @@
 import { ReactElement } from "react";
 import useErrorBoundary from "../../hooks/useErrorBoundary";
-import loading from "../../assets/images/crypto.jpeg";
+import loading from "../../assets/images/loading.gif";
 interface ErrorBoundaryFallbackProps {
     children: ReactElement;
 }

@@ -5,5 +5,5 @@ export const config = {
 
 export const route_paths = {
     DASHBOARD: "/",
-    DETAIL: "/detail/:id",
+    ESCROOM: "/room/:id",
 };

@@ -3,9 +3,7 @@ import { createContext, ReactNode, useContext, useState } from "react";
 export interface ListObject {
     id: string;
     name: string;
-    current_price: number;
     image: string;
-    price_change_percentage_24h: number;
 }
 
 interface ContextType {
@@ -18,7 +16,7 @@ const AppContext = createContext<ContextType | undefined>(undefined);
 interface ContextProviderProps {
     children: ReactNode;
 }
-// The CryptoProvider wrapped around the app:
+// The Provider wrapped around the app:
 const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     const [modalCurrencyObject, setModalCurrencyObject] = useState<ListObject | undefined>();
     console.log(modalCurrencyObject);
