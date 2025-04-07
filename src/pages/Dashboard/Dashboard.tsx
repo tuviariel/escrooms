@@ -43,7 +43,7 @@ export const Dashboard = () => {
         <>
             <h2 className="font-semibold text-3xl mb-12 underline">Educational Escape Rooms</h2>
             {roomsList.length > 0 ? (
-                <div className="grid grid-cols-3 gap-5 h-52 w-56">
+                <div className="grid grid-cols-3 gap-10 px-10">
                     {roomsList.map((item) => {
                         return (
                             <GameCard

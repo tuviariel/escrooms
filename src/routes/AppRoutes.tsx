@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 import Dashboard from "../pages/Dashboard";
+import NavBar from "../components/Navbar";
 import { route_paths } from "../util/config";
 const DASHBOARD = route_paths["DASHBOARD"];
 const ROOM = route_paths["ESCROOM"];
@@ -17,9 +18,11 @@ export default function AppRoutes() {
         <Router>
             <Suspense fallback={<div>Loading...</div>}>
                 <Routes>
-                    {/* <Route path="/add" element={<Add />} /> */}
-                    <Route path={ROOM} element={<Room />} />
-                    <Route path={DASHBOARD} element={<Dashboard />} />
+                    <Route path="/" element={<NavBar />}>
+                        {/* <Route path="/add" element={<Add />} /> */}
+                        <Route path={ROOM} element={<Room />} />
+                        <Route path={DASHBOARD} element={<Dashboard />} />
+                    </Route>
                 </Routes>
             </Suspense>
         </Router>

@@ -1,14 +1,8 @@
-import { useLocation, useNavigate } from "react-router";
+import NumbersTemplate from "../../components/NumbersTemplate";
 export const Room = () => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    console.log(location.pathname);
     return (
-        <div
-            onClick={() => {
-                navigate("/");
-            }}>
-            {location.pathname}
-        </div>
+        <>
+            <NumbersTemplate />
+        </>
     );
 };

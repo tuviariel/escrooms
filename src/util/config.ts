@@ -4,6 +4,6 @@ export const config = {
 };
 
 export const route_paths = {
-    DASHBOARD: "/",
-    ESCROOM: "/room/:id",
+    DASHBOARD: "",
+    ESCROOM: "room/:id",
 };

@@ -9,12 +9,13 @@ export const GameCard: React.FC<ListObject> = (props) => {
     };
     return (
         <div
-            className="relative border-black rounded-2xl "
+            className="relative border border-black rounded-2xl h-36 w-full cursor-pointer"
+            title={`Open "${name}"`}
             onClick={() => {
                 openRoom(id);
             }}>
             <div className="absolute">{name}</div>
-            <img src={image} alt={name} className="" />
+            <img src={image} alt="" className="" />
         </div>
     );
 };
