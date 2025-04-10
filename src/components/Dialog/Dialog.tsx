@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 interface DialogProps {
     open: boolean;
-    setOpen: (e: undefined) => void;
+    setOpen: (e: boolean) => void;
     size: string;
     data: string;
     disableOverlayClose: boolean;
@@ -25,7 +25,7 @@ export const Dialog: React.FC<DialogProps> = (props) => {
     return (
         <div
             className={open ? "fixed z-20 overflow-y-auto w-screen inset-0" : "hidden"}
-            onClick={disableOverlayClose ? () => setOpen(undefined) : (e) => e.stopPropagation()}>
+            onClick={disableOverlayClose ? () => setOpen(false) : (e) => e.stopPropagation()}>
             <div className="flex h-screen items-center justify-center backdrop-blur-lg">
                 <div
                     className={`w-full p-6 backdrop-blur-3xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0`}>
@@ -43,7 +43,7 @@ export const Dialog: React.FC<DialogProps> = (props) => {
                         }`}>
                         <div className={`flex flex-col h-max p-5 items-center`}>
                             <div
-                                onClick={() => setOpen(undefined)}
+                                onClick={() => setOpen(false)}
                                 className="ml-auto h-10 w-10 text-xl border-1 hover:border-2 rounded-full border-black px-3 pt-1 flex cursor-pointer font-bold">
                                 X
                             </div>
