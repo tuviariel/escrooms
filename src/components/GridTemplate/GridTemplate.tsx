@@ -1,10 +1,10 @@
 import { useState } from "react";
-import DigitalNumbers from "../DigitalNumbers";
+// import DigitalNumbers from "../DigitalNumbers";
 import Dialog from "../Dialog";
 import HintChat from "../HintChat";
 import { quizDataProps } from "../../pages/Room/Room";
 
-export const NumbersTemplate = (props: quizDataProps) => {
+export const GridTemplate = (props: quizDataProps) => {
     const { data, index } = props;
     const [result, setResult] = useState("");
     const [open, setOpen] = useState(false);
@@ -19,7 +19,8 @@ export const NumbersTemplate = (props: quizDataProps) => {
                 <HintChat hints={data.quiz[index].hints} />
             </div>
             <Dialog open={open} setOpen={setOpen} size="large" disableOverlayClose={false} data="">
-                <DigitalNumbers data={data.quiz[index]} result={result} setResult={setResult} />
+                {/* <DigitalNumbers data={data[index]} result={result} setResult={setResult} /> */}
+                <>here</>
             </Dialog>
         </div>
     );

@@ -4,7 +4,7 @@ import Button from "../Button";
 interface DigitalNumbersProps {
     data: {
         answer: number;
-        riddleImg: string;
+        quizImg: string;
         correctOptions: string[];
         inCorrectOptions: string[];
     };
@@ -71,7 +71,7 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
                                 : data.inCorrectOptions[incorrectI],
                         };
                     });
-                    console.log(arr);
+                    // console.log(arr);
                     create.push(arr);
                 }
                 return create;
@@ -88,15 +88,15 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
     ) => {
         let finished = true;
         Array.from(data.answer.toString()).map((number, i) => {
-            console.log(number);
-            console.log(answerArr[i]);
+            // console.log(number);
+            // console.log(answerArr[i]);
             answerArr[i].map((elem, j) => {
-                console.log(elem, !checkObj[Number(number)].includes(j));
+                // console.log(elem, !checkObj[Number(number)].includes(j));
                 if (
                     (checkObj[Number(number)].includes(j) && elem?.status === false) ||
                     (!checkObj[Number(number)].includes(j) && elem?.status === true)
                 ) {
-                    console.log("wrong");
+                    // console.log("wrong");
                     finished = false;
                     return setResult("Wrong answer! Try again..");
                 }
@@ -117,7 +117,7 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
         };
         setActive(updatedActive);
     };
-    console.log(active);
+    // console.log(active);
     return (
         <div className="bg-gray-100 w-full">
             <div
