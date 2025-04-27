@@ -64,6 +64,7 @@ export const HintChat = (props: hintChatProps) => {
                                 if (item.user === "bot")
                                     return (
                                         <div
+                                            key={i}
                                             className="mr-auto ml-2 text-left bg-amber-400 p-1 rounded-2xl mb-0.5"
                                             ref={i === chat.length - 1 ? lastMessageRef : null}>
                                             {item.text}
@@ -72,6 +73,7 @@ export const HintChat = (props: hintChatProps) => {
                                 else
                                     return (
                                         <div
+                                            key={i}
                                             className="ml-auto mr-2 text-right bg-amber-500 p-1 rounded-2xl mb-0.5"
                                             ref={i === chat.length - 1 ? lastMessageRef : null}>
                                             {item.text}

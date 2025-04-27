@@ -42,9 +42,10 @@ export const Room = () => {
                 <>
                     <div>Room main Show</div>
                     <img src={data.mainImage} alt="mainImage" className="h-full" />
-                    <div onClick={() => setQuizNumber(0)}>first quiz</div>
-                    <div onClick={() => setQuizNumber(1)}>second quiz</div>
+                    <div onClick={() => setQuizNumber(0)}>7segments quiz</div>
+                    <div onClick={() => setQuizNumber(1)}>grid quiz</div>
                     <div onClick={() => setQuizNumber(2)}>third quiz</div>
+                    <div onClick={() => setQuizNumber(3)}>forth quiz</div>
                 </>
             )}
         </>

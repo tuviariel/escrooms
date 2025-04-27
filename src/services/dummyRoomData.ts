@@ -17,7 +17,7 @@ const data = {
         {
             _id: "2",
             type: "gridPlay",
-            answer: 1234,
+            answer: 12345,
             quizImg: "imageURL",
             quizText: "imageURL",
             quizData: ["imageURL"],
