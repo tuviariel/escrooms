@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import DigitalNumber from "../../../DigitalNumber";
+import DigitalNumber from "./DigitalNumber";
 import Button from "../../../Button";
 interface DigitalNumbersProps {
     data: {
