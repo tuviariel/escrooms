@@ -11,7 +11,7 @@ export const GridTemplate = (props: quizDataProps) => {
 
     return (
         <div className="flex flex-col relative h-full min-h-96">
-            <img src={data.quiz[index].quizImg} alt="riddle - error..." className="h-full" />
+            <img src={data.quiz[index].quizImg} alt="riddle - error..." className="h-20" />
             <div className="" onClick={() => setOpen(true)}>
                 grid
             </div>

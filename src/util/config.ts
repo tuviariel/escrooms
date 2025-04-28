@@ -4,7 +4,7 @@ export const config = {
 };
 
 export const route_paths = {
-    DASHBOARD: "",
-    ESCROOM: "room/:id",
-    QUIZ: "room/:id/quiz/:id",
+    DASHBOARD: "/",
+    ESCROOM: "/room/:id",
+    QUIZ: "/room/:id/quiz/:id",
 };

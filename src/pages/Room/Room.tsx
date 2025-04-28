@@ -1,4 +1,5 @@
-import { JSX, useState } from "react";
+import { JSX, useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import NumbersTemplate from "../../components/NumbersTemplate";
 import GridTemplate from "../../components/GridTemplate";
 import data from "../../services/dummyRoomData";
@@ -30,7 +31,17 @@ export const Room = () => {
         "7segments": <NumbersTemplate data={data} index={quizNumber} />,
         gridPlay: <GridTemplate data={data} index={quizNumber} />,
     };
-    console.log(quizNumber, data.quiz[quizNumber]);
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
+            //   } else if (document.documentElement.webkitRequestFullscreen) { // Safari
+            //     document.documentElement.webkitRequestFullscreen();
+            //   } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+            //     document.documentElement.msRequestFullscreen();
+        }
+    }, []);
+    // console.log(quizNumber, data.quiz[quizNumber]);
     return (
         <>
             {quizNumber > -1 ? (
@@ -40,8 +51,13 @@ export const Room = () => {
                 </>
             ) : (
                 <>
-                    <div>Room main Show</div>
-                    <img src={data.mainImage} alt="mainImage" className="h-full" />
+                    <div className="flex">
+                        <div className="ml-3 mr-auto" onClick={() => navigate("/")}>
+                            exit room
+                        </div>
+                        <div className="text-center">Room main Show</div>
+                    </div>
+                    <img src={data.mainImage} alt="mainImage" className="h-20" />
                     <div onClick={() => setQuizNumber(0)}>7segments quiz</div>
                     <div onClick={() => setQuizNumber(1)}>grid quiz</div>
                     <div onClick={() => setQuizNumber(2)}>third quiz</div>

@@ -26,7 +26,7 @@ export const NavBar = () => {
                     className="ml-5"
                 />
             </div>
-            <Outlet />
+            {/* <Outlet /> */}
         </div>
     );
 };

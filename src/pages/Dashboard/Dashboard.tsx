@@ -4,6 +4,7 @@ import GameCard from "../../components/GameCard";
 import Loading from "../../assets/images/loading.gif";
 // import { getRoomsList } from "../../services/service";
 import { ListObject, useAppContext } from "../../contexts/context";
+import NavBar from "../../components/Navbar";
 
 /**
  * Dashboard page- currently the apps main page ('/' route)
@@ -21,6 +22,14 @@ export const Dashboard = () => {
     // const [watchedList, setWatchedList] = useState<ListObject[]>([]);
     const [errorMessage, setErrorMessage] = useState<string>("");
     useEffect(() => {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+            // } else if (document.webkitExitFullscreen) { // Safari
+            //   document.webkitExitFullscreen();
+            // } else if (document.msExitFullscreen) { // IE/Edge
+            //   document.msExitFullscreen();
+        }
+
         //getting info through API service:
         const getList = async () => {
             // try {
@@ -41,6 +50,7 @@ export const Dashboard = () => {
     // console.log(modalCurrencyObject);
     return (
         <>
+            <NavBar />
             <h2 className="font-semibold text-3xl mb-12 underline">Educational Escape Rooms</h2>
             {roomsList.length > 0 ? (
                 <div className="grid grid-cols-3 gap-10 px-10">

@@ -18,11 +18,11 @@ export default function AppRoutes() {
         <Router>
             <Suspense fallback={<div>Loading...</div>}>
                 <Routes>
-                    <Route path="/" element={<NavBar />}>
-                        {/* <Route path="/add" element={<Add />} /> */}
-                        <Route path={ROOM} element={<Room />} />
-                        <Route path={DASHBOARD} element={<Dashboard />} />
-                    </Route>
+                    {/* <Route path="/" element={<NavBar />}> */}
+                    {/* <Route path="/add" element={<Add />} /> */}
+                    <Route path={ROOM} element={<Room />} />
+                    <Route path={DASHBOARD} element={<Dashboard />} />
+                    {/* </Route> */}
                 </Routes>
             </Suspense>
         </Router>
