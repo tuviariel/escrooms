@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Button from "../Button";
+import Button from "../../../Button";
 interface GridProps {
     data: {
         answer: number;

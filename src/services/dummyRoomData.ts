@@ -27,7 +27,7 @@ const data = {
         },
         {
             _id: "3",
-            type: "gridPlay",
+            type: "colorChange",
             answer: 1234,
             quizImg: "imageURL",
             quizText: "imageURL",
@@ -38,7 +38,7 @@ const data = {
         },
         {
             _id: "4",
-            type: "gridPlay",
+            type: "turnRound",
             answer: 1234,
             quizImg: "imageURL",
             quizText: "imageURL",

@@ -1,7 +1,7 @@
 import { JSX, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import NumbersTemplate from "../../components/NumbersTemplate";
-import GridTemplate from "../../components/GridTemplate";
+import NumbersTemplate from "../../components/templates/NumbersTemplate";
+import GridTemplate from "../../components/templates/GridTemplate";
 import data from "../../services/dummyRoomData";
 
 export interface quizDataProps {
