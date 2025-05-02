@@ -2,8 +2,8 @@ import { useState } from "react";
 import HintChat from "../../HintChat";
 import Dialog from "../../Dialog";
 import { quizDataProps } from "../../../pages/Room/Room";
-import ColorChoose from "./ColorChoose";
-export const ColorTemplate = (props: quizDataProps) => {
+import TurnRound from "./TurnRound";
+export const TurnRoundTemplate = (props: quizDataProps) => {
     const { data, index } = props;
     const [result, setResult] = useState("");
     const [open, setOpen] = useState(false);
@@ -12,13 +12,13 @@ export const ColorTemplate = (props: quizDataProps) => {
         <div className="flex flex-col relative h-full min-h-96">
             <img src={data.quiz[index].quizImg} alt="riddle - error..." className="h-20" />
             <div className="" onClick={() => setOpen(true)}>
-                color/image Choose
+                Turn Round...
             </div>
             <div className="fixed right-3 bottom-3">
                 <HintChat hints={data.quiz[index].hints} />
             </div>
             <Dialog open={open} setOpen={setOpen} size="large" disableOverlayClose={false} data="">
-                <ColorChoose data={data.quiz[index]} result={result} setResult={setResult} />
+                <TurnRound data={data.quiz[index]} result={result} setResult={setResult} />
             </Dialog>
         </div>
     );
