@@ -3,6 +3,8 @@ import { useNavigate } from "react-router";
 import NumbersTemplate from "../../components/templates/NumbersTemplate";
 import GridTemplate from "../../components/templates/GridTemplate";
 import data from "../../services/dummyRoomData";
+import ColorTemplate from "../../components/templates/ColorTemplate";
+import TurnRoundTemplate from "../../components/templates/TurnRoundTemplate";
 
 export interface quizDataProps {
     data: {
@@ -16,7 +18,7 @@ export interface quizDataProps {
 interface quizData {
     _id: string;
     type: string;
-    answer: number;
+    answer: string;
     quizImg: string;
     quizText: string;
     quizData: string[];
@@ -30,6 +32,8 @@ export const Room = () => {
     const types: Record<string, JSX.Element> = {
         "7segments": <NumbersTemplate data={data} index={quizNumber} />,
         gridPlay: <GridTemplate data={data} index={quizNumber} />,
+        colorChange: <ColorTemplate data={data} index={quizNumber} />,
+        turnRound: <TurnRoundTemplate data={data} index={quizNumber} />,
     };
     const navigate = useNavigate();
     useEffect(() => {
@@ -51,17 +55,17 @@ export const Room = () => {
                 </>
             ) : (
                 <>
-                    <div className="flex">
+                    <div className="flex flex-col">
                         <div className="ml-3 mr-auto" onClick={() => navigate("/")}>
                             exit room
                         </div>
-                        <div className="text-center">Room main Show</div>
+                        <div className="ml-auto text-center">Room main Show</div>
                     </div>
                     <img src={data.mainImage} alt="mainImage" className="h-20" />
                     <div onClick={() => setQuizNumber(0)}>7segments quiz</div>
                     <div onClick={() => setQuizNumber(1)}>grid quiz</div>
-                    <div onClick={() => setQuizNumber(2)}>third quiz</div>
-                    <div onClick={() => setQuizNumber(3)}>forth quiz</div>
+                    <div onClick={() => setQuizNumber(2)}>color quiz</div>
+                    <div onClick={() => setQuizNumber(3)}>turn round quiz</div>
                 </>
             )}
         </>

@@ -6,7 +6,7 @@ const data = {
         {
             _id: "1",
             type: "7segments",
-            answer: 1234,
+            answer: "1234",
             quizImg: "imageURL",
             quizText: "imageURL",
             quizData: ["imageURL"],
@@ -17,7 +17,7 @@ const data = {
         {
             _id: "2",
             type: "gridPlay",
-            answer: 125,
+            answer: "בדה",
             quizImg: "imageURL",
             quizText: "imageURL",
             quizData: ["imageURL"],
@@ -28,7 +28,7 @@ const data = {
         {
             _id: "3",
             type: "colorChange",
-            answer: 1234,
+            answer: "1234",
             quizImg: "imageURL",
             quizText: "imageURL",
             quizData: ["imageURL"],
@@ -39,7 +39,7 @@ const data = {
         {
             _id: "4",
             type: "turnRound",
-            answer: 1234,
+            answer: "1234",
             quizImg: "imageURL",
             quizText: "imageURL",
             quizData: ["imageURL"],

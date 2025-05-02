@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import Button from "../../../Button";
+import { GridCharObj } from "../../../../util/utils";
 interface GridProps {
     data: {
-        answer: number;
+        answer: string;
         quizImg: string;
         correctOptions: string[];
         inCorrectOptions: string[];
@@ -10,34 +11,10 @@ interface GridProps {
     result: string;
     setResult: (newResult: string) => void;
 }
-interface literalObject {
-    width: number;
-    points: number[][];
-}
+
 export const Grid = (props: GridProps) => {
     const { data, result, setResult } = props;
-    console.log(data);
-    const checkObj: Record<number, literalObject> = {
-        1: { width: 1, points: [[], [1], [4], [7], [10], [13], []] },
-        2: { width: 3, points: [[], [1, 2, 3], [6], [7, 8, 9], [10], [13, 14, 15], []] },
-        3: { width: 3, points: [[], [1, 2, 3], [6], [7, 8, 9], [12], [13, 14, 15], []] },
-        4: {
-            width: 3,
-            points: [[], [1, 3], [4, 6], [7, 8, 9], [12], [15], []],
-        },
-        5: { width: 3, points: [[], [1, 2, 3], [4], [7, 8, 9], [12], [13, 14, 15], []] },
-        6: { width: 3, points: [[], [1, 2, 3], [4], [7, 8, 9], [10, 12], [13, 14, 15], []] },
-        7: { width: 3, points: [[], [1, 2, 3], [6], [9], [12], [15], []] },
-        8: {
-            width: 3,
-            points: [[], [1, 2, 3], [4, 6], [7, 8, 9], [10, 12], [13, 14, 15], []],
-        },
-        9: { width: 3, points: [[], [1, 2, 3], [4, 6], [7, 8, 9], [12], [13, 14, 15], []] },
-        0: {
-            width: 3,
-            points: [[], [1, 2, 3], [4, 6], [7, 9], [10, 12], [13, 14, 15], []],
-        },
-    };
+    // console.log(data);
     const [active, setActive] = useState<
         {
             status: boolean;
@@ -47,23 +24,35 @@ export const Grid = (props: GridProps) => {
     >([]);
     const [disabled, setDisabled] = useState(true);
     useEffect(() => {
-        const setRiddle = () => {
+        const setGrid = () => {
             setActive(() => {
+                let rightAnswer = "";
+                if (/\d/.test(data.answer[0]) || /[a-zA-Z]/.test(data.answer[0])) {
+                    //checking if answer is a number or a letter in English-
+                    rightAnswer = data.answer;
+                } else {
+                    //if it is a letter in hebrew the answer should first be reversed:
+                    for (let i = 0; i < data.answer.length; i++) {
+                        rightAnswer = data.answer[i] + rightAnswer;
+                    }
+                }
+                // console.log(rightAnswer);
                 let create: any[] = [];
                 let correctI = -1,
                     incorrectI = -1,
                     correctMax = data.correctOptions.length - 1,
                     incorrectMax = data.inCorrectOptions.length - 1;
-                for (let j = 0; j < 7; j++) {
+                for (let levelI = 0; levelI < 5; levelI++) {
                     let level: any[] = [];
-                    for (let i = 0; i < data.answer.toString().length; i++) {
-                        let number: string = data.answer.toString()[i];
-                        const arr = new Array(1 + checkObj[Number(number)].width)
+                    for (let charI = 0; charI < rightAnswer.length; charI++) {
+                        let char: string = rightAnswer[charI];
+                        const arr = new Array(
+                            charI === 0 ? GridCharObj[char].width : 1 + GridCharObj[char].width
+                        )
                             .fill(null)
-                            .map((_, i) => {
-                                // console.log(checkObj[Number(number)].points[j - 1]);
-                                const isCorrect = checkObj[Number(number)].points[j].includes(
-                                    (j - 1) * 3 + i
+                            .map((_, IInChar) => {
+                                const isCorrect = GridCharObj[char].points[levelI].includes(
+                                    charI === 0 ? levelI * 4 + IInChar + 1 : levelI * 4 + IInChar
                                 );
                                 isCorrect
                                     ? correctI === correctMax
@@ -81,17 +70,9 @@ export const Grid = (props: GridProps) => {
                                 };
                             });
                         // console.log(arr, i);
-
                         level = level.concat(arr);
                         // console.log(level);
                     }
-                    // console.log(level);
-                    incorrectI === incorrectMax ? (incorrectI = 0) : incorrectI++;
-                    level.push({
-                        status: false,
-                        elem: data.inCorrectOptions[incorrectI],
-                        answer: false,
-                    });
                     create.push(level);
                     level = [];
                 }
@@ -99,7 +80,7 @@ export const Grid = (props: GridProps) => {
                 return create;
             });
         };
-        setRiddle();
+        setGrid();
     }, []);
 
     const checkAnswer = () => {
@@ -131,7 +112,7 @@ export const Grid = (props: GridProps) => {
         };
         setActive(updatedActive);
     };
-    // console.log(active);
+    console.log(active);
     return (
         <div className="bg-gray-100 w-full">
             <div
