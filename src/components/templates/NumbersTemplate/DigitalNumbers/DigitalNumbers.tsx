@@ -1,13 +1,9 @@
 import { useEffect, useState } from "react";
 import DigitalNumber from "./DigitalNumber";
 import Button from "../../../Button";
+import { quizData } from "../../../../pages/Room/Room";
 interface DigitalNumbersProps {
-    data: {
-        answer: number;
-        quizImg: string;
-        correctOptions: string[];
-        inCorrectOptions: string[];
-    };
+    data: quizData;
     // checkAnswer: (
     //     active: {
     //         status: boolean;
@@ -119,7 +115,10 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
     };
     // console.log(active);
     return (
-        <div className="bg-gray-100 w-full">
+        <div className="bg-gray-100 w-full rounded-md">
+            <div className="max-h-96 w-full overflow-auto border-4 border-b-cyan-900 rounded-t-md">
+                <img src={data.quizImg} alt="Quiz Image" className=" scroll-auto max-w-full" />
+            </div>
             <div
                 className={`${
                     active.length < 4 ? "ts:flex" : "ph:flex"
@@ -133,6 +132,7 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
                                   number={number}
                                   toggleSegment={toggleSegment}
                                   amount={active.length}
+                                  category={data.category}
                               />
                           );
                       })

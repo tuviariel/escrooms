@@ -14,26 +14,35 @@ export interface quizDataProps {
         mainImage: string;
     };
     index: number;
+    back: () => void;
 }
-interface quizData {
+export interface quizData {
     _id: string;
     type: string;
     answer: string;
-    quizImg: string;
+    quizImg: string | any;
     quizText: string;
-    quizData: string[];
-    correctOptions: string[];
-    inCorrectOptions: string[];
+    quizData: string[] | any[];
+    category: any[] | null;
+    correctOptions: string[] | any[];
+    inCorrectOptions: string[] | any[];
     hints: string[];
 }
 
 export const Room = () => {
     const [quizNumber, setQuizNumber] = useState<number>(-1);
     const types: Record<string, JSX.Element> = {
-        "7segments": <NumbersTemplate data={data} index={quizNumber} />,
-        gridPlay: <GridTemplate data={data} index={quizNumber} />,
-        colorChange: <ColorTemplate data={data} index={quizNumber} />,
-        turnRound: <TurnRoundTemplate data={data} index={quizNumber} />,
+        "7segments": (
+            <NumbersTemplate data={data} index={quizNumber} back={() => setQuizNumber(-1)} />
+        ),
+        gridPlay: <GridTemplate data={data} index={quizNumber} back={() => setQuizNumber(-1)} />,
+        colorChange: (
+            <ColorTemplate data={data} index={quizNumber} back={() => setQuizNumber(-1)} />
+        ),
+        turnRound: (
+            <TurnRoundTemplate data={data} index={quizNumber} back={() => setQuizNumber(-1)} />
+        ),
+        working: <NumbersTemplate data={data} index={quizNumber} back={() => setQuizNumber(-1)} />,
     };
     const navigate = useNavigate();
     useEffect(() => {
@@ -49,10 +58,7 @@ export const Room = () => {
     return (
         <>
             {quizNumber > -1 ? (
-                <>
-                    <div onClick={() => setQuizNumber(-1)}>Back to main</div>
-                    {types[data.quiz[quizNumber].type]}
-                </>
+                <>{types[data.quiz[quizNumber].type]}</>
             ) : (
                 <>
                     <div className="flex flex-col">
@@ -66,6 +72,7 @@ export const Room = () => {
                     <div onClick={() => setQuizNumber(1)}>grid quiz</div>
                     <div onClick={() => setQuizNumber(2)}>color quiz</div>
                     <div onClick={() => setQuizNumber(3)}>turn round quiz</div>
+                    {/* <div onClick={() => setQuizNumber(4)}>working</div> */}
                 </>
             )}
         </>

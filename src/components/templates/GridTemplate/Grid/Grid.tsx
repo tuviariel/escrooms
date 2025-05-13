@@ -1,13 +1,9 @@
 import { useEffect, useState } from "react";
 import Button from "../../../Button";
 import { GridCharObj } from "../../../../util/utils";
+import { quizData } from "../../../../pages/Room/Room";
 interface GridProps {
-    data: {
-        answer: string;
-        quizImg: string;
-        correctOptions: string[];
-        inCorrectOptions: string[];
-    };
+    data: quizData;
     result: string;
     setResult: (newResult: string) => void;
 }
