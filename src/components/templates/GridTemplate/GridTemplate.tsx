@@ -3,6 +3,7 @@ import Grid from "./Grid";
 import Dialog from "../../Dialog";
 import HintChat from "../../HintChat";
 import { quizDataProps } from "../../../pages/Room/Room";
+import QuizSuccess from "../../QuizSuccess";
 
 export const GridTemplate = (props: quizDataProps) => {
     const { data, index } = props;
@@ -20,6 +21,14 @@ export const GridTemplate = (props: quizDataProps) => {
             </div>
             <Dialog open={open} setOpen={setOpen} size="large" disableOverlayClose={false} data="">
                 <Grid data={data.quiz[index]} result={result} setResult={setResult} />
+            </Dialog>
+            <Dialog
+                open={open}
+                setOpen={setOpen}
+                size="small"
+                disableOverlayClose={true}
+                data="quizSuccess">
+                <QuizSuccess />
             </Dialog>
         </div>
     );

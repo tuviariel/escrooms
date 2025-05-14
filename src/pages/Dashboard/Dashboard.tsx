@@ -17,7 +17,7 @@ export const Dashboard = () => {
     const [roomsList, setRoomsList] = useState<ListObject[]>([
         { id: "rfvwkjf34v43", name: "Sexual Harassment", image: "url" },
         { id: "rfvwkjf34v45", name: "First Aid", image: "url" },
-        { id: "rfvwkjf34v46", name: "Height Working", image: "url" },
+        { id: "kjbhdfvksjdf", name: "Embezzlement and fraud", image: "url" },
     ]);
     // const [watchedList, setWatchedList] = useState<ListObject[]>([]);
     const [errorMessage, setErrorMessage] = useState<string>("");

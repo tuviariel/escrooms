@@ -26,9 +26,16 @@ export const Dialog: React.FC<DialogProps> = (props) => {
         <div
             className={open ? "fixed z-20 overflow-y-auto w-screen inset-0" : "hidden"}
             onClick={disableOverlayClose ? () => setOpen(false) : (e) => e.stopPropagation()}>
-            <div className="flex h-screen items-center justify-center backdrop-blur-lg">
+            <div
+                className={`flex h-screen items-center justify-center ${
+                    data === "quizSuccess" ? "" : "backdrop-blur-lg"
+                }`}>
                 <div
-                    className={`w-full p-6 backdrop-blur-3xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0`}>
+                    className={`w-full p-6 ${
+                        data === "quizSuccess"
+                            ? ""
+                            : "backdrop-blur-3xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
+                    }`}>
                     <div
                         onClick={(e) => e.stopPropagation()}
                         className={`inline-block rounded-l-md bg-white text-left shadow-xl scale-100 overflow-hidden p-1 align-bottom transition-all sm:my-8 sm:align-middle border-2 border-solid border-blue-100

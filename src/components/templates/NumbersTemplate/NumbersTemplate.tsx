@@ -7,6 +7,7 @@ import clock from "../../../assets/images/Clock.png";
 import backArrow from "../../../assets/images/backArrow.svg";
 import pagePaginateArrow from "../../../assets/images/pagePaginate.svg";
 import pagePaginateArrowDisabled from "../../../assets/images/pagePaginateDis.svg";
+import QuizSuccess from "../../QuizSuccess";
 
 export const NumbersTemplate = (props: quizDataProps) => {
     const { data, index, back } = props;
@@ -98,6 +99,14 @@ export const NumbersTemplate = (props: quizDataProps) => {
             </div>
             <Dialog open={open} setOpen={setOpen} size="large" disableOverlayClose={false} data="">
                 <DigitalNumbers data={data.quiz[index]} result={result} setResult={setResult} />
+            </Dialog>
+            <Dialog
+                open={open}
+                setOpen={setOpen}
+                size="small"
+                disableOverlayClose={true}
+                data="quizSuccess">
+                <QuizSuccess />
             </Dialog>
         </div>
     );

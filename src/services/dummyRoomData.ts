@@ -30,7 +30,7 @@ import cat2 from "../assets/images/icons/23.png";
 import cat3 from "../assets/images/icons/22.png";
 const data = {
     _id: "kjbhdfvksjdf",
-    name: "Basic First Aid",
+    name: "מעילות והונאות", //Embezzlement and fraud
     mainImage: "imageURL",
     quiz: [
         {
@@ -60,7 +60,7 @@ const data = {
         {
             _id: "3",
             type: "colorChange",
-            answer: "1234",
+            answer: "1",
             quizImg: "imageURL",
             quizText: "imageURL",
             quizData: ["imageURL"],
