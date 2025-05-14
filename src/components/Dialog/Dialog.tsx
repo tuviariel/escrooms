@@ -1,4 +1,5 @@
 import { ReactElement } from "react";
+import { get_text } from "../../util/language";
 interface DialogProps {
     open: boolean;
     setOpen: (e: boolean) => void;
@@ -51,6 +52,7 @@ export const Dialog: React.FC<DialogProps> = (props) => {
                         <div className={`flex flex-col h-max p-5 items-center`}>
                             <div
                                 onClick={() => setOpen(false)}
+                                title={get_text("close", "he")}
                                 className="ml-auto h-10 w-10 text-xl border-1 hover:border-2 rounded-full border-black px-3 pt-1 flex cursor-pointer font-bold">
                                 X
                             </div>

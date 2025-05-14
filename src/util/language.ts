@@ -1,0 +1,48 @@
+interface TranslationEntry {
+    [key: string]: string;
+}
+interface Translations {
+    [key: string]: TranslationEntry; //{ en: string; he: string; ar: string; };
+}
+
+const appContext: Translations = {
+    welcome: { en: "Welcome", he: "ברוכים הבאים", ar: "" },
+    next_page: { en: "Next Page", he: "לעמוד הבא", ar: "" },
+    no_next_page: { en: "No Next Page", he: "אין עמוד הבא", ar: "" },
+    prev_page: { en: "Previous Page", he: "לעמוד הקודם", ar: "" },
+    no_prev_page: { en: "No Previous Page", he: "אין עמוד הקודם", ar: "" },
+    back_to_main: { en: "Back to main room", he: "חזרה לחדר הראשי", ar: "" },
+    success: { en: "Success!", he: "הצלחה!", ar: "" },
+    answer_quiz: { en: "Enter Quiz Answer", he: "מלא תשובה לחידה", ar: "" },
+    close: { en: "Close", he: "סגירה", ar: "" },
+    close_quiz: { en: "Close Quiz", he: "סגירת חידה", ar: "" },
+    check_answer: { en: "Check Answer", he: "בדיקת התשובה", ar: "" },
+    phone_to_side: {
+        en: "Please turn your phone on its side",
+        he: "אנא סובבו את מכשיר הסלולארי שלכם על צידו",
+        ar: "",
+    },
+    give_hint: { en: "Yes, please give me a hint...", he: "כן, אשמח לקבל רמז בבקשה...", ar: "" },
+    get_hint: { en: "Get Hints", he: "קבלו רמזים", ar: "" },
+    close_hint: { en: "Close Hints", he: "סגור רמזים", ar: "" },
+    do_want_hint: { en: "Do you want a hint?", he: "האם תרצה/י רמז?", ar: "" },
+    do_want_another_hint: { en: "Do you want another hint?", he: "האם תרצה/י רמז נוסף?", ar: "" },
+    cant_help_more: {
+        en: "Sorry, I can't help you any more...",
+        he: "מחילה, לא אוכל לעזור לך יותר...",
+        ar: "",
+    },
+    welcome_hint: {
+        en: "Hello!! I can help you by giving you hints...",
+        he: "שלום! האם אוכל לעזור לך עם רמז?",
+        ar: "",
+    },
+};
+
+export const get_text = (name: string, lang: string) => {
+    return appContext[name]
+        ? appContext[name][lang]
+            ? appContext[name][lang]
+            : appContext[name]["en"]
+        : name;
+};

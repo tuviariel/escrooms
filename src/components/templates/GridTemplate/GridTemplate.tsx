@@ -9,6 +9,7 @@ export const GridTemplate = (props: quizDataProps) => {
     const { data, index } = props;
     const [result, setResult] = useState("");
     const [open, setOpen] = useState(false);
+    const [openLock, setOpenLock] = useState(false);
 
     return (
         <div className="flex flex-col relative h-full min-h-96">
@@ -23,12 +24,12 @@ export const GridTemplate = (props: quizDataProps) => {
                 <Grid data={data.quiz[index]} result={result} setResult={setResult} />
             </Dialog>
             <Dialog
-                open={open}
-                setOpen={setOpen}
+                open={openLock}
+                setOpen={setOpenLock}
                 size="small"
                 disableOverlayClose={true}
                 data="quizSuccess">
-                <QuizSuccess />
+                <QuizSuccess setOpenLock={() => setOpenLock(false)} />
             </Dialog>
         </div>
     );

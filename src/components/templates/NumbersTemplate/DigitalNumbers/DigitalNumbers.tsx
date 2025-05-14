@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import DigitalNumber from "./DigitalNumber";
 import Button from "../../../Button";
 import { quizData } from "../../../../pages/Room/Room";
+import { get_text } from "../../../../util/language";
 interface DigitalNumbersProps {
     data: quizData;
     // checkAnswer: (
@@ -139,11 +140,11 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
                     : "Preparing Riddle"}
             </div>
             <div className={`flex ${active.length < 4 ? "ts:hidden" : "ph:hidden"}`}>
-                Please turn your phone on its side
+                {get_text("phone_on_side", "he")}
             </div>
             <div className={`${active.length < 4 ? "ts:flex" : "ph:flex"} hidden`}>
                 <Button
-                    label="Check Answer"
+                    label={get_text("check_answer", "he")}
                     onClick={() => checkAnswer(active)}
                     disabled={disabled}
                 />

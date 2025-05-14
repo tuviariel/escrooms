@@ -13,8 +13,6 @@ export const ColorTemplate = (props: quizDataProps) => {
     useEffect(() => {
         if (result === "Great!") {
             setOpen(true);
-        } else {
-            setOpen(false);
         }
     }, [result]);
 
@@ -34,7 +32,7 @@ export const ColorTemplate = (props: quizDataProps) => {
                 size="small"
                 disableOverlayClose={true}
                 data="quizSuccess">
-                <QuizSuccess />
+                <QuizSuccess setOpenLock={() => setOpen(false)} />
             </Dialog>
         </div>
     );

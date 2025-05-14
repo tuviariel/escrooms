@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Typing from "../../assets/images/typing.gif";
+import { get_text } from "../../util/language";
 interface chatContent {
     user: string;
     text: string;
@@ -13,8 +14,8 @@ export const HintChat = (props: hintChatProps) => {
     const [open, setOpen] = useState<boolean>(false);
     const [counter, setCounter] = useState<number>(0);
     const [chat, setChat] = useState<chatContent[]>([
-        { user: "bot", text: "Hello!! I can help you by giving you hints..." },
-        { user: "bot", text: "Do you want a hint?" },
+        { user: "bot", text: get_text("welcome_hint", "he") },
+        { user: "bot", text: get_text("do_want_hint", "he") },
     ]);
     // const [userInput, setUserInput] = useState<string>("");
     const [botTyping, setBotTyping] = useState<boolean>(false);
@@ -40,7 +41,7 @@ export const HintChat = (props: hintChatProps) => {
                 let newArray = [...prev];
                 newArray.push({
                     user: "bot",
-                    text: hints[counter] ? hints[counter] : "can't help you any more...",
+                    text: hints[counter] ? hints[counter] : get_text("cant_help_more", "he"),
                 });
                 return newArray;
             });
@@ -53,7 +54,7 @@ export const HintChat = (props: hintChatProps) => {
                         let newArray = [...prev];
                         newArray.push({
                             user: "bot",
-                            text: "Do you want another hint?",
+                            text: get_text("do_want_another_hint", "he"),
                         });
                         return newArray;
                     });
@@ -72,7 +73,8 @@ export const HintChat = (props: hintChatProps) => {
                     className={`bg-amber-500 rounded-full h-12 w-12 p-auto text-pink-800 text-3xl cursor-pointer border-2 ${
                         open ? "border-amber-600" : "border-amber-900"
                     }`}
-                    onClick={() => setOpen((prev) => !prev)}>
+                    onClick={() => setOpen((prev) => !prev)}
+                    title={open ? get_text("close_hint", "he") : get_text("get_hint", "he")}>
                     ?
                 </div>
                 {open && (
@@ -84,6 +86,7 @@ export const HintChat = (props: hintChatProps) => {
                                         <div
                                             key={i}
                                             className="mr-auto ml-2 text-left bg-amber-400 p-1 rounded-2xl mb-0.5"
+                                            dir="rtl"
                                             ref={
                                                 i === chat.length - 1 && !botTyping
                                                     ? lastMessageRef
@@ -97,6 +100,7 @@ export const HintChat = (props: hintChatProps) => {
                                         <div
                                             key={i}
                                             className="ml-auto mr-2 text-right bg-amber-500 p-1 rounded-2xl mb-0.5"
+                                            dir="rtl"
                                             ref={
                                                 i === chat.length - 1 && !botTyping
                                                     ? lastMessageRef
@@ -117,7 +121,7 @@ export const HintChat = (props: hintChatProps) => {
                             )}
                         </div>
 
-                        <div className="flex mt-auto h-12 w-56 border-t-2 border-amber-950">
+                        <div className="flex mt-auto h-12 w-56">
                             {/* <input
                                 type="text"
                                 value={userInput}
@@ -131,11 +135,14 @@ export const HintChat = (props: hintChatProps) => {
                                 } rounded-2xl p-0.5 pl-4 cursor-pointer`}>
                                 send
                             </div> */}
-                            <div
-                                onClick={() => userSend("Yes, please give me a hint...")}
-                                className={`bg-amber-600 rounded-2xl p-0.5 pl-3 mt-2 cursor-pointer border border-t-2`}>
-                                Yes, please give me a hint...
-                            </div>
+                            {!botTyping && (
+                                <div
+                                    dir="rtl"
+                                    onClick={() => userSend(get_text("give_hint", "he"))}
+                                    className={`bg-amber-600 rounded-2xl p-0.5 pl-3 mt-2 cursor-pointer border border-t-2`}>
+                                    {get_text("give_hint", "he")}
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}
