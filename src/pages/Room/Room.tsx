@@ -5,6 +5,7 @@ import GridTemplate from "../../components/templates/GridTemplate";
 import data from "../../services/dummyRoomData";
 import ColorTemplate from "../../components/templates/ColorTemplate";
 import TurnRoundTemplate from "../../components/templates/TurnRoundTemplate";
+import { useQuizContext } from "../../contexts/quizNumberContext";
 
 export interface quizDataProps {
     data: {
@@ -24,13 +25,14 @@ export interface quizData {
     quizText: string;
     quizData: string[] | any[];
     category: any[] | null;
+    orderAnswer: number[] | null;
     correctOptions: string[] | any[];
     inCorrectOptions: string[] | any[];
     hints: string[];
 }
 
 export const Room = () => {
-    const [quizNumber, setQuizNumber] = useState<number>(-1);
+    const { quizNumber, setQuizNumber } = useQuizContext();
     const types: Record<string, JSX.Element> = {
         "7segments": (
             <NumbersTemplate data={data} index={quizNumber} back={() => setQuizNumber(-1)} />

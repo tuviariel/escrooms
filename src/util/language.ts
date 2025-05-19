@@ -13,11 +13,15 @@ const appContext: Translations = {
     no_prev_page: { en: "No Previous Page", he: "אין עמוד הקודם", ar: "" },
     back_to_main: { en: "Back to main room", he: "חזרה לחדר הראשי", ar: "" },
     success: { en: "Success!", he: "הצלחה!", ar: "" },
+    wrong: { en: "Wrong answer... Try again", he: "טעות... נסו שוב", ar: "" },
+    continue: { en: "Your getting there... Continue", he: "אתם בדרך הנכונה... המשיכו", ar: "" },
+    finish: { en: "Finish", he: "לסיום", ar: "" },
     answer_quiz: { en: "Enter Quiz Answer", he: "מלא תשובה לחידה", ar: "" },
     close: { en: "Close", he: "סגירה", ar: "" },
     close_quiz: { en: "Close Quiz", he: "סגירת חידה", ar: "" },
     check_answer: { en: "Check Answer", he: "בדיקת התשובה", ar: "" },
-    phone_to_side: {
+    more_info: { en: "More Info", he: "מידע נוסף", ar: "" },
+    phone_on_side: {
         en: "Please turn your phone on its side",
         he: "אנא סובבו את מכשיר הסלולארי שלכם על צידו",
         ar: "",
@@ -37,6 +41,7 @@ const appContext: Translations = {
         he: "שלום! האם אוכל לעזור לך עם רמז?",
         ar: "",
     },
+    prepare: { en: "Preparing Riddle", he: "מכין את החידה", ar: "" },
 };
 
 export const get_text = (name: string, lang: string) => {

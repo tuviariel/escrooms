@@ -95,12 +95,12 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
                 ) {
                     // console.log("wrong");
                     finished = false;
-                    return setResult("Wrong answer! Try again..");
+                    return setResult(get_text("wrong", "he"));
                 }
             });
         });
         if (finished) {
-            setResult("Great!");
+            setResult(get_text("success", "he"));
         }
     };
     const toggleSegment = (position: number, index: number) => {
@@ -114,10 +114,13 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
         };
         setActive(updatedActive);
     };
+    const func = () => {
+        console.log("finished");
+    };
     // console.log(active);
     return (
         <div className="bg-gray-100 w-full rounded-md">
-            <div className="max-h-96 w-full overflow-auto border-4 border-b-cyan-900 rounded-t-md">
+            <div className="max-h-96 sm:max-h-24 md:max-h-72 w-full overflow-auto border-4 border-b-cyan-900 rounded-t-md">
                 <img src={data.quizImg} alt="Quiz Image" className=" scroll-auto max-w-full" />
             </div>
             <div
@@ -131,24 +134,30 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
                                   key={i}
                                   position={i}
                                   number={number}
-                                  toggleSegment={toggleSegment}
+                                  toggleSegment={
+                                      result !== get_text("success", "he") ? toggleSegment : func
+                                  }
                                   amount={active.length}
                                   category={data.category}
                               />
                           );
                       })
-                    : "Preparing Riddle"}
+                    : get_text("prepare", "he")}
             </div>
             <div className={`flex ${active.length < 4 ? "ts:hidden" : "ph:hidden"}`}>
                 {get_text("phone_on_side", "he")}
             </div>
             <div className={`${active.length < 4 ? "ts:flex" : "ph:flex"} hidden`}>
-                <Button
-                    label={get_text("check_answer", "he")}
-                    onClick={() => checkAnswer(active)}
-                    disabled={disabled}
-                />
-                <div className="pt-2">{result}</div>
+                {result !== get_text("success", "he") && (
+                    <Button
+                        label={get_text("check_answer", "he")}
+                        onClick={() => checkAnswer(active)}
+                        disabled={disabled}
+                    />
+                )}
+                <div className="w-full pt-2 text-center" dir="rtl">
+                    {result}
+                </div>
             </div>
         </div>
     );

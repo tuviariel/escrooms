@@ -3,9 +3,13 @@ import { useCallback, useEffect, useState } from "react";
 import GameCard from "../../components/GameCard";
 import Loading from "../../assets/images/loading.gif";
 // import { getRoomsList } from "../../services/service";
-import { ListObject, useAppContext } from "../../contexts/context";
-import NavBar from "../../components/Navbar";
 
+import NavBar from "../../components/Navbar";
+interface ListObject {
+    id: string;
+    name: string;
+    image: string;
+}
 /**
  * Dashboard page- currently the apps main page ('/' route)
  * @param props none. Gets data by calling the CryptoGecko API.
@@ -13,13 +17,12 @@ import NavBar from "../../components/Navbar";
  */
 
 export const Dashboard = () => {
-    // const { modalCurrencyObject, setModalCurrencyObject } = useAppContext();
+    //TODO- this list should be connected to the DB with all the room's quiz's data...
     const [roomsList, setRoomsList] = useState<ListObject[]>([
         { id: "rfvwkjf34v43", name: "Sexual Harassment", image: "url" },
         { id: "rfvwkjf34v45", name: "First Aid", image: "url" },
         { id: "kjbhdfvksjdf", name: "Embezzlement and fraud", image: "url" },
     ]);
-    // const [watchedList, setWatchedList] = useState<ListObject[]>([]);
     const [errorMessage, setErrorMessage] = useState<string>("");
     useEffect(() => {
         if (document.exitFullscreen) {
@@ -73,14 +76,6 @@ export const Dashboard = () => {
                     <img src={Loading} alt="Loading..." className="mx-auto" />
                 </div>
             )}
-            {/* <Dialog
-                open={modalCurrencyObject?.id ? true : false}
-                setOpen={setModalCurrencyObject}
-                size="large"
-                data="cryptoDetail"
-                disableOverlayClose={true}>
-                <CryptoDetail />
-            </Dialog> */}
         </>
     );
 };

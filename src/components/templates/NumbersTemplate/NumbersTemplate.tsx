@@ -30,7 +30,7 @@ export const NumbersTemplate = (props: quizDataProps) => {
                     className="cursor-pointer h-8 w-8 z-20 md:h-12 md:w-12 absolute left-2 md:-left-12 top-2 p-1 rounded-full bg-gray-100 border-2 hover:border-amber-700"
                     onClick={back}
                 />
-                <QuizData data={data.quiz[index].quizData} />
+                <QuizData data={data.quiz[index]} />
                 <img
                     src={clock}
                     alt={get_text("answer_quiz", "he")}
@@ -51,7 +51,10 @@ export const NumbersTemplate = (props: quizDataProps) => {
                 size="small"
                 disableOverlayClose={true}
                 data="quizSuccess">
-                <QuizSuccess setOpenLock={() => setOpenLock(false)} />
+                <QuizSuccess
+                    data={data.quiz[index].answer}
+                    setOpenLock={() => setOpenLock(false)}
+                />
             </Dialog>
         </div>
     );

@@ -67,7 +67,7 @@ export const HintChat = (props: hintChatProps) => {
     };
 
     return (
-        <>
+        <div className="fixed right-3 bottom-3">
             <div className="relative flex">
                 <div
                     className={`bg-amber-500 rounded-full h-12 w-12 p-auto text-pink-800 text-3xl cursor-pointer border-2 ${
@@ -147,6 +147,6 @@ export const HintChat = (props: hintChatProps) => {
                     </div>
                 )}
             </div>
-        </>
+        </div>
     );
 };
