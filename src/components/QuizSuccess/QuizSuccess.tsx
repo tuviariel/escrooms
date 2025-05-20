@@ -19,11 +19,12 @@ export const QuizSuccess = (props: quizSuccessProps) => {
     const [play, setPlay] = useState(false);
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState("");
-    const [digits, setDigits] = useState(new Array(data.length).fill(0));
+    const [digits, setDigits] = useState(new Array(data.length).fill("0"));
     useEffect(() => {
         honk();
     }, [play]);
     const setNumber = (value: string, index: number) => {
+        setMessage("");
         const updatedDigits = [...digits];
         updatedDigits[index] = value;
         setDigits(updatedDigits);
@@ -79,6 +80,9 @@ export const QuizSuccess = (props: quizSuccessProps) => {
                 ) : (
                     <Button label={get_text("check_answer", "he")} onClick={checkAnswer} />
                 )}
+            </div>
+            <div className="absolute bottom-1 left-0 right-0 flex justify-center">
+                {message && <div className=" text-red-500 mt-2">{message}</div>}
             </div>
         </div>
     );

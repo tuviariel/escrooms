@@ -36,6 +36,11 @@ const appContext: Translations = {
         he: "מחילה, לא אוכל לעזור לך יותר...",
         ar: "",
     },
+    you_can_do_it: {
+        en: "Try using the hints I already gave you. You can do it!!",
+        he: "נסה להשתמש ברמזים שכבר נתתי לך. אתה יכול לעשות את זה!!",
+        ar: "",
+    },
     welcome_hint: {
         en: "Hello!! I can help you by giving you hints...",
         he: "שלום! האם אוכל לעזור לך עם רמז?",

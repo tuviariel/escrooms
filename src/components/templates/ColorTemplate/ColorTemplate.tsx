@@ -51,7 +51,7 @@ export const ColorTemplate = (props: quizDataProps) => {
             {result === get_text("success", "he") && (
                 <Button
                     label={get_text("finish", "he")}
-                    onClick={() => setOpen(true)}
+                    onClick={() => setOpenLock(true)}
                     className="flex w-auto mr-auto ml-10"
                 />
             )}

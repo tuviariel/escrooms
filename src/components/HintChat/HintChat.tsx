@@ -19,6 +19,7 @@ export const HintChat = (props: hintChatProps) => {
     ]);
     // const [userInput, setUserInput] = useState<string>("");
     const [botTyping, setBotTyping] = useState<boolean>(false);
+    const [finished, setFinished] = useState<boolean>(false);
     const lastMessageRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         if (lastMessageRef.current) {
@@ -48,26 +49,25 @@ export const HintChat = (props: hintChatProps) => {
             setCounter((prev) => {
                 return prev + 1;
             });
-            if (hints[counter]) {
-                setTimeout(() => {
-                    setChat((prev) => {
-                        let newArray = [...prev];
-                        newArray.push({
-                            user: "bot",
-                            text: get_text("do_want_another_hint", "he"),
-                        });
-                        return newArray;
+            setTimeout(() => {
+                setChat((prev) => {
+                    let newArray = [...prev];
+                    newArray.push({
+                        user: "bot",
+                        text: hints[counter]
+                            ? get_text("do_want_another_hint", "he")
+                            : get_text("you_can_do_it", "he"),
                     });
-                    setBotTyping(false);
-                }, 3000);
-            } else {
+                    return newArray;
+                });
+                !hints[counter] && setFinished(true);
                 setBotTyping(false);
-            }
+            }, 3000);
         }, 5000);
     };
 
     return (
-        <div className="fixed right-3 bottom-3">
+        <div className="fixed right-3 bottom-3 z-20">
             <div className="relative flex">
                 <div
                     className={`bg-amber-500 rounded-full h-12 w-12 p-auto text-pink-800 text-3xl cursor-pointer border-2 ${
@@ -135,7 +135,7 @@ export const HintChat = (props: hintChatProps) => {
                                 } rounded-2xl p-0.5 pl-4 cursor-pointer`}>
                                 send
                             </div> */}
-                            {!botTyping && (
+                            {!botTyping && !finished && (
                                 <div
                                     dir="rtl"
                                     onClick={() => userSend(get_text("give_hint", "he"))}
