@@ -144,7 +144,7 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
                       })
                     : get_text("prepare", "he")}
             </div>
-            <div className={`flex ${active.length < 4 ? "ts:hidden" : "ph:hidden"}`}>
+            <div className={`flex ${active.length < 4 ? "ts:hidden" : "ph:hidden"}`} dir="rtl">
                 {get_text("phone_on_side", "he")}
             </div>
             <div className={`${active.length < 4 ? "ts:flex" : "ph:flex"} hidden`}>
@@ -153,6 +153,7 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
                         label={get_text("check_answer", "he")}
                         onClick={() => checkAnswer(active)}
                         disabled={disabled}
+                        className="min-w-fit"
                     />
                 )}
                 <div className="w-full pt-2 text-center" dir="rtl">

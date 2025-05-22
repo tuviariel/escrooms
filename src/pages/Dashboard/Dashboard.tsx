@@ -1,14 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
-// import Dialog from "../../components/Dialog";
+import fraudImage from "../../assets/images/הונאות ומעילות.png";
 import GameCard from "../../components/GameCard";
 import Loading from "../../assets/images/loading.gif";
-// import { getRoomsList } from "../../services/service";
-
+import { get_text } from "../../util/language";
 import NavBar from "../../components/Navbar";
-interface ListObject {
+export interface ListObject {
     id: string;
     name: string;
-    image: string;
+    image: string | any;
 }
 /**
  * Dashboard page- currently the apps main page ('/' route)
@@ -19,42 +18,30 @@ interface ListObject {
 export const Dashboard = () => {
     //TODO- this list should be connected to the DB with all the room's quiz's data...
     const [roomsList, setRoomsList] = useState<ListObject[]>([
-        { id: "rfvwkjf34v43", name: "Sexual Harassment", image: "url" },
-        { id: "rfvwkjf34v45", name: "First Aid", image: "url" },
-        { id: "kjbhdfvksjdf", name: "Embezzlement and fraud", image: "url" },
+        { id: "rfvwkjf34v43", name: get_text("sexual_harassment", "he"), image: "url" },
+        { id: "rfvwkjf34v45", name: get_text("first_aid", "he"), image: "url" },
+        { id: "kjbhdfvksjdf", name: get_text("fraud", "he"), image: fraudImage },
+        { id: "rfvwkjf34v43", name: get_text("sexual_harassment", "he"), image: "url" },
+        { id: "rfvwkjf34v45", name: get_text("first_aid", "he"), image: "url" },
+        { id: "kjbhdfvksjdf", name: get_text("fraud", "he"), image: fraudImage },
+        { id: "rfvwkjf34v43", name: get_text("sexual_harassment", "he"), image: "url" },
+        { id: "rfvwkjf34v45", name: get_text("first_aid", "he"), image: "url" },
+        { id: "kjbhdfvksjdf", name: get_text("fraud", "he"), image: fraudImage },
     ]);
     const [errorMessage, setErrorMessage] = useState<string>("");
     useEffect(() => {
         if (document.exitFullscreen) {
             document.exitFullscreen();
-            // } else if (document.webkitExitFullscreen) { // Safari
-            //   document.webkitExitFullscreen();
-            // } else if (document.msExitFullscreen) { // IE/Edge
-            //   document.msExitFullscreen();
         }
 
         //getting info through API service:
-        const getList = async () => {
-            // try {
-            //     let queryParams = { vs_currency: "usd" };
-            //     const res: any = await getRoomsList(queryParams);
-            //     if (!res.data) {
-            //         throw new Error(`Response status: ${res.status}`);
-            //     }
-            //     setRoomsList(res.data);
-            //     // console.log(res);
-            // } catch (err: any) {
-            //     console.error(err.message);
-            //     setErrorMessage(err.message);
-            // }
-        };
+        const getList = async () => {};
         getList();
     }, []);
-    // console.log(modalCurrencyObject);
     return (
-        <>
+        <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-b from-[#f5f5f5] to-[#e0e0e0]">
             <NavBar />
-            <h2 className="font-semibold text-3xl mb-12 underline">Educational Escape Rooms</h2>
+            <h2 className="font-semibold text-3xl mb-12 underline">{get_text("title", "he")}</h2>
             {roomsList.length > 0 ? (
                 <div className="grid grid-cols-3 gap-10 px-10">
                     {roomsList.map((item) => {
@@ -76,6 +63,6 @@ export const Dashboard = () => {
                     <img src={Loading} alt="Loading..." className="mx-auto" />
                 </div>
             )}
-        </>
+        </div>
     );
 };

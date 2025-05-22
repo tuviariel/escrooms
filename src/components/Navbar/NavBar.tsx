@@ -23,7 +23,7 @@ export const NavBar = () => {
                     onClick={() => {
                         location.pathname !== "/" && navigate("/");
                     }}
-                    className="ml-5"
+                    className="ml-5 h-10 w-10"
                 />
             </div>
             {/* <Outlet /> */}

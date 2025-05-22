@@ -47,6 +47,24 @@ const appContext: Translations = {
         ar: "",
     },
     prepare: { en: "Preparing Riddle", he: "מכין את החידה", ar: "" },
+    leave_room: { en: "Leaving The Escape-Room", he: "עזב את החדר", ar: "" },
+    are_you_sure: {
+        en: "Are you sure you want to leave the escape-room?",
+        he: "האם אתה בטוח שברצונך לעזוב את חדר הבריחה?",
+        ar: "",
+    },
+    cancel: { en: "Cancel", he: "ביטול", ar: "" },
+    exit_room: { en: "Exit Room", he: "יציאה מהחדר", ar: "" },
+    enter_room: { en: "Enter Room", he: "כניסה לחדר", ar: "" },
+    sexual_harassment: {
+        en: "PreventingSexual Harassment",
+        he: "מניעת הטרדות מיניות",
+        ar: "",
+    },
+    first_aid: { en: "First Aid", he: "עזרה ראשונה", ar: "" },
+    confirm: { en: "Confirm", he: "אישור", ar: "" },
+    fraud: { en: "Embezzlement and fraud", he: "הונאות ומעילות", ar: "" },
+    title: { en: "Educational Escape Rooms", he: "חדרי בריחה חינוכיים", ar: "" },
 };
 
 export const get_text = (name: string, lang: string) => {

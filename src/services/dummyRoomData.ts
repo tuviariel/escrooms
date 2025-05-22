@@ -39,11 +39,12 @@ import Q3O1 from "../assets/images/colorCards/colors/1.png";
 import Q3O2 from "../assets/images/colorCards/colors/2.png";
 import Q3O3 from "../assets/images/colorCards/colors/3.png";
 import Q3O4 from "../assets/images/colorCards/colors/4.png";
+import MainFraud from "../assets/images/הונאות ומעילות.png";
 
 const data = {
     _id: "kjbhdfvksjdf",
     name: "מעילות והונאות", //Embezzlement and fraud
-    mainImage: "imageURL",
+    mainImage: MainFraud,
     quiz: [
         {
             _id: "1",
@@ -76,7 +77,8 @@ const data = {
             type: "colorChange",
             answer: "1491",
             quizImg: Q3D7,
-            quizText: "עבור כל דמות וסיטואציה חובה לקבוע אם הוא פעל כראוי או אם עבר על איסוי מעילה",
+            quizText:
+                "עבור כל דמות וסיטואציה חובה לקבוע אם הוא פעל כראוי או אם עבר על איסור מעילה. כדאי לעיין בעיתון לקבל משום תובנות...",
             quizData: [Q3D1, Q3D2, Q3D3, Q3D4, Q3D5, Q3D6],
             category: [Q3O1, Q3O2, Q3O3, Q3O4],
             orderAnswer: [0, 2, 1, 3, 2, 0],
@@ -86,7 +88,7 @@ const data = {
                 "לחצו על הדפים השונים עד שיתגלה הדין הנכון של הסיטואציה",
                 "כמובן, שצריך לסיים לתייג את כל הדפים",
                 "לאחר מכן, יש לסדר את הדפים לפי הסדר הנכון- שנבין מה כתוב באמצע",
-                "והקשיבו",
+                "...והקשיבו",
                 "אולי שמישהו יקרא את שמות המשפחה לפי הסדר ומישהוא אחר יקשיב לו...",
             ],
         },

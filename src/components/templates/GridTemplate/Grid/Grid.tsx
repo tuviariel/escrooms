@@ -10,7 +10,7 @@ interface GridProps {
 
 export const Grid = (props: GridProps) => {
     const { data, result, setResult } = props;
-    // console.log(data);
+    console.log(data);
     const [active, setActive] = useState<
         {
             status: boolean;

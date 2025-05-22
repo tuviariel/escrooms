@@ -1,51 +1,34 @@
 import { useState } from "react";
-import backArrow from "../../../assets/images/backArrow.svg";
 import HintChat from "../../HintChat";
 import Dialog from "../../Dialog";
-import { quizDataProps } from "../../../pages/Room/Room";
+import { quizDataP } from "../../../pages/Room/Room";
 import QuizSuccess from "../../QuizSuccess";
 import QuizData from "../../QuizData";
 import { get_text } from "../../../util/language";
 import Button from "../../Button";
 import Puzzle6 from "../../Puzzle6";
 
-export const ColorTemplate = (props: quizDataProps) => {
-    const { data, index, back } = props;
+export const ColorTemplate = (props: quizDataP) => {
+    const { data } = props;
     const [result, setResult] = useState("");
     const [open, setOpen] = useState(false);
     const [openLock, setOpenLock] = useState(false);
 
     return (
-        <div className="flex flex-col relative h-full min-h-96">
-            <div className="relative">
-                <img
-                    src={backArrow}
-                    alt={get_text("back_to_main", "he")}
-                    title={get_text("back_to_main", "he")}
-                    className="cursor-pointer h-8 w-8 z-20 md:h-12 md:w-12 absolute left-2 md:-left-12 top-2 p-1 rounded-full bg-gray-100 border-2 hover:border-amber-700"
-                    onClick={back}
-                />
+        <div className="flex flex-col relative min-h-96">
+            <div className="">
                 {result !== get_text("success", "he") ? (
                     <>
-                        <QuizData data={data.quiz[index]} result={result} setResult={setResult} />
-                        <Dialog
-                            open={open}
-                            setOpen={setOpen}
-                            size="large"
-                            disableOverlayClose={false}
-                            data="">
-                            <div className="max-h-96 overflow-scroll">
-                                <img
-                                    src={data.quiz[index] && data.quiz[index].quizImg}
-                                    alt="mainQuizImage"
-                                    className=""
-                                />
-                            </div>
-                        </Dialog>
-                        <Button onClick={() => setOpen(true)} label={get_text("more_info", "he")} />
+                        <QuizData data={data} result={result} setResult={setResult} />
+                        <div dir="rtl" className="text-center text-2xl font-bold my-2">
+                            {data?.quizText}
+                        </div>
+                        <div className="max-h-96 overflow-y-scroll">
+                            <img src={data?.quizImg} alt="mainQuizImage" className="" />
+                        </div>
                     </>
                 ) : (
-                    <Puzzle6 data={data.quiz[index]} />
+                    <Puzzle6 data={data} />
                 )}
             </div>
             {result === get_text("success", "he") && (
@@ -55,17 +38,14 @@ export const ColorTemplate = (props: quizDataProps) => {
                     className="flex w-auto mr-auto ml-10"
                 />
             )}
-            <HintChat hints={data.quiz[index].hints} />
+            <HintChat hints={data.hints} />
             <Dialog
                 open={openLock}
                 setOpen={setOpenLock}
                 size="small"
                 disableOverlayClose={true}
                 data="quizSuccess">
-                <QuizSuccess
-                    data={data.quiz[index].answer}
-                    setOpenLock={() => setOpenLock(false)}
-                />
+                <QuizSuccess data={data.answer} setOpenLock={() => setOpenLock(false)} />
             </Dialog>
         </div>
     );

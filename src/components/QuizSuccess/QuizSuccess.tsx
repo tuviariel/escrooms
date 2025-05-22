@@ -3,7 +3,7 @@ import closedLock from "../../assets/images/closedLock.png";
 import Button from "../Button";
 import useSound from "use-sound";
 import honkMP3 from "../../assets/sounds/honk.mp3";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuizContext } from "../../contexts/quizNumberContext";
 import { get_text } from "../../util/language";
 // import { quizData } from "../../pages/Room/Room";
@@ -23,6 +23,7 @@ export const QuizSuccess = (props: quizSuccessProps) => {
     useEffect(() => {
         honk();
     }, [play]);
+    const inputRef = useRef(null);
     const setNumber = (value: string, index: number) => {
         setMessage("");
         const updatedDigits = [...digits];
@@ -56,12 +57,15 @@ export const QuizSuccess = (props: quizSuccessProps) => {
                         {digits.map((digit, index) => {
                             return (
                                 <input
+                                    ref={index === 0 ? inputRef : null}
+                                    // autoFocus={index === 0}
+                                    key={index}
                                     type="number"
                                     max={9}
                                     min={0}
                                     className="z-20 bg-stone-400 pl-10 w-22"
                                     onChange={(e) => setNumber(e.target.value, index)}
-                                    value={digits[index]}
+                                    value={digit}
                                 />
                             );
                         })}

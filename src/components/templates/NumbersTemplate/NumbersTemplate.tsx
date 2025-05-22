@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import DigitalNumbers from "./DigitalNumbers";
 import Dialog from "../../Dialog";
 import HintChat from "../../HintChat";
-import { quizDataProps } from "../../../pages/Room/Room";
+import { quizDataP } from "../../../pages/Room/Room";
 import clock from "../../../assets/images/Clock.png";
-import backArrow from "../../../assets/images/backArrow.svg";
 import QuizSuccess from "../../QuizSuccess";
 import { get_text } from "../../../util/language";
 import QuizData from "../../QuizData";
+import Button from "../../Button";
 
-export const NumbersTemplate = (props: quizDataProps) => {
-    const { data, index, back } = props;
+export const NumbersTemplate = (props: quizDataP) => {
+    const { data } = props;
     const [result, setResult] = useState("");
     const [open, setOpen] = useState(false);
     const [openLock, setOpenLock] = useState(false);
@@ -23,14 +23,7 @@ export const NumbersTemplate = (props: quizDataProps) => {
     return (
         <div className="flex flex-col relative h-full min-h-96">
             <div className="relative">
-                <img
-                    src={backArrow}
-                    alt={get_text("back_to_main", "he")}
-                    title={get_text("back_to_main", "he")}
-                    className="cursor-pointer h-8 w-8 z-20 md:h-12 md:w-12 absolute left-2 md:-left-12 top-2 p-1 rounded-full bg-gray-100 border-2 hover:border-amber-700"
-                    onClick={back}
-                />
-                <QuizData data={data.quiz[index]} />
+                <QuizData data={data} />
                 <img
                     src={clock}
                     alt={get_text("answer_quiz", "he")}
@@ -40,10 +33,19 @@ export const NumbersTemplate = (props: quizDataProps) => {
                 />
             </div>
             <div className="fixed right-3 bottom-3">
-                <HintChat hints={data.quiz[index].hints} />
+                <HintChat hints={data.hints} />
             </div>
             <Dialog open={open} setOpen={setOpen} size="large" disableOverlayClose={false} data="">
-                <DigitalNumbers data={data.quiz[index]} result={result} setResult={setResult} />
+                <>
+                    <DigitalNumbers data={data} result={result} setResult={setResult} />
+                    {result === get_text("success", "he") && (
+                        <Button
+                            label={get_text("finish", "he")}
+                            onClick={() => setOpenLock(true)}
+                            className="flex w-auto mr-auto ml-10"
+                        />
+                    )}
+                </>
             </Dialog>
             <Dialog
                 open={openLock}
@@ -51,10 +53,7 @@ export const NumbersTemplate = (props: quizDataProps) => {
                 size="small"
                 disableOverlayClose={true}
                 data="quizSuccess">
-                <QuizSuccess
-                    data={data.quiz[index].answer}
-                    setOpenLock={() => setOpenLock(false)}
-                />
+                <QuizSuccess data={data.answer} setOpenLock={() => setOpenLock(false)} />
             </Dialog>
         </div>
     );
