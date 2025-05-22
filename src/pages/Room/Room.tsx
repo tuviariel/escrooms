@@ -60,7 +60,7 @@ export const Room = () => {
             document.documentElement.requestFullscreen();
         }
     }, []);
-    // console.log(quizNumber, data.quiz[quizNumber]);
+    console.log(window.innerWidth);
     return (
         <>
             {window.innerWidth < 600 ? (
@@ -88,19 +88,18 @@ export const Room = () => {
                             onClick={() => setCheckLeave(true)}>
                             X
                         </div>
+                        {/* quiz #0 */}
                         <div
-                            className="absolute top-10 left-10 h-44 w-44 backdrop-blur-md border-2 hover:border-amber-50 rounded-full cursor-pointer"
+                            className="absolute md:top-5 top-2 md:left-5 left-2 md:h-44 h-16 md:w-64 w-36 backdrop-blur-md border-2 hover:border-amber-50 rounded-full cursor-pointer"
                             onClick={() => setQuizNumber(0)}></div>
+                        {/* quiz #2 */}
                         <div
-                            className="absolute bottom-10 left-20 h-72 w-56  backdrop-blur-md border-2 hover:border-amber-50 -rotate-45 cursor-pointer"
-                            onClick={() => setQuizNumber(2)}>
-                            color quiz
-                        </div>
+                            className="absolute bottom-0 md:left-28 left-12 md:h-72 h-32 md:w-88 w-36 backdrop-blur-md border-2 hover:border-amber-50 cursor-pointer"
+                            onClick={() => setQuizNumber(2)}></div>
+                        {/* quiz #1 */}
                         <div
-                            className="absolute bottom-10 right-20 h-72 w-56 backdrop-blur-md border-2 hover:border-amber-50 rotate-45 cursor-pointer"
-                            onClick={() => setQuizNumber(2)}>
-                            7 segments quiz
-                        </div>
+                            className="absolute bottom-0 md:right-28 right-12 md:h-72 h-32 md:w-88 w-36 backdrop-blur-md border-2 hover:border-amber-50 cursor-pointer"
+                            onClick={() => setQuizNumber(2)}></div>
                     </div>
                     <Dialog
                         open={checkLeave}

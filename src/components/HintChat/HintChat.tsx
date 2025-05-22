@@ -62,15 +62,16 @@ export const HintChat = (props: hintChatProps) => {
                 });
                 !hints[counter] && setFinished(true);
                 setBotTyping(false);
-            }, 3000);
-        }, 5000);
+            }, 2000);
+        }, 4000);
     };
+    //TODO: add ability to check which stage the user got to and give him the relevant hint.
 
     return (
         <div className="fixed right-3 bottom-3 z-20">
             <div className="relative flex">
                 <div
-                    className={`bg-amber-500 rounded-full h-12 w-12 p-auto text-pink-800 text-3xl cursor-pointer border-2 ${
+                    className={`bg-amber-500 rounded-full md:h-12 h-8 md:w-12 w-8 p-auto text-pink-800 md:text-3xl text-xl cursor-pointer border-2 ${
                         open ? "border-amber-600" : "border-amber-900"
                     }`}
                     onClick={() => setOpen((prev) => !prev)}
@@ -78,7 +79,7 @@ export const HintChat = (props: hintChatProps) => {
                     ?
                 </div>
                 {open && (
-                    <div className="absolute bottom-16 right-0 rounded-3xl bg-amber-300 h-80 w-64 flex flex-col p-2">
+                    <div className="absolute md:bottom-14 bottom-10 right-0 rounded-3xl bg-amber-300 md:h-88 h-72 w-64 flex flex-col p-2 md:text-base text-sm">
                         <div className="overflow-auto scrollbar flex flex-col">
                             {chat.map((item, i) => {
                                 if (item.user === "bot")
@@ -139,7 +140,7 @@ export const HintChat = (props: hintChatProps) => {
                                 <div
                                     dir="rtl"
                                     onClick={() => userSend(get_text("give_hint", "he"))}
-                                    className={`bg-amber-600 rounded-2xl p-0.5 pl-3 mt-2 cursor-pointer border border-t-2`}>
+                                    className={`bg-amber-600 rounded-2xl md:p-2 p-1 md:h-10 h-8 md:mt-2 mt-4 cursor-pointer border-black border-b-2`}>
                                     {get_text("give_hint", "he")}
                                 </div>
                             )}

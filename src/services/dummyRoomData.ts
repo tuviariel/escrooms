@@ -39,7 +39,7 @@ import Q3O1 from "../assets/images/colorCards/colors/1.png";
 import Q3O2 from "../assets/images/colorCards/colors/2.png";
 import Q3O3 from "../assets/images/colorCards/colors/3.png";
 import Q3O4 from "../assets/images/colorCards/colors/4.png";
-import MainFraud from "../assets/images/הונאות ומעילות.png";
+import MainFraud from "../assets/images/fraud.png";
 
 const data = {
     _id: "kjbhdfvksjdf",

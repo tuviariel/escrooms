@@ -21,12 +21,12 @@ export const Dashboard = () => {
         { id: "rfvwkjf34v43", name: get_text("sexual_harassment", "he"), image: "url" },
         { id: "rfvwkjf34v45", name: get_text("first_aid", "he"), image: "url" },
         { id: "kjbhdfvksjdf", name: get_text("fraud", "he"), image: fraudImage },
-        { id: "rfvwkjf34v43", name: get_text("sexual_harassment", "he"), image: "url" },
-        { id: "rfvwkjf34v45", name: get_text("first_aid", "he"), image: "url" },
-        { id: "kjbhdfvksjdf", name: get_text("fraud", "he"), image: fraudImage },
-        { id: "rfvwkjf34v43", name: get_text("sexual_harassment", "he"), image: "url" },
-        { id: "rfvwkjf34v45", name: get_text("first_aid", "he"), image: "url" },
-        { id: "kjbhdfvksjdf", name: get_text("fraud", "he"), image: fraudImage },
+        { id: "rfvwkjf34v44", name: get_text("sexual_harassment", "he"), image: "url" },
+        { id: "rfvwkjf34v42", name: get_text("first_aid", "he"), image: "url" },
+        { id: "kjbhdfvksjd4", name: get_text("fraud", "he"), image: fraudImage },
+        { id: "rfvwkjf34v46", name: get_text("sexual_harassment", "he"), image: "url" },
+        { id: "rfvwkjf34v47", name: get_text("first_aid", "he"), image: "url" },
+        { id: "kjbhdfvksjd6", name: get_text("fraud", "he"), image: fraudImage },
     ]);
     const [errorMessage, setErrorMessage] = useState<string>("");
     useEffect(() => {
