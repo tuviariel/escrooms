@@ -11,7 +11,8 @@ import backArrow from "../../assets/images/backArrow.svg";
 import { get_text } from "../../util/language";
 import Dialog from "../../components/Dialog";
 import Button from "../../components/Button";
-
+import { useSelector, useDispatch } from "react-redux";
+import { quizNumberActions } from "../../reduxStor/quizNumber";
 export interface quizDataProps {
     data: {
         _id: string;
@@ -40,7 +41,14 @@ export interface quizData {
 }
 
 export const Room = () => {
-    const { quizNumber, setQuizNumber } = useQuizContext();
+    const quiz = useSelector((state: { quizNumber: { quizNumber: number } }) => state.quizNumber);
+    const quizNumber = quiz?.quizNumber;
+    const dispatch = useDispatch();
+    const setQuizNumber = (number: number) => {
+        dispatch(quizNumberActions.changeQuizNumber(number));
+        console.log("setQuizNumber", number);
+    };
+    // const { quizNumber, setQuizNumber } = useQuizContext();
     const types: Record<string, JSX.Element> = {
         "7segments": <NumbersTemplate data={data.quiz[quizNumber]} />,
         gridPlay: <GridTemplate data={data.quiz[quizNumber]} />,
@@ -60,7 +68,7 @@ export const Room = () => {
             document.documentElement.requestFullscreen();
         }
     }, []);
-    console.log(window.innerWidth);
+    console.log(quizNumber);
     return (
         <>
             {window.innerWidth < 600 ? (

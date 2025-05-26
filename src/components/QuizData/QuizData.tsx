@@ -13,6 +13,7 @@ interface QuizDataProps {
 export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
     const { data, result, setResult } = props;
     const [quizDataPageNumber, setQuizDataPageNumber] = useState(0);
+
     const [colorOrder, setColorOrder] = useState(new Array(data?.quizData.length).fill(-1));
     const imgContainerRef = useRef<HTMLDivElement>(null);
     // const pagination = (clicked: string) => {
