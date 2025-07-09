@@ -132,7 +132,7 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
     const func = () => {
         console.log("finished");
     };
-    console.log(active);
+    // console.log(active);
     return (
         <div className="bg-gray-100 w-full rounded-md">
             <div className="max-h-96 sm:max-h-24 md:max-h-72 w-full overflow-auto border-4 border-b-cyan-900 rounded-t-md">

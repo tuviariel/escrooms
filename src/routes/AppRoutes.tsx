@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 import Dashboard from "../pages/Dashboard";
-import NavBar from "../components/Navbar";
+// import NavBar from "../components/Navbar";
 import { ContextProvider } from "../contexts/quizNumberContext";
 import { route_paths } from "../util/config";
 const DASHBOARD = route_paths["DASHBOARD"];
