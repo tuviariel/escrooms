@@ -6,7 +6,7 @@ import data from "../../services/dummyRoomData";
 import ColorTemplate from "../../components/templates/ColorTemplate";
 import TurnRoundTemplate from "../../components/templates/TurnRoundTemplate";
 import OrderBorderTemplate from "../../components/templates/OrderBorderTemplate";
-import { useQuizContext } from "../../contexts/quizNumberContext";
+// import { useQuizContext } from "../../contexts/quizNumberContext";
 import backArrow from "../../assets/images/backArrow.svg";
 import { get_text } from "../../util/language";
 import Dialog from "../../components/Dialog";

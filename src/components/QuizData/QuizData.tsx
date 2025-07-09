@@ -13,9 +13,27 @@ interface QuizDataProps {
 export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
     const { data, result, setResult } = props;
     const [quizDataPageNumber, setQuizDataPageNumber] = useState(0);
-
-    const [colorOrder, setColorOrder] = useState(new Array(data?.quizData.length).fill(-1));
+    const [colorOrder, setColorOrder] = useState(
+        data?.type === "colorChange" ? new Array(data?.quizData.length).fill(-1) : []
+    );
     const imgContainerRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (
+            data?.type === "colorChange" &&
+            data?._id.toString() &&
+            localStorage.getItem(data?._id.toString())
+        ) {
+            setColorOrder(JSON.parse(localStorage.getItem(data?._id.toString()) || "[]"));
+        }
+        // return () => {
+        //     if (result === get_text("success", "he")) {
+        //         data?._id.toString() && localStorage.removeItem(data?._id.toString());
+        //     } else {
+        //         data?._id.toString() &&
+        //             localStorage.setItem(data?._id.toString(), JSON.stringify(colorOrder));
+        //     }
+        // };
+    }, []);
     // const pagination = (clicked: string) => {
     //     console.log(clicked);
     //     if (clicked === "next") {
@@ -44,6 +62,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                 ? updatedColorOrder[i] + 1
                 : 0;
         setColorOrder(updatedColorOrder);
+        data?._id && localStorage.setItem(data?._id.toString(), JSON.stringify(updatedColorOrder));
     };
 
     const checkOrderAnswer = () => {

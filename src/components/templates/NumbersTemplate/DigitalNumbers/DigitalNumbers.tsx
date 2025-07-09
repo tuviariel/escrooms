@@ -44,38 +44,53 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
     const [disabled, setDisabled] = useState(true);
     useEffect(() => {
         const setRiddle = () => {
-            setActive(() => {
-                let create = [];
-                let correctI = -1,
-                    incorrectI = -1,
-                    correctMax = data.correctOptions.length - 1,
-                    incorrectMax = data.inCorrectOptions.length - 1;
-                for (let i = 0; i < data.answer.toString().length; i++) {
-                    let number: any = data.answer.toString()[i];
-                    const arr = new Array(7).fill(null).map((_, i) => {
-                        const isCorrect = checkObj[Number(number)].includes(i);
-                        isCorrect
-                            ? correctI === correctMax
-                                ? (correctI = 0)
-                                : correctI++
-                            : incorrectI === incorrectMax
-                            ? (incorrectI = 0)
-                            : incorrectI++;
-                        return {
-                            status: false,
-                            elem: isCorrect
-                                ? data.correctOptions[correctI]
-                                : data.inCorrectOptions[incorrectI],
-                        };
-                    });
-                    // console.log(arr);
-                    create.push(arr);
-                }
-                return create;
-            });
+            const check = localStorage.getItem(data?._id);
+            if (check && check !== "[]") {
+                console.log("localStorage", check);
+                setActive(JSON.parse(localStorage.getItem(data?._id) || "[]"));
+            } else {
+                setActive(() => {
+                    let create = [];
+                    let correctI = -1,
+                        incorrectI = -1,
+                        correctMax = data.correctOptions.length - 1,
+                        incorrectMax = data.inCorrectOptions.length - 1;
+                    for (let i = 0; i < data.answer.toString().length; i++) {
+                        let number: any = data.answer.toString()[i];
+                        const arr = new Array(7).fill(null).map((_, i) => {
+                            const isCorrect = checkObj[Number(number)].includes(i);
+                            isCorrect
+                                ? correctI === correctMax
+                                    ? (correctI = 0)
+                                    : correctI++
+                                : incorrectI === incorrectMax
+                                ? (incorrectI = 0)
+                                : incorrectI++;
+                            return {
+                                status: false,
+                                elem: isCorrect
+                                    ? data.correctOptions[correctI]
+                                    : data.inCorrectOptions[incorrectI],
+                            };
+                        });
+                        // console.log(arr);
+                        create.push(arr);
+                    }
+                    return create;
+                });
+            }
         };
+
         setRiddle();
     }, []);
+    useEffect(() => {
+        data?._id && localStorage.setItem(data?._id, JSON.stringify(active));
+        return () => {
+            if (result === get_text("success", "he")) {
+                localStorage.removeItem(data?._id);
+            }
+        };
+    }, [active]);
 
     const checkAnswer = (
         answerArr: {
@@ -117,7 +132,7 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
     const func = () => {
         console.log("finished");
     };
-    // console.log(active);
+    console.log(active);
     return (
         <div className="bg-gray-100 w-full rounded-md">
             <div className="max-h-96 sm:max-h-24 md:max-h-72 w-full overflow-auto border-4 border-b-cyan-900 rounded-t-md">
