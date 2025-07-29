@@ -45,6 +45,10 @@ const data = {
     _id: "kjbhdfvksjdf",
     name: "מעילות והונאות", //Embezzlement and fraud
     mainImage: MainFraud,
+    colorPalette: "redBlueGray",
+    imageStyle: "realistic",
+    fontFamily: "sansSerif",
+    description: "משחק חינוכי ללימוד על הונאות ומעילות",
     quiz: [
         {
             _id: "1",
