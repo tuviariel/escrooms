@@ -53,7 +53,7 @@ export const Puzzle6 = (props: quizDataP) => {
         return initialPositions.map((idx, i) => ({
             id: idx,
             src: data.quizData[idx],
-            answerSrc: data.category && data.orderAnswer && data.category[data.orderAnswer[idx]],
+            answerSrc: data.category && data.orderAnswer && data.category[data.orderAnswer[idx][0]],
         }));
     };
     const [images] = useState<DraggableImage[]>(getImages());

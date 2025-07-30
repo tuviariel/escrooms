@@ -34,7 +34,7 @@ export interface quizData {
     quizText: string;
     quizData: string[] | any[];
     category: any[] | null;
-    orderAnswer: number[] | null;
+    orderAnswer: number[][] | null;
     correctOptions: string[] | any[];
     inCorrectOptions: string[] | any[];
     hints: string[];

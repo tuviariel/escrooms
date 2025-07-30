@@ -3,7 +3,9 @@ import { get_text } from "../../util/language";
 // import pagePaginateArrow from "../../assets/images/pagePaginate.svg";
 // import pagePaginateArrowDisabled from "../../assets/images/pagePaginateDis.svg";
 import { quizData } from "../../pages/Room/Room";
+
 import Button from "../Button";
+import Dialog from "../Dialog";
 
 interface QuizDataProps {
     data: quizData;
@@ -12,10 +14,12 @@ interface QuizDataProps {
 }
 export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
     const { data, result, setResult } = props;
-    const [quizDataPageNumber, setQuizDataPageNumber] = useState(0);
+    const [quizDataPageNumber, setQuizDataPageNumber] = useState(-1);
     const [colorOrder, setColorOrder] = useState(
-        data?.type === "colorChange" ? new Array(data?.quizData.length).fill(-1) : []
+        data?.type === "colorChange" ? new Array(data?.quizData.length).fill([-1, -1]) : []
     );
+    const [openDialog, setOpenDialog] = useState(false);
+    const [stage, setStage] = useState(1); // 1: pick from 2, 2: pick from 3
     const imgContainerRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         if (
@@ -34,6 +38,15 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
         //     }
         // };
     }, []);
+    useEffect(() => {
+        quizDataPageNumber !== -1 ? setOpenDialog(true) : setOpenDialog(false);
+    }, [quizDataPageNumber]);
+    useEffect(() => {
+        if (openDialog === false) {
+            setQuizDataPageNumber(-1);
+            result && setResult && setResult("");
+        }
+    }, [openDialog]);
     // const pagination = (clicked: string) => {
     //     console.log(clicked);
     //     if (clicked === "next") {
@@ -53,23 +66,42 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                 inline: "center",
             });
     }, [quizDataPageNumber]);
-    const colorChange = (i: number) => {
-        setQuizDataPageNumber(i);
-        result && setResult && setResult("");
+    const colorChange = (choose: number) => {
+        console.log(choose, quizDataPageNumber, stage);
         const updatedColorOrder = [...colorOrder];
-        updatedColorOrder[i] =
-            data?.category && data?.category?.length - 1 > updatedColorOrder[i]
-                ? updatedColorOrder[i] + 1
-                : 0;
+        updatedColorOrder[quizDataPageNumber] = [...colorOrder[quizDataPageNumber]];
+        if (stage === 1) {
+            updatedColorOrder[quizDataPageNumber][0] = data?.category && data?.category[0][choose];
+            setStage(2);
+        } else if (stage === 2) {
+            updatedColorOrder[quizDataPageNumber][1] = data?.category && data?.category[1][choose];
+            setStage(1);
+            setOpenDialog(false);
+        }
         setColorOrder(updatedColorOrder);
         data?._id && localStorage.setItem(data?._id.toString(), JSON.stringify(updatedColorOrder));
     };
+    // const pickFrom2 = (choose: number) => {
+    //     console.log(choose);
+    //     setStage(2);
+    // };
+    // const pickFrom3 = (choose: number) => {
+    //     console.log(choose);
+    //     setStage(1);
+    //     setOpenDialog(false);
+    // };
 
     const checkOrderAnswer = () => {
         let count = 0,
             i;
         for (i = 0; i <= colorOrder.length - 1; i++) {
-            if (data?.orderAnswer && data.orderAnswer[i] === colorOrder[i]) {
+            console.log("correct", i, colorOrder[i]);
+            if (
+                data?.orderAnswer &&
+                data.orderAnswer[i][0] === colorOrder[i][0] &&
+                data.orderAnswer[i][1] === colorOrder[i][1]
+            ) {
+                console.log("correct");
                 count++;
             }
         }
@@ -82,7 +114,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                     : get_text("continue", "he") + ": (" + count + "/" + i + ")"
             );
     };
-    // console.log(data);
+    console.log(colorOrder);
     return (
         <>
             {data && data.quizData.length > 1 ? (
@@ -149,21 +181,91 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                                 : "h-full w-auto"
                                         } pt-10 mx-20`}
                                         onClick={() =>
-                                            data.type === "colorChange" && colorChange(i)
+                                            data.type === "colorChange" && setQuizDataPageNumber(i)
                                         }
                                     />
-                                    {data.type === "colorChange" && colorOrder[i] !== -1 && (
-                                        <img
-                                            src={data.category && data.category[colorOrder[i]]}
-                                            alt={`option #` + (colorOrder[i] + 1)}
-                                            className="absolute right-44 bottom-0 w-80 h-40 cursor-pointer"
-                                            onClick={() => colorChange(i)}
-                                        />
+                                    {data.type === "colorChange" && colorOrder[i][0] !== -1 && (
+                                        <>
+                                            <img
+                                                src={
+                                                    data?.category &&
+                                                    data?.category[0][0] === colorOrder[i][0]
+                                                        ? data?.category[0][0]
+                                                        : data?.category && data?.category[0][1]
+                                                }
+                                                alt="color change"
+                                                className="absolute right-20 bottom-18 w-16 h-16"
+                                            />
+                                            <img
+                                                src={
+                                                    data.category &&
+                                                    data.category[1][0] === colorOrder[i][1]
+                                                        ? data.category[1][0]
+                                                        : data.category &&
+                                                          data.category[1][1] === colorOrder[i][1]
+                                                        ? data.category[1][1]
+                                                        : data.category && data.category[1][2]
+                                                }
+                                                alt={`option #` + (colorOrder[i][1] + 1)}
+                                                className="absolute right-44 bottom-20 w-20 h-10"
+                                            />
+                                        </>
                                     )}
                                 </div>
                             );
                         })}
                     </div>
+                    <Dialog
+                        open={openDialog}
+                        setOpen={setOpenDialog}
+                        size="xLarge"
+                        disableOverlayClose={false}
+                        data="">
+                        <div className="relative">
+                            <img
+                                src={data.quizData[quizDataPageNumber]}
+                                alt={`Quiz Data Page ${quizDataPageNumber + 1}`}
+                                className="h-full w-full object-cover"
+                            />
+                            {data.type === "colorChange" && stage === 2 && (
+                                <img
+                                    src={
+                                        data?.category &&
+                                        data?.category[0][0] === colorOrder[quizDataPageNumber][0]
+                                            ? data?.category[0][0]
+                                            : data?.category && data?.category[0][1]
+                                    }
+                                    alt="color change"
+                                    className="absolute right-20 bottom-18 w-16 h-16"
+                                />
+                            )}
+                            <div className="flex items-center justify-center">
+                                <Button onClick={() => colorChange(0)} className="mx-2">
+                                    <img
+                                        src={data.category && data.category[stage === 1 ? 0 : 1][0]}
+                                        alt={`option #1`}
+                                        className="w-10 h-10 cursor-pointer"
+                                    />
+                                </Button>
+                                <Button onClick={() => colorChange(1)} className="mx-2">
+                                    <img
+                                        src={data.category && data.category[stage === 1 ? 0 : 1][1]}
+                                        alt={`option #2`}
+                                        className="w-10 h-10 cursor-pointer"
+                                    />
+                                </Button>
+                                {stage === 2 && (
+                                    <Button onClick={() => colorChange(2)} className="mx-2">
+                                        <img
+                                            src={data.category && data.category[1][2]}
+                                            alt={`option #3`}
+                                            className="w-10 h-10 cursor-pointer"
+                                        />
+                                    </Button>
+                                )}
+                            </div>
+                        </div>
+                    </Dialog>
                     {data.type === "colorChange" && (
                         <div className="absolute left-0 -bottom-20 flex">
                             <Button

@@ -23,9 +23,9 @@ export const ColorTemplate = (props: quizDataP) => {
                         <div dir="rtl" className="text-center text-2xl font-bold my-2">
                             {data?.quizText}
                         </div>
-                        <div className="max-h-96 overflow-y-scroll">
+                        {/* <div className="max-h-96 overflow-y-scroll">
                             <img src={data?.quizImg} alt="mainQuizImage" className="" />
-                        </div>
+                        </div> */}
                     </>
                 ) : (
                     <Puzzle6 data={data} />

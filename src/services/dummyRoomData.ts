@@ -39,6 +39,7 @@ import Q3O1 from "../assets/images/colorCards/colors/1.png";
 import Q3O2 from "../assets/images/colorCards/colors/2.png";
 import Q3O3 from "../assets/images/colorCards/colors/3.png";
 import Q3O4 from "../assets/images/colorCards/colors/4.png";
+import Q3O5 from "../assets/images/colorCards/colors/5.png";
 import MainFraud from "../assets/images/fraud.png";
 
 const data = {
@@ -84,8 +85,18 @@ const data = {
             quizText:
                 "עבור כל דמות וסיטואציה חובה לקבוע אם הוא פעל כראוי או אם עבר על איסור מעילה. כדאי לעיין בעיתון לקבל משום תובנות...",
             quizData: [Q3D1, Q3D2, Q3D3, Q3D4, Q3D5, Q3D6],
-            category: [Q3O1, Q3O2, Q3O3, Q3O4],
-            orderAnswer: [0, 2, 1, 3, 2, 0],
+            category: [
+                [Q3O1, Q3O2],
+                [Q3O3, Q3O4, Q3O5],
+            ],
+            orderAnswer: [
+                [0, 0],
+                [1, 2],
+                [1, 1],
+                [1, 1],
+                [0, 2],
+                [1, 0],
+            ], //must change to real answer
             correctOptions: ["correct1", "correct2", "correct3", "correct4"],
             inCorrectOptions: ["incorrect1", "incorrect2", "incorrect3", "incorrect4"],
             hints: [
