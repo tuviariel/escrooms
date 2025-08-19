@@ -65,6 +65,13 @@ const appContext: Translations = {
     confirm: { en: "Confirm", he: "אישור", ar: "" },
     fraud: { en: "Embezzlement and fraud", he: "הונאות ומעילות", ar: "" },
     title: { en: "Educational Escape Rooms", he: "חדרי בריחה חינוכיים", ar: "" },
+    correct: { en: "Correct ✔️", he: "✔️ נכון", ar: "✔️" },
+    incorrect: { en: "Incorrect ❌", he: "❌ לא נכון", ar: "❌" },
+    situationAction: {
+        en: "Situation & Action",
+        he: "מצב ופעולה",
+        ar: "الوضع العمل",
+    },
 };
 
 export const get_text = (name: string, lang: string) => {

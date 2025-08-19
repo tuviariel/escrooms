@@ -6,13 +6,14 @@ import data from "../../services/dummyRoomData";
 import ColorTemplate from "../../components/templates/ColorTemplate";
 import TurnRoundTemplate from "../../components/templates/TurnRoundTemplate";
 import OrderBorderTemplate from "../../components/templates/OrderBorderTemplate";
-// import { useQuizContext } from "../../contexts/quizNumberContext";
+import { useRoomContext } from "../../contexts/roomStyleContext";
 import backArrow from "../../assets/images/backArrow.svg";
 import { get_text } from "../../util/language";
 import Dialog from "../../components/Dialog";
 import Button from "../../components/Button";
 import { useSelector, useDispatch } from "react-redux";
 import { quizNumberActions } from "../../reduxStor/quizNumber";
+// import { quizListActions } from "../../reduxStor/quizList";
 export interface quizDataProps {
     data: {
         _id: string;
@@ -24,19 +25,20 @@ export interface quizDataProps {
     back: () => void;
 }
 export interface quizDataP {
-    data: quizData;
+    data: quizData | any;
 }
 export interface quizData {
     _id: string;
     type: string;
     answer: string;
+    quiz: any[];
     quizImg: string | any;
     quizText: string;
     quizData: string[] | any[];
     category: any[] | null;
     orderAnswer: number[][] | null;
-    correctOptions: string[] | any[];
-    inCorrectOptions: string[] | any[];
+    // correctOptions: string[] | any[];
+    // inCorrectOptions: string[] | any[];
     hints: string[];
 }
 
@@ -48,6 +50,13 @@ export const Room = () => {
         dispatch(quizNumberActions.changeQuizNumber(number));
         console.log("setQuizNumber", number);
     };
+    const quizL = useSelector(
+        (state: { quizList: { list: { id: number; completed: boolean }[] } }) => state.quizList
+    );
+    const quizList = quizL?.list;
+    // const setQuizList = (number: number) => {
+    //     dispatch(quizListActions.changeQuizList(number));
+    // };
     // const { quizNumber, setQuizNumber } = useQuizContext();
     const types: Record<string, JSX.Element> = {
         "7segments": <NumbersTemplate data={data.quiz[quizNumber]} />,
@@ -57,18 +66,23 @@ export const Room = () => {
         borderOrder: <OrderBorderTemplate />, //</OrderBorderTemplate>data={data.quiz[quizNumber]} />,
     };
     const [checkLeave, setCheckLeave] = useState(false);
+    // const [quizList, setQuizList] = useState<{ id: number; completed: boolean }[]>([]);
     const navigate = useNavigate();
     const location = useLocation();
     const roomId = location.pathname.split("/").pop();
+    const { setRoomColor, setRoomStyle, setRoomFont } = useRoomContext();
     useEffect(() => {
         // in future get room data from Api call via roomId. now just checking Id is right:
         if (roomId !== data._id) {
             navigate("/");
         } else if (document.documentElement.requestFullscreen) {
             document.documentElement.requestFullscreen();
+            setRoomStyle(data.imageStyle);
+            setRoomColor(data.colorPalette);
+            setRoomFont(data.fontFamily);
         }
     }, []);
-    console.log(quizNumber);
+    console.log();
     return (
         <>
             {window.innerWidth < 600 ? (
@@ -97,17 +111,40 @@ export const Room = () => {
                             X
                         </div>
                         {/* quiz #0 */}
-                        <div
-                            className="absolute md:top-5 top-2 md:left-5 left-2 md:h-44 h-16 md:w-64 w-36 backdrop-blur-md border-2 hover:border-amber-50 rounded-full cursor-pointer"
-                            onClick={() => setQuizNumber(0)}></div>
+                        <div className="absolute top-0 left-0">
+                            {quizList ? (
+                                quizList.map((quiz: any) => {
+                                    return (
+                                        <div
+                                            key={quiz.id}
+                                            className={`z-30 md:h-44 h-16 w-16 rounded-full ${
+                                                quiz.completed
+                                                    ? ""
+                                                    : "backdrop-blur-md border-2 hover:border-amber-50 cursor-pointer"
+                                            }`}
+                                            onClick={() =>
+                                                !quiz.completed && setQuizNumber(quiz.id)
+                                            }>
+                                            <img
+                                                src={data.quiz[quiz.id].outerQuizImg}
+                                                alt="Quiz Image"
+                                                className="w-full h-full object-cover rounded-full"
+                                            />
+                                        </div>
+                                    );
+                                })
+                            ) : (
+                                <>here</>
+                            )}
+                        </div>
                         {/* quiz #2 */}
-                        <div
+                        {/* <div
                             className="absolute bottom-0 md:left-28 left-12 md:h-72 h-32 md:w-88 w-36 backdrop-blur-md border-2 hover:border-amber-50 cursor-pointer"
                             onClick={() => setQuizNumber(2)}></div>
-                        {/* quiz #1 */}
+                        {/* quiz #1 *
                         <div
                             className="absolute bottom-0 md:right-28 right-12 md:h-72 h-32 md:w-88 w-36 backdrop-blur-md border-2 hover:border-amber-50 cursor-pointer"
-                            onClick={() => setQuizNumber(2)}></div>
+                            onClick={() => setQuizNumber(2)}></div> */}
                     </div>
                     <Dialog
                         open={checkLeave}

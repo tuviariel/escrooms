@@ -8,11 +8,12 @@ import QuizSuccess from "../../QuizSuccess";
 import { get_text } from "../../../util/language";
 import QuizData from "../../QuizData";
 import Button from "../../Button";
+import { imageStyle } from "../../../util/UIstyle";
 
 export const NumbersTemplate = (props: quizDataP) => {
     const { data } = props;
     const [result, setResult] = useState("");
-    const [open, setOpen] = useState(false);
+    // const [open, setOpen] = useState(false);
     const [openLock, setOpenLock] = useState(false);
     useEffect(() => {
         if (result === get_text("success", "he")) {
@@ -22,7 +23,7 @@ export const NumbersTemplate = (props: quizDataP) => {
 
     return (
         <div className="flex flex-col relative h-full min-h-96">
-            <div className="relative">
+            {/* <div className={`relative`}>
                 <QuizData data={data} />
                 <img
                     src={clock}
@@ -31,22 +32,18 @@ export const NumbersTemplate = (props: quizDataP) => {
                     className="cursor-pointer h-12 w-24 hover:h-14 hover:w-28 absolute right-16 top-14 p-2 rounded-lg bg-gray-100 border border-amber-300"
                     onClick={() => setOpen(true)}
                 />
-            </div>
+            </div> */}
+            <DigitalNumbers data={data} result={result} setResult={setResult} />
             <div className="fixed right-3 bottom-3">
                 <HintChat hints={data.hints} />
             </div>
-            <Dialog open={open} setOpen={setOpen} size="large" disableOverlayClose={false} data="">
-                <>
-                    <DigitalNumbers data={data} result={result} setResult={setResult} />
-                    {result === get_text("success", "he") && (
-                        <Button
-                            label={get_text("finish", "he")}
-                            onClick={() => setOpenLock(true)}
-                            className="flex w-auto mr-auto ml-10"
-                        />
-                    )}
-                </>
-            </Dialog>
+            {result === get_text("success", "he") && (
+                <Button
+                    label={get_text("finish", "he")}
+                    onClick={() => setOpenLock(true)}
+                    className="flex w-auto mr-auto ml-10"
+                />
+            )}
             <Dialog
                 open={openLock}
                 setOpen={setOpenLock}

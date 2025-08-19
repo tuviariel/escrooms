@@ -4,8 +4,10 @@ import Button from "../Button";
 import useSound from "use-sound";
 import honkMP3 from "../../assets/sounds/honk.mp3";
 import { useEffect, useRef, useState } from "react";
-import { useQuizContext } from "../../contexts/quizNumberContext";
 import { get_text } from "../../util/language";
+import { useSelector, useDispatch } from "react-redux";
+import { quizNumberActions } from "../../reduxStor/quizNumber";
+import { quizListActions } from "../../reduxStor/quizList";
 // import { quizData } from "../../pages/Room/Room";
 interface quizSuccessProps {
     setOpenLock: () => void;
@@ -14,7 +16,19 @@ interface quizSuccessProps {
 
 export const QuizSuccess = (props: quizSuccessProps) => {
     const { setOpenLock, data } = props;
-    const { setQuizNumber } = useQuizContext();
+    const quiz = useSelector((state: { quizNumber: { quizNumber: number } }) => state.quizNumber);
+    const quizNumber = quiz?.quizNumber;
+    const dispatch = useDispatch();
+    const setQuizNumber = (number: number) => {
+        dispatch(quizNumberActions.changeQuizNumber(number));
+    };
+    const quizL = useSelector(
+        (state: { quizList: { quizList: { id: number; completed: boolean }[] } }) => state.quizList
+    );
+    // const quizList = quizL?.quizList;
+    const setQuizList = (number: number) => {
+        dispatch(quizListActions.changeQuizList(number));
+    };
     const [honk] = useSound(honkMP3, { volume: 1.25 });
     const [play, setPlay] = useState(false);
     const [open, setOpen] = useState(false);
@@ -42,11 +56,17 @@ export const QuizSuccess = (props: quizSuccessProps) => {
         }
         console.log(count, i);
 
-        count === i
-            ? setOpen(true)
-            : count === 0
-            ? setMessage(get_text("wrong", "he") + ": (" + count + "/" + i + ")")
-            : setMessage(get_text("continue", "he") + ": (" + count + "/" + i + ")");
+        if (count === i) {
+            setOpen(true);
+            setQuizList(quizNumber);
+            setTimeout(() => {
+                setQuizNumber(-1);
+            }, 3000);
+        } else if (count === 0) {
+            setMessage(get_text("wrong", "he") + ": (" + count + "/" + i + ")");
+        } else {
+            setMessage(get_text("continue", "he") + ": (" + count + "/" + i + ")");
+        }
     };
     return (
         <div className="h-96 w-full">

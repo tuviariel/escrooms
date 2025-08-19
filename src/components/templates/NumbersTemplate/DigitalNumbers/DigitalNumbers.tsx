@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import DigitalNumber from "./DigitalNumber";
 import Button from "../../../Button";
 import { quizData } from "../../../../pages/Room/Room";
 import { get_text } from "../../../../util/language";
+import { imageStyle } from "../../../../util/UIstyle";
+import { useRoomContext } from "../../../../contexts/roomStyleContext";
 interface DigitalNumbersProps {
     data: quizData;
     // checkAnswer: (
@@ -29,7 +31,7 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
         9: [0, 1, 2, 3, 5, 6],
         0: [0, 1, 2, 4, 5, 6],
     };
-
+    const { roomStyle, roomColor, roomFont } = useRoomContext();
     const [active, setActive] = useState<
         {
             status: boolean;
@@ -41,8 +43,23 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
         //     Array.from({ length: 7 }, () => ({ status: false, elem: "" }))
         // )
     );
+    const nextLineRef = useRef<HTMLTableRowElement>(null);
+    const [nextLine, setNextLine] = useState(1);
     const [disabled, setDisabled] = useState(true);
     useEffect(() => {
+        const correct: string[] = [],
+            incorrect: string[] = [];
+        data.quiz.map((q) => {
+            if (q.is_correct_action) {
+                correct.push(q.icons.correct);
+                incorrect.push(q.icons.incorrect);
+            } else {
+                correct.push(q.icons.incorrect);
+                incorrect.push(q.icons.correct);
+            }
+        });
+        console.log("correct", correct);
+        console.log("incorrect", incorrect);
         const setRiddle = () => {
             const check = localStorage.getItem(data?._id);
             if (check && check !== "[]") {
@@ -53,8 +70,8 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
                     let create = [];
                     let correctI = -1,
                         incorrectI = -1,
-                        correctMax = data.correctOptions.length - 1,
-                        incorrectMax = data.inCorrectOptions.length - 1;
+                        correctMax = correct.length - 1,
+                        incorrectMax = incorrect.length - 1;
                     for (let i = 0; i < data.answer.toString().length; i++) {
                         let number: any = data.answer.toString()[i];
                         const arr = new Array(7).fill(null).map((_, i) => {
@@ -68,9 +85,7 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
                                 : incorrectI++;
                             return {
                                 status: false,
-                                elem: isCorrect
-                                    ? data.correctOptions[correctI]
-                                    : data.inCorrectOptions[incorrectI],
+                                elem: isCorrect ? correct[correctI] : incorrect[incorrectI],
                             };
                         });
                         // console.log(arr);
@@ -132,16 +147,80 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
     const func = () => {
         console.log("finished");
     };
-    // console.log(active);
+    console.log(roomStyle, roomColor, roomFont);
     return (
         <div className="bg-gray-100 w-full rounded-md">
-            <div className="max-h-96 sm:max-h-24 md:max-h-72 w-full overflow-auto border-4 border-b-cyan-900 rounded-t-md">
-                <img src={data.quizImg} alt="Quiz Image" className=" scroll-auto max-w-full" />
+            <div
+                className={` h-full max-h-96 sm:max-h-24 md:max-h-72 w-full overflow-y-auto border-4 border-b-cyan-900 rounded-t-md`}
+                style={{
+                    backgroundImage: `url(${
+                        imageStyle[roomStyle as keyof typeof imageStyle].background
+                    })`,
+                }}>
+                <table
+                    className="table-auto w-full h-full text-right border border-amber-50 text-xl text-amber-50 overflow-y-auto"
+                    dir="rtl">
+                    <thead className="sticky top-0 z-10 bg-gray-700 opacity-70">
+                        <tr>
+                            <th className="border border-amber-50 whitespace-nowrap">
+                                {get_text("situationAction", "he")}
+                            </th>
+                            <th className="border border-amber-50 whitespace-nowrap px-2">
+                                {get_text("correct", "he")}
+                            </th>
+                            <th className="border border-amber-50 whitespace-nowrap px-2">
+                                {get_text("incorrect", "he")}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {data?.quiz &&
+                            data.quiz.map((q, i) => {
+                                return (
+                                    <tr
+                                        key={i}
+                                        className=""
+                                        ref={i === nextLine ? nextLineRef : null}>
+                                        <td className="border border-amber-50">
+                                            {q.situationAndAction}
+                                        </td>
+                                        <td
+                                            className="cursor-pointer border border-amber-50"
+                                            onClick={() => {
+                                                nextLineRef.current?.scrollIntoView({
+                                                    behavior: "smooth",
+                                                    block: "end",
+                                                });
+                                                setNextLine((prev) => prev + 1);
+                                            }}>
+                                            {q.icons.correct}
+                                        </td>
+                                        <td
+                                            className="cursor-pointer border border-amber-50"
+                                            onClick={() => {
+                                                nextLineRef.current?.scrollIntoView({
+                                                    behavior: "smooth",
+                                                    block: "end",
+                                                });
+                                                setNextLine((prev) => prev + 1);
+                                            }}>
+                                            {q.icons.incorrect}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                    </tbody>
+                </table>
             </div>
             <div
                 className={`${
                     active.length < 4 ? "ts:flex" : "ph:flex"
-                } hidden items-center justify-center`}>
+                } hidden items-center justify-center`}
+                style={{
+                    backgroundImage: `url(${
+                        imageStyle[roomStyle as keyof typeof imageStyle].background
+                    })`,
+                }}>
                 {active.length > 0 && active[0]
                     ? active.map((number, i) => {
                           return (
@@ -153,7 +232,7 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
                                       result !== get_text("success", "he") ? toggleSegment : func
                                   }
                                   amount={active.length}
-                                  category={data.category}
+                                  //   category={data.category}
                               />
                           );
                       })
