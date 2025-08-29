@@ -3,12 +3,8 @@ import DigitalNumbers from "./DigitalNumbers";
 import Dialog from "../../Dialog";
 import HintChat from "../../HintChat";
 import { quizDataP } from "../../../pages/Room/Room";
-import clock from "../../../assets/images/Clock.png";
 import QuizSuccess from "../../QuizSuccess";
 import { get_text } from "../../../util/language";
-import QuizData from "../../QuizData";
-import Button from "../../Button";
-import { imageStyle } from "../../../util/UIstyle";
 
 export const NumbersTemplate = (props: quizDataP) => {
     const { data } = props;

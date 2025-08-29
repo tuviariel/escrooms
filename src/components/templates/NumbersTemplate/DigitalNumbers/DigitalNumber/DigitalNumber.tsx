@@ -17,7 +17,7 @@ import { colorPalette } from "../../../../../util/UIstyle";
 
 export const DigitalNumber = (props: DigitalNumberProps) => {
     const { position, number, toggleSegment, amount } = props;
-    const { roomStyle, roomColor, roomFont } = useRoomContext();
+    const { roomColor } = useRoomContext();
 
     console.log(number);
     return (

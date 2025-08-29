@@ -26,7 +26,7 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
         9: [0, 1, 2, 3, 5, 6],
         0: [0, 1, 2, 4, 5, 6],
     };
-    const { roomStyle, roomColor, roomFont } = useRoomContext();
+    const { roomStyle, roomColor } = useRoomContext();
     const [active, setActive] = useState<
         {
             status: boolean;
