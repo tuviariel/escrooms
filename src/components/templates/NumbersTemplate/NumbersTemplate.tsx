@@ -33,17 +33,15 @@ export const NumbersTemplate = (props: quizDataP) => {
                     onClick={() => setOpen(true)}
                 />
             </div> */}
-            <DigitalNumbers data={data} result={result} setResult={setResult} />
+            <DigitalNumbers
+                data={data}
+                result={result}
+                setResult={setResult}
+                setOpenLock={setOpenLock}
+            />
             <div className="fixed right-3 bottom-3">
                 <HintChat hints={data.hints} />
             </div>
-            {result === get_text("success", "he") && (
-                <Button
-                    label={get_text("finish", "he")}
-                    onClick={() => setOpenLock(true)}
-                    className="flex w-auto mr-auto ml-10"
-                />
-            )}
             <Dialog
                 open={openLock}
                 setOpen={setOpenLock}

@@ -7,18 +7,13 @@ import { imageStyle } from "../../../../util/UIstyle";
 import { useRoomContext } from "../../../../contexts/roomStyleContext";
 interface DigitalNumbersProps {
     data: quizData;
-    // checkAnswer: (
-    //     active: {
-    //         status: boolean;
-    //         elem: string;
-    //     }[][]
-    // ) => void;
     result: string;
     setResult: (newResult: string) => void;
+    setOpenLock: (open: boolean) => void;
 }
 
 export const DigitalNumbers = (props: DigitalNumbersProps) => {
-    const { data, result, setResult } = props;
+    const { data, result, setResult, setOpenLock } = props;
     const checkObj: Record<number, number[]> = {
         1: [2, 5],
         2: [0, 2, 3, 4, 6],
@@ -35,7 +30,10 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
     const [active, setActive] = useState<
         {
             status: boolean;
-            elem: string;
+            elem: {
+                index: number;
+                icon: string;
+            };
         }[][]
     >(
         []
@@ -44,18 +42,19 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
         // )
     );
     const nextLineRef = useRef<HTMLTableRowElement>(null);
+    const digitsRef = useRef<HTMLDivElement>(null);
     const [nextLine, setNextLine] = useState(1);
     const [disabled, setDisabled] = useState(true);
     useEffect(() => {
-        const correct: string[] = [],
-            incorrect: string[] = [];
-        data.quiz.map((q) => {
+        const correct: any[] = [],
+            incorrect: any[] = [];
+        data.quiz.map((q, i) => {
             if (q.is_correct_action) {
-                correct.push(q.icons.correct);
-                incorrect.push(q.icons.incorrect);
+                correct.push({ index: i, icon: q.icons.correct });
+                incorrect.push({ index: i, icon: q.icons.incorrect });
             } else {
-                correct.push(q.icons.incorrect);
-                incorrect.push(q.icons.correct);
+                correct.push({ index: i, icon: q.icons.incorrect });
+                incorrect.push({ index: i, icon: q.icons.correct });
             }
         });
         console.log("correct", correct);
@@ -95,9 +94,9 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
                 });
             }
         };
-
         setRiddle();
     }, []);
+
     useEffect(() => {
         data?._id && localStorage.setItem(data?._id, JSON.stringify(active));
         return () => {
@@ -110,7 +109,10 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
     const checkAnswer = (
         answerArr: {
             status: boolean;
-            elem: string;
+            elem: {
+                index: number;
+                icon: string;
+            };
         }[][]
     ) => {
         let finished = true;
@@ -133,30 +135,47 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
             setResult(get_text("success", "he"));
         }
     };
+
     const toggleSegment = (position: number, index: number) => {
         disabled && setDisabled(false);
         result && setResult("");
-        const updatedActive = [...active];
-        updatedActive[position] = [...updatedActive[position]];
-        updatedActive[position][index] = {
-            ...updatedActive[position][index],
-            status: !updatedActive[position][index].status,
-        };
-        setActive(updatedActive);
+        setActive((prevActive) => {
+            const updatedActive = [...prevActive];
+            updatedActive[position] = [...updatedActive[position]];
+            updatedActive[position][index] = {
+                ...updatedActive[position][index],
+                status: !updatedActive[position][index].status,
+            };
+            return updatedActive;
+        });
     };
+
+    const toggleFromTable = (icon: string, index: number) => {
+        active.map((num, i) => {
+            num.map((elem, j) => {
+                if (elem.elem.icon === icon && elem.elem.index === index) {
+                    console.log("Element found:", i, j, elem.elem);
+                    toggleSegment(i, j);
+                }
+            });
+        });
+    };
+
     const func = () => {
         console.log("finished");
     };
-    console.log(roomStyle, roomColor, roomFont);
+
+    console.log(roomColor);
     return (
-        <div className="bg-gray-100 w-full rounded-md">
+        <div
+            className="bg-gray-100 w-full rounded-md"
+            style={{
+                backgroundImage: `url(${
+                    imageStyle[roomStyle as keyof typeof imageStyle].background
+                })`,
+            }}>
             <div
-                className={` h-full max-h-96 sm:max-h-24 md:max-h-72 w-full overflow-y-auto border-4 border-b-cyan-900 rounded-t-md`}
-                style={{
-                    backgroundImage: `url(${
-                        imageStyle[roomStyle as keyof typeof imageStyle].background
-                    })`,
-                }}>
+                className={` h-full max-h-96 sm:max-h-24 md:max-h-72 w-full overflow-y-auto border-4 border-b-cyan-900 rounded-t-md`}>
                 <table
                     className="table-auto w-full h-full text-right border border-amber-50 text-xl text-amber-50 overflow-y-auto"
                     dir="rtl">
@@ -187,22 +206,42 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
                                         <td
                                             className="cursor-pointer border border-amber-50"
                                             onClick={() => {
-                                                nextLineRef.current?.scrollIntoView({
-                                                    behavior: "smooth",
-                                                    block: "end",
+                                                setNextLine((prev) => {
+                                                    console.log(prev);
+                                                    if (prev === i + 1) {
+                                                        return prev + 1;
+                                                    } else {
+                                                        return i + 1;
+                                                    }
                                                 });
-                                                setNextLine((prev) => prev + 1);
+                                                toggleFromTable(q.icons.correct, i);
+                                                setTimeout(() => {
+                                                    nextLineRef.current?.scrollIntoView({
+                                                        behavior: "smooth",
+                                                        block: "end",
+                                                    });
+                                                }, 400);
                                             }}>
                                             {q.icons.correct}
                                         </td>
                                         <td
                                             className="cursor-pointer border border-amber-50"
                                             onClick={() => {
-                                                nextLineRef.current?.scrollIntoView({
-                                                    behavior: "smooth",
-                                                    block: "end",
+                                                setNextLine((prev) => {
+                                                    console.log(prev);
+                                                    if (prev === i + 1) {
+                                                        return prev + 1;
+                                                    } else {
+                                                        return i + 1;
+                                                    }
                                                 });
-                                                setNextLine((prev) => prev + 1);
+                                                toggleFromTable(q.icons.incorrect, i);
+                                                setTimeout(() => {
+                                                    nextLineRef.current?.scrollIntoView({
+                                                        behavior: "smooth",
+                                                        block: "end",
+                                                    });
+                                                }, 400);
                                             }}>
                                             {q.icons.incorrect}
                                         </td>
@@ -216,11 +255,7 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
                 className={`${
                     active.length < 4 ? "ts:flex" : "ph:flex"
                 } hidden items-center justify-center`}
-                style={{
-                    backgroundImage: `url(${
-                        imageStyle[roomStyle as keyof typeof imageStyle].background
-                    })`,
-                }}>
+                ref={digitsRef}>
                 {active.length > 0 && active[0]
                     ? active.map((number, i) => {
                           return (
@@ -232,7 +267,6 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
                                       result !== get_text("success", "he") ? toggleSegment : func
                                   }
                                   amount={active.length}
-                                  //   category={data.category}
                               />
                           );
                       })
@@ -242,17 +276,24 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
                 {get_text("phone_on_side", "he")}
             </div>
             <div className={`${active.length < 4 ? "ts:flex" : "ph:flex"} hidden`}>
-                {result !== get_text("success", "he") && (
-                    <Button
-                        label={get_text("check_answer", "he")}
-                        onClick={() => checkAnswer(active)}
-                        disabled={disabled}
-                        className="min-w-fit"
-                    />
+                <Button
+                    label={
+                        result === get_text("success", "he")
+                            ? get_text("finish", "he")
+                            : get_text("check_answer", "he")
+                    }
+                    onClick={() =>
+                        result === get_text("success", "he")
+                            ? setOpenLock(true)
+                            : checkAnswer(active)
+                    }
+                    className="flex w-auto mx-10 min-w-fit "
+                />
+                {result && (
+                    <div className="m-auto p-1 rounded-xl text-center bg-amber-50" dir="rtl">
+                        {result}
+                    </div>
                 )}
-                <div className="w-full pt-2 text-center" dir="rtl">
-                    {result}
-                </div>
             </div>
         </div>
     );

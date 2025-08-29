@@ -1,9 +1,10 @@
 import RBG from "../assets/images/backgrounds/realistic.png";
 import ABG from "../assets/images/backgrounds/abstract.png";
 export const colorPalette = {
-    redBlueGray: { 1: "#FF5733", 2: "#C70039", 3: "#900C3F" },
-    greenOrangeWhite: { 1: "#33FF57", 2: "#39C700", 3: "#3F900C" },
-    yellowBluePurple: { 1: "#581845", 2: "#DAF7A6", 3: "#FFC300" },
+    //1 - dark/dominant/chosen color, 2 - bright/positive color, 3 - light color
+    redBlueGray: { dark: "#E50113", bright: "#0255db", light: "#9ea5b0" },
+    orangeGreenWhite: { dark: "#e38202", bright: "#36e039", light: "#ffffff" },
+    purpleLightblueYellow: { dark: "#a002ab", bright: "#5093fa", light: "#f0f002" },
 };
 export const imageStyle = {
     realistic: {
