@@ -51,7 +51,9 @@ export const Room = () => {
         console.log("setQuizNumber", number);
     };
     const quizL = useSelector(
-        (state: { quizList: { list: { id: number; completed: boolean }[] } }) => state.quizList
+        (state: {
+            quizList: { list: { id: number; completed: boolean; type: string; image: string }[] };
+        }) => state.quizList
     );
     const quizList = quizL?.list;
     // const setQuizList = (number: number) => {
@@ -63,7 +65,7 @@ export const Room = () => {
         gridPlay: <GridTemplate data={data.quiz[quizNumber]} />,
         colorChange: <ColorTemplate data={data.quiz[quizNumber]} />,
         turnRound: <TurnRoundTemplate data={data.quiz[quizNumber]} />,
-        borderOrder: <OrderBorderTemplate />, //</OrderBorderTemplate>data={data.quiz[quizNumber]} />,
+        borderOrder: <OrderBorderTemplate data={data.quiz[quizNumber]} />,
     };
     const [checkLeave, setCheckLeave] = useState(false);
     // const [quizList, setQuizList] = useState<{ id: number; completed: boolean }[]>([]);
@@ -110,9 +112,8 @@ export const Room = () => {
                             onClick={() => setCheckLeave(true)}>
                             X
                         </div>
-                        {/* quiz #0 */}
                         <div className="absolute top-0 left-0">
-                            {quizList ? (
+                            {quizList &&
                                 quizList.map((quiz: any) => {
                                     return (
                                         <div
@@ -124,27 +125,17 @@ export const Room = () => {
                                             }`}
                                             onClick={() =>
                                                 !quiz.completed && setQuizNumber(quiz.id)
-                                            }>
+                                            }
+                                            title={quiz.type}>
                                             <img
-                                                src={data.quiz[quiz.id].outerQuizImg}
+                                                src={quiz.image}
                                                 alt="Quiz Image"
                                                 className="w-full h-full object-cover rounded-full"
                                             />
                                         </div>
                                     );
-                                })
-                            ) : (
-                                <>here</>
-                            )}
+                                })}
                         </div>
-                        {/* quiz #2 */}
-                        {/* <div
-                            className="absolute bottom-0 md:left-28 left-12 md:h-72 h-32 md:w-88 w-36 backdrop-blur-md border-2 hover:border-amber-50 cursor-pointer"
-                            onClick={() => setQuizNumber(2)}></div>
-                        {/* quiz #1 *
-                        <div
-                            className="absolute bottom-0 md:right-28 right-12 md:h-72 h-32 md:w-88 w-36 backdrop-blur-md border-2 hover:border-amber-50 cursor-pointer"
-                            onClick={() => setQuizNumber(2)}></div> */}
                     </div>
                     <Dialog
                         open={checkLeave}

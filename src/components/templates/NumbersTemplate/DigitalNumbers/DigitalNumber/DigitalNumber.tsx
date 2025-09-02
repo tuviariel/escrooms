@@ -19,7 +19,7 @@ export const DigitalNumber = (props: DigitalNumberProps) => {
     const { position, number, toggleSegment, amount } = props;
     const { roomColor } = useRoomContext();
 
-    console.log(number);
+    // console.log(colorPalette[roomColor as keyof typeof colorPalette].dark);
     return (
         <div
             className={`relative ${
@@ -27,13 +27,14 @@ export const DigitalNumber = (props: DigitalNumberProps) => {
             } h-60 flex flex-col items-center justify-center content-center bg-black`}>
             {/* Top horizontal line */}
             <div
-                className={`absolute cursor-pointer hover:bg-blue-500 top-2 left-6 content-center ${
+                className={`absolute cursor-pointer hover:opacity-90 top-2 left-6 content-center ${
                     amount < 4 ? "w-14 sph:w-22 ph:w-28" : "w-16 ph:w-20 sm:w-24 md:w-28"
-                } h-8 rounded-b-3xl ${
-                    number[0]?.status
-                        ? "bg-[" + colorPalette[roomColor as keyof typeof colorPalette].dark + "]"
-                        : "bg-[#535353]"
-                }`}
+                } h-8 rounded-b-3xl`}
+                style={{
+                    backgroundColor: number[0]?.status
+                        ? colorPalette[roomColor as keyof typeof colorPalette].dark
+                        : "#535353",
+                }}
                 onClick={() => toggleSegment(position, 0)}>
                 {number[0]?.elem?.icon.startsWith("http") ||
                 number[0]?.elem?.icon.startsWith("/src") ? (
@@ -51,11 +52,12 @@ export const DigitalNumber = (props: DigitalNumberProps) => {
 
             {/* Top-left vertical line */}
             <div
-                className={`absolute cursor-pointer hover:bg-blue-500 top-8 left-6 w-6 h-18 rounded-r-full content-center ${
-                    number[1]?.status
-                        ? "bg-[" + colorPalette[roomColor as keyof typeof colorPalette].dark + "]"
-                        : "bg-[#535353]"
-                }`}
+                className={`absolute cursor-pointer hover:opacity-90 top-8 left-6 w-6 h-18 rounded-r-full content-center`}
+                style={{
+                    backgroundColor: number[1]?.status
+                        ? colorPalette[roomColor as keyof typeof colorPalette].dark
+                        : "#535353",
+                }}
                 onClick={() => toggleSegment(position, 1)}>
                 {number[1]?.elem?.icon.startsWith("http") ||
                 number[1]?.elem?.icon.startsWith("/src") ? (
@@ -76,11 +78,12 @@ export const DigitalNumber = (props: DigitalNumberProps) => {
 
             {/* Top-right vertical line */}
             <div
-                className={`absolute cursor-pointer hover:bg-blue-500 top-8 right-6 w-6 h-18 rounded-l-full content-center ${
-                    number[2]?.status
-                        ? "bg-[" + colorPalette[roomColor as keyof typeof colorPalette].dark + "]"
-                        : "bg-[#535353]"
-                }`}
+                className={`absolute cursor-pointer hover:opacity-90 top-8 right-6 w-6 h-18 rounded-l-full content-center`}
+                style={{
+                    backgroundColor: number[2]?.status
+                        ? colorPalette[roomColor as keyof typeof colorPalette].dark
+                        : "#535353",
+                }}
                 onClick={() => toggleSegment(position, 2)}>
                 {number[2]?.elem?.icon.startsWith("http") ||
                 number[2]?.elem?.icon.startsWith("/src") ? (
@@ -101,13 +104,14 @@ export const DigitalNumber = (props: DigitalNumberProps) => {
 
             {/* Middle horizontal line */}
             <div
-                className={`absolute cursor-pointer hover:bg-blue-500 top-25 left-6 content-center ${
+                className={`absolute cursor-pointer hover:opacity-90 top-25 left-6 content-center ${
                     amount < 4 ? "w-14 sph:w-22 ph:w-28" : "w-16 ph:w-20 sm:w-24 md:w-28"
-                } h-8 rounded-full ${
-                    number[3]?.status
-                        ? "bg-[" + colorPalette[roomColor as keyof typeof colorPalette].dark + "]"
-                        : "bg-[#535353]"
-                }`}
+                } h-8 rounded-full`}
+                style={{
+                    backgroundColor: number[3]?.status
+                        ? colorPalette[roomColor as keyof typeof colorPalette].dark
+                        : "#535353",
+                }}
                 onClick={() => toggleSegment(position, 3)}>
                 {number[3]?.elem?.icon.startsWith("http") ||
                 number[3]?.elem?.icon.startsWith("/src") ? (
@@ -125,11 +129,12 @@ export const DigitalNumber = (props: DigitalNumberProps) => {
 
             {/* Bottom-left vertical line */}
             <div
-                className={`absolute cursor-pointer hover:bg-blue-500 bottom-8 left-6 w-6 h-20 rounded-r-full content-center ${
-                    number[4]?.status
-                        ? "bg-[" + colorPalette[roomColor as keyof typeof colorPalette].dark + "]"
-                        : "bg-[#535353]"
-                }`}
+                className={`absolute cursor-pointer hover:opacity-90 bottom-8 left-6 w-6 h-20 rounded-r-full content-center`}
+                style={{
+                    backgroundColor: number[4]?.status
+                        ? colorPalette[roomColor as keyof typeof colorPalette].dark
+                        : "#535353",
+                }}
                 onClick={() => toggleSegment(position, 4)}>
                 {number[4]?.elem?.icon.startsWith("http") ||
                 number[4]?.elem?.icon.startsWith("/src") ? (
@@ -150,11 +155,12 @@ export const DigitalNumber = (props: DigitalNumberProps) => {
 
             {/* Bottom-right vertical line */}
             <div
-                className={`absolute cursor-pointer hover:bg-blue-500 bottom-8 right-6 w-6 h-20 rounded-l-full content-center ${
-                    number[5]?.status
-                        ? "bg-[" + colorPalette[roomColor as keyof typeof colorPalette].dark + "]"
-                        : "bg-[#535353]"
-                }`}
+                className={`absolute cursor-pointer hover:opacity-90 bottom-8 right-6 w-6 h-20 rounded-l-full content-center`}
+                style={{
+                    backgroundColor: number[5]?.status
+                        ? colorPalette[roomColor as keyof typeof colorPalette].dark
+                        : "#535353",
+                }}
                 onClick={() => toggleSegment(position, 5)}>
                 {number[5]?.elem?.icon.startsWith("http") ||
                 number[5]?.elem?.icon.startsWith("/src") ? (
@@ -175,13 +181,14 @@ export const DigitalNumber = (props: DigitalNumberProps) => {
 
             {/* Bottom horizontal line */}
             <div
-                className={`absolute cursor-pointer hover:bg-blue-500 bottom-2 left-6 content-center ${
+                className={`absolute cursor-pointer hover:opacity-90 bottom-2 left-6 content-center ${
                     amount < 4 ? "w-14 sph:w-22 ph:w-28" : "w-16 ph:w-20 sm:w-24 md:w-28"
-                } h-8 rounded-t-3xl ${
-                    number[6]?.status
-                        ? "bg-[" + colorPalette[roomColor as keyof typeof colorPalette].dark + "]"
-                        : "bg-[#535353]"
-                }`}
+                } h-8 rounded-t-3xl`}
+                style={{
+                    backgroundColor: number[6]?.status
+                        ? colorPalette[roomColor as keyof typeof colorPalette].dark
+                        : "#535353",
+                }}
                 onClick={() => toggleSegment(position, 6)}>
                 {number[6]?.elem?.icon.startsWith("http") ||
                 number[6]?.elem?.icon.startsWith("/src") ? (

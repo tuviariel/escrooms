@@ -87,8 +87,6 @@ const data = {
             quizData: [Q1D1, Q1D2, Q1D3, Q1D4, Q1D5],
             category: null,
             orderAnswer: null,
-            // correctOptions: [co1, co2, co3, co4, co5, co6, co7, co8, co9, co10, co11, co12],
-            // inCorrectOptions: [inCo1, inCo2, inCo3, inCo4, inCo5, inCo6, inCo7, inCo8, inCo9],
             hints: ["firstHint", "secondHint", "thirdHint", "forthHint", "fifthHint"],
         },
         {
@@ -101,8 +99,6 @@ const data = {
             quizData: ["imageURL"],
             category: null,
             orderAnswer: null,
-            // correctOptions: ["correct1", "correct2", "correct3", "correct4"],
-            // inCorrectOptions: ["incorrect1", "incorrect2", "incorrect3", "incorrect4"],
             hints: ["firstHint", "secondHint", "thirdHint", "forthHint", "fifthHint"],
         },
         {
@@ -126,8 +122,6 @@ const data = {
                 [0, 2],
                 [1, 0],
             ], //must change to real answer
-            // correctOptions: ["correct1", "correct2", "correct3", "correct4"],
-            // inCorrectOptions: ["incorrect1", "incorrect2", "incorrect3", "incorrect4"],
             hints: [
                 "לחצו על הדפים השונים עד שיתגלה הדין הנכון של הסיטואציה",
                 "כמובן, שצריך לסיים לתייג את כל הדפים",
@@ -146,22 +140,84 @@ const data = {
             quizData: ["imageURL"],
             category: null,
             orderAnswer: null,
-            // correctOptions: ["correct1", "correct2", "correct3", "correct4"],
-            // inCorrectOptions: ["incorrect1", "incorrect2", "incorrect3", "incorrect4"],
             hints: ["firstHint", "secondHint", "thirdHint", "forthHint", "fifthHint"],
         },
         {
             _id: "5",
-            type: "7segments",
-            answer: "247",
+            type: "orderBorder",
+            answer: "3579",
+            quiz: [
+                {
+                    title: "🫁 Airway",
+                    content: "בדוק שהנתיב האוויר פתוח וודא שאין חסימה.",
+                    explanation:
+                        "השלב הראשון הוא להבטיח מעבר אוויר תקין. יש לנקות הפרשות, להסיר גוף זר ולהשתמש באמצעים מתקדמים לפי הצורך.",
+                    interesting_insights:
+                        "אפילו חסימה חלקית של נתיב האוויר יכולה להחמיר במהירות למצוקה חמורה.",
+                },
+                {
+                    title: "🌬️ Breathing",
+                    content: "הערך את הנשימה וחפש סימני מצוקה נשימתית.",
+                    explanation:
+                        "לאחר פתיחת נתיב האוויר, יש לוודא שהמטופל נושם בצורה אפקטיבית. יש לבדוק תנועות בית חזה, קולות נשימה ורמת חמצן.",
+                    interesting_insights:
+                        "מצבי חזה אוויר בלחץ יכולים להיות קטלניים אם לא מאובחנים מיד.",
+                },
+                {
+                    title: "❤️ Circulation",
+                    content: "בדוק דופק, לחץ דם והאם יש דימום חיצוני פעיל.",
+                    explanation:
+                        "השלב כולל הערכת מצב ההמודינמי ועצירת דימומים חיצוניים באמצעות לחץ ישיר או אמצעים אחרים.",
+                    interesting_insights:
+                        "דימום בלתי נשלט הוא הסיבה המובילה לתמותה שניתן למנוע בפגיעות טראומה.",
+                },
+                {
+                    title: "🧠 Disability",
+                    content: "בצע בדיקה נוירולוגית מהירה.",
+                    explanation:
+                        "יש להעריך מצב הכרה (AVPU/Glasgow Coma Scale), גודל אישונים ותגובות נוירולוגיות בסיסיות.",
+                    interesting_insights:
+                        "ירידה חדה במצב ההכרה עשויה להעיד על פגיעת ראש קשה או על חסר חמצן.",
+                },
+                {
+                    title: "🩺 Exposure",
+                    content: "חשוף את כל גוף המטופל לבדיקה מלאה.",
+                    explanation:
+                        "הסרת בגדים מאפשרת לזהות פציעות נוספות אך חשוב לשמור על חימום למניעת היפותרמיה.",
+                    interesting_insights:
+                        "היפותרמיה עלולה להחמיר הפרעות בקרישת דם ולפגוע בסיכויי ההישרדות.",
+                },
+                {
+                    title: "📊 Full set of vital signs",
+                    content: "מדוד את כל המדדים החיוניים.",
+                    explanation:
+                        "יש לתעד חום, לחץ דם, דופק, קצב נשימה וריווי חמצן כדי לקבל תמונת מצב מלאה.",
+                    interesting_insights:
+                        "מדדים חיוניים יכולים להתריע מוקדם על הידרדרות לפני שמופיעים סימנים קליניים גלויים.",
+                },
+                {
+                    title: "💊 Give comfort measures",
+                    content: "ספק אמצעי נוחות וטיפול בכאב.",
+                    explanation:
+                        "ניהול כאב הוא חלק חשוב בטיפול בחולה טראומה וישמש לשיפור שיתוף הפעולה והערכת מצב נוספת.",
+                    interesting_insights:
+                        "כאבים לא מטופלים יכולים לגרום לתגובה פיזיולוגית שמחמירה את מצבו של המטופל.",
+                },
+                {
+                    title: "📋 History and Head-to-toe examination",
+                    content: "אסוף אנמנזה ובצע בדיקה גופנית מקיפה.",
+                    explanation:
+                        "היסטוריה רפואית (AMPLE) ובדיקה מלאה מהראש ועד כפות הרגליים מאפשרות לזהות בעיות שלא התגלו בבדיקה הראשונית.",
+                    interesting_insights:
+                        "השאלות על אלרגיות, תרופות, מחלות רקע וארוחה אחרונה עשויות לשנות את ניהול הטיפול וההתערבויות.",
+                },
+            ],
             quizImg: Q1Image,
             outerQuizImg: Q1Image,
             quizText: "טקסט מסביר את המשימה...",
             quizData: [Q1D1, Q1D2, Q1D3, Q1D4, Q1D5],
             category: null,
             orderAnswer: null,
-            // correctOptions: [co9, co9, co9, co9, co9, co9, co9, co9, co9, co9, co9, co9],
-            // inCorrectOptions: [co9, co9, co9, co9, co9, co9, co9, co9, co9],
             hints: ["firstHint", "secondHint", "thirdHint", "forthHint", "fifthHint"],
         },
     ],

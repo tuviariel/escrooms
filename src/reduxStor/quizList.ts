@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import data from "../services/dummyRoomData";
 let list = data.quiz.map((q, i) => {
-    return { id: i, completed: false };
+    return { id: i, completed: false, type: q.type, image: q.quizImg };
 });
 console.log("list", list);
 const initialState = { list };
