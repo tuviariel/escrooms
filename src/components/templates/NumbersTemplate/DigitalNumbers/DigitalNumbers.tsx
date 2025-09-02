@@ -11,7 +11,10 @@ interface DigitalNumbersProps {
     setResult: (newResult: string) => void;
     setOpenLock: (open: boolean) => void;
 }
-
+type TableContentType = {
+    index: number;
+    icon: string;
+};
 export const DigitalNumbers = (props: DigitalNumbersProps) => {
     const { data, result, setResult, setOpenLock } = props;
     const checkObj: Record<number, number[]> = {
@@ -46,8 +49,8 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
     const [nextLine, setNextLine] = useState(1);
     const [disabled, setDisabled] = useState(true);
     useEffect(() => {
-        const correct: any[] = [],
-            incorrect: any[] = [];
+        const correct: TableContentType[] = [],
+            incorrect: TableContentType[] = [];
         data.quiz.map((q, i) => {
             if (q.is_correct_action) {
                 correct.push({ index: i, icon: q.icons.correct });
@@ -57,8 +60,8 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
                 incorrect.push({ index: i, icon: q.icons.correct });
             }
         });
-        console.log("correct", correct);
-        console.log("incorrect", incorrect);
+        // console.log("correct", correct);
+        // console.log("incorrect", incorrect);
         const setRiddle = () => {
             const check = localStorage.getItem(data?._id);
             if (check && check !== "[]") {
@@ -80,8 +83,8 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
                                     ? (correctI = 0)
                                     : correctI++
                                 : incorrectI === incorrectMax
-                                ? (incorrectI = 0)
-                                : incorrectI++;
+                                  ? (incorrectI = 0)
+                                  : incorrectI++;
                             return {
                                 status: false,
                                 elem: isCorrect ? correct[correctI] : incorrect[incorrectI],

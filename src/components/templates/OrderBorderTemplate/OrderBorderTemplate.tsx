@@ -14,6 +14,7 @@ export const OrderBorderTemplate = (props: quizDataP) => {
     useEffect(() => {
         if (result === get_text("success", "he")) {
             setOpenLock(true);
+            setResult("");
         }
     }, [result]);
 

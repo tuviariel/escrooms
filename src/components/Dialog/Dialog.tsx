@@ -47,10 +47,10 @@ export const Dialog: React.FC<DialogProps> = (props) => {
                             size === "small"
                                 ? "max-w-lg w-full max-h-[90vh]"
                                 : size === "large"
-                                ? "w-[75vw] h-[75vh] max-w-6xl max-h-[90vh]"
-                                : size === "xLarge"
-                                ? "w-[90vw] h-[90vh] max-w-8xl max-h-[90vh]"
-                                : ""
+                                  ? "w-[75vw] h-[75vh] max-w-6xl max-h-[90vh]"
+                                  : size === "xLarge"
+                                    ? "w-[90vw] h-[90vh] max-w-8xl max-h-[90vh]"
+                                    : ""
                         }
                         flex flex-col overflow-hidden transition-all duration-300 ease-out
                     `}
@@ -63,7 +63,7 @@ export const Dialog: React.FC<DialogProps> = (props) => {
                             X
                         </div>
                         <div className="w-full h-full flex flex-col justify-center items-center overflow-auto">
-                            {children}
+                            {children || data}
                         </div>
                     </div>
                 </div>

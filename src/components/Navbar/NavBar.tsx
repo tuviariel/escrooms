@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, Outlet } from "react-router";
+import { useLocation, useNavigate } from "react-router"; //Outlet
 import Logo from "../../assets/images/vaivrach.jpg";
 // import Button from "../Button";
 

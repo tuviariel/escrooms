@@ -22,9 +22,9 @@ export const QuizSuccess = (props: quizSuccessProps) => {
     const setQuizNumber = (number: number) => {
         dispatch(quizNumberActions.changeQuizNumber(number));
     };
-    const quizL = useSelector(
-        (state: { quizList: { quizList: { id: number; completed: boolean }[] } }) => state.quizList
-    );
+    // const quizL = useSelector(
+    //     (state: { quizList: { quizList: { id: number; completed: boolean }[] } }) => state.quizList
+    // );
     // const quizList = quizL?.quizList;
     const setQuizList = (number: number) => {
         dispatch(quizListActions.changeQuizList(number));
@@ -36,6 +36,7 @@ export const QuizSuccess = (props: quizSuccessProps) => {
     const [digits, setDigits] = useState(new Array(data.length).fill("0"));
     useEffect(() => {
         honk();
+        setPlay(false);
     }, [play]);
     const inputRef = useRef(null);
     const setNumber = (value: string, index: number) => {

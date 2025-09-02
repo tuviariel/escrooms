@@ -7,7 +7,10 @@ interface GridProps {
     result: string;
     setResult: (newResult: string) => void;
 }
-
+type TableContentType = {
+    index: number;
+    icon: string;
+};
 export const Grid = (props: GridProps) => {
     const { data, result, setResult } = props;
     console.log(data);
@@ -33,11 +36,22 @@ export const Grid = (props: GridProps) => {
                     }
                 }
                 // console.log(rightAnswer);
+                const correct: TableContentType[] = [],
+                    incorrect: TableContentType[] = [];
+                data.quiz.map((q, i) => {
+                    if (q.is_correct_action) {
+                        correct.push({ index: i, icon: q.icons.correct });
+                        incorrect.push({ index: i, icon: q.icons.incorrect });
+                    } else {
+                        correct.push({ index: i, icon: q.icons.incorrect });
+                        incorrect.push({ index: i, icon: q.icons.correct });
+                    }
+                });
                 let create: any[] = [];
                 let correctI = -1,
                     incorrectI = -1,
-                    correctMax = data.correctOptions.length - 1,
-                    incorrectMax = data.inCorrectOptions.length - 1;
+                    correctMax = correct.length - 1,
+                    incorrectMax = incorrect.length - 1;
                 for (let levelI = 0; levelI < 5; levelI++) {
                     let level: any[] = [];
                     for (let charI = 0; charI < rightAnswer.length; charI++) {
@@ -55,13 +69,11 @@ export const Grid = (props: GridProps) => {
                                         ? (correctI = 0)
                                         : correctI++
                                     : incorrectI === incorrectMax
-                                    ? (incorrectI = 0)
-                                    : incorrectI++;
+                                      ? (incorrectI = 0)
+                                      : incorrectI++;
                                 return {
                                     status: false,
-                                    elem: isCorrect
-                                        ? data.correctOptions[correctI]
-                                        : data.inCorrectOptions[incorrectI],
+                                    elem: isCorrect ? correct[correctI] : incorrect[incorrectI],
                                     answer: isCorrect ? true : false,
                                 };
                             });

@@ -11,7 +11,7 @@ import Puzzle6 from "../../Puzzle6";
 export const ColorTemplate = (props: quizDataP) => {
     const { data } = props;
     const [result, setResult] = useState("");
-    const [open, setOpen] = useState(false);
+    // const [open, setOpen] = useState(false);
     const [openLock, setOpenLock] = useState(false);
 
     return (

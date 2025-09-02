@@ -50,7 +50,7 @@ export const Puzzle6 = (props: quizDataP) => {
 
     // Build images array based on initialPositions
     const getImages = (): DraggableImage[] => {
-        return initialPositions.map((idx, i) => ({
+        return initialPositions.map((idx) => ({
             id: idx,
             src: data.quizData[idx],
             answerSrc: data.category && data.orderAnswer && data.category[data.orderAnswer[idx][0]],

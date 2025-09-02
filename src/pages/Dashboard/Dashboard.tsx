@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import fraudImage from "../../assets/images/הונאות ומעילות.png";
 import GameCard from "../../components/GameCard";
 import Loading from "../../assets/images/loading.gif";
@@ -17,7 +17,7 @@ export interface ListObject {
 
 export const Dashboard = () => {
     //TODO- this list should be connected to the DB with all the room's quiz's data...
-    const [roomsList, setRoomsList] = useState<ListObject[]>([
+    const [roomsList] = useState<ListObject[]>([
         { id: "rfvwkjf34v43", name: get_text("sexual_harassment", "he"), image: "url" },
         { id: "rfvwkjf34v45", name: get_text("first_aid", "he"), image: "url" },
         { id: "kjbhdfvksjdf", name: get_text("fraud", "he"), image: fraudImage },
@@ -33,7 +33,7 @@ export const Dashboard = () => {
         if (document.exitFullscreen) {
             document.exitFullscreen();
         }
-
+        setErrorMessage("");
         //getting info through API service:
         const getList = async () => {};
         getList();

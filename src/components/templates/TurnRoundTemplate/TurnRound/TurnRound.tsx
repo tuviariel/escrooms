@@ -1,83 +1,84 @@
 import { useEffect, useState } from "react";
-import Button from "../../../Button";
+// import Button from "../../../Button";
 import { quizData } from "../../../../pages/Room/Room";
 interface TurnProps {
     data: quizData;
     result: string;
     setResult: (newResult: string) => void;
 }
-interface literalObject {
-    width: number;
-    points: number[][];
-}
+// interface literalObject {
+//     width: number;
+//     points: number[][];
+// }
 export const TurnRound = (props: TurnProps) => {
     const { data, result, setResult } = props;
     console.log(data);
 
-    const [active, setActive] = useState<
-        {
-            status: boolean;
-            elem: string;
-            answer: boolean;
-        }[][]
-    >([]);
-    const [disabled, setDisabled] = useState(true);
+    // const [active, setActive] = useState<
+    //     {
+    //         status: boolean;
+    //         elem: string;
+    //         answer: boolean;
+    //     }[][]
+    // >([]);
+    // const [disabled, setDisabled] = useState(true);
     const [cardAnswer, setCardAnswer] = useState(true);
-    // useEffect(() => {
-    //     const setRiddle = () => {
-    //         setActive(() => {
-    //             let create: any[] = [];
-    //             let correctI = -1,
-    //                 incorrectI = -1,
-    //                 correctMax = data.correctOptions.length - 1,
-    //                 incorrectMax = data.inCorrectOptions.length - 1;
-    //             for (let j = 0; j < 7; j++) {
-    //                 let level: any[] = [];
-    //                 for (let i = 0; i < data.answer.toString().length; i++) {
-    //                     let number: string = data.answer.toString()[i];
-    //                     const arr = new Array(1 + checkObj[Number(number)].width)
-    //                         .fill(null)
-    //                         .map((_, i) => {
-    //                             // console.log(checkObj[Number(number)].points[j - 1]);
-    //                             const isCorrect = checkObj[Number(number)].points[j].includes(
-    //                                 (j - 1) * 3 + i
-    //                             );
-    //                             isCorrect
-    //                                 ? correctI === correctMax
-    //                                     ? (correctI = 0)
-    //                                     : correctI++
-    //                                 : incorrectI === incorrectMax
-    //                                 ? (incorrectI = 0)
-    //                                 : incorrectI++;
-    //                             return {
-    //                                 status: false,
-    //                                 elem: isCorrect
-    //                                     ? data.correctOptions[correctI]
-    //                                     : data.inCorrectOptions[incorrectI],
-    //                                 answer: isCorrect ? true : false,
-    //                             };
-    //                         });
-    //                     // console.log(arr, i);
+    useEffect(() => {
+        setResult(result);
+        //     const setRiddle = () => {
+        //         setActive(() => {
+        //             let create: any[] = [];
+        //             let correctI = -1,
+        //                 incorrectI = -1,
+        //                 correctMax = data.correctOptions.length - 1,
+        //                 incorrectMax = data.inCorrectOptions.length - 1;
+        //             for (let j = 0; j < 7; j++) {
+        //                 let level: any[] = [];
+        //                 for (let i = 0; i < data.answer.toString().length; i++) {
+        //                     let number: string = data.answer.toString()[i];
+        //                     const arr = new Array(1 + checkObj[Number(number)].width)
+        //                         .fill(null)
+        //                         .map((_, i) => {
+        //                             // console.log(checkObj[Number(number)].points[j - 1]);
+        //                             const isCorrect = checkObj[Number(number)].points[j].includes(
+        //                                 (j - 1) * 3 + i
+        //                             );
+        //                             isCorrect
+        //                                 ? correctI === correctMax
+        //                                     ? (correctI = 0)
+        //                                     : correctI++
+        //                                 : incorrectI === incorrectMax
+        //                                 ? (incorrectI = 0)
+        //                                 : incorrectI++;
+        //                             return {
+        //                                 status: false,
+        //                                 elem: isCorrect
+        //                                     ? data.correctOptions[correctI]
+        //                                     : data.inCorrectOptions[incorrectI],
+        //                                 answer: isCorrect ? true : false,
+        //                             };
+        //                         });
+        //                     // console.log(arr, i);
 
-    //                     level = level.concat(arr);
-    //                     // console.log(level);
-    //                 }
-    //                 // console.log(level);
-    //                 incorrectI === incorrectMax ? (incorrectI = 0) : incorrectI++;
-    //                 level.push({
-    //                     status: false,
-    //                     elem: data.inCorrectOptions[incorrectI],
-    //                     answer: false,
-    //                 });
-    //                 create.push(level);
-    //                 level = [];
-    //             }
-    //             // console.log(create);
-    //             return create;
-    //         });
-    //     };
-    //     setRiddle();
-    // }, []);
+        //                     level = level.concat(arr);
+        //                     // console.log(level);
+        //                 }
+        //                 // console.log(level);
+        //                 incorrectI === incorrectMax ? (incorrectI = 0) : incorrectI++;
+        //                 level.push({
+        //                     status: false,
+        //                     elem: data.inCorrectOptions[incorrectI],
+        //                     answer: false,
+        //                 });
+        //                 create.push(level);
+        //                 level = [];
+        //             }
+        //             // console.log(create);
+        //             return create;
+        //         });
+        //     };
+        //     setRiddle();
+    }, []);
 
     // const checkAnswer = () => {
     //     let finished = true;
@@ -147,13 +148,13 @@ export const TurnRound = (props: TurnProps) => {
                     </div>
                 </div>
             </>
-            <div className={`flex ${active[0]?.length < 4 ? "ts:hidden" : "ph:hidden"}`}>
+            {/* <div className={`flex ${active[0]?.length < 4 ? "ts:hidden" : "ph:hidden"}`}>
                 Please turn your phone on its side
-            </div>
-            <div className={`${active.length < 4 ? "ts:flex" : "ph:flex"} hidden`}>
-                {/* <Button label="Check Answer" onClick={() => checkAnswer()} disabled={disabled} /> */}
+            </div> */}
+            {/* <div className={`${active.length < 4 ? "ts:flex" : "ph:flex"} hidden`}>
+                <Button label="Check Answer" onClick={() => checkAnswer()} disabled={disabled} />
                 <div className="pt-2">{result}</div>
-            </div>
+            </div> */}
         </div>
     );
 };
