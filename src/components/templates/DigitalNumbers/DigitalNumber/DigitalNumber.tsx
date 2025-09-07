@@ -12,8 +12,8 @@ interface DigitalNumberProps {
     number: ElemObject[];
     amount: number;
 }
-import { useRoomContext } from "../../../../../contexts/roomStyleContext";
-import { colorPalette } from "../../../../../util/UIstyle";
+import { useRoomContext } from "../../../../contexts/roomStyleContext";
+import { colorPalette } from "../../../../util/UIstyle";
 
 export const DigitalNumber = (props: DigitalNumberProps) => {
     const { position, number, toggleSegment, amount } = props;

@@ -1,16 +1,8 @@
 import { useEffect, useState } from "react";
 // import Button from "../../../Button";
-import { quizData } from "../../../../pages/Room/Room";
-interface TurnProps {
-    data: quizData;
-    result: string;
-    setResult: (newResult: string) => void;
-}
-// interface literalObject {
-//     width: number;
-//     points: number[][];
-// }
-export const TurnRound = (props: TurnProps) => {
+import { TemplateProps } from "../../../pages/QuizTemplate/QuizTemplate";
+
+export const TurnRound = (props: TemplateProps) => {
     const { data, result, setResult } = props;
     console.log(data);
 

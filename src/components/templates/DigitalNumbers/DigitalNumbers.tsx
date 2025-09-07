@@ -1,21 +1,22 @@
 import { useRef, useEffect, useState } from "react";
 import DigitalNumber from "./DigitalNumber";
-import Button from "../../../Button";
-import { quizData } from "../../../../pages/Room/Room";
-import { get_text } from "../../../../util/language";
-import { imageStyle } from "../../../../util/UIstyle";
-import { useRoomContext } from "../../../../contexts/roomStyleContext";
-interface DigitalNumbersProps {
-    data: quizData;
-    result: string;
-    setResult: (newResult: string) => void;
-    setOpenLock: (open: boolean) => void;
-}
+import Button from "../../Button";
+// import { quizData } from "../../../../pages/Room/Room";
+import { get_text } from "../../../util/language";
+import { imageStyle } from "../../../util/UIstyle";
+import { useRoomContext } from "../../../contexts/roomStyleContext";
+import { TemplateProps } from "../../../pages/QuizTemplate/QuizTemplate";
+// interface DigitalNumbersProps {
+//     data: quizData;
+//     result: string;
+//     setResult: (newResult: string) => void;
+//     setOpenLock: (open: boolean) => void;
+// }
 type TableContentType = {
     index: number;
     icon: string;
 };
-export const DigitalNumbers = (props: DigitalNumbersProps) => {
+export const DigitalNumbers = (props: TemplateProps) => {
     const { data, result, setResult, setOpenLock } = props;
     const checkObj: Record<number, number[]> = {
         1: [2, 5],
@@ -168,7 +169,7 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
         console.log("finished");
     };
 
-    console.log(roomColor);
+    // console.log(roomColor);
     return (
         <div
             className="bg-gray-100 w-full rounded-md"
@@ -211,7 +212,7 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
                                             onClick={() => {
                                                 setNextLine((prev) => {
                                                     console.log(prev);
-                                                    if (prev === i + 1) {
+                                                    if (prev === i) {
                                                         return prev + 1;
                                                     } else {
                                                         return i + 1;
@@ -232,7 +233,7 @@ export const DigitalNumbers = (props: DigitalNumbersProps) => {
                                             onClick={() => {
                                                 setNextLine((prev) => {
                                                     console.log(prev);
-                                                    if (prev === i + 1) {
+                                                    if (prev === i) {
                                                         return prev + 1;
                                                     } else {
                                                         return i + 1;

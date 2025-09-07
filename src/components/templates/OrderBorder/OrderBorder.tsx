@@ -1,27 +1,34 @@
 import { useEffect, useState } from "react";
-import Button from "../../../Button";
-import { GridCharObj } from "../../../../util/utils";
-import { quizData } from "../../../../pages/Room/Room";
-interface GridProps {
-    data: quizData;
-    result: string;
-    setResult: (newResult: string) => void;
-}
-type TableContentType = {
-    index: number;
-    icon: string;
-};
-export const Grid = (props: GridProps) => {
+import Button from "../../Button";
+import { GridCharObj } from "../../../util/utils";
+import { TemplateProps } from "../../../pages/QuizTemplate/QuizTemplate";
+import { imageStyle } from "../../../util/UIstyle";
+import { useRoomContext } from "../../../contexts/roomStyleContext";
+
+// interface GridProps {
+//     data: quizData;
+//     result: string;
+//     setResult: (newResult: string) => void;
+// }
+// type TableContentType = {
+//     index: number;
+//     icon: string;
+// };
+export const OrderBorder = (props: TemplateProps) => {
     const { data, result, setResult } = props;
     console.log(data);
     const [active, setActive] = useState<
         {
             status: boolean;
-            elem: string;
+            elem: {
+                icon: string;
+                title: string;
+            };
             answer: boolean;
         }[][]
     >([]);
     const [disabled, setDisabled] = useState(true);
+    const { roomStyle } = useRoomContext();
     useEffect(() => {
         const setGrid = () => {
             setActive(() => {
@@ -36,22 +43,22 @@ export const Grid = (props: GridProps) => {
                     }
                 }
                 // console.log(rightAnswer);
-                const correct: TableContentType[] = [],
-                    incorrect: TableContentType[] = [];
-                data.quiz.map((q, i) => {
-                    if (q.is_correct_action) {
-                        correct.push({ index: i, icon: q.icons.correct });
-                        incorrect.push({ index: i, icon: q.icons.incorrect });
-                    } else {
-                        correct.push({ index: i, icon: q.icons.incorrect });
-                        incorrect.push({ index: i, icon: q.icons.correct });
-                    }
-                });
+                // const correct: TableContentType[] = [],
+                //     incorrect: TableContentType[] = [];
+                // data.quiz.map((q, i) => {
+                //     if (q.is_correct_action) {
+                //         correct.push({ index: i, icon: q.icons.correct });
+                //         incorrect.push({ index: i, icon: q.icons.incorrect });
+                //     } else {
+                //         correct.push({ index: i, icon: q.icons.incorrect });
+                //         incorrect.push({ index: i, icon: q.icons.correct });
+                //     }
+                // });
                 let create: any[] = [];
                 let correctI = -1,
                     incorrectI = -1,
-                    correctMax = correct.length - 1,
-                    incorrectMax = incorrect.length - 1;
+                    correctMax = data.quiz[0].length - 1,
+                    incorrectMax = data.quiz[1].length - 1;
                 for (let levelI = 0; levelI < 5; levelI++) {
                     let level: any[] = [];
                     for (let charI = 0; charI < rightAnswer.length; charI++) {
@@ -73,7 +80,9 @@ export const Grid = (props: GridProps) => {
                                       : incorrectI++;
                                 return {
                                     status: false,
-                                    elem: isCorrect ? correct[correctI] : incorrect[incorrectI],
+                                    elem: isCorrect
+                                        ? data.quiz[0][correctI]
+                                        : data.quiz[1][incorrectI],
                                     answer: isCorrect ? true : false,
                                 };
                             });
@@ -122,7 +131,13 @@ export const Grid = (props: GridProps) => {
     };
     console.log(active);
     return (
-        <div className="bg-gray-100 w-full">
+        <div
+            className="bg-gray-100 w-full"
+            style={{
+                backgroundImage: `url(${
+                    imageStyle[roomStyle as keyof typeof imageStyle].background
+                })`,
+            }}>
             <div
                 className={`${
                     active[0]?.length < 4 ? "ts:flex" : "ph:flex"
@@ -141,8 +156,9 @@ export const Grid = (props: GridProps) => {
                                                     className={`border border-amber-800 h-10 w-8 cursor-pointer ${
                                                         box.status ? "bg-amber-700" : "bg-amber-200"
                                                     }`}
-                                                    onClick={() => toggleSegment(i, j)}>
-                                                    {box.elem}
+                                                    onClick={() => toggleSegment(i, j)}
+                                                    title={box.elem.title}>
+                                                    {box.elem.icon}
                                                 </div>
                                             );
                                         })}

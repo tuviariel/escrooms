@@ -1,18 +1,20 @@
-import { JSX, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router";
-import NumbersTemplate from "../../components/templates/NumbersTemplate";
-import GridTemplate from "../../components/templates/GridTemplate";
+// import NumbersTemplate from "../../components/templates/NumbersTemplate";
+// import GridTemplate from "../../components/templates/GridTemplate";
 import data from "../../services/dummyRoomData";
-import ColorTemplate from "../../components/templates/ColorTemplate";
-import TurnRoundTemplate from "../../components/templates/TurnRoundTemplate";
-import OrderBorderTemplate from "../../components/templates/OrderBorderTemplate";
+// import ColorTemplate from "../../components/templates/Color";
+// import TurnRoundTemplate from "../../components/templates/TurnRoundTemplate";
+// import OrderBorderTemplate from "../../components/templates/OrderBorder";
 import { useRoomContext } from "../../contexts/roomStyleContext";
+import { colorPalette } from "../../util/UIstyle";
 import backArrow from "../../assets/images/backArrow.svg";
 import { get_text } from "../../util/language";
 import Dialog from "../../components/Dialog";
 import Button from "../../components/Button";
 import { useSelector, useDispatch } from "react-redux";
 import { quizNumberActions } from "../../reduxStor/quizNumber";
+import QuizTemplate from "../QuizTemplate";
 // import { quizListActions } from "../../reduxStor/quizList";
 export interface quizDataProps {
     data: {
@@ -37,8 +39,6 @@ export interface quizData {
     quizData: string[] | any[];
     category: any[] | null;
     orderAnswer: number[][] | null;
-    // correctOptions: string[] | any[];
-    // inCorrectOptions: string[] | any[];
     hints: string[];
 }
 
@@ -60,19 +60,19 @@ export const Room = () => {
     //     dispatch(quizListActions.changeQuizList(number));
     // };
     // const { quizNumber, setQuizNumber } = useQuizContext();
-    const types: Record<string, JSX.Element> = {
-        "7segments": <NumbersTemplate data={data.quiz[quizNumber]} />,
-        gridPlay: <GridTemplate data={data.quiz[quizNumber]} />,
-        colorChange: <ColorTemplate data={data.quiz[quizNumber]} />,
-        turnRound: <TurnRoundTemplate data={data.quiz[quizNumber]} />,
-        borderOrder: <OrderBorderTemplate data={data.quiz[quizNumber]} />,
-    };
+    // const types: Record<string, JSX.Element> = {
+    //     "7segments": <NumbersTemplate data={data.quiz[quizNumber]} />,
+    //     gridPlay: <GridTemplate data={data.quiz[quizNumber]} />,
+    //     colorChange: <ColorTemplate data={data.quiz[quizNumber]} />,
+    //     turnRound: <TurnRoundTemplate data={data.quiz[quizNumber]} />,
+    //     borderOrder: <OrderBorderTemplate data={data.quiz[quizNumber]} />,
+    // };
     const [checkLeave, setCheckLeave] = useState(false);
     // const [quizList, setQuizList] = useState<{ id: number; completed: boolean }[]>([]);
     const navigate = useNavigate();
     const location = useLocation();
     const roomId = location.pathname.split("/").pop();
-    const { setRoomColor, setRoomStyle, setRoomFont } = useRoomContext();
+    const { setRoomColor, setRoomStyle, setRoomFont, roomColor } = useRoomContext();
     useEffect(() => {
         // in future get room data from Api call via roomId. now just checking Id is right:
         if (roomId !== data._id) {
@@ -100,7 +100,8 @@ export const Room = () => {
                         className="cursor-pointer h-8 w-8 z-20 md:h-12 md:w-12 fixed left-3 top-3 p-1 rounded-full bg-gray-100 border-2 hover:border-amber-700"
                         onClick={() => setQuizNumber(-1)}
                     />
-                    {types[data.quiz[quizNumber].type]}
+                    {/* TODO: add quiz data besides the specific template */}
+                    <QuizTemplate data={data.quiz[quizNumber]} />
                 </>
             ) : (
                 <>
@@ -112,13 +113,13 @@ export const Room = () => {
                             onClick={() => setCheckLeave(true)}>
                             X
                         </div>
-                        <div className="absolute top-0 left-0">
+                        <div className="absolute top-0 left-0 h-full w-auto">
                             {quizList &&
                                 quizList.map((quiz: any) => {
                                     return (
                                         <div
                                             key={quiz.id}
-                                            className={`z-30 md:h-44 h-16 w-16 rounded-full ${
+                                            className={`z-30 h-22 w-22 rounded-full ${
                                                 quiz.completed
                                                     ? ""
                                                     : "backdrop-blur-md border-2 hover:border-amber-50 cursor-pointer"
@@ -126,6 +127,15 @@ export const Room = () => {
                                             onClick={() =>
                                                 !quiz.completed && setQuizNumber(quiz.id)
                                             }
+                                            style={{
+                                                borderColor: quiz.completed
+                                                    ? colorPalette[
+                                                          roomColor as keyof typeof colorPalette
+                                                      ].dark
+                                                    : colorPalette[
+                                                          roomColor as keyof typeof colorPalette
+                                                      ].bright,
+                                            }}
                                             title={quiz.type}>
                                             <img
                                                 src={quiz.image}
