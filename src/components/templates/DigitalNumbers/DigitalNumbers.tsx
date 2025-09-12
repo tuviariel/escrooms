@@ -172,14 +172,14 @@ export const DigitalNumbers = (props: TemplateProps) => {
     // console.log(roomColor);
     return (
         <div
-            className="bg-gray-100 w-full rounded-md"
+            className="bg-gray-100 flex flex-col w-full rounded-md"
             style={{
                 backgroundImage: `url(${
                     imageStyle[roomStyle as keyof typeof imageStyle].background
                 })`,
             }}>
             <div
-                className={` h-full max-h-96 sm:max-h-24 md:max-h-72 w-full overflow-y-auto border-4 border-b-cyan-900 rounded-t-md`}>
+                className={`h-full max-h-96 sm:max-h-24 md:max-h-72 w-full overflow-y-auto border-4 border-b-cyan-900 rounded-t-md`}>
                 <table
                     className="table-auto w-full h-full text-right border border-amber-50 text-xl text-amber-50 overflow-y-auto"
                     dir="rtl">

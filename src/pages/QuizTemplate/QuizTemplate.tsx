@@ -70,17 +70,26 @@ export const QuizTemplate = (props: quizDataP) => {
         ),
     };
     return (
-        <div className="flex flex-col relative h-full min-h-96">
+        <div className="flex flex-col relative h-full min-h-80" dir="rtl">
             {types[data.type]}
             {showText ? (
-                <div
-                    className="fixed bottom-3 -left-1/2 translate-x-1/2 max-w-screen h-10 rounded-4xl m-2 text-center"
-                    style={{
-                        backgroundColor: colorPalette[roomColor as keyof typeof colorPalette].light,
-                        color: colorPalette[roomColor as keyof typeof colorPalette].dark,
-                        borderColor: colorPalette[roomColor as keyof typeof colorPalette].dark,
-                    }}>
-                    {data.quizText}
+                <div className="fixed bottom-10 md:bottom-20 left-1/2 transform -translate-x-1/2 max-w-screen rounded-4xl m-2 text-center flex items-center justify-center px-4">
+                    <span
+                        className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
+                        style={{
+                            backgroundColor:
+                                colorPalette[roomColor as keyof typeof colorPalette].light,
+                        }}></span>
+                    <div
+                        className="relative rounded-full px-5 py-2.5 text-lg font-medium border-2"
+                        style={{
+                            backgroundColor:
+                                colorPalette[roomColor as keyof typeof colorPalette].light,
+                            color: colorPalette[roomColor as keyof typeof colorPalette].dark,
+                            borderColor: colorPalette[roomColor as keyof typeof colorPalette].dark,
+                        }}>
+                        {data.quizText}
+                    </div>
                 </div>
             ) : (
                 <div className="fixed right-3 bottom-3">

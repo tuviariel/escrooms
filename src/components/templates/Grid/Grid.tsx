@@ -5,6 +5,7 @@ import { GridCharObj } from "../../../util/utils";
 import { imageStyle } from "../../../util/UIstyle";
 import { useRoomContext } from "../../../contexts/roomStyleContext";
 import { TemplateProps } from "../../../pages/QuizTemplate/QuizTemplate";
+import { get_text } from "../../../util/language";
 // interface GridProps {
 //     data: quizData;
 //     result: string;
@@ -132,7 +133,7 @@ export const Grid = (props: TemplateProps) => {
     console.log(active);
     return (
         <div
-            className="bg-gray-100 w-full"
+            className="bg-gray-100 flex flex-col w-screen h-screen p-3"
             style={{
                 backgroundImage: `url(${
                     imageStyle[roomStyle as keyof typeof imageStyle].background
@@ -144,7 +145,7 @@ export const Grid = (props: TemplateProps) => {
                 } hidden items-center justify-center`}>
                 <>
                     {active.length > 0 ? (
-                        <div className="">
+                        <div className="" dir="ltr">
                             {active.map((line, i) => {
                                 // console.log(line);
                                 return (
@@ -175,7 +176,11 @@ export const Grid = (props: TemplateProps) => {
                 Please turn your phone on its side
             </div>
             <div className={`${active.length < 4 ? "ts:flex" : "ph:flex"} hidden`}>
-                <Button label="Check Answer" onClick={() => checkAnswer()} disabled={disabled} />
+                <Button
+                    label={get_text("check_answer", "he")}
+                    onClick={() => checkAnswer()}
+                    disabled={disabled}
+                />
                 <div className="pt-2">{result}</div>
             </div>
         </div>

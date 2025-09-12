@@ -5,15 +5,6 @@ import { TemplateProps } from "../../../pages/QuizTemplate/QuizTemplate";
 import { imageStyle } from "../../../util/UIstyle";
 import { useRoomContext } from "../../../contexts/roomStyleContext";
 
-// interface GridProps {
-//     data: quizData;
-//     result: string;
-//     setResult: (newResult: string) => void;
-// }
-// type TableContentType = {
-//     index: number;
-//     icon: string;
-// };
 export const OrderBorder = (props: TemplateProps) => {
     const { data, result, setResult } = props;
     console.log(data);

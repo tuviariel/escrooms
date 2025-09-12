@@ -117,7 +117,7 @@ const data = {
             ],
             quizImg: "imageURL",
             outerQuizImg: Q1Image,
-            quizText: "עבור כל דמות וסיטואציה חובה לקבוע אם הוא פעל כראוי או אם עבר על איסוי מעילה",
+            quizText: "אתה מארגן תיק של ציוד עזרה ראשונה. מה תשים בתיק?",
             category: null,
             orderAnswer: null,
             hints: ["firstHint", "secondHint", "thirdHint", "forthHint", "fifthHint"],
