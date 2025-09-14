@@ -123,7 +123,13 @@ export const OrderBorder = (props: TemplateProps) => {
 
     // console.log(cards);
     return (
-        <>
+        <div
+            style={{
+                backgroundImage: `url(${imageStyle[roomStyle as keyof typeof imageStyle].background})`,
+
+                backgroundSize: "cover",
+            }}
+            className="py-4">
             <DndContext
                 sensors={!disabled ? sensors : undefined}
                 collisionDetection={closestCenter}
@@ -132,8 +138,8 @@ export const OrderBorder = (props: TemplateProps) => {
                     items={cards.map((c) => c.id)}
                     strategy={verticalListSortingStrategy}>
                     <div className="flex flex-col items-center">
-                        {cards.map((card: any) => (
-                            <SortableCard key={card.id} {...card} />
+                        {cards.map((card, i) => (
+                            <SortableCard key={card.id} {...card} index={i} />
                         ))}
                     </div>
                 </SortableContext>
@@ -156,6 +162,6 @@ export const OrderBorder = (props: TemplateProps) => {
                     </div>
                 )}
             </div>
-        </>
+        </div>
     );
 };
