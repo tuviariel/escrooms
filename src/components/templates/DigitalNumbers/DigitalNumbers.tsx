@@ -1,35 +1,19 @@
 import { useRef, useEffect, useState } from "react";
 import DigitalNumber from "./DigitalNumber";
 import Button from "../../Button";
-// import { quizData } from "../../../../pages/Room/Room";
 import { get_text } from "../../../util/language";
 import { imageStyle } from "../../../util/UIstyle";
 import { useRoomContext } from "../../../contexts/roomStyleContext";
 import { TemplateProps } from "../../../pages/QuizTemplate/QuizTemplate";
-// interface DigitalNumbersProps {
-//     data: quizData;
-//     result: string;
-//     setResult: (newResult: string) => void;
-//     setOpenLock: (open: boolean) => void;
-// }
+import { segmentsCheckObj } from "../../../util/utils";
+
 type TableContentType = {
     index: number;
     icon: string;
 };
 export const DigitalNumbers = (props: TemplateProps) => {
     const { data, result, setResult, setOpenLock } = props;
-    const checkObj: Record<number, number[]> = {
-        1: [2, 5],
-        2: [0, 2, 3, 4, 6],
-        3: [0, 2, 3, 5, 6],
-        4: [1, 2, 3, 5],
-        5: [0, 1, 3, 5, 6],
-        6: [0, 1, 3, 4, 5, 6],
-        7: [0, 2, 5],
-        8: [0, 1, 2, 3, 4, 5, 6],
-        9: [0, 1, 2, 3, 5, 6],
-        0: [0, 1, 2, 4, 5, 6],
-    };
+
     const { roomStyle, roomColor } = useRoomContext();
     const [active, setActive] = useState<
         {
@@ -78,7 +62,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
                     for (let i = 0; i < data.answer.toString().length; i++) {
                         let number: any = data.answer.toString()[i];
                         const arr = new Array(7).fill(null).map((_, i) => {
-                            const isCorrect = checkObj[Number(number)].includes(i);
+                            const isCorrect = segmentsCheckObj[Number(number)].includes(i);
                             isCorrect
                                 ? correctI === correctMax
                                     ? (correctI = 0)
@@ -126,8 +110,8 @@ export const DigitalNumbers = (props: TemplateProps) => {
             answerArr[i].map((elem, j) => {
                 // console.log(elem, !checkObj[Number(number)].includes(j));
                 if (
-                    (checkObj[Number(number)].includes(j) && elem?.status === false) ||
-                    (!checkObj[Number(number)].includes(j) && elem?.status === true)
+                    (segmentsCheckObj[Number(number)].includes(j) && elem?.status === false) ||
+                    (!segmentsCheckObj[Number(number)].includes(j) && elem?.status === true)
                 ) {
                     // console.log("wrong");
                     finished = false;

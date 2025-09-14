@@ -2,6 +2,7 @@ export const dateDisplay = (ts: number) => {
     const date = new Date(ts);
     return date.toLocaleDateString("he-IL");
 };
+
 interface literalObject {
     width: number;
     points: number[][];
@@ -200,4 +201,30 @@ export const GridCharObj: Record<string, literalObject> = {
         width: 4,
         points: [[1, 4], [5, 6, 7, 8], [10, 11], [15, 16], [20]],
     },
+};
+
+export const ListNumObj: Record<string, string[]> = {
+    "1": ["R", "R"],
+    "2": ["TR", "TLB"],
+    "3": ["TR", "TRB"],
+    "4": ["LR", "TR"],
+    "5": ["TL", "TRB"],
+    "6": ["TL", "TRLB"],
+    "7": ["TR", "R"],
+    "8": ["TRLB", "TRLB"],
+    "9": ["TRLB", "TRB"],
+    "0": ["TRL", "RLB"],
+};
+
+export const segmentsCheckObj: Record<number, number[]> = {
+    1: [2, 5],
+    2: [0, 2, 3, 4, 6],
+    3: [0, 2, 3, 5, 6],
+    4: [1, 2, 3, 5],
+    5: [0, 1, 3, 5, 6],
+    6: [0, 1, 3, 4, 5, 6],
+    7: [0, 2, 5],
+    8: [0, 1, 2, 3, 4, 5, 6],
+    9: [0, 1, 2, 3, 5, 6],
+    0: [0, 1, 2, 4, 5, 6],
 };

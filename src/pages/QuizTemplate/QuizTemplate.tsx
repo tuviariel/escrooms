@@ -2,8 +2,8 @@ import { JSX, useEffect, useState } from "react";
 import DigitalNumbers from "../../components/templates/DigitalNumbers";
 import Grid from "../../components/templates/Grid";
 import Color from "../../components/templates/Color";
-import TurnRound from "../../components/templates/DigitalNumbers";
-import OrderBorder from "../../components/templates/DigitalNumbers";
+import TurnRound from "../../components/templates/TurnRound";
+import OrderBorder from "../../components/templates/OrderBorder";
 import Dialog from "../../components/Dialog";
 import HintChat from "../../components/HintChat";
 import { quizDataP } from "../Room/Room";
@@ -60,7 +60,7 @@ export const QuizTemplate = (props: quizDataP) => {
                 setOpenLock={setOpenLock}
             />
         ),
-        borderOrder: (
+        orderBorder: (
             <OrderBorder
                 data={data}
                 result={result}

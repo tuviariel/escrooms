@@ -1,174 +1,161 @@
 import { useEffect, useState } from "react";
 import Button from "../../Button";
-import { GridCharObj } from "../../../util/utils";
+import { ListNumObj } from "../../../util/utils";
 import { TemplateProps } from "../../../pages/QuizTemplate/QuizTemplate";
 import { imageStyle } from "../../../util/UIstyle";
 import { useRoomContext } from "../../../contexts/roomStyleContext";
+import { get_text } from "../../../util/language";
+import {
+    DndContext,
+    closestCenter,
+    KeyboardSensor,
+    PointerSensor,
+    TouchSensor,
+    useSensor,
+    useSensors,
+} from "@dnd-kit/core";
+import {
+    arrayMove,
+    SortableContext,
+    sortableKeyboardCoordinates,
+    verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import SortableCard from "./SortableCard";
 
 export const OrderBorder = (props: TemplateProps) => {
-    const { data, result, setResult } = props;
-    console.log(data);
-    const [active, setActive] = useState<
+    const { data, result, setResult, setOpenLock } = props;
+    const [cards, setCards] = useState<
         {
-            status: boolean;
-            elem: {
-                icon: string;
+            id: number;
+            data: {
                 title: string;
+                content: string;
+                explanation: string;
+                interesting_insights: string;
             };
-            answer: boolean;
-        }[][]
+            borders: string;
+        }[]
     >([]);
-    const [disabled, setDisabled] = useState(true);
+    const [disabled, setDisabled] = useState(false);
     const { roomStyle } = useRoomContext();
     useEffect(() => {
-        const setGrid = () => {
-            setActive(() => {
-                let rightAnswer = "";
+        const setList = () => {
+            setCards(() => {
+                let answer = "";
                 if (/\d/.test(data.answer[0]) || /[a-zA-Z]/.test(data.answer[0])) {
                     //checking if answer is a number or a letter in English-
-                    rightAnswer = data.answer;
+                    answer = data.answer;
                 } else {
                     //if it is a letter in hebrew the answer should first be reversed:
                     for (let i = 0; i < data.answer.length; i++) {
-                        rightAnswer = data.answer[i] + rightAnswer;
+                        answer = data.answer[i] + answer;
                     }
                 }
-                // console.log(rightAnswer);
-                // const correct: TableContentType[] = [],
-                //     incorrect: TableContentType[] = [];
-                // data.quiz.map((q, i) => {
-                //     if (q.is_correct_action) {
-                //         correct.push({ index: i, icon: q.icons.correct });
-                //         incorrect.push({ index: i, icon: q.icons.incorrect });
-                //     } else {
-                //         correct.push({ index: i, icon: q.icons.incorrect });
-                //         incorrect.push({ index: i, icon: q.icons.correct });
-                //     }
-                // });
-                let create: any[] = [];
-                let correctI = -1,
-                    incorrectI = -1,
-                    correctMax = data.quiz[0].length - 1,
-                    incorrectMax = data.quiz[1].length - 1;
-                for (let levelI = 0; levelI < 5; levelI++) {
-                    let level: any[] = [];
-                    for (let charI = 0; charI < rightAnswer.length; charI++) {
-                        let char: string = rightAnswer[charI];
-                        const arr = new Array(
-                            charI === 0 ? GridCharObj[char].width : 1 + GridCharObj[char].width
-                        )
-                            .fill(null)
-                            .map((_, IInChar) => {
-                                const isCorrect = GridCharObj[char].points[levelI].includes(
-                                    charI === 0 ? levelI * 4 + IInChar + 1 : levelI * 4 + IInChar
-                                );
-                                isCorrect
-                                    ? correctI === correctMax
-                                        ? (correctI = 0)
-                                        : correctI++
-                                    : incorrectI === incorrectMax
-                                      ? (incorrectI = 0)
-                                      : incorrectI++;
-                                return {
-                                    status: false,
-                                    elem: isCorrect
-                                        ? data.quiz[0][correctI]
-                                        : data.quiz[1][incorrectI],
-                                    answer: isCorrect ? true : false,
-                                };
-                            });
-                        // console.log(arr, i);
-                        level = level.concat(arr);
-                        // console.log(level);
-                    }
-                    create.push(level);
-                    level = [];
-                }
+                let create: any[] = new Array(data.quiz.length).fill(null).map((_, i) => {
+                    return {
+                        data: data.quiz[i],
+                        borders:
+                            ListNumObj[i % 2 === 0 ? answer[i / 2] : answer[(i - 1) / 2]][
+                                i % 2 === 0 ? 0 : 1
+                            ],
+                        id: i,
+                    };
+                });
+                // console.log(create);
+                create = create.sort(() => Math.random() - 0.5);
                 // console.log(create);
                 return create;
             });
         };
-        setGrid();
+        setList();
     }, []);
 
     const checkAnswer = () => {
         let finished = true;
-        active.map((line) => {
-            line.map((elem) => {
-                if (
-                    (elem?.answer === true && elem?.status === false) ||
-                    (elem?.answer === false && elem?.status === true)
-                ) {
-                    finished = false;
-                    return setResult("Wrong answer! Try again..");
-                }
-            });
-        });
+        for (let i = 0; i < cards.length; i++) {
+            const card = cards[i];
+            if (card.id !== i) {
+                finished = false;
+                setResult(get_text("wrong", "he"));
+                break;
+            }
+        }
         if (finished) {
-            setResult("Great!");
+            setResult(get_text("success", "he"));
+            setDisabled(true);
         }
     };
 
-    const toggleSegment = (position: number, index: number) => {
-        disabled && setDisabled(false);
-        result && setResult("");
-        const updatedActive = [...active];
-        updatedActive[position] = [...updatedActive[position]];
-        updatedActive[position][index] = {
-            ...updatedActive[position][index],
-            status: !updatedActive[position][index].status,
-        };
-        setActive(updatedActive);
+    const sensors =
+        window.outerWidth > 768
+            ? useSensors(
+                  useSensor(PointerSensor, {
+                      activationConstraint: {
+                          distance: 5,
+                      },
+                  }),
+                  useSensor(KeyboardSensor, {
+                      coordinateGetter: sortableKeyboardCoordinates,
+                  })
+              )
+            : useSensors(
+                  useSensor(TouchSensor, {
+                      activationConstraint: {
+                          distance: 5,
+                      },
+                  }),
+                  useSensor(KeyboardSensor, {
+                      coordinateGetter: sortableKeyboardCoordinates,
+                  })
+              );
+
+    const handleDragEnd = (event: any) => {
+        const { active, over } = event;
+        result === get_text("wrong", "he") && setResult("");
+        if (active.id !== over?.id) {
+            const oldIndex = cards.findIndex((c) => c.id === active.id);
+            const newIndex = cards.findIndex((c) => c.id === over.id);
+            const newCards = arrayMove(cards, oldIndex, newIndex);
+            setCards(newCards);
+            // onOrderChange?.(newCards);
+        }
     };
-    console.log(active);
+
+    // console.log(cards);
     return (
-        <div
-            className="bg-gray-100 w-full"
-            style={{
-                backgroundImage: `url(${
-                    imageStyle[roomStyle as keyof typeof imageStyle].background
-                })`,
-            }}>
-            <div
-                className={`${
-                    active[0]?.length < 4 ? "ts:flex" : "ph:flex"
-                } hidden items-center justify-center`}>
-                <>
-                    {active.length > 0 ? (
-                        <div className="">
-                            {active.map((line, i) => {
-                                // console.log(line);
-                                return (
-                                    <div className="flex " key={i}>
-                                        {line.map((box, j) => {
-                                            return (
-                                                <div
-                                                    key={i + " " + j}
-                                                    className={`border border-amber-800 h-10 w-8 cursor-pointer ${
-                                                        box.status ? "bg-amber-700" : "bg-amber-200"
-                                                    }`}
-                                                    onClick={() => toggleSegment(i, j)}
-                                                    title={box.elem.title}>
-                                                    {box.elem.icon}
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    ) : (
-                        "Preparing Riddle"
-                    )}
-                </>
+        <>
+            <DndContext
+                sensors={!disabled ? sensors : undefined}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}>
+                <SortableContext
+                    items={cards.map((c) => c.id)}
+                    strategy={verticalListSortingStrategy}>
+                    <div className="flex flex-col items-center">
+                        {cards.map((card: any) => (
+                            <SortableCard key={card.id} {...card} />
+                        ))}
+                    </div>
+                </SortableContext>
+            </DndContext>
+            <div className="flex">
+                <Button
+                    label={
+                        result === get_text("success", "he")
+                            ? get_text("finish", "he")
+                            : get_text("check_answer", "he")
+                    }
+                    onClick={() =>
+                        result === get_text("success", "he") ? setOpenLock(true) : checkAnswer()
+                    }
+                    className="flex w-auto mx-10 min-w-fit "
+                />
+                {result && (
+                    <div className="m-auto p-1 rounded-xl text-center bg-amber-50" dir="rtl">
+                        {result}
+                    </div>
+                )}
             </div>
-            <div className={`flex ${active[0]?.length < 4 ? "ts:hidden" : "ph:hidden"}`}>
-                Please turn your phone on its side
-            </div>
-            <div className={`${active.length < 4 ? "ts:flex" : "ph:flex"} hidden`}>
-                <Button label="Check Answer" onClick={() => checkAnswer()} disabled={disabled} />
-                <div className="pt-2">{result}</div>
-            </div>
-        </div>
+        </>
     );
 };
