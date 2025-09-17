@@ -138,7 +138,8 @@ export const Grid = (props: TemplateProps) => {
                 backgroundImage: `url(${
                     imageStyle[roomStyle as keyof typeof imageStyle].background
                 })`,
-            }}>
+            }}
+            dir="rtl">
             <div
                 className={`${
                     active[0]?.length < 4 ? "ts:flex" : "ph:flex"

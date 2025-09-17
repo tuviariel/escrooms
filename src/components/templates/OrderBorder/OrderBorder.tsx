@@ -42,14 +42,12 @@ export const OrderBorder = (props: TemplateProps) => {
         const setList = () => {
             setCards(() => {
                 let answer = "";
-                if (/\d/.test(data.answer[0]) || /[a-zA-Z]/.test(data.answer[0])) {
-                    //checking if answer is a number or a letter in English-
+                if (/\d/.test(data.answer[0])) {
+                    //checking if answer is a number-
                     answer = data.answer;
                 } else {
-                    //if it is a letter in hebrew the answer should first be reversed:
-                    for (let i = 0; i < data.answer.length; i++) {
-                        answer = data.answer[i] + answer;
-                    }
+                    //if it is a letter it shouldn't work, yet
+                    answer = data.answer;
                 }
                 let create: any[] = new Array(data.quiz.length).fill(null).map((_, i) => {
                     return {

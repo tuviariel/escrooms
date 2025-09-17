@@ -79,6 +79,12 @@ export const Room = () => {
             navigate("/");
         } else if (document.documentElement.requestFullscreen) {
             document.documentElement.requestFullscreen();
+            // if (screen.orientation && screen.orientation.lock) {
+            //     screen.orientation.lock("landscape").catch((err) => {
+            //         console.warn("Orientation lock failed:", err);
+            //     });
+            // }
+            console.log("orientation:", screen.orientation);
             setRoomStyle(data.imageStyle);
             setRoomColor(data.colorPalette);
             setRoomFont(data.fontFamily);

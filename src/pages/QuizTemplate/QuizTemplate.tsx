@@ -70,7 +70,7 @@ export const QuizTemplate = (props: quizDataP) => {
         ),
     };
     return (
-        <div className="flex flex-col relative h-full min-h-80" dir="rtl">
+        <div className="flex flex-col relative h-full min-h-80">
             {types[data.type]}
             {showText ? (
                 <div className="fixed bottom-10 md:bottom-20 left-1/2 transform -translate-x-1/2 max-w-screen rounded-4xl m-2 text-center flex items-center justify-center px-4">
