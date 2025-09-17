@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from "react";
 import DigitalNumber from "./DigitalNumber";
 import Button from "../../Button";
 import { get_text } from "../../../util/language";
-import { imageStyle } from "../../../util/UIstyle";
+import { colorPalette, imageStyle } from "../../../util/UIstyle";
 import { useRoomContext } from "../../../contexts/roomStyleContext";
 import { TemplateProps } from "../../../pages/QuizTemplate/QuizTemplate";
 import { segmentsCheckObj } from "../../../util/utils";
@@ -163,7 +163,8 @@ export const DigitalNumbers = (props: TemplateProps) => {
                 })`,
             }}>
             <div
-                className={`h-full max-h-96 sm:max-h-24 md:max-h-72 w-full overflow-y-auto border-4 border-b-cyan-900 rounded-t-md`}>
+                className={`h-full max-h-96 sm:max-h-24 md:max-h-72 w-full overflow-y-auto border-4 rounded-t-md`}
+                style={{ borderColor: colorPalette[roomColor as keyof typeof colorPalette].dark }}>
                 <table
                     className="table-auto w-full h-full text-right border border-amber-50 text-xl text-amber-50 overflow-y-auto"
                     dir="rtl">

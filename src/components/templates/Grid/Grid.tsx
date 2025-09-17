@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Button from "../../Button";
 import { GridCharObj } from "../../../util/utils";
 // import { quizData } from "../../../pages/Room/Room";
-import { imageStyle } from "../../../util/UIstyle";
+import { colorPalette, imageStyle } from "../../../util/UIstyle";
 import { useRoomContext } from "../../../contexts/roomStyleContext";
 import { TemplateProps } from "../../../pages/QuizTemplate/QuizTemplate";
 import { get_text } from "../../../util/language";
@@ -158,6 +158,15 @@ export const Grid = (props: TemplateProps) => {
                                                     className={`border border-amber-800 h-10 w-8 cursor-pointer ${
                                                         box.status ? "bg-amber-700" : "bg-amber-200"
                                                     }`}
+                                                    style={{
+                                                        backgroundColor: box.status
+                                                            ? colorPalette[
+                                                                  roomColor as keyof typeof colorPalette
+                                                              ].dark
+                                                            : colorPalette[
+                                                                  roomColor as keyof typeof colorPalette
+                                                              ].bright,
+                                                    }}
                                                     onClick={() => toggleSegment(i, j)}
                                                     title={box.elem.title}>
                                                     {box.elem.icon}
