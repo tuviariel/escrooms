@@ -137,7 +137,7 @@ export const OrderBorder = (props: TemplateProps) => {
                     strategy={verticalListSortingStrategy}>
                     <div className="flex flex-col items-center">
                         {cards.map((card, i) => (
-                            <SortableCard key={card.id} {...card} index={i} />
+                            <SortableCard key={card.id} {...card} index={i} disabled={disabled} />
                         ))}
                     </div>
                 </SortableContext>

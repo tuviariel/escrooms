@@ -42,8 +42,8 @@ const appContext: Translations = {
         ar: "",
     },
     welcome_hint: {
-        en: "Hello!! I can help you by giving you hints...",
-        he: "שלום! האם אוכל לעזור לך עם רמז?",
+        en: "Hello!! I can help you with the quiz?",
+        he: "שלום! האם אוכל לעזור לך עם החידה?",
         ar: "",
     },
     prepare: { en: "Preparing Riddle", he: "מכין את החידה", ar: "" },
@@ -71,6 +71,11 @@ const appContext: Translations = {
         en: "Situation & Action",
         he: "מצב ופעולה",
         ar: "الوضع العمل",
+    },
+    instructions: {
+        en: "Instructions: ",
+        he: "הוראות: ",
+        ar: "تعليمات: ",
     },
 };
 

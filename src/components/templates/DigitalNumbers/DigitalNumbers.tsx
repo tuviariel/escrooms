@@ -163,12 +163,18 @@ export const DigitalNumbers = (props: TemplateProps) => {
                 })`,
             }}>
             <div
-                className={`h-full max-h-96 sm:max-h-24 md:max-h-72 w-full overflow-y-auto border-4 rounded-t-md`}
+                className={`h-full max-h-96 sm:max-h-24 md:max-h-72 w-full overflow-y-auto border-4`}
                 style={{ borderColor: colorPalette[roomColor as keyof typeof colorPalette].dark }}>
                 <table
                     className="table-auto w-full h-full text-right border border-amber-50 text-xl text-amber-50 overflow-y-auto"
                     dir="rtl">
-                    <thead className="sticky top-0 z-10 bg-gray-700 opacity-70">
+                    <thead
+                        className="sticky top-0 z-10"
+                        style={{
+                            backgroundColor:
+                                colorPalette[roomColor as keyof typeof colorPalette].light,
+                            color: colorPalette[roomColor as keyof typeof colorPalette].dark,
+                        }}>
                         <tr>
                             <th className="border border-amber-50 whitespace-nowrap">
                                 {get_text("situationAction", "he")}
@@ -193,7 +199,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
                                             {q.situationAndAction}
                                         </td>
                                         <td
-                                            className="cursor-pointer border border-amber-50"
+                                            className="cursor-pointer border border-amber-50 text-center"
                                             onClick={() => {
                                                 setNextLine((prev) => {
                                                     console.log(prev);
@@ -214,7 +220,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
                                             {q.icons.correct}
                                         </td>
                                         <td
-                                            className="cursor-pointer border border-amber-50"
+                                            className="cursor-pointer border border-amber-50 text-center"
                                             onClick={() => {
                                                 setNextLine((prev) => {
                                                     console.log(prev);

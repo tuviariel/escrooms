@@ -92,8 +92,8 @@ export const QuizTemplate = (props: quizDataP) => {
                     </div>
                 </div>
             ) : (
-                <div className="fixed right-3 bottom-3">
-                    <HintChat hints={data.hints} />
+                <div className="fixed right-3 bottom-3" dir="rtl">
+                    <HintChat hints={data.hints} quizText={data.quizText} />
                 </div>
             )}
             <Dialog

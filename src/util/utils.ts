@@ -211,8 +211,8 @@ export const ListNumObj: Record<string, string[]> = {
     "5": ["TL", "TRB"],
     "6": ["TL", "TRLB"],
     "7": ["TR", "R"],
-    "8": ["TRLB", "TRLB"],
-    "9": ["TRLB", "TRB"],
+    "8": ["TRL", "TRLB"],
+    "9": ["TRL", "TRB"],
     "0": ["TRL", "RLB"],
 };
 

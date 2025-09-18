@@ -7,13 +7,15 @@ interface chatContent {
 }
 interface hintChatProps {
     hints: string[];
+    quizText: string;
 }
 export const HintChat = (props: hintChatProps) => {
-    const { hints } = props;
+    const { hints, quizText } = props;
     // const hintsAmount = hints.length;
     const [open, setOpen] = useState<boolean>(false);
     const [counter, setCounter] = useState<number>(0);
     const [chat, setChat] = useState<chatContent[]>([
+        { user: "bot", text: get_text("instructions", "he") + quizText },
         { user: "bot", text: get_text("welcome_hint", "he") },
         { user: "bot", text: get_text("do_want_hint", "he") },
     ]);

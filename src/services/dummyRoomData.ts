@@ -16,12 +16,12 @@ import Q3O2 from "../assets/images/colorCards/colors/2.png";
 import Q3O3 from "../assets/images/colorCards/colors/3.png";
 import Q3O4 from "../assets/images/colorCards/colors/4.png";
 import Q3O5 from "../assets/images/colorCards/colors/5.png";
-import MainFraud from "../assets/images/fraud.png";
+import MainFirstAid from "../assets/images/First-aid.jpg";
 
 const data = {
     _id: "kjbhdfvksjdf",
-    name: "עזרה ראשונה", //First Aid
-    mainImage: MainFraud,
+    name: "עזרה ראשונה",
+    mainImage: MainFirstAid,
     colorPalette: "redBlueGray",
     imageStyle: "realistic",
     fontFamily: "sansSerif",
@@ -235,7 +235,7 @@ const data = {
             ],
             quizImg: Q1Image,
             outerQuizImg: Q1Image,
-            quizText: "טקסט מסביר את המשימה...",
+            quizText: "סדרו את הכרטיסיות לפי סדר הפעולות הנכון של סדר טיפול בפצוע וגלו את הקוד",
             quizData: [Q1D1, Q1D2, Q1D3, Q1D4, Q1D5],
             category: null,
             orderAnswer: null,

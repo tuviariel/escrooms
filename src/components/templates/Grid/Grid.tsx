@@ -165,7 +165,7 @@ export const Grid = (props: TemplateProps) => {
                                                               ].dark
                                                             : colorPalette[
                                                                   roomColor as keyof typeof colorPalette
-                                                              ].bright,
+                                                              ].light,
                                                     }}
                                                     onClick={() => toggleSegment(i, j)}
                                                     title={box.elem.title}>
