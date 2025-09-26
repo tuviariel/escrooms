@@ -110,8 +110,8 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                 count === i
                     ? get_text("success", "he")
                     : count === 0
-                    ? get_text("wrong", "he") + ": (" + count + "/" + i + ")"
-                    : get_text("continue", "he") + ": (" + count + "/" + i + ")"
+                      ? get_text("wrong", "he") + ": (" + count + "/" + i + ")"
+                      : get_text("continue", "he") + ": (" + count + "/" + i + ")"
             );
     };
     console.log(colorOrder);
@@ -202,9 +202,9 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                                     data.category[1][0] === colorOrder[i][1]
                                                         ? data.category[1][0]
                                                         : data.category &&
-                                                          data.category[1][1] === colorOrder[i][1]
-                                                        ? data.category[1][1]
-                                                        : data.category && data.category[1][2]
+                                                            data.category[1][1] === colorOrder[i][1]
+                                                          ? data.category[1][1]
+                                                          : data.category && data.category[1][2]
                                                 }
                                                 alt={`option #` + (colorOrder[i][1] + 1)}
                                                 className="absolute right-44 bottom-20 w-20 h-10"
