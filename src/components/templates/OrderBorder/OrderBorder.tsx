@@ -36,7 +36,7 @@ export const OrderBorder = (props: TemplateProps) => {
             borders: string;
         }[]
     >([]);
-    const [disabled, setDisabled] = useState(false);
+    // const [disabled, setDisabled] = useState(false);
     const { roomStyle } = useRoomContext();
     useEffect(() => {
         const setList = () => {
@@ -80,7 +80,7 @@ export const OrderBorder = (props: TemplateProps) => {
         }
         if (finished) {
             setResult(get_text("success", "he"));
-            setDisabled(true);
+            // setDisabled(true);
         }
     };
 
@@ -124,12 +124,11 @@ export const OrderBorder = (props: TemplateProps) => {
         <div
             style={{
                 backgroundImage: `url(${imageStyle[roomStyle as keyof typeof imageStyle].background})`,
-
                 backgroundSize: "cover",
             }}
             className="py-4">
             <DndContext
-                sensors={!disabled ? sensors : undefined}
+                sensors={sensors}
                 collisionDetection={closestCenter}
                 onDragEnd={handleDragEnd}>
                 <SortableContext
@@ -137,7 +136,7 @@ export const OrderBorder = (props: TemplateProps) => {
                     strategy={verticalListSortingStrategy}>
                     <div className="flex flex-col items-center">
                         {cards.map((card, i) => (
-                            <SortableCard key={card.id} {...card} index={i} disabled={disabled} />
+                            <SortableCard key={card.id} {...card} index={i} result={result} />
                         ))}
                     </div>
                 </SortableContext>

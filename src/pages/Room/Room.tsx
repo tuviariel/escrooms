@@ -56,17 +56,6 @@ export const Room = () => {
         }) => state.quizList
     );
     const quizList = quizL?.list;
-    // const setQuizList = (number: number) => {
-    //     dispatch(quizListActions.changeQuizList(number));
-    // };
-    // const { quizNumber, setQuizNumber } = useQuizContext();
-    // const types: Record<string, JSX.Element> = {
-    //     "7segments": <NumbersTemplate data={data.quiz[quizNumber]} />,
-    //     gridPlay: <GridTemplate data={data.quiz[quizNumber]} />,
-    //     colorChange: <ColorTemplate data={data.quiz[quizNumber]} />,
-    //     turnRound: <TurnRoundTemplate data={data.quiz[quizNumber]} />,
-    //     borderOrder: <OrderBorderTemplate data={data.quiz[quizNumber]} />,
-    // };
     const [checkLeave, setCheckLeave] = useState(false);
     // const [quizList, setQuizList] = useState<{ id: number; completed: boolean }[]>([]);
     const navigate = useNavigate();
@@ -106,52 +95,59 @@ export const Room = () => {
                         className="cursor-pointer h-8 w-8 z-20 md:h-12 md:w-12 fixed left-3 top-3 p-1 rounded-full bg-gray-100 border-2 hover:border-amber-700"
                         onClick={() => setQuizNumber(-1)}
                     />
-                    {/* TODO: add quiz data besides the specific template */}
                     <QuizTemplate data={data.quiz[quizNumber]} />
                 </>
             ) : (
                 <>
-                    <div className="h-screen w-full relative">
-                        <img src={data.mainImage} alt="mainImage" className="h-full w-auto" />
+                    <div className="h-screen w-screen relative flex justify-center items-center overflow-hidden">
+                        <img src={data.mainImage} alt="mainImage" className="h-full w-4/5" />
                         <div
                             className="fixed top-3 left-3 rounded-full p-3 z-20 border-2 text-black hover:text-red-500 hover:border-red-500 cursor-pointer"
                             title={get_text("exit_room", "he")}
                             onClick={() => setCheckLeave(true)}>
                             X
                         </div>
-                        <div className="absolute top-0 left-0 h-full w-auto">
-                            {quizList &&
-                                quizList.map((quiz: any) => {
-                                    return (
-                                        <div
-                                            key={quiz.id}
-                                            className={`z-30 h-22 w-22 rounded-full ${
-                                                quiz.completed
-                                                    ? ""
-                                                    : "backdrop-blur-md border-2 hover:border-amber-50 cursor-pointer"
-                                            }`}
-                                            onClick={() =>
-                                                !quiz.completed && setQuizNumber(quiz.id)
-                                            }
-                                            style={{
-                                                borderColor: quiz.completed
-                                                    ? colorPalette[
-                                                          roomColor as keyof typeof colorPalette
-                                                      ].dark
-                                                    : colorPalette[
-                                                          roomColor as keyof typeof colorPalette
-                                                      ].bright,
-                                            }}
-                                            title={quiz.type}>
+                        {quizList &&
+                            quizList.map((quiz: any, i: number) => {
+                                return (
+                                    <div
+                                        key={quiz.id}
+                                        className={`absolute ${i === 0 ? "top-4 left-32" : i === 1 ? "top-30 left-22" : i === 2 ? "top-4 right-32" : i === 3 ? "top-30 right-22" : ""} z-30 h-22 w-22 rounded-full ${
+                                            quiz.completed
+                                                ? ""
+                                                : "backdrop-blur-md border-2 hover:border-amber-50 cursor-pointer"
+                                        }`}
+                                        onClick={() => !quiz.completed && setQuizNumber(quiz.id)}
+                                        style={{
+                                            borderColor: quiz.completed
+                                                ? colorPalette[
+                                                      roomColor as keyof typeof colorPalette
+                                                  ].dark
+                                                : colorPalette[
+                                                      roomColor as keyof typeof colorPalette
+                                                  ].bright,
+                                        }}
+                                        title={quiz.type}>
+                                        <div className="relative w-full h-full rounded-full overflow-hidden">
                                             <img
                                                 src={quiz.image}
                                                 alt="Quiz Image"
-                                                className="w-full h-full object-cover rounded-full"
+                                                className="w-full h-full rounded-full"
                                             />
+                                            {!quiz.completed && (
+                                                <div
+                                                    className="absolute top-0 right-0 blur-sm w-full h-full opacity-100"
+                                                    style={{
+                                                        background:
+                                                            colorPalette[
+                                                                roomColor as keyof typeof colorPalette
+                                                            ].dark,
+                                                    }}></div>
+                                            )}
                                         </div>
-                                    );
-                                })}
-                        </div>
+                                    </div>
+                                );
+                            })}
                     </div>
                     <Dialog
                         open={checkLeave}

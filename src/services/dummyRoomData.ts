@@ -10,13 +10,16 @@ import Q3D3 from "../assets/images/colorCards/3.png";
 import Q3D4 from "../assets/images/colorCards/4.png";
 import Q3D5 from "../assets/images/colorCards/5.png";
 import Q3D6 from "../assets/images/colorCards/6.png";
-import Q3D7 from "../assets/images/colorCards/mianImage.png";
 import Q3O1 from "../assets/images/colorCards/colors/1.png";
 import Q3O2 from "../assets/images/colorCards/colors/2.png";
 import Q3O3 from "../assets/images/colorCards/colors/3.png";
 import Q3O4 from "../assets/images/colorCards/colors/4.png";
 import Q3O5 from "../assets/images/colorCards/colors/5.png";
 import MainFirstAid from "../assets/images/First-aid.jpg";
+import Clock from "../assets/images/clock2.png";
+import Graph from "../assets/images/graph.jpeg";
+import List from "../assets/images/checklist.png";
+import Color from "../assets/images/colors.png";
 
 const data = {
     _id: "kjbhdfvksjdf",
@@ -81,7 +84,7 @@ const data = {
                     is_correct_action: true,
                 },
             ],
-            quizImg: Q1Image,
+            quizImg: Clock,
             outerQuizImg: Q1Image,
             quizText: "עבור כל מקרה בטבלה צריך לקבוע אם הפעולה שננקטה הייתה נכונה או לא",
             quizData: [Q1D1, Q1D2, Q1D3, Q1D4, Q1D5],
@@ -115,7 +118,7 @@ const data = {
                     { icon: "🎧", title: "אוזניות" },
                 ],
             ],
-            quizImg: "imageURL",
+            quizImg: Graph,
             outerQuizImg: Q1Image,
             quizText: "אתה מארגן תיק של ציוד עזרה ראשונה. מה תשים בתיק?",
             category: null,
@@ -126,7 +129,7 @@ const data = {
             _id: "3",
             type: "colorChange",
             answer: "1491",
-            quizImg: Q3D7,
+            quizImg: Color,
             outerQuizImg: Q1Image,
             quizText:
                 "עבור כל דמות וסיטואציה חובה לקבוע אם הוא פעל כראוי או אם עבר על איסור מעילה. כדאי לעיין בעיתון לקבל משום תובנות...",
@@ -151,20 +154,20 @@ const data = {
                 "אולי שמישהו יקרא את שמות המשפחה לפי הסדר ומישהוא אחר יקשיב לו...",
             ],
         },
+        // {
+        //     _id: "4",
+        //     type: "turnRound",
+        //     answer: "1234",
+        //     quizImg: "imageURL",
+        //     outerQuizImg: Q1Image,
+        //     quizText: "imageURL",
+        //     quizData: ["imageURL"],
+        //     category: null,
+        //     orderAnswer: null,
+        //     hints: ["firstHint", "secondHint", "thirdHint", "forthHint", "fifthHint"],
+        // },
         {
             _id: "4",
-            type: "turnRound",
-            answer: "1234",
-            quizImg: "imageURL",
-            outerQuizImg: Q1Image,
-            quizText: "imageURL",
-            quizData: ["imageURL"],
-            category: null,
-            orderAnswer: null,
-            hints: ["firstHint", "secondHint", "thirdHint", "forthHint", "fifthHint"],
-        },
-        {
-            _id: "5",
             type: "orderBorder",
             answer: "3579",
             quiz: [
@@ -233,7 +236,7 @@ const data = {
                         "השאלות על אלרגיות, תרופות, מחלות רקע וארוחה אחרונה עשויות לשנות את ניהול הטיפול וההתערבויות.",
                 },
             ],
-            quizImg: Q1Image,
+            quizImg: List,
             outerQuizImg: Q1Image,
             quizText: "סדרו את הכרטיסיות לפי סדר הפעולות הנכון של סדר טיפול בפצוע וגלו את הקוד",
             quizData: [Q1D1, Q1D2, Q1D3, Q1D4, Q1D5],

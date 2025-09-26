@@ -16,7 +16,7 @@ import { get_text } from "../../../util/language";
 //     icon: string;
 // };
 export const Grid = (props: TemplateProps) => {
-    const { data, result, setResult } = props;
+    const { data, result, setResult, setOpenLock } = props;
     console.log(data);
     const [active, setActive] = useState<
         {
@@ -110,12 +110,12 @@ export const Grid = (props: TemplateProps) => {
                     (elem?.answer === false && elem?.status === true)
                 ) {
                     finished = false;
-                    return setResult("Wrong answer! Try again..");
+                    return setResult(get_text("wrong", "he"));
                 }
             });
         });
         if (finished) {
-            setResult("Great!");
+            setResult(get_text("success", "he"));
         }
     };
 
@@ -187,11 +187,21 @@ export const Grid = (props: TemplateProps) => {
             </div>
             <div className={`${active.length < 4 ? "ts:flex" : "ph:flex"} hidden`}>
                 <Button
-                    label={get_text("check_answer", "he")}
-                    onClick={() => checkAnswer()}
-                    disabled={disabled}
+                    label={
+                        result === get_text("success", "he")
+                            ? get_text("finish", "he")
+                            : get_text("check_answer", "he")
+                    }
+                    onClick={() =>
+                        result === get_text("success", "he") ? setOpenLock(true) : checkAnswer()
+                    }
+                    className="flex w-auto mx-10 min-w-fit"
                 />
-                <div className="pt-2">{result}</div>
+                {result && (
+                    <div className="mr-10 py-1 px-4 rounded-xl text-center bg-amber-50" dir="rtl">
+                        {result}
+                    </div>
+                )}
             </div>
         </div>
     );

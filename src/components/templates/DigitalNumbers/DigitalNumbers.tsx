@@ -282,10 +282,10 @@ export const DigitalNumbers = (props: TemplateProps) => {
                             ? setOpenLock(true)
                             : checkAnswer(active)
                     }
-                    className="flex w-auto mx-10 min-w-fit "
+                    className="flex w-auto mx-10 min-w-fit"
                 />
                 {result && (
-                    <div className="m-auto p-1 rounded-xl text-center bg-amber-50" dir="rtl">
+                    <div className="mr-10 py-1 px-4 rounded-xl text-center bg-amber-50" dir="rtl">
                         {result}
                     </div>
                 )}

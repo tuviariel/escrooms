@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router"; //Outlet
-import Logo from "../../assets/images/vaivrach.jpg";
+import Logo from "../../assets/images/vaivrach.png";
 // import Button from "../Button";
 
 export const NavBar = () => {
