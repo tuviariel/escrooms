@@ -16,6 +16,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { quizNumberActions } from "../../reduxStor/quizNumber";
 import QuizTemplate from "../QuizTemplate";
 // import { quizListActions } from "../../reduxStor/quizList";
+import finishedRoomGif from "../../assets/images/finishedRoom.gif";
 export interface quizDataProps {
     data: {
         _id: string;
@@ -57,6 +58,7 @@ export const Room = () => {
     );
     const quizList = quizL?.list;
     const [checkLeave, setCheckLeave] = useState(false);
+    const [completed, setCompleted] = useState(false);
     // const [quizList, setQuizList] = useState<{ id: number; completed: boolean }[]>([]);
     const navigate = useNavigate();
     const location = useLocation();
@@ -78,7 +80,15 @@ export const Room = () => {
             setRoomColor(data.colorPalette);
             setRoomFont(data.fontFamily);
         }
-    }, []);
+    }, [screen.orientation]);
+    useEffect(() => {
+        if (quizList && quizList.length > 0) {
+            const allCompleted = quizList.every((quiz: any) => quiz.completed);
+            if (allCompleted) {
+                setCompleted(true);
+            }
+        }
+    }, [quizList]);
     console.log();
     return (
         <>
@@ -106,6 +116,20 @@ export const Room = () => {
                                 alt="mainImage"
                                 className="h-full w-auto object-cover"
                             />
+                            {completed && (
+                                <>
+                                    <img
+                                        src={finishedRoomGif}
+                                        alt="mainImage"
+                                        className="h-full w-auto object-cover z-30 blur-sm opacity-90 absolute top-0"
+                                    />
+                                    <div
+                                        className="absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 text-4xl md:text-6xl font-bold text-white bg-opacity-90 rounded-md p-4"
+                                        dir="rtl">
+                                        {get_text("room_finished", "he")}
+                                    </div>
+                                </>
+                            )}
                             {quizList &&
                                 quizList.map((quiz: any, i: number) => {
                                     return (
@@ -129,7 +153,7 @@ export const Room = () => {
                                                       ].bright,
                                             }}
                                             title={quiz.type}>
-                                            <div className="relative w-full h-full rounded-full overflow-hidden">
+                                            <div className="relative w-full h-full rounded-full">
                                                 <img
                                                     src={quiz.image}
                                                     alt="Quiz Image"
@@ -145,6 +169,9 @@ export const Room = () => {
                                                                 ].dark,
                                                         }}></div>
                                                 )}
+                                                <div className="absolute bottom-3 w-full text-center text-white text-md py-1 z-20">
+                                                    {quiz.type}
+                                                </div>
                                             </div>
                                         </div>
                                     );
@@ -153,7 +180,7 @@ export const Room = () => {
                         <div
                             className="w-8 h-8 text-center fixed top-3 left-3 rounded-full font-bold z-20 border-2 text-black bg-white hover:text-red-500 hover:border-red-500 cursor-pointer"
                             title={get_text("exit_room", "he")}
-                            onClick={() => setCheckLeave(true)}>
+                            onClick={() => (!completed ? setCheckLeave(true) : navigate("/"))}>
                             x
                         </div>
                     </div>
