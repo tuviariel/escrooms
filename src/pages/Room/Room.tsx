@@ -63,24 +63,36 @@ export const Room = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const roomId = location.pathname.split("/").pop();
+    const [orientation, setOrientation] = useState(
+        window.matchMedia("(orientation: portrait)").matches ? "portrait" : "landscape"
+    );
     const { setRoomColor, setRoomStyle, setRoomFont, roomColor } = useRoomContext();
     useEffect(() => {
         // in future get room data from Api call via roomId. now just checking Id is right:
         if (roomId !== data._id) {
             navigate("/");
-        } else if (document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen();
+        } else {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            }
             // if (screen.orientation && screen.orientation.lock) {
             //     screen.orientation.lock("landscape").catch((err) => {
             //         console.warn("Orientation lock failed:", err);
             //     });
             // }
-            console.log("orientation:", screen.orientation);
+            window.matchMedia("(orientation: portrait)").addEventListener("change", (event) => {
+                if (event.matches) {
+                    setOrientation("portrait");
+                } else {
+                    setOrientation("landscape");
+                }
+            });
+            console.log("orientation:", screen.orientation.type);
             setRoomStyle(data.imageStyle);
             setRoomColor(data.colorPalette);
             setRoomFont(data.fontFamily);
         }
-    }, [screen.orientation]);
+    }, [screen.orientation.type]);
     useEffect(() => {
         if (quizList && quizList.length > 0) {
             const allCompleted = quizList.every((quiz: any) => quiz.completed);
@@ -92,7 +104,7 @@ export const Room = () => {
     console.log();
     return (
         <>
-            {window.innerWidth < 600 ? (
+            {window.innerWidth < 600 || orientation === "portrait" ? (
                 <div className="h-screen w-screen bg-gray-900 text-amber-50 text-center flex flex-col justify-center items-center p-20">
                     {get_text("phone_on_side", "he")}
                 </div>
@@ -135,7 +147,7 @@ export const Room = () => {
                                     return (
                                         <div
                                             key={quiz.id}
-                                            className={`absolute ${i === 0 ? "top-4 left-8 md:left-32" : i === 1 ? "top-30 left-2 md:left-22" : i === 2 ? "top-4 right-8 md:right-32" : i === 3 ? "top-30 right-2 md:right-22" : ""} z-30 h-22 w-22 rounded-full ${
+                                            className={`absolute ${i === 0 ? "top-4 left-8 md:left-32" : i === 1 ? "top-30 left-2 md:left-22" : i === 2 ? "top-4 right-8 md:right-32" : i === 3 ? "top-30 right-2 md:right-22" : ""} z-20 h-22 w-22 rounded-full ${
                                                 quiz.completed
                                                     ? ""
                                                     : "backdrop-blur-md border-2 hover:border-amber-50 cursor-pointer"
