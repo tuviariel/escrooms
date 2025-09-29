@@ -220,22 +220,54 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                             <div className="text-right mt-2 mx-3 text-2xl font-semibold">
                                                 {item.desc}
                                             </div>
-                                            {colorOrder[i][0] !== "" && (
-                                                <div className="absolute right-1/2 translate-x-1/2 bottom-12 flex gap-6 text-center font-extrabold text-xl whitespace-nowrap text-black">
-                                                    <div className="flex flex-col items-center">
-                                                        {answerKeys[0]}
-                                                        <div className="w-16 h-16 flex flex-col content-center bg-amber-500 rounded-full text-white">
-                                                            {colorOrder[i][0]}
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex flex-col items-center">
-                                                        {answerKeys[1]}
-                                                        <div className="w-20 h-12 flex flex-col content-center bg-emerald-500 rounded-xl my-auto py-auto text-white">
-                                                            {colorOrder[i][1]}
-                                                        </div>
+                                            {/* {colorOrder[i][0] !== "" && ( */}
+                                            <div className="absolute right-1/2 translate-x-1/2 bottom-12 flex gap-6 text-center font-extrabold text-xl whitespace-nowrap text-black">
+                                                <div className="flex flex-col items-center">
+                                                    {answerKeys[0]}
+                                                    <div
+                                                        className={`w-16 h-16 flex flex-col content-center rounded-full items-center justify-center text-white 
+                                                            ${
+                                                                answerData &&
+                                                                answerData[0][0] ===
+                                                                    colorOrder[i][0]
+                                                                    ? "bg-amber-500"
+                                                                    : answerData &&
+                                                                        answerData[0][1] ===
+                                                                            colorOrder[i][0]
+                                                                      ? "bg-purple-500"
+                                                                      : "bg-gray-500"
+                                                            }`}>
+                                                        {colorOrder[i][0] !== ""
+                                                            ? colorOrder[i][0]
+                                                            : "?"}
                                                     </div>
                                                 </div>
-                                            )}
+                                                <div className="flex flex-col items-center">
+                                                    {answerKeys[1]}
+                                                    <div
+                                                        className={`w-20 h-12 flex flex-col content-center rounded-xl my-auto py-auto items-center justify-center text-white
+                                                            ${
+                                                                answerData &&
+                                                                answerData[1][0] ===
+                                                                    colorOrder[i][1]
+                                                                    ? "bg-emerald-500"
+                                                                    : answerData &&
+                                                                        answerData[1][1] ===
+                                                                            colorOrder[i][1]
+                                                                      ? "bg-pink-500"
+                                                                      : answerData &&
+                                                                          answerData[1][2] ===
+                                                                              colorOrder[i][1]
+                                                                        ? "bg-cyan-500"
+                                                                        : "bg-gray-500"
+                                                            }`}>
+                                                        {colorOrder[i][1] !== ""
+                                                            ? colorOrder[i][1]
+                                                            : "?"}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {/* )} */}
                                         </div>
                                     </div>
                                 </div>
@@ -283,9 +315,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                             )
                                         }
                                         onMouseLeave={() => setOpenStatus(-1)}
-                                        title={get_text("more_info", "he") + "..."}
-                                        // onTouchEnd={() => setOpenStatus(-1)}
-                                    >
+                                        title={get_text("more_info", "he") + "..."}>
                                         !
                                         {openStatus !== -1 && (
                                             <div
@@ -336,8 +366,9 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                                 answerData &&
                                                 colorChange(answerData[stage === 1 ? 0 : 1][0])
                                             }
-                                            className="mx-2 bg-amber-500 rounded-full">
-                                            <div className="w-10 h-10 cursor-pointer whitespace-nowrap">
+                                            className="mx-2">
+                                            <div
+                                                className={`w-10 h-10 cursor-pointer whitespace-nowrap ${stage === 1 ? "bg-amber-500 rounded-full" : "bg-emerald-500 rounded-lg"} flex items-center justify-center text-white`}>
                                                 {answerData && answerData[stage === 1 ? 0 : 1][0]}
                                             </div>
                                         </Button>
@@ -346,8 +377,9 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                                 answerData &&
                                                 colorChange(answerData[stage === 1 ? 0 : 1][1])
                                             }
-                                            className="mx-2 bg-indigo-500 rounded-full">
-                                            <div className="w-10 h-10 cursor-pointer whitespace-nowrap">
+                                            className="mx-2">
+                                            <div
+                                                className={`w-10 h-10 cursor-pointer whitespace-nowrap ${stage === 1 ? "bg-purple-500 rounded-full" : "bg-pink-500 rounded-lg"} flex items-center justify-center text-white`}>
                                                 {answerData && answerData[stage === 1 ? 0 : 1][1]}
                                             </div>
                                         </Button>
@@ -357,7 +389,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                                     answerData && colorChange(answerData[1][2])
                                                 }
                                                 className="mx-2">
-                                                <div className="w-10 h-10 cursor-pointer whitespace-nowrap">
+                                                <div className="w-10 h-10 cursor-pointer whitespace-nowrap bg-cyan-500 rounded-lg flex items-center justify-center text-white">
                                                     {answerData && answerData[1][2]}
                                                 </div>
                                             </Button>

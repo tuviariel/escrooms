@@ -17,7 +17,7 @@ export const Color = (props: TemplateProps) => {
     // }, [result]);
     return (
         <>
-            {result === get_text("success", "he") ? (
+            {result !== get_text("success", "he") ? (
                 <QuizData data={data} result={result} setResult={setResult} />
             ) : (
                 <Puzzle6 data={data} setOpenLock={setOpenLock} />

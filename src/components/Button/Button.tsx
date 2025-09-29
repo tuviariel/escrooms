@@ -20,7 +20,7 @@ export const Button: React.FC<Partial<ButtonProps>> = (props) => {
     return (
         <button
             onClick={onClick}
-            className={`h-8 m-1 pb-1 font-light ${
+            className={`h-8 m-1 pb-1 font-light flex ${
                 disabled ? "cursor-not-allowed" : "cursor-pointer"
             } ${className}`}
             style={{
