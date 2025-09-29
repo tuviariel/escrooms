@@ -103,7 +103,7 @@ export const QuizTemplate = (props: quizDataP) => {
                 size="small"
                 disableOverlayClose={true}
                 data="quizSuccess">
-                <QuizSuccess data={data.answer} setOpenLock={() => setOpenLock(false)} />
+                <QuizSuccess data={data.answer} />
             </Dialog>
         </div>
     );

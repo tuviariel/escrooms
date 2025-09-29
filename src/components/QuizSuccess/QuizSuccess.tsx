@@ -14,12 +14,12 @@ import { imageStyle } from "../../util/UIstyle";
 import { useRoomContext } from "../../contexts/roomStyleContext";
 // import { quizData } from "../../pages/Room/Room";
 interface quizSuccessProps {
-    setOpenLock: () => void;
+    // setOpenLock: () => void;
     data: string;
 }
 
 export const QuizSuccess = (props: quizSuccessProps) => {
-    const { setOpenLock, data } = props;
+    const { data } = props;
     const { roomStyle } = useRoomContext();
     const quiz = useSelector((state: { quizNumber: { quizNumber: number } }) => state.quizNumber);
     const quizNumber = quiz?.quizNumber;

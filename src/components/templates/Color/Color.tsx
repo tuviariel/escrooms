@@ -4,7 +4,7 @@ import QuizData from "../../QuizData";
 import { get_text } from "../../../util/language";
 import Puzzle6 from "../../Puzzle6";
 import { TemplateProps } from "../../../pages/QuizTemplate/QuizTemplate";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 export const Color = (props: TemplateProps) => {
     const { data, result, setResult, setOpenLock } = props;
     // const [result, setResult] = useState("");

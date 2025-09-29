@@ -32,7 +32,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
             ans3: string[] = [];
         let answer: string[][] = [];
         let keys = Object.keys(data?.quiz[0].answer);
-        data?.quiz.map((card, i) => {
+        data?.quiz.map((card) => {
             !ans2.includes(card.answer[keys[0]]) && ans2.push(card.answer[keys[0]]);
             !ans3.includes(card.answer[keys[1]]) && ans3.push(card.answer[keys[1]]);
         });
