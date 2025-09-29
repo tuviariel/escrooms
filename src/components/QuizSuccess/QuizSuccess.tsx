@@ -10,7 +10,7 @@ import { get_text } from "../../util/language";
 import { useSelector, useDispatch } from "react-redux";
 import { quizNumberActions } from "../../reduxStor/quizNumber";
 import { quizListActions } from "../../reduxStor/quizList";
-import { colorPalette } from "../../util/UIstyle";
+import { imageStyle } from "../../util/UIstyle";
 import { useRoomContext } from "../../contexts/roomStyleContext";
 // import { quizData } from "../../pages/Room/Room";
 interface quizSuccessProps {
@@ -20,7 +20,7 @@ interface quizSuccessProps {
 
 export const QuizSuccess = (props: quizSuccessProps) => {
     const { setOpenLock, data } = props;
-    const { roomColor } = useRoomContext();
+    const { roomStyle } = useRoomContext();
     const quiz = useSelector((state: { quizNumber: { quizNumber: number } }) => state.quizNumber);
     const quizNumber = quiz?.quizNumber;
     const dispatch = useDispatch();
@@ -87,54 +87,58 @@ export const QuizSuccess = (props: quizSuccessProps) => {
     };
     return (
         <div
-            className="h-96 w-full"
+            className="h-full w-full cover"
             style={{
-                backgroundColor: colorPalette[roomColor as keyof typeof colorPalette].bright,
+                backgroundImage: `url(${imageStyle[roomStyle as keyof typeof imageStyle].semiBackground})`,
+                backgroundSize: "cover",
             }}>
-            {!open ? (
-                <div className="relative flex flex-col-reverse items-center">
-                    <img src={closedBox} alt="Opening Lock" className="h-56" />
-                    <div className="flex flex-row z-20 gap-2" dir="rtl">
-                        {digits.map((digit, index) => {
-                            return (
-                                <input
-                                    ref={index === indexedRef ? inputRef : null}
-                                    // autoFocus={index === 0}
-                                    key={index}
-                                    type="text"
-                                    // max={9}
-                                    // min={0}
-                                    className="z-20 bg-stone-400 w-10 h-10 text-center"
-                                    onChange={(e) => setNumber(e.target.value, index)}
-                                    value={digit}
-                                    maxLength={1}
-                                    onKeyUp={(e) => {
-                                        if (e.key === data[index].toString()) {
-                                            e.preventDefault();
-                                            inputRef.current?.focus();
-                                        }
-                                    }}
-                                />
-                            );
-                        })}
-                    </div>
-                </div>
-            ) : (
-                <img src={openBox} alt="Opening Lock" className="h-46" />
-            )}
-            <div className="flex">
-                <Button label={get_text("close", "he")} onClick={setOpenLock} />
-                {open ? (
-                    <Button
-                        label={get_text("close_quiz", "he")}
-                        onClick={() => setQuizNumber(-1)}
-                    />
+            <div className="relative flex flex-col items-center gap-2">
+                {!open ? (
+                    <img src={closedBox} alt="Closed Lock" className="h-46" />
                 ) : (
-                    <Button label={get_text("check_answer", "he")} onClick={checkAnswer} />
+                    <img src={openBox} alt="Opening Lock" className="h-46" />
                 )}
-            </div>
-            <div className="absolute bottom-1 left-0 right-0 flex justify-center">
-                {message && <div className=" text-red-500 mt-2">{message}</div>}
+                <div className="flex flex-row z-20 gap-2 py-2" dir="ltr">
+                    {digits.map((digit, index) => {
+                        return (
+                            <input
+                                ref={index === indexedRef ? inputRef : null}
+                                // autoFocus={index === 0}
+                                key={index}
+                                type="text"
+                                // max={9}
+                                // min={0}
+                                className="z-20 bg-stone-400 w-10 h-10 text-center"
+                                onChange={(e) => setNumber(e.target.value, index)}
+                                value={digit}
+                                maxLength={1}
+                                onKeyUp={(e) => {
+                                    if (e.key === data[index].toString()) {
+                                        e.preventDefault();
+                                        inputRef.current?.focus();
+                                    }
+                                    if (e.key === "Enter" || e.key === "enter") {
+                                        checkAnswer();
+                                    }
+                                }}
+                            />
+                        );
+                    })}
+                </div>
+                <div className="flex">
+                    {/* <Button label={get_text("close", "he")} onClick={setOpenLock} /> */}
+                    {open ? (
+                        <Button
+                            label={get_text("close_quiz", "he")}
+                            onClick={() => setQuizNumber(-1)}
+                        />
+                    ) : (
+                        <Button label={get_text("check_answer", "he")} onClick={checkAnswer} />
+                    )}
+                </div>
+                <div className="absolute bottom-9 flex justify-center font-semibold bg-amber-200 opacity-80 z-10">
+                    {message && <div className=" text-red-500 mt-2">{message}</div>}
+                </div>
             </div>
         </div>
     );

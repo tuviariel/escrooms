@@ -10,26 +10,18 @@ export const Color = (props: TemplateProps) => {
     // const [result, setResult] = useState("");
     // const [open, setOpen] = useState(false);
     // const [openLock, setOpenLock] = useState(false);
-    useEffect(() => {
-        if (result === get_text("success", "he")) {
-            setOpenLock(true);
-        }
-    }, [result]);
+    // useEffect(() => {
+    //     if (result === get_text("success", "he")) {
+    //         setOpenLock(true);
+    //     }
+    // }, [result]);
     return (
-        <div className="">
-            {result !== get_text("success", "he") ? (
-                <>
-                    <QuizData data={data} result={result} setResult={setResult} />
-                    <div dir="rtl" className="text-center text-2xl font-bold my-2">
-                        {data?.quizText}
-                    </div>
-                    {/* <div className="max-h-96 overflow-y-scroll">
-                            <img src={data?.quizImg} alt="mainQuizImage" className="" />
-                        </div> */}
-                </>
+        <>
+            {result === get_text("success", "he") ? (
+                <QuizData data={data} result={result} setResult={setResult} />
             ) : (
-                <Puzzle6 data={data} />
+                <Puzzle6 data={data} setOpenLock={setOpenLock} />
             )}
-        </div>
+        </>
     );
 };

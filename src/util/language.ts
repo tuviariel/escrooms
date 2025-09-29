@@ -77,6 +77,11 @@ const appContext: Translations = {
         he: "הוראות: ",
         ar: "تعليمات: ",
     },
+    puzzle6_inst: {
+        en: "Arrange the images in the correct order",
+        he: "סדרו את התמונות בסדר הנכון",
+        ar: "",
+    },
 };
 
 export const get_text = (name: string, lang: string) => {

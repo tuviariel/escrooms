@@ -151,7 +151,7 @@ export const Room = () => {
                                 })}
                         </div>
                         <div
-                            className="fixed top-3 left-3 rounded-full font-bold p-2 z-20 border-2 text-black bg-white hover:text-red-500 hover:border-red-500 cursor-pointer"
+                            className="w-8 h-8 text-center fixed top-3 left-3 rounded-full font-bold z-20 border-2 text-black bg-white hover:text-red-500 hover:border-red-500 cursor-pointer"
                             title={get_text("exit_room", "he")}
                             onClick={() => setCheckLeave(true)}>
                             x

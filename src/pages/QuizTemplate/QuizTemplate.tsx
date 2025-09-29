@@ -29,7 +29,7 @@ export const QuizTemplate = (props: quizDataP) => {
     const { roomColor } = useRoomContext();
     useEffect(() => {
         if (result === get_text("success", "he")) {
-            setOpenLock(true);
+            data.type !== "colorChange" && setOpenLock(true);
         }
     }, [result]);
     useEffect(() => {
@@ -87,7 +87,8 @@ export const QuizTemplate = (props: quizDataP) => {
                                 colorPalette[roomColor as keyof typeof colorPalette].light,
                             color: colorPalette[roomColor as keyof typeof colorPalette].dark,
                             borderColor: colorPalette[roomColor as keyof typeof colorPalette].dark,
-                        }}>
+                        }}
+                        dir="rtl">
                         {data.quizText}
                     </div>
                 </div>

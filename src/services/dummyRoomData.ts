@@ -4,12 +4,12 @@ import Q1D3 from "../assets/images/12.png";
 import Q1D4 from "../assets/images/13.png";
 import Q1D5 from "../assets/images/14.png";
 import Q1Image from "../assets/images/24.png";
-import Q3D1 from "../assets/images/colorCards/1.png";
-import Q3D2 from "../assets/images/colorCards/2.png";
-import Q3D3 from "../assets/images/colorCards/3.png";
-import Q3D4 from "../assets/images/colorCards/4.png";
-import Q3D5 from "../assets/images/colorCards/5.png";
-import Q3D6 from "../assets/images/colorCards/6.png";
+import Q3D1 from "../assets/images/colorCards/daniel.png";
+import Q3D2 from "../assets/images/colorCards/maya.png";
+import Q3D3 from "../assets/images/colorCards/tamar.png"; // 3 Needs to be changed
+import Q3D4 from "../assets/images/colorCards/tamar.png";
+import Q3D5 from "../assets/images/colorCards/tamar.png"; // 5 Needs to be changed
+import Q3D6 from "../assets/images/colorCards/tamar.png"; // 6 Needs to be changed
 import Q3O1 from "../assets/images/colorCards/colors/1.png";
 import Q3O2 from "../assets/images/colorCards/colors/2.png";
 import Q3O3 from "../assets/images/colorCards/colors/3.png";
@@ -131,89 +131,83 @@ const data = {
             answer: "1491",
             quiz: [
                 {
-                    title: "Daniel",
+                    title: "דניאל",
                     desc: "גבר בן 34, שיער חום קצר, לבוש בגדי עבודה, שוכב על הקרקע בהכרה חלקית עם פצע מדמם ברגל שמאל.",
                     status: {
-                        d: "מעורפל",
-                        c: "חלש ומהיר",
-                        b: "נשימות שטחיות",
-                        e: "דימום פנימי אפשרי בבטן",
+                        הכרה: "מעורפל",
+                        דופק: "חלש ומהיר",
+                        נשימה: "נשימות שטחיות",
+                        חשיפה: "דימום פנימי אפשרי בבטן",
                     },
-                    level: "immediate",
-                    attention: "yes",
-                    image: "https://example.com/images/daniel.png",
+                    answer: { "השגחה צמודה": "כן", "דחיפות פינוי": "מיידי" },
+                    image: Q3D1,
                 },
                 {
-                    title: "Maya",
+                    title: "מאיה",
                     desc: "אישה בת 27, שיער שחור ארוך, יושבת בהכרה מלאה עם חתכים שטחיים בידיים ונשימה תקינה.",
                     status: {
-                        d: "בהכרה מלאה",
-                        c: "תקין",
-                        b: "תקין",
-                        e: "אין ממצאים נוספים",
+                        הכרה: "בהכרה מלאה",
+                        דופק: "תקין",
+                        נשימה: "תקין",
+                        חשיפה: "אין ממצאים נוספים",
                     },
-                    level: "calm",
-                    attention: "no",
-                    image: "https://example.com/images/maya.png",
+                    answer: { "השגחה צמודה": "לא", "דחיפות פינוי": "לא דחוף" },
+                    image: Q3D2,
                 },
                 {
-                    title: "Omer",
+                    title: "עומר",
                     desc: "גבר בן 40, גוף מלא, שוכב על צידו עם חבלה בראש, מדמם מהמצח ומגיב לאט לשאלות.",
                     status: {
-                        d: "ישנוני",
-                        c: "חלש",
-                        b: "לא סדיר",
-                        e: "פגיעת ראש חשודה",
+                        הכרה: "ישנוני",
+                        דופק: "חלש",
+                        נשימה: "לא סדיר",
+                        חשיפה: "פגיעת ראש חשודה",
                     },
-                    level: "immediate",
-                    attention: "yes",
-                    image: "https://example.com/images/omer.png",
+                    answer: { "השגחה צמודה": "כן", "דחיפות פינוי": "מיידי" },
+                    image: Q3D3,
                 },
                 {
-                    title: "Tamar",
+                    title: "תמר",
                     desc: "נערה בת 16, בלונדינית, נמצאה יושבת בהלם עם פצע חתך עמוק בזרוע ימין אך בהכרה מלאה.",
                     status: {
-                        d: "בהכרה מלאה",
-                        c: "מואץ",
-                        b: "מהיר",
-                        e: "דימום חיצוני משמעותי בזרוע",
+                        הכרה: "בהכרה מלאה",
+                        דופק: "מואץ",
+                        נשימה: "מהיר",
+                        חשיפה: "דימום חיצוני משמעותי בזרוע",
                     },
-                    level: "soon",
-                    attention: "yes",
-                    image: "https://example.com/images/tamar.png",
+                    answer: { "השגחה צמודה": "כן", "דחיפות פינוי": "בהקדם" },
+                    image: Q3D4,
                 },
                 {
-                    title: "Yosef",
+                    title: "יוסי",
                     desc: "גבר בן 65, שיער אפור, נמצא שוכב על גבו, מתנשם בכבדות ומחזיק את החזה.",
                     status: {
-                        d: "מעורפל",
-                        c: "חלש ולא סדיר",
-                        b: "קשה",
-                        e: "חשד לחזה אוויר או פגיעה לבבית",
+                        הכרה: "מעורפל",
+                        דופק: "חלש ולא סדיר",
+                        נשימה: "קשה",
+                        חשיפה: "חשד לחזה אוויר או פגיעה לבבית",
                     },
-                    level: "immediate",
-                    attention: "yes",
-                    image: "https://example.com/images/yosef.png",
+                    answer: { "השגחה צמודה": "כן", "דחיפות פינוי": "מיידי" },
+                    image: Q3D5,
                 },
                 {
-                    title: "Noa",
+                    title: "נועה",
                     desc: "ילדה בת 10, שיער חום אסוף בקוקו, יושבת ומבכה עם שריטה בברך בלבד.",
                     status: {
-                        d: "בהכרה מלאה",
-                        c: "תקין",
-                        b: "תקין",
-                        e: "אין פגיעות נסתרות",
+                        הכרה: "בהכרה מלאה",
+                        דופק: "תקין",
+                        נשימה: "תקין",
+                        חשיפה: "אין פגיעות נסתרות",
                     },
-                    level: "calm",
-                    attention: "no",
-                    image: "https://example.com/images/noa.png",
+                    answer: { "השגחה צמודה": "לא", "דחיפות פינוי": "לא דחוף" },
+                    image: Q3D6,
                 },
             ],
             quizImg: Color,
             outerQuizImg: Q1Image,
             quizText:
-                "עבור כל דמות וסיטואציה חובה לקבוע אם הוא פעל כראוי או אם עבר על איסור מעילה. כדאי לעיין בעיתון לקבל משום תובנות...",
-            quizData: [Q3D1, Q3D2, Q3D3, Q3D4, Q3D5, Q3D6],
+                "עבור כל דמות וסיטואציה חובה לקבוע עד כמה צריך לטפל ולהשגיח בשטח ואת רמת דחיפות הפינוי...",
+            quizData: ["אֵלֶּה", "פְאָר", "בַּמֶּאוֹ", "טִישׁ", "אִימְוֵוה", "חַד"],
             category: [
                 [Q3O1, Q3O2],
                 [Q3O3, Q3O4, Q3O5],
@@ -227,10 +221,10 @@ const data = {
                 [1, 0],
             ], //must change to real answer
             hints: [
-                "לחצו על הדפים השונים עד שיתגלה הדין הנכון של הסיטואציה",
+                "לחצו על הדפים השונים ובחרו את ההגדרה הנכונה לסיטואציה",
                 "כמובן, שצריך לסיים לתייג את כל הדפים",
-                "לאחר מכן, יש לסדר את הדפים לפי הסדר הנכון- שנבין מה כתוב באמצע",
-                "...והקשיבו",
+                "לאחר מכן, יש לסדר את הדפים לפי הסדר הנכון",
+                "...והקשיבו לשמות המשפחה",
                 "אולי שמישהו יקרא את שמות המשפחה לפי הסדר ומישהוא אחר יקשיב לו...",
             ],
         },

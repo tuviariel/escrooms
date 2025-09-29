@@ -1,5 +1,4 @@
-import { quizDataP } from "../../pages/Room/Room";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     DndContext,
     closestCenter,
@@ -15,16 +14,18 @@ import {
     sortableKeyboardCoordinates,
     verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-
+import Button from "../Button";
 import { Sortable } from "./Sortable/Sortable";
-
-export const Puzzle6 = (props: quizDataP) => {
-    const { data } = props;
-
+import { TemplateProps } from "../../pages/QuizTemplate/QuizTemplate";
+import { get_text } from "../../util/language";
+import { imageStyle } from "../../util/UIstyle";
+import { useRoomContext } from "../../contexts/roomStyleContext";
+// import { get } from "aws-amplify/api";
+export const Puzzle6: React.FC<Partial<TemplateProps>> = ({ data, setOpenLock }) => {
     const initialPositions = [5, 3, 4, 1, 0, 2]; // scattered order
-    // const targetOrder = [3, 4, 5, 0, 1, 2]; // final order as in your render
     const [items, setItems] = useState(initialPositions);
-
+    const [showEnd, setShowEnd] = useState(false);
+    const { roomStyle } = useRoomContext();
     // --- DND Kit sensors ---
     const sensors =
         window.outerWidth > 768
@@ -52,10 +53,11 @@ export const Puzzle6 = (props: quizDataP) => {
     const getImages = (): DraggableImage[] => {
         return initialPositions.map((idx) => ({
             id: idx,
-            src: data.quizData[idx],
-            answerSrc: data.category && data.orderAnswer && data.category[data.orderAnswer[idx][0]],
+            src: data?.quiz[idx].image,
+            answerSrc: data?.quiz[idx].title + " " + data?.quizData[idx],
         }));
     };
+
     const [images] = useState<DraggableImage[]>(getImages());
 
     // --- DND Kit drag end handler ---
@@ -70,38 +72,61 @@ export const Puzzle6 = (props: quizDataP) => {
         }
     };
 
+    useEffect(() => {
+        const isCorrectOrder = items.every((item, index) => item === index);
+        if (isCorrectOrder) {
+            setOpenLock && setOpenLock(true);
+            setShowEnd(true);
+        }
+    }, [items]);
+
+    console.log("Items:", items);
     return (
-        <div className="w-full h-full columns-2 gap-0">
-            <DndContext
-                sensors={sensors}
-                collisionDetection={closestCenter}
-                onDragEnd={handleDragEnd}>
-                <SortableContext items={items} strategy={verticalListSortingStrategy}>
-                    {items.map((itemId) => {
-                        const image = images.find((img) => img.id === itemId);
-                        if (!image) return null;
-                        // console.log("Items:", image);
-                        return (
-                            <Sortable key={image.id} id={image.id}>
-                                <div className="relative">
-                                    <img
-                                        src={image.src}
-                                        alt={`#${image.id}`}
-                                        className="cursor-grab"
-                                    />
-                                    {image.answerSrc && (
+        <div
+            className="w-screen h-screen"
+            style={{
+                backgroundImage: `url(${imageStyle[roomStyle as keyof typeof imageStyle].semiBackground})`,
+                backgroundSize: "cover",
+            }}>
+            <div className="text-center text-2xl font-semibold p-2 pt-5">
+                {get_text("puzzle6_inst", "he")}
+            </div>
+            <div className="pt-10 columns-6 gap-0" dir="rtl">
+                <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}>
+                    <SortableContext items={items} strategy={verticalListSortingStrategy}>
+                        {items.map((itemId) => {
+                            const image = images.find((img) => img.id === itemId);
+                            if (!image) return null;
+                            return (
+                                <Sortable key={image.id} id={image.id}>
+                                    <div className="relative pt-14">
                                         <img
-                                            src={image.answerSrc}
-                                            alt=""
-                                            className="absolute z-20 -bottom-4 right-24 h-28 w-52"
+                                            src={image.src}
+                                            alt={`#${image.id}`}
+                                            className="cursor-grab w-full h-auto"
                                         />
-                                    )}
-                                </div>
-                            </Sortable>
-                        );
-                    })}
-                </SortableContext>
-            </DndContext>
+                                        {image.answerSrc && (
+                                            <div className="absolute z-20 top-0 right-1/2 translate-1/2 text-xl bg-white rounded-md p-1 whitespace-nowrap">
+                                                {image.answerSrc}
+                                            </div>
+                                        )}
+                                    </div>
+                                </Sortable>
+                            );
+                        })}
+                    </SortableContext>
+                </DndContext>
+            </div>
+            {showEnd && (
+                <div className="flex ml-2 mr-auto">
+                    <Button onClick={() => setOpenLock && setOpenLock(true)}>
+                        <div>{get_text("finish", "he")}</div>
+                    </Button>
+                </div>
+            )}
         </div>
     );
 };

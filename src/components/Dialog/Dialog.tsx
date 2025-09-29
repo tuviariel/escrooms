@@ -55,13 +55,13 @@ export const Dialog: React.FC<DialogProps> = (props) => {
                         flex flex-col overflow-hidden transition-all duration-300 ease-out
                     `}
                     onClick={(e) => e.stopPropagation()}>
+                    <div
+                        onClick={() => setOpen(false)}
+                        title={get_text("close", "he")}
+                        className="absolute top-0 right-0 h-8 w-8 text-xl border-1 hover:border-2 rounded-lg border-black pl-2 pb-1 flex cursor-pointer font-bold">
+                        X
+                    </div>
                     <div className="flex flex-col h-full p-5 items-center">
-                        <div
-                            onClick={() => setOpen(false)}
-                            title={get_text("close", "he")}
-                            className="ml-auto h-10 w-10 text-xl border-1 hover:border-2 rounded-full border-black px-3 pt-1 flex cursor-pointer font-bold">
-                            X
-                        </div>
                         <div className="w-full h-full flex flex-col justify-center items-center overflow-auto">
                             {children || data}
                         </div>

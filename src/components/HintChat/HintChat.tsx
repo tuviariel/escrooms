@@ -88,7 +88,7 @@ export const HintChat = (props: hintChatProps) => {
                                     return (
                                         <div
                                             key={i}
-                                            className="mr-auto ml-2 text-left bg-amber-400 p-1 rounded-2xl mb-0.5"
+                                            className="flex mr-5 ml-1 text-right bg-amber-400 p-1 rounded-2xl mb-0.5"
                                             dir="rtl"
                                             ref={
                                                 i === chat.length - 1 && !botTyping
@@ -102,7 +102,7 @@ export const HintChat = (props: hintChatProps) => {
                                     return (
                                         <div
                                             key={i}
-                                            className="ml-auto mr-2 text-right bg-amber-500 p-1 rounded-2xl mb-0.5"
+                                            className="flex ml-5 mr-1 text-right bg-amber-500 p-1 rounded-2xl mb-0.5"
                                             dir="rtl"
                                             ref={
                                                 i === chat.length - 1 && !botTyping

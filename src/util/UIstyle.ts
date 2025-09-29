@@ -1,5 +1,14 @@
-import RBG from "../assets/images/backgrounds/realistic.png";
-import ABG from "../assets/images/backgrounds/abstract.png";
+import RBG from "../assets/images/UIelements/backgrounds/realistic.png";
+import ABG from "../assets/images/UIelements/backgrounds/abstract.png";
+import MBG from "../assets/images/UIelements/backgrounds/abstract.png";
+import CBG from "../assets/images/UIelements/backgrounds/abstract.png";
+import VBG from "../assets/images/UIelements/backgrounds/abstract.png";
+import RSBG from "../assets/images/UIelements/semiBackgrounds/realistic.png";
+import ASBG from "../assets/images/UIelements/semiBackgrounds/abstract.png";
+import MSBG from "../assets/images/UIelements/semiBackgrounds/realistic.png";
+import CSBG from "../assets/images/UIelements/semiBackgrounds/realistic.png";
+import VSBG from "../assets/images/UIelements/semiBackgrounds/realistic.png";
+
 export const colorPalette = {
     //1 - dark/dominant/chosen color, 2 - bright/positive color, 3 - light color
     redBlueGray: { dark: "#E50113", bright: "#0255db", light: "#9ea5b0" },
@@ -9,6 +18,7 @@ export const colorPalette = {
 export const imageStyle = {
     realistic: {
         background: RBG,
+        semiBackground: RSBG,
         right: "#FFFFFF",
         left: "#000000",
         back: "",
@@ -18,6 +28,7 @@ export const imageStyle = {
     },
     abstract: {
         background: ABG,
+        semiBackground: ASBG,
         right: "#FFFFFF",
         left: "#000000",
         back: "",
@@ -26,7 +37,8 @@ export const imageStyle = {
         button: "",
     },
     minimalistic: {
-        background: "image3.jpg",
+        background: MBG,
+        semiBackground: MSBG,
         right: "#FFFFFF",
         left: "#000000",
         back: "",
@@ -35,7 +47,8 @@ export const imageStyle = {
         button: "",
     },
     comic: {
-        background: "image4.jpg",
+        background: CBG,
+        semiBackground: CSBG,
         right: "#FFFFFF",
         left: "#000000",
         back: "",
@@ -44,7 +57,8 @@ export const imageStyle = {
         button: "",
     },
     vintage: {
-        background: "image5.jpg",
+        background: VBG,
+        semiBackground: VSBG,
         right: "#FFFFFF",
         left: "#000000",
         back: "",
