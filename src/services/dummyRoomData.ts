@@ -1,20 +1,9 @@
-import Q1D1 from "../assets/images/10.png";
-import Q1D2 from "../assets/images/11.png";
-import Q1D3 from "../assets/images/12.png";
-import Q1D4 from "../assets/images/13.png";
-import Q1D5 from "../assets/images/14.png";
-import Q1Image from "../assets/images/24.png";
 import Q3D1 from "../assets/images/colorCards/daniel.png";
 import Q3D2 from "../assets/images/colorCards/maya.png";
-import Q3D3 from "../assets/images/colorCards/tamar.png"; // 3 Needs to be changed
+import Q3D3 from "../assets/images/colorCards/omer.png";
 import Q3D4 from "../assets/images/colorCards/tamar.png";
-import Q3D5 from "../assets/images/colorCards/tamar.png"; // 5 Needs to be changed
-import Q3D6 from "../assets/images/colorCards/tamar.png"; // 6 Needs to be changed
-import Q3O1 from "../assets/images/colorCards/colors/1.png";
-import Q3O2 from "../assets/images/colorCards/colors/2.png";
-import Q3O3 from "../assets/images/colorCards/colors/3.png";
-import Q3O4 from "../assets/images/colorCards/colors/4.png";
-import Q3O5 from "../assets/images/colorCards/colors/5.png";
+import Q3D5 from "../assets/images/colorCards/yosi.png";
+import Q3D6 from "../assets/images/colorCards/noa.png";
 import MainFirstAid from "../assets/images/First-aid.jpg";
 import Clock from "../assets/images/clock2.png";
 import Graph from "../assets/images/graph.jpeg";
@@ -85,9 +74,9 @@ const data = {
                 },
             ],
             quizImg: Clock,
-            outerQuizImg: Q1Image,
+            outerQuizImg: Clock,
             quizText: "עבור כל מקרה בטבלה צריך לקבוע אם הפעולה שננקטה הייתה נכונה או לא",
-            quizData: [Q1D1, Q1D2, Q1D3, Q1D4, Q1D5],
+            quizData: [""],
             category: null,
             orderAnswer: null,
             hints: ["firstHint", "secondHint", "thirdHint", "forthHint", "fifthHint"],
@@ -119,7 +108,7 @@ const data = {
                 ],
             ],
             quizImg: Graph,
-            outerQuizImg: Q1Image,
+            outerQuizImg: Graph,
             quizText: "אתה מארגן תיק של ציוד עזרה ראשונה. מה תשים בתיק?",
             category: null,
             orderAnswer: null,
@@ -204,14 +193,11 @@ const data = {
                 },
             ],
             quizImg: Color,
-            outerQuizImg: Q1Image,
+            outerQuizImg: Color,
             quizText:
                 "עבור כל דמות וסיטואציה חובה לקבוע עד כמה צריך לטפל ולהשגיח בשטח ואת רמת דחיפות הפינוי...",
             quizData: ["אֵלֶּה", "פְאָר", "בַּמֶּאוֹ", "טִישׁ", "אִימְוֵוה", "חַד"],
-            category: [
-                [Q3O1, Q3O2],
-                [Q3O3, Q3O4, Q3O5],
-            ],
+            category: null,
             orderAnswer: [
                 [0, 0],
                 [1, 2],
@@ -311,9 +297,9 @@ const data = {
                 },
             ],
             quizImg: List,
-            outerQuizImg: Q1Image,
+            outerQuizImg: List,
             quizText: "סדרו את הכרטיסיות לפי סדר הפעולות הנכון של סדר טיפול בפצוע וגלו את הקוד",
-            quizData: [Q1D1, Q1D2, Q1D3, Q1D4, Q1D5],
+            quizData: ["🫁", "🌬️", "❤️", "🧠", "🩺", "📊", "💊", "📋"],
             category: null,
             orderAnswer: null,
             hints: ["firstHint", "secondHint", "thirdHint", "forthHint", "fifthHint"],
