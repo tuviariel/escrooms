@@ -33,6 +33,7 @@ export interface quizDataP {
 export interface quizData {
     _id: string;
     type: string;
+    name: string;
     answer: string;
     quiz: any[];
     quizImg: string | any;
@@ -53,7 +54,15 @@ export const Room = () => {
     };
     const quizL = useSelector(
         (state: {
-            quizList: { list: { id: number; completed: boolean; type: string; image: string }[] };
+            quizList: {
+                list: {
+                    id: number;
+                    completed: boolean;
+                    name: string;
+                    answer: string;
+                    image: string;
+                }[];
+            };
         }) => state.quizList
     );
     const quizList = quizL?.list;
@@ -121,8 +130,8 @@ export const Room = () => {
                 </>
             ) : (
                 <>
-                    <div className="h-screen w-full relative flex justify-center items-center overflow-hidden md:pt-20 md:pb-20 bg-gray-900">
-                        <div className="h-full relative bg-gray-900">
+                    <div className="h-screen w-screen relative flex justify-center items-center overflow-hidden lg:pt-20 lg:pb-20 bg-gray-900">
+                        <div className="h-full w-full relative bg-gray-900 flex justify-center items-center">
                             <img
                                 src={data.mainImage}
                                 alt="mainImage"
@@ -164,7 +173,7 @@ export const Room = () => {
                                                           roomColor as keyof typeof colorPalette
                                                       ].bright,
                                             }}
-                                            title={quiz.type}>
+                                            title={quiz.name}>
                                             <div className="relative w-full h-full rounded-full">
                                                 <img
                                                     src={quiz.image}
@@ -182,7 +191,7 @@ export const Room = () => {
                                                         }}></div>
                                                 )}
                                                 <div className="absolute bottom-3 w-full text-center text-white text-md py-1 z-20">
-                                                    {quiz.type}
+                                                    {!quiz.completed ? quiz.name : quiz.answer}
                                                 </div>
                                             </div>
                                         </div>

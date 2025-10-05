@@ -85,7 +85,7 @@ export const OrderBorder = (props: TemplateProps) => {
     };
 
     const sensors =
-        window.outerWidth > 768
+        window.outerWidth > 968
             ? useSensors(
                   useSensor(PointerSensor, {
                       activationConstraint: {

@@ -42,9 +42,9 @@ export const Dashboard = () => {
         // getList();
     }, []);
     return (
-        <div className="flex flex-col items-center md:justify-center h-screen bg-gradient-to-b from-[#f5f5f5] to-[#e0e0e0]">
+        <div className="flex flex-col items-center lg:justify-center h-screen bg-gradient-to-b from-[#f5f5f5] to-[#e0e0e0]">
             <NavBar />
-            <h2 className="font-semibold text-3xl mb-12 underline hidden md:block">
+            <h2 className="font-semibold text-3xl mb-12 underline hidden lg:block">
                 {get_text("welcome", "he")}
             </h2>
             <div
@@ -55,7 +55,7 @@ export const Dashboard = () => {
                 <img
                     src={first_aid}
                     alt="First-aid"
-                    className="w-2/5 md:w-1/2 rounded-2xl border-red-600 border-4"
+                    className="w-1/3 lg:w-1/2 rounded-2xl border-red-600 border-4"
                 />
                 <div className="absolute top-32 md:top-44 right-1/2 translate-1/2 text-4xl md:text-6xl mt-1 md:mt-4 text-red-600">
                     {get_text("first_aid", "he")}

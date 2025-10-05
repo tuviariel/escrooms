@@ -17,7 +17,7 @@ interface QuizDataProps {
 export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
     const { data, result, setResult } = props;
     const { roomStyle } = useRoomContext();
-    const [quizDataPageNumber, setQuizDataPageNumber] = useState(0);
+    const [quizDataPageNumber, setQuizDataPageNumber] = useState<number>(0);
     const [colorOrder, setColorOrder] = useState<string[][]>(
         data?.type === "colorChange" ? new Array(data?.quiz.length).fill(["", ""]) : []
     );
@@ -114,7 +114,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
         let count = 0,
             i;
         for (i = 0; i <= colorOrder.length - 1; i++) {
-            console.log("correct", i, colorOrder[i]);
+            console.log("correct", i, colorOrder[i], answerKeys[0], answerKeys[1]);
             if (
                 data?.quiz[i].answer[answerKeys[0]] === colorOrder[i][0] &&
                 data.quiz[i].answer[answerKeys[1]] === colorOrder[i][1]
@@ -132,7 +132,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                       : get_text("continue", "he") + ": (" + count + "/" + i + ")"
             );
     };
-    console.log(answerData);
+    console.log(quizDataPageNumber);
     return (
         <>
             {data && data.quizData.length > 1 ? (
@@ -197,10 +197,12 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                     key={i}>
                                     <div
                                         className={`cursor-pointer h-full max-w-screen py-10 px-5 flex gap-4 `}
-                                        onClick={() =>
-                                            quizDataPageNumber !== i
-                                                ? setQuizDataPageNumber(i)
-                                                : setOpenDialog(true)
+                                        onClick={() => setOpenDialog(true)}
+                                        onScroll={() =>
+                                            quizDataPageNumber !== i && setQuizDataPageNumber(i)
+                                        }
+                                        onTouchEnd={() =>
+                                            quizDataPageNumber !== i && setQuizDataPageNumber(i)
                                         }>
                                         <img
                                             src={item.image}
@@ -409,7 +411,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                 className=""
                             />
                             {result && (
-                                <div className="content-center bg-white rounded-md p-1">
+                                <div className="content-center h-8 mt-1 border-amber-200 border-2 bg-white rounded-md p-1">
                                     {result}
                                 </div>
                             )}

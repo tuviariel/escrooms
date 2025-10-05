@@ -40,6 +40,9 @@ export const QuizSuccess = (props: quizSuccessProps) => {
     const [message, setMessage] = useState("");
     const [digits, setDigits] = useState<string[]>(new Array(data.length).fill(""));
     const [indexedRef, setIndexedRef] = useState(0);
+    const [answerType, setAnswerType] = useState<"number" | "english" | "hebrew" | "other">(
+        "other"
+    );
     const inputRef = useRef<HTMLInputElement | null>(null);
     useEffect(() => {
         honk();
@@ -48,6 +51,17 @@ export const QuizSuccess = (props: quizSuccessProps) => {
 
     useEffect(() => {
         inputRef.current?.focus();
+        const getAnswerType = () => {
+            if (/[0-9]/.test(data[0])) {
+                return "number";
+            } else if (/[A-Za-z]/.test(data[0])) {
+                return "english";
+            } else if (/[\u0590-\u05FF]/.test(data[0])) {
+                return "hebrew";
+            }
+            return "other";
+        };
+        setAnswerType(getAnswerType());
     }, []);
     const setNumber = (value: string, index: number) => {
         index < digits.length && setIndexedRef(index + 1);
@@ -98,7 +112,9 @@ export const QuizSuccess = (props: quizSuccessProps) => {
                 ) : (
                     <img src={openBox} alt="Opening Lock" className="h-46" />
                 )}
-                <div className="flex flex-row z-20 gap-2 py-2" dir="ltr">
+                <div
+                    className="flex flex-row z-20 gap-2 py-2"
+                    dir={answerType === "hebrew" ? "rtl" : "ltr"}>
                     {digits.map((digit, index) => {
                         return (
                             <input

@@ -28,15 +28,23 @@ export const Puzzle6: React.FC<Partial<TemplateProps>> = ({ data, setOpenLock })
     const { roomStyle } = useRoomContext();
     // --- DND Kit sensors ---
     const sensors =
-        window.outerWidth > 768
+        window.outerWidth > 968
             ? useSensors(
-                  useSensor(PointerSensor),
+                  useSensor(PointerSensor, {
+                      activationConstraint: {
+                          distance: 5,
+                      },
+                  }),
                   useSensor(KeyboardSensor, {
                       coordinateGetter: sortableKeyboardCoordinates,
                   })
               )
             : useSensors(
-                  useSensor(TouchSensor),
+                  useSensor(TouchSensor, {
+                      activationConstraint: {
+                          distance: 5,
+                      },
+                  }),
                   useSensor(KeyboardSensor, {
                       coordinateGetter: sortableKeyboardCoordinates,
                   })
@@ -130,54 +138,3 @@ export const Puzzle6: React.FC<Partial<TemplateProps>> = ({ data, setOpenLock })
         </div>
     );
 };
-
-/* {images &&
-                images.slice(0, 3).map((img, idx) => (
-                    <div className="relative" key={img.id}>
-                        <img
-                            src={img.src}
-                            alt={`#${idx + 4}`}
-                            className=""
-                            draggable
-                            onDragStart={() => handleDragStart(idx)}
-                            onDragEnd={handleDragEnd}
-                            onDragOver={handleDragOver}
-                            onDrop={() => handleDrop(idx)}
-                            style={{ opacity: draggedIdx === idx ? 0.5 : 1, cursor: "grab" }}
-                        />
-                        {img.answerSrc && (
-                            <img
-                                src={img.answerSrc}
-                                alt=""
-                                className="absolute z-20 -bottom-4 right-24 h-28 w-52"
-                            />
-                        )}
-                    </div>
-                ))}
-            {images &&
-                images.slice(3, 6).map((img, idx) => (
-                    <div className="relative" key={img.id + 3}>
-                        <img
-                            src={img.src}
-                            alt={`#${idx + 1}`}
-                            className=""
-                            draggable
-                            onDragStart={() => handleDragStart(idx + 3)}
-                            onDragEnd={handleDragEnd}
-                            onDragOver={handleDragOver}
-                            onDrop={() => handleDrop(idx + 3)}
-                            style={{ opacity: draggedIdx === idx + 3 ? 0.5 : 1, cursor: "grab" }}
-                        />
-                        {img.answerSrc && (
-                            <img
-                                src={img.answerSrc}
-                                alt=""
-                                className="absolute z-20 -bottom-4 right-24 h-28 w-52"
-                            />
-                        )}
-                    </div>
-                ))} */
-
-//         </div>
-//     );
-// };

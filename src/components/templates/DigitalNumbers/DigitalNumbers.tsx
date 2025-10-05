@@ -163,7 +163,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
                 })`,
             }}>
             <div
-                className={`h-full max-h-96 sm:max-h-24 md:max-h-72 w-full overflow-y-auto border-4`}
+                className={`h-full max-h-96 sm:max-h-24 lg:max-h-72 w-full overflow-y-auto border-4`}
                 style={{ borderColor: colorPalette[roomColor as keyof typeof colorPalette].dark }}>
                 <table
                     className="table-auto w-full h-full text-right border border-amber-50 text-xl text-amber-50 overflow-y-auto"
