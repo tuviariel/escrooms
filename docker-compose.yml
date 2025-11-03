@@ -1,0 +1,12 @@
+# version: "3.8"
+
+# services:
+#     frontend:
+#         build:
+#             context: .
+#             dockerfile: Dockerfile # Use the development Dockerfile
+#         ports:
+#             - "5173:5173" # Map host port to container port
+#         volumes:
+#             - .:/app # Mount the project directory for live updates
+#             - /app/node_modules # Exclude node_modules from host mount to prevent issues
