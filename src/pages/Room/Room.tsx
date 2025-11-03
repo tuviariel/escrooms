@@ -190,7 +190,9 @@ export const Room = () => {
                                                                 ].dark,
                                                         }}></div>
                                                 )}
-                                                <div className="absolute bottom-3 w-full text-center text-white text-md py-1 z-20">
+                                                <div
+                                                    className="absolute bottom-3 w-full text-center text-white text-md py-1 z-20"
+                                                    dir="rtl">
                                                     {!quiz.completed ? quiz.name : quiz.answer}
                                                 </div>
                                             </div>

@@ -156,7 +156,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
     // console.log(roomColor);
     return (
         <div
-            className="bg-gray-100 flex flex-col w-full rounded-md"
+            className="bg-gray-100 flex flex-col w-screen h-screen rounded-md p-3"
             style={{
                 backgroundImage: `url(${
                     imageStyle[roomStyle as keyof typeof imageStyle].background
