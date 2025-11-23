@@ -1,26 +1,58 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import first_aid from "../../assets/images/First-aid.jpg";
 import { useNavigate } from "react-router";
-// import fraudImage from "../../assets/images/הונאות ומעילות.png";
-// import GameCard from "../../components/GameCard";
-// import Loading from "../../assets/images/loading.gif";
+// import data from "../../services/dummyRoomData";
+import { quizzes } from "../../services/dummyRoomData";
+import GameCard from "../../components/GameCard";
+import Loading from "../../assets/images/loading.gif";
 import { get_text } from "../../util/language";
 import NavBar from "../../components/Navbar";
+import MainFirstAid from "../../assets/images/First-aid.jpg";
+
 export interface ListObject {
     id: string;
     name: string;
-    image: string | any;
+    mainImage: string | null;
+    description: string | null;
 }
 /**
  * Dashboard page- currently the apps main page ('/' route)
  * @param props none. Gets data by calling the CryptoGecko API.
  * @returns the main dashboard page with sub components.
  */
+import { generateClient } from "aws-amplify/data";
+// import { client } from "./backend";
+import type { Schema } from "../../../amplify/data/resource";
+import { getCurrentUser } from "aws-amplify/auth";
+
+// type Room = {
+//     id: string;
+//     name: string;
+//     description?: string;
+//     mainImage?: string;
+// };
 
 export const Dashboard = () => {
-    //TODO- this list should be connected to the DB with all the room's quiz's data...
     const navigate = useNavigate();
-    // const [roomsList] = useState<ListObject[]>([
+    const [user, setUser] = useState<any>();
+    useEffect(() => {
+        const getUser = async () => {
+            try {
+                const user = await getCurrentUser();
+                setUser(user);
+                console.log("user:", user.userId);
+            } catch (error) {
+                console.log("No user logged in", error);
+            }
+        };
+        getUser();
+    }, []);
+    const client = generateClient<Schema>({
+        authMode: user ? "userPool" : "identityPool",
+    });
+
+    //TODO- this list should be connected to the DB with all the room's quiz's data...
+    const [roomsList, setRoomsList] = useState<ListObject[]>([]);
     //     { id: "rfvwkjf34v43", name: get_text("sexual_harassment", "he"), image: "url" },
     //     { id: "rfvwkjf34v45", name: get_text("first_aid", "he"), image: "url" },
     //     { id: "kjbhdfvksjdf", name: get_text("fraud", "he"), image: fraudImage },
@@ -31,16 +63,73 @@ export const Dashboard = () => {
     //     { id: "rfvwkjf34v47", name: get_text("first_aid", "he"), image: "url" },
     //     { id: "kjbhdfvksjd6", name: get_text("fraud", "he"), image: fraudImage },
     // ]);
-    // const [errorMessage, setErrorMessage] = useState<string>("");
+    const [errorMessage, setErrorMessage] = useState<string>("");
     useEffect(() => {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        }
-        // setErrorMessage("");
-        //getting info through API service:
-        // const getList = async () => {};
-        // getList();
-    }, []);
+        // if (document.exitFullscreen) {
+        //     document.exitFullscreen();
+        // }
+        const getRooms = async () => {
+            // if (!user) return;
+            console.log(quizzes);
+            console.log("Fetching rooms from DataStore...");
+            console.log("client:", client);
+            console.log("client.mutations:", client.mutations);
+            console.log("client.models:", client.models);
+            console.log("Quiz model:", client.models?.Quiz);
+            // const selectionSet = ["roomId", "name", "description", "mainImage"] as const; //{selectionSet}
+            try {
+                const rooms = await client.models.Room.list();
+                // if (rooms) {
+                console.log("Fetched rooms:", rooms);
+                setRoomsList(rooms.data);
+            } catch (errors) {
+                console.error("Error fetching rooms:", errors);
+                // setErrorMessage("Error fetching Escape-Rooms");
+            }
+
+            // const quizIds: string[] = [];
+            // const quizData = quizzes;
+
+            // quizzes:
+            // try {
+            //     for (const q of quizzes) {
+            //         q.roomId = "3b0c95f3-20ad-486c-9e54-8d16f48db39c";
+            //         const cleanQuiz = JSON.stringify(q.quiz);
+            //         q.quiz = cleanQuiz as any;
+            //         const cleanHints = JSON.stringify(q.hints);
+            //         q.hints = cleanHints as any;
+            //         const quizy = await client.models.Quiz.create(q);
+            //         console.log("Creating quiz with data:", q);
+            //         if (quizy) {
+            //             // quizIds.push(quiz.id);
+            //             console.log("Quiz created:", quizy);
+            //         }
+            //     }
+            // } catch (errors) {
+            //     console.error("Error creating quiz:", errors);
+            // }
+
+            // try {
+            //     const result = await client.models.Room.create({
+            //         creatorId: user.userId || "d06c890c-d061-7063-e269-9e3040f72e67",
+            //         name: "עזרה ראשונה",
+            //         mainImage: MainFirstAid ?? null,
+            //         colorPalette: "redBlueGray",
+            //         imageStyle: "realistic",
+            //         fontFamily: "sansSerif",
+            //         description: "משחק חינוכי ללימוד על עזרה ראשונה",
+            //     });
+            // if (result) {
+            //     console.log("room created:", result);
+            // } catch (error) {
+            //     console.error("Error creating room:", error);
+            // }
+
+            // console.log("Game created:", rooms);
+        };
+        getRooms();
+    }, [user]);
+
     return (
         <div className="flex flex-col items-center lg:justify-center h-screen bg-gradient-to-b from-[#f5f5f5] to-[#e0e0e0]">
             <NavBar />
@@ -61,17 +150,10 @@ export const Dashboard = () => {
                     {get_text("first_aid", "he")}
                 </div>
             </div>
-            {/* {roomsList.length > 0 ? (
+            {roomsList.length > 0 ? (
                 <div className="grid grid-cols-3 gap-10 px-10">
-                    {roomsList.map((item) => {
-                        return (
-                            <GameCard
-                                key={item.id}
-                                name={item.name}
-                                id={item.id}
-                                image={item.image}
-                            />
-                        );
+                    {roomsList.map((room) => {
+                        return <GameCard key={room.id} data={room} />;
                     })}
                 </div>
             ) : errorMessage ? (
@@ -79,9 +161,9 @@ export const Dashboard = () => {
             ) : (
                 <div className="flex flex-col-reverse">
                     <div>Loading...</div>
-                    <img src={Loading} alt="Loading..." className="mx-auto" />
+                    <img src={Loading} alt="Loading..." className="mx-auto h-24 w-24" />
                 </div>
-            )} */}
+            )}
         </div>
     );
 };

@@ -78,7 +78,7 @@ export const Room = () => {
     const { setRoomColor, setRoomStyle, setRoomFont, roomColor } = useRoomContext();
     useEffect(() => {
         // in future get room data from Api call via roomId. now just checking Id is right:
-        if (roomId !== data._id) {
+        if (roomId !== data.id) {
             navigate("/");
         } else {
             if (document.documentElement.requestFullscreen) {
@@ -100,6 +100,15 @@ export const Room = () => {
             setRoomStyle(data.imageStyle);
             setRoomColor(data.colorPalette);
             setRoomFont(data.fontFamily);
+            // try {
+            //     const rooms = await client.models.Room.list();
+            //     // if (rooms) {
+            //     console.log("Fetched rooms:", rooms);
+            //     setRoomsList(rooms.data);
+            // } catch (errors) {
+            //     console.error("Error fetching rooms:", errors);
+            //     // setErrorMessage("Error fetching Escape-Rooms");
+            // }
         }
     }, [screen.orientation.type]);
     useEffect(() => {
@@ -110,7 +119,7 @@ export const Room = () => {
             }
         }
     }, [quizList]);
-    console.log();
+    // console.log();
     return (
         <>
             {window.innerWidth < 600 || orientation === "portrait" ? (

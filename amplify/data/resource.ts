@@ -1,53 +1,68 @@
-import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
+import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
-/*== STEP 1 ===============================================================
-The section below creates a Todo database table with a "content" field. Try
-adding a new "isDone" field as a boolean. The authorization rule below
-specifies that any unauthenticated user can "create", "read", "update", 
-and "delete" any "Todo" records.
-=========================================================================*/
 const schema = a.schema({
-  Todo: a
-    .model({
-      content: a.string(),
-    })
-    .authorization((allow) => [allow.guest()]),
+    // USER PROFILE
+    UserProfile: a
+        .model({
+            id: a.id(),
+            displayName: a.string().required(),
+            avatar: a.string(),
+            email: a.string().required(),
+            roomsLeft: a.integer().default(1),
+            rooms: a.hasMany("Room", "creatorId"), // A user can have many rooms (FK = creatorId)
+        })
+        .authorization((allow) => [allow.owner(), allow.authenticated().to(["create"])]),
+
+    // ROOM
+    Room: a
+        .model({
+            creatorId: a.id().required(),
+            creator: a.belongsTo("UserProfile", "creatorId"), // Each room belongs to a user
+
+            name: a.string().required(),
+            mainImage: a.string(),
+            colorPalette: a.string(),
+            imageStyle: a.string(),
+            fontFamily: a.string(),
+            description: a.string(),
+
+            quizzes: a.hasMany("Quiz", "roomId"), // A room has many quizzes (FK = roomId)
+        })
+        .authorization((allow) => [
+            allow.authenticated().to(["read"]),
+            allow.guest().to(["read"]),
+            allow.owner(),
+        ]),
+
+    // QUIZ
+    Quiz: a
+        .model({
+            roomId: a.id().required(),
+            room: a.belongsTo("Room", "roomId"), // Each quiz belongs to a room
+
+            type: a.string().required(),
+            name: a.string(),
+            answer: a.string().required(),
+            quiz: a.json(),
+            quizImg: a.string(),
+            quizText: a.string(),
+            hints: a.json(),
+        })
+        .authorization((allow) => [
+            allow.authenticated().to(["read"]),
+            allow.guest().to(["read"]),
+            allow.owner(),
+        ]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
 
 export const data = defineData({
-  schema,
-  authorizationModes: {
-    defaultAuthorizationMode: 'identityPool',
-  },
+    schema,
+    authorizationModes: {
+        defaultAuthorizationMode: "identityPool",
+    },
 });
 
-/*== STEP 2 ===============================================================
-Go to your frontend source code. From your client-side code, generate a
-Data client to make CRUDL requests to your table. (THIS SNIPPET WILL ONLY
-WORK IN THE FRONTEND CODE FILE.)
-
-Using JavaScript or Next.js React Server Components, Middleware, Server 
-Actions or Pages Router? Review how to generate Data clients for those use
-cases: https://docs.amplify.aws/gen2/build-a-backend/data/connect-to-API/
+/*https://docs.amplify.aws/gen2/build-a-backend/data/connect-to-API/
 =========================================================================*/
-
-/*
-"use client"
-import { generateClient } from "aws-amplify/data";
-import type { Schema } from "@/amplify/data/resource";
-
-const client = generateClient<Schema>() // use this Data client for CRUDL requests
-*/
-
-/*== STEP 3 ===============================================================
-Fetch records from the database and use them in your frontend component.
-(THIS SNIPPET WILL ONLY WORK IN THE FRONTEND CODE FILE.)
-=========================================================================*/
-
-/* For example, in a React component, you can use this snippet in your
-  function's RETURN statement */
-// const { data: todos } = await client.models.Todo.list()
-
-// return <ul>{todos.map(todo => <li key={todo.id}>{todo.content}</li>)}</ul>

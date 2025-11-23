@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router"; //Outlet
 import Logo from "../../assets/images/vaivrach.png";
+import Login from "../Login";
 // import Button from "../Button";
 
 export const NavBar = () => {
@@ -23,8 +24,11 @@ export const NavBar = () => {
                     onClick={() => {
                         location.pathname !== "/" && navigate("/");
                     }}
-                    className="ml-5 h-10 w-10"
+                    className="ml-5 h-10 w-10 cursor-pointer"
                 />
+                <div className="relative inline-block mr-5 ml-auto">
+                    <Login />
+                </div>
             </div>
             {/* <Outlet /> */}
         </div>
