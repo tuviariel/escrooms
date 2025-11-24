@@ -83,6 +83,10 @@ const appContext: Translations = {
         ar: "",
     },
     room_finished: { en: "Room Completed!", he: "החדר הושלם!", ar: "" },
+    new_room: { en: "New Room", he: "חדר חדש", ar: "" },
+    subscription: { en: "Subscription", he: "מנוי", ar: "" },
+    go_pro: { en: "Go Pro", he: "לעבור לפרו", ar: "" },
+    edit_profile: { en: "Edit Profile", he: "ערוך פרופיל", ar: "" },
 };
 
 export const get_text = (name: string, lang: string) => {

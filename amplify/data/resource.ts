@@ -9,6 +9,7 @@ const schema = a.schema({
             avatar: a.string(),
             email: a.string().required(),
             roomsLeft: a.integer().default(1),
+            subscription: a.string().default("free"), // start, pro, etc.
             rooms: a.hasMany("Room", "creatorId"), // A user can have many rooms (FK = creatorId)
         })
         .authorization((allow) => [allow.owner(), allow.authenticated().to(["create"])]),

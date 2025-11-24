@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import first_aid from "../../assets/images/First-aid.jpg";
 import { useNavigate } from "react-router";
 // import data from "../../services/dummyRoomData";
+import type { Schema } from "../../../amplify/data/resource";
 import { quizzes } from "../../services/dummyRoomData";
 import GameCard from "../../components/GameCard";
 import Loading from "../../assets/images/loading.gif";
 import { get_text } from "../../util/language";
-import NavBar from "../../components/Navbar";
-import MainFirstAid from "../../assets/images/First-aid.jpg";
-
+// import NavBar from "../../components/Navbar";
+import { roomsService } from "../../services/service";
+export type Room = Schema["Room"]["type"];
 export interface ListObject {
     id: string;
     name: string;
@@ -17,52 +18,30 @@ export interface ListObject {
 }
 /**
  * Dashboard page- currently the apps main page ('/' route)
- * @param props none. Gets data by calling the CryptoGecko API.
+ * @param props none. Gets data by calling the Rooms API.
  * @returns the main dashboard page with sub components.
  */
-import { generateClient } from "aws-amplify/data";
-// import { client } from "./backend";
-import type { Schema } from "../../../amplify/data/resource";
-import { getCurrentUser } from "aws-amplify/auth";
-
-// type Room = {
-//     id: string;
-//     name: string;
-//     description?: string;
-//     mainImage?: string;
-// };
 
 export const Dashboard = () => {
     const navigate = useNavigate();
-    const [user, setUser] = useState<any>();
-    useEffect(() => {
-        const getUser = async () => {
-            try {
-                const user = await getCurrentUser();
-                setUser(user);
-                console.log("user:", user.userId);
-            } catch (error) {
-                console.log("No user logged in", error);
-            }
-        };
-        getUser();
-    }, []);
-    const client = generateClient<Schema>({
-        authMode: user ? "userPool" : "identityPool",
-    });
+    // const [user, setUser] = useState<any>();
+    // useEffect(() => {
+    //     const getUser = async () => {
+    //         try {
+    //             const user = await getCurrentUser();
+    //             setUser(user);
+    //             console.log("user:", user.userId);
+    //         } catch (error) {
+    //             console.log("No user logged in", error);
+    //         }
+    //     };
+    //     getUser();
+    // }, []);
+    // const client = generateClient<Schema>({
+    //     authMode: user ? "userPool" : "identityPool",
+    // });
 
-    //TODO- this list should be connected to the DB with all the room's quiz's data...
-    const [roomsList, setRoomsList] = useState<ListObject[]>([]);
-    //     { id: "rfvwkjf34v43", name: get_text("sexual_harassment", "he"), image: "url" },
-    //     { id: "rfvwkjf34v45", name: get_text("first_aid", "he"), image: "url" },
-    //     { id: "kjbhdfvksjdf", name: get_text("fraud", "he"), image: fraudImage },
-    //     { id: "rfvwkjf34v44", name: get_text("sexual_harassment", "he"), image: "url" },
-    //     { id: "rfvwkjf34v42", name: get_text("first_aid", "he"), image: "url" },
-    //     { id: "kjbhdfvksjd4", name: get_text("fraud", "he"), image: fraudImage },
-    //     { id: "rfvwkjf34v46", name: get_text("sexual_harassment", "he"), image: "url" },
-    //     { id: "rfvwkjf34v47", name: get_text("first_aid", "he"), image: "url" },
-    //     { id: "kjbhdfvksjd6", name: get_text("fraud", "he"), image: fraudImage },
-    // ]);
+    const [roomsList, setRoomsList] = useState<Room[] | undefined>(undefined);
     const [errorMessage, setErrorMessage] = useState<string>("");
     useEffect(() => {
         // if (document.exitFullscreen) {
@@ -72,19 +51,18 @@ export const Dashboard = () => {
             // if (!user) return;
             console.log(quizzes);
             console.log("Fetching rooms from DataStore...");
-            console.log("client:", client);
-            console.log("client.mutations:", client.mutations);
-            console.log("client.models:", client.models);
-            console.log("Quiz model:", client.models?.Quiz);
+            // console.log("client:", client);
+            // console.log("client.mutations:", client.mutations);
+            // console.log("client.models:", client.models);
+            // console.log("Quiz model:", client.models?.Quiz);
             // const selectionSet = ["roomId", "name", "description", "mainImage"] as const; //{selectionSet}
             try {
-                const rooms = await client.models.Room.list();
-                // if (rooms) {
+                const rooms = await roomsService.listRooms();
                 console.log("Fetched rooms:", rooms);
-                setRoomsList(rooms.data);
+                setRoomsList(rooms);
             } catch (errors) {
                 console.error("Error fetching rooms:", errors);
-                // setErrorMessage("Error fetching Escape-Rooms");
+                setErrorMessage("Error fetching Escape-Rooms");
             }
 
             // const quizIds: string[] = [];
@@ -128,14 +106,10 @@ export const Dashboard = () => {
             // console.log("Game created:", rooms);
         };
         getRooms();
-    }, [user]);
+    }, []);
 
     return (
-        <div className="flex flex-col items-center lg:justify-center h-screen bg-gradient-to-b from-[#f5f5f5] to-[#e0e0e0]">
-            <NavBar />
-            <h2 className="font-semibold text-3xl mb-12 underline hidden lg:block">
-                {get_text("welcome", "he")}
-            </h2>
+        <div className="flex flex-col items-center lg:justify-center mt-12 bg-gradient-to-b from-[#f5f5f5] to-[#e0e0e0]">
             <div
                 className="font-bold my-8 relative flex flex-col items-center cursor-pointer"
                 onClick={() => {
@@ -150,7 +124,7 @@ export const Dashboard = () => {
                     {get_text("first_aid", "he")}
                 </div>
             </div>
-            {roomsList.length > 0 ? (
+            {roomsList && roomsList.length > 0 ? (
                 <div className="grid grid-cols-3 gap-10 px-10">
                     {roomsList.map((room) => {
                         return <GameCard key={room.id} data={room} />;
