@@ -3,12 +3,13 @@ import first_aid from "../../assets/images/First-aid.jpg";
 import { useNavigate } from "react-router";
 // import data from "../../services/dummyRoomData";
 import type { Schema } from "../../../amplify/data/resource";
-import { quizzes } from "../../services/dummyRoomData";
+// import { quizzes } from "../../services/dummyRoomData";
 import GameCard from "../../components/GameCard";
 import Loading from "../../assets/images/loading.gif";
 import { get_text } from "../../util/language";
 // import NavBar from "../../components/Navbar";
 import { roomsService } from "../../services/service";
+// import { fileStorage } from "../../services/service";
 export type Room = Schema["Room"]["type"];
 export interface ListObject {
     id: string;
@@ -24,38 +25,27 @@ export interface ListObject {
 
 export const Dashboard = () => {
     const navigate = useNavigate();
-    // const [user, setUser] = useState<any>();
-    // useEffect(() => {
-    //     const getUser = async () => {
-    //         try {
-    //             const user = await getCurrentUser();
-    //             setUser(user);
-    //             console.log("user:", user.userId);
-    //         } catch (error) {
-    //             console.log("No user logged in", error);
-    //         }
-    //     };
-    //     getUser();
-    // }, []);
-    // const client = generateClient<Schema>({
-    //     authMode: user ? "userPool" : "identityPool",
-    // });
-
     const [roomsList, setRoomsList] = useState<Room[] | undefined>(undefined);
     const [errorMessage, setErrorMessage] = useState<string>("");
     useEffect(() => {
-        // if (document.exitFullscreen) {
-        //     document.exitFullscreen();
-        // }
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
         const getRooms = async () => {
             // if (!user) return;
-            console.log(quizzes);
-            console.log("Fetching rooms from DataStore...");
+            // console.log(quizzes);
+            // console.log("Fetching rooms from DataStore...");
             // console.log("client:", client);
             // console.log("client.mutations:", client.mutations);
             // console.log("client.models:", client.models);
             // console.log("Quiz model:", client.models?.Quiz);
             // const selectionSet = ["roomId", "name", "description", "mainImage"] as const; //{selectionSet}
+
+            //deleting room:
+            // const rooms = await roomsService.deleteRoom("c9e8aeb8-01f1-43cc-b494-cde58418e7db");
+            // console.log("Fetched rooms:", rooms);
+
+            //getting all rooms:
             try {
                 const rooms = await roomsService.listRooms();
                 console.log("Fetched rooms:", rooms);
@@ -68,7 +58,7 @@ export const Dashboard = () => {
             // const quizIds: string[] = [];
             // const quizData = quizzes;
 
-            // quizzes:
+            // --- quizzes create:
             // try {
             //     for (const q of quizzes) {
             //         q.roomId = "3b0c95f3-20ad-486c-9e54-8d16f48db39c";
@@ -87,6 +77,7 @@ export const Dashboard = () => {
             //     console.error("Error creating quiz:", errors);
             // }
 
+            // --- room create:
             // try {
             //     const result = await client.models.Room.create({
             //         creatorId: user.userId || "d06c890c-d061-7063-e269-9e3040f72e67",
@@ -97,17 +88,46 @@ export const Dashboard = () => {
             //         fontFamily: "sansSerif",
             //         description: "משחק חינוכי ללימוד על עזרה ראשונה",
             //     });
-            // if (result) {
-            //     console.log("room created:", result);
+
+            // --- room update:
+            // try {
+            //     console.log("updating room...");
+            //     const result = await roomsService.updateRoom(
+            //         "3b0c95f3-20ad-486c-9e54-8d16f48db39c",
+            //         { mainImage: "images/3b0c95f3-20ad-486c-9e54-8d16f48db39c/First-aid.jpg" }
+            //     );
+            //     // creatorId: "d06c890c-d061-7063-e269-9e3040f72e67",
+            //     // name: "עזרה ראשונה",
+            //     // mainImage: "images/3b0c95f3-20ad-486c-9e54-8d16f48db39c/First-aid.jpg",
+            //     // colorPalette: "redBlueGray",
+            //     // imageStyle: "realistic",
+            //     // fontFamily: "sansSerif",
+            //     // description: "משחק חינוכי ללימוד על עזרה ראשונה",
+            //     // });
+            //     console.log("updating room...", result);
+            //     if (result) {
+            //         console.log("room updated:", result);
+            //     }
             // } catch (error) {
-            //     console.error("Error creating room:", error);
+            //     console.error("room updated no:", error);
             // }
 
             // console.log("Game created:", rooms);
         };
         getRooms();
     }, []);
-
+    //uploading file- image:
+    // const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     if (!e.target.files?.[0]) return;
+    //     fileStorage
+    //         .uploadFile(e.target.files[0], "3b0c95f3-20ad-486c-9e54-8d16f48db39c")
+    //         .then((res) => {
+    //             console.log("File uploaded successfully:", res);
+    //         })
+    //         .catch((err) => {
+    //             console.error("Error uploading file:", err);
+    //         });
+    // };
     return (
         <div className="flex flex-col items-center lg:justify-center mt-12 bg-gradient-to-b from-[#f5f5f5] to-[#e0e0e0]">
             <div
@@ -124,6 +144,7 @@ export const Dashboard = () => {
                     {get_text("first_aid", "he")}
                 </div>
             </div>
+            {/* uploading file: <input type="file" onChange={(e) => handleUpload(e)} /> */}
             {roomsList && roomsList.length > 0 ? (
                 <div className="grid grid-cols-3 gap-10 px-10">
                     {roomsList.map((room) => {

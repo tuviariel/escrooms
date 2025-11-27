@@ -11,6 +11,7 @@ const schema = a.schema({
             roomsLeft: a.integer().default(1),
             subscription: a.string().default("free"), // start, pro, etc.
             rooms: a.hasMany("Room", "creatorId"), // A user can have many rooms (FK = creatorId)
+            completed: a.hasMany("Room", "creatorId"), // A user can have many completed rooms (FK = id)
         })
         .authorization((allow) => [allow.owner(), allow.authenticated().to(["create"])]),
 
@@ -26,7 +27,7 @@ const schema = a.schema({
             imageStyle: a.string(),
             fontFamily: a.string(),
             description: a.string(),
-
+            public: a.boolean().default(false),
             quizzes: a.hasMany("Quiz", "roomId"), // A room has many quizzes (FK = roomId)
         })
         .authorization((allow) => [

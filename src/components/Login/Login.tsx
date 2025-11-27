@@ -23,7 +23,7 @@ export function Login() {
     const dispatch = useDispatch();
     const setUser = (user: userType | undefined) => {
         dispatch(userActions.updateUserData(user));
-        console.log("updateUser", user);
+        console.log("setUserRedux", user);
     };
     const navigate = useNavigate();
     const [userOpen, setUserOpen] = useState(false);
