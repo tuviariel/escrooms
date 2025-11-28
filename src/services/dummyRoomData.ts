@@ -75,11 +75,7 @@ const data = {
                 },
             ],
             quizImg: Clock,
-            outerQuizImg: Clock,
             quizText: "עבור כל מקרה בטבלה צריך לקבוע אם הפעולה שננקטה הייתה נכונה או לא",
-            quizData: [""],
-            category: null,
-            orderAnswer: null,
             hints: [
                 "המקרה בצידו הימני של הטבלה יכולה להיות נכונה או לא נכונה",
                 "צריך להדגיש את האייקון שמופיע בתשובה הנכונה לפי המקרה",
@@ -121,10 +117,7 @@ const data = {
                 ],
             ],
             quizImg: Graph,
-            outerQuizImg: Graph,
             quizText: "אתה מארגן תיק של ציוד עזרה ראשונה. מה תשים בתיק?",
-            category: null,
-            orderAnswer: null,
             hints: [
                 "ישנו מגוון של מוצרים שפזורים בטבלה. בחרו את כמה מה שיכול לעזור לכם להציל חיים.",
                 "שימו לב לכלול את כל מה שיכול להועיל לך במשימה שלך",
@@ -212,19 +205,9 @@ const data = {
                 },
             ],
             quizImg: Color,
-            outerQuizImg: Color,
             quizText:
                 "עבור כל דמות וסיטואציה חובה לקבוע עד כמה צריך לטפל ולהשגיח בשטח ואת רמת דחיפות הפינוי...",
-            quizData: ["אֵלֶּה", "פְאָר", "בַּמֶּאוֹ", "טִישׁ", "אִימְוֵוה", "חַד"],
-            category: null,
-            orderAnswer: [
-                [0, 0],
-                [1, 2],
-                [1, 1],
-                [1, 1],
-                [0, 2],
-                [1, 0],
-            ],
+            // quizData: ["אֵלֶּה", "פְאָר", "בַּמֶּאוֹ", "טִישׁ", "אִימְוֵוה", "חַד"],
             hints: [
                 "לחצו על הדפים השונים ובחרו את ההגדרה הנכונה לסיטואציה",
                 "כמובן, שצריך לסיים לתייג את כל הדפים",
@@ -305,11 +288,8 @@ const data = {
                 },
             ],
             quizImg: List,
-            outerQuizImg: List,
             quizText: "סדרו את הכרטיסיות לפי סדר הפעולות הנכון של סדר טיפול בפצוע וגלו את הקוד",
-            quizData: ["🫁", "🌬️", "❤️", "🧠", "🩺", "📊", "💊", "📋"],
-            category: null,
-            orderAnswer: null,
+            // ["🫁", "🌬️", "❤️", "🧠", "🩺", "📊", "💊", "📋"],
             hints: [
                 "תגררו את הכרטיסיות לסדר הנכון",
                 "לאחר ששלבי הפעולה הם בסדר הנכון תוכלו לראות את הספרות של התשובה",
@@ -322,11 +302,9 @@ const data = {
         //     type: "turnRound",
         //     answer: "1234",
         //     quizImg: "imageURL",
-        //     outerQuizImg: Q1Image,
         //     quizText: "imageURL",
         //     quizData: ["imageURL"],
-        //     category: null,
-        //     orderAnswer: null,
+        //     quiz: [],
         //     hints: ["firstHint", "secondHint", "thirdHint", "forthHint", "fifthHint"],
         // },
     ],
@@ -399,11 +377,7 @@ export const quizzes = [
             ],
         },
         quizImg: Clock,
-        // outerQuizImg: Clock,
         quizText: "עבור כל מקרה בטבלה צריך לקבוע אם הפעולה שננקטה הייתה נכונה או לא",
-        // quizData: [""],
-        // category: null,
-        // orderAnswer: null,
         hints: {
             hints: [
                 "המקרה בצידו הימני של הטבלה יכולה להיות נכונה או לא נכונה",
@@ -449,10 +423,7 @@ export const quizzes = [
             ],
         },
         quizImg: Graph,
-        // outerQuizImg: Graph,
         quizText: "אתה מארגן תיק של ציוד עזרה ראשונה. מה תשים בתיק?",
-        // category: null,
-        // orderAnswer: null,
         hints: {
             hints: [
                 "ישנו מגוון של מוצרים שפזורים בטבלה. בחרו את כמה מה שיכול לעזור לכם להציל חיים.",
@@ -468,7 +439,6 @@ export const quizzes = [
         name: "דרגות פינוי",
         answer: "1491",
         quiz: {
-            // here: "here",
             questions: [
                 {
                     title: "דניאל אֵלֶּה",
@@ -545,19 +515,8 @@ export const quizzes = [
             ],
         },
         quizImg: Color,
-        // outerQuizImg: Color,
         quizText:
             "עבור כל דמות וסיטואציה חובה לקבוע עד כמה צריך לטפל ולהשגיח בשטח ואת רמת דחיפות הפינוי...",
-        // quizData: ["אֵלֶּה", "פְאָר", "בַּמֶּאוֹ", "טִישׁ", "אִימְוֵוה", "חַד"],
-        // category: null,
-        // orderAnswer: [
-        //     [0, 0],
-        //     [1, 2],
-        //     [1, 1],
-        //     [1, 1],
-        //     [0, 2],
-        //     [1, 0],
-        // ],
         hints: {
             hints: [
                 "לחצו על הדפים השונים ובחרו את ההגדרה הנכונה לסיטואציה",
@@ -642,11 +601,7 @@ export const quizzes = [
             ],
         },
         quizImg: List,
-        // outerQuizImg: List,
         quizText: "סדרו את הכרטיסיות לפי סדר הפעולות הנכון של סדר טיפול בפצוע וגלו את הקוד",
-        // quizData: ["🫁", "🌬️", "❤️", "🧠", "🩺", "📊", "💊", "📋"],
-        // category: null,
-        // orderAnswer: null,
         hints: {
             hints: [
                 "תגררו את הכרטיסיות לסדר הנכון",
@@ -656,18 +611,6 @@ export const quizzes = [
             ],
         },
     },
-    // {
-    //     _id: "5",
-    //     type: "turnRound",
-    //     answer: "1234",
-    //     quizImg: "imageURL",
-    //     outerQuizImg: Q1Image,
-    //     quizText: "imageURL",
-    //     quizData: ["imageURL"],
-    //     category: null,
-    //     orderAnswer: null,
-    //     hints: ["firstHint", "secondHint", "thirdHint", "forthHint", "fifthHint"],
-    // },
 ];
 
 export default data;

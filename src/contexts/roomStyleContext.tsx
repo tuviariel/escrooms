@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useState } from "react";
-import data from "../services/dummyRoomData";
+// import data from "../services/dummyRoomData";
 interface ContextType {
     userLanguage: string;
     roomStyle: string;
@@ -19,9 +19,9 @@ interface ContextProviderProps {
 // The Provider wrapped around the room component:
 const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     const [userLanguage, setUserLanguage] = useState<string>("he");
-    const [roomStyle, setRoomStyle] = useState<string>(data.imageStyle || "abstract");
-    const [roomColor, setRoomColor] = useState<string>(data.colorPalette || "redBlueGray");
-    const [roomFont, setRoomFont] = useState<string>(data.fontFamily || "Arial");
+    const [roomStyle, setRoomStyle] = useState<string>("abstract");
+    const [roomColor, setRoomColor] = useState<string>("redBlueGray");
+    const [roomFont, setRoomFont] = useState<string>("Arial");
     console.log(userLanguage, roomStyle, roomColor, roomFont);
     return (
         <RoomStyleContext.Provider

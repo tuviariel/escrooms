@@ -5,6 +5,7 @@ import pagePaginateArrowDisabled from "../../assets/images/pagePaginateDis.svg";
 import { imageStyle } from "../../util/UIstyle";
 import { useRoomContext } from "../../contexts/roomStyleContext";
 import { quizData } from "../../pages/Room/Room";
+import loading from "../../assets/images/loading.gif";
 
 import Button from "../Button";
 import Dialog from "../Dialog";
@@ -135,7 +136,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
     console.log(quizDataPageNumber);
     return (
         <>
-            {data && data.quizData.length > 1 ? (
+            {data && data.quiz.length > 1 ? (
                 <div className="relative w-screen h-screen font-bold">
                     <img
                         src={
@@ -217,7 +218,8 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                                 backgroundSize: "cover",
                                             }}>
                                             <div className="text-center mt-2 text-4xl">
-                                                {item.title + " " + data.quizData[i]}
+                                                {item.title}
+                                                {/* + " " + data.quizData[i]} */}
                                             </div>
                                             <div className="text-right mt-2 mx-3 text-2xl font-semibold">
                                                 {item.desc}
@@ -302,9 +304,10 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                         backgroundSize: "cover",
                                     }}>
                                     <div className="text-center mt-2 text-xl">
-                                        {data.quiz[quizDataPageNumber].title +
+                                        {data.quiz[quizDataPageNumber].title}
+                                        {/* +
                                             " " +
-                                            data.quizData[quizDataPageNumber]}
+                                            data.quizData[quizDataPageNumber]} */}
                                     </div>
                                     <div className="text-right mt-2">
                                         {data.quiz[quizDataPageNumber].desc}
@@ -345,20 +348,6 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                             </div>
                                         )}
                                     </div>
-
-                                    {/* {data.type === "colorChange" && stage === 2 && (
-                                        <img
-                                            src={
-                                                data?.category &&
-                                                data?.category[0][0] ===
-                                                    colorOrder[quizDataPageNumber][0]
-                                                    ? data?.category[0][0]
-                                                    : data?.category && data?.category[0][1]
-                                            }
-                                            alt="color change"
-                                            className="absolute right-20 bottom-18 w-16 h-16"
-                                        />
-                                    )} */}
                                     <div className="flex items-center justify-center text-center">
                                         {answerKeys[stage === 1 ? 0 : 1]}
                                     </div>
@@ -419,7 +408,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                     )}
                 </div>
             ) : (
-                <img src={data?.quizData[0]} alt="riddle - error..." className="h-screen w-full" />
+                <img src={loading} alt="riddle - error..." className="h-screen w-full" />
             )}
         </>
     );

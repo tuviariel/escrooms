@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router";
 // import NumbersTemplate from "../../components/templates/NumbersTemplate";
 // import GridTemplate from "../../components/templates/GridTemplate";
-import data from "../../services/dummyRoomData";
+// import data from "../../services/dummyRoomData";
 // import ColorTemplate from "../../components/templates/Color";
 // import TurnRoundTemplate from "../../components/templates/TurnRoundTemplate";
 // import OrderBorderTemplate from "../../components/templates/OrderBorder";
@@ -15,7 +15,8 @@ import Button from "../../components/Button";
 import { useSelector, useDispatch } from "react-redux";
 import { quizNumberActions } from "../../reduxStor/quizNumber";
 import QuizTemplate from "../QuizTemplate";
-// import { quizListActions } from "../../reduxStor/quizList";
+import { fileStorage } from "../../services/service";
+import { quizListActions } from "../../reduxStor/quizList";
 import finishedRoomGif from "../../assets/images/finishedRoom.gif";
 export interface quizDataProps {
     data: {
@@ -39,8 +40,6 @@ export interface quizData {
     quizImg: string | any;
     quizText: string;
     quizData: string[] | any[];
-    category: any[] | null;
-    orderAnswer: number[][] | null;
     hints: string[];
 }
 
@@ -66,29 +65,44 @@ export const Room = () => {
         }) => state.quizList
     );
     const quizList = quizL?.list;
+    const setQuizList = (list: any[]) => {
+        dispatch(quizListActions.createQuizList(list));
+        console.log("setQuizList", list);
+    };
     const [checkLeave, setCheckLeave] = useState(false);
     const [completed, setCompleted] = useState(false);
+    const [URLMainImage, setURLMainImage] = useState<string>("");
     // const [quizList, setQuizList] = useState<{ id: number; completed: boolean }[]>([]);
     const navigate = useNavigate();
     const location = useLocation();
+    const data = location.state?.roomData;
+    console.log("Room data:", data);
+    useEffect(() => {
+        const list = data.quizzes.map((quiz: any, index: number) => {
+            return {
+                id: index,
+                completed: false,
+                name: quiz.name,
+                answer: quiz.answer,
+                image: quiz.quizImg,
+            };
+        });
+        console.log("Initializing quiz list:", list);
+        setQuizList(list);
+    }, []);
+
     const roomId = location.pathname.split("/").pop();
     const [orientation, setOrientation] = useState(
         window.matchMedia("(orientation: portrait)").matches ? "portrait" : "landscape"
     );
     const { setRoomColor, setRoomStyle, setRoomFont, roomColor } = useRoomContext();
     useEffect(() => {
-        // in future get room data from Api call via roomId. now just checking Id is right:
         if (roomId !== data.id) {
             navigate("/");
         } else {
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen();
             }
-            // if (screen.orientation && screen.orientation.lock) {
-            //     screen.orientation.lock("landscape").catch((err) => {
-            //         console.warn("Orientation lock failed:", err);
-            //     });
-            // }
             window.matchMedia("(orientation: portrait)").addEventListener("change", (event) => {
                 if (event.matches) {
                     setOrientation("portrait");
@@ -100,15 +114,6 @@ export const Room = () => {
             setRoomStyle(data.imageStyle);
             setRoomColor(data.colorPalette);
             setRoomFont(data.fontFamily);
-            // try {
-            //     const rooms = await client.models.Room.list();
-            //     // if (rooms) {
-            //     console.log("Fetched rooms:", rooms);
-            //     setRoomsList(rooms.data);
-            // } catch (errors) {
-            //     console.error("Error fetching rooms:", errors);
-            //     // setErrorMessage("Error fetching Escape-Rooms");
-            // }
         }
     }, [screen.orientation.type]);
     useEffect(() => {
@@ -119,7 +124,15 @@ export const Room = () => {
             }
         }
     }, [quizList]);
-    // console.log();
+    useEffect(() => {
+        const getUrl = async (mainImage: string | null) => {
+            if (!mainImage) return;
+            const url = await fileStorage.getFileUrl(mainImage);
+            setURLMainImage(url);
+        };
+        getUrl(data.mainImage);
+    }, []);
+    console.log(quizList);
     return (
         <>
             {window.innerWidth < 600 || orientation === "portrait" ? (
@@ -135,14 +148,14 @@ export const Room = () => {
                         className="cursor-pointer h-8 w-8 z-20 md:h-12 md:w-12 fixed left-3 top-3 p-1 rounded-full bg-gray-100 border-2 hover:border-amber-700"
                         onClick={() => setQuizNumber(-1)}
                     />
-                    <QuizTemplate data={data.quiz[quizNumber]} />
+                    <QuizTemplate data={data.quizzes[quizNumber]} />
                 </>
             ) : (
                 <>
                     <div className="h-screen w-screen relative flex justify-center items-center overflow-hidden lg:pt-20 lg:pb-20 bg-gray-900">
                         <div className="h-full w-full relative bg-gray-900 flex justify-center items-center">
                             <img
-                                src={data.mainImage}
+                                src={URLMainImage}
                                 alt="mainImage"
                                 className="h-full w-auto object-cover"
                             />
@@ -165,14 +178,15 @@ export const Room = () => {
                                     return (
                                         <div
                                             key={quiz.id}
-                                            className={`absolute ${i === 0 ? "top-4 left-8 md:left-32" : i === 1 ? "top-30 left-2 md:left-22" : i === 2 ? "top-4 right-8 md:right-32" : i === 3 ? "top-30 right-2 md:right-22" : ""} z-20 h-22 w-22 rounded-full ${
+                                            className={`absolute ${i === 0 ? "top-4 left-8 md:left-32" : i === 1 ? "top-30 left-2 md:left-22" : i === 2 ? "top-4 right-8 md:right-32" : i === 3 ? "top-30 right-2 md:right-22" : i === 4 ? "top-34 left-8 md:left-32" : i === 5 ? "top-60 left-2 md:left-22" : i === 6 ? "top-34 right-8 md:right-32" : i === 7 ? "top-60 right-2 md:right-22" : ""} z-20 h-22 w-22 rounded-full ${
                                                 quiz.completed
                                                     ? ""
                                                     : "backdrop-blur-md border-2 hover:border-amber-50 cursor-pointer"
                                             }`}
-                                            onClick={() =>
-                                                !quiz.completed && setQuizNumber(quiz.id)
-                                            }
+                                            onClick={() => {
+                                                console.log("quiz:", quiz);
+                                                !quiz.completed && setQuizNumber(quiz.id);
+                                            }}
                                             style={{
                                                 borderColor: quiz.completed
                                                     ? colorPalette[

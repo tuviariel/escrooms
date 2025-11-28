@@ -62,7 +62,7 @@ export const Puzzle6: React.FC<Partial<TemplateProps>> = ({ data, setOpenLock })
         return initialPositions.map((idx) => ({
             id: idx,
             src: data?.quiz[idx].image,
-            answerSrc: data?.quiz[idx].title + " " + data?.quizData[idx],
+            answerSrc: data?.quiz[idx].title,
         }));
     };
 

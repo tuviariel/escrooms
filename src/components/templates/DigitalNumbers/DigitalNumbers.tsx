@@ -38,11 +38,11 @@ export const DigitalNumbers = (props: TemplateProps) => {
             incorrect: TableContentType[] = [];
         data.quiz.map((q, i) => {
             if (q.is_correct_action) {
-                correct.push({ index: i, icon: q.icons.correct });
-                incorrect.push({ index: i, icon: q.icons.incorrect });
+                correct.push({ index: i, icon: q.correctIcon });
+                incorrect.push({ index: i, icon: q.incorrectIcon });
             } else {
-                correct.push({ index: i, icon: q.icons.incorrect });
-                incorrect.push({ index: i, icon: q.icons.correct });
+                correct.push({ index: i, icon: q.incorrectIcon });
+                incorrect.push({ index: i, icon: q.correctIcon });
             }
         });
         // console.log("correct", correct);
@@ -125,6 +125,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
     };
 
     const toggleSegment = (position: number, index: number) => {
+        // console.log("Toggling segment:", position, index);
         disabled && setDisabled(false);
         result && setResult("");
         setActive((prevActive) => {
@@ -139,6 +140,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
     };
 
     const toggleFromTable = (icon: string, index: number) => {
+        // console.log("Toggling from table:", icon, index);
         active.map((num, i) => {
             num.map((elem, j) => {
                 if (elem.elem.icon === icon && elem.elem.index === index) {
@@ -209,7 +211,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
                                                         return i + 1;
                                                     }
                                                 });
-                                                toggleFromTable(q.icons.correct, i);
+                                                toggleFromTable(q.correctIcon, i);
                                                 setTimeout(() => {
                                                     nextLineRef.current?.scrollIntoView({
                                                         behavior: "smooth",
@@ -217,7 +219,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
                                                     });
                                                 }, 400);
                                             }}>
-                                            {q.icons.correct}
+                                            {q.correctIcon}
                                         </td>
                                         <td
                                             className="cursor-pointer border border-amber-50 text-center"
@@ -230,7 +232,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
                                                         return i + 1;
                                                     }
                                                 });
-                                                toggleFromTable(q.icons.incorrect, i);
+                                                toggleFromTable(q.incorrectIcon, i);
                                                 setTimeout(() => {
                                                     nextLineRef.current?.scrollIntoView({
                                                         behavior: "smooth",
@@ -238,7 +240,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
                                                     });
                                                 }, 400);
                                             }}>
-                                            {q.icons.incorrect}
+                                            {q.incorrectIcon}
                                         </td>
                                     </tr>
                                 );
