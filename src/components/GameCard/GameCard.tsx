@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router";
-import { Room } from "../../pages/Dashboard/Dashboard";
+// import { Room } from "../../pages/Dashboard/Dashboard";
 import { get_text } from "../../util/language";
 import { fileStorage } from "../../services/service";
 import { useEffect, useState } from "react";
+// import { firstLowercaseGroup } from "../../util/UIstyle";
 export const GameCard = (props: any) => {
     // console.log("GameCard props:", props);
     const { data } = props;
@@ -33,21 +34,21 @@ export const GameCard = (props: any) => {
         getUrl(data.mainImage);
     }, []);
 
-    // console.log("GameCard render:", name, id, mainImage, description);
+    console.log("GameCard render:", data);
 
     return (
         <div
-            className="relative border border-black rounded-2xl h-36 w-full cursor-pointer overflow-hidden"
-            title={`${get_text("enter_room", "he")} "${name}"`}
+            className={`relative border border-black bg-white rounded-2xl h-72 w-46 cursor-pointer overflow-hidden flex flex-col hover:shadow-2xl hover:scale-105 transition-transform duration-200`}
+            title={`${get_text("enter_room", "he")} "${data.name}"`}
             onClick={() => {
                 openRoom(data.id);
             }}>
-            <div
-                title={data.description ? data.description : ""}
-                className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-2xl text-amber-50 font-bold">
-                {data.name}
-            </div>
-            {data.mainImage && <img src={URL} alt="" className="" />}
+            {data.mainImage && <img src={URL} alt="" className={`h-36 w-full object-cover`} />}
+            <div className="text-xl md:text-2xl font-bold">{data.name}</div>
+            <p className="text-base">{data.description}</p>
+            <p className="text-sm mt-auto mb-1 text-gray-600">
+                {get_text("last_updated", "he")}: {new Date(data.updatedAt).toLocaleDateString()}
+            </p>
         </div>
     );
 };

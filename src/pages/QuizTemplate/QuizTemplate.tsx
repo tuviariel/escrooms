@@ -6,6 +6,7 @@ import TurnRound from "../../components/templates/TurnRound";
 import OrderBorder from "../../components/templates/OrderBorder";
 import Dialog from "../../components/Dialog";
 import HintChat from "../../components/HintChat";
+import TimerLine from "../../components/TimerLine";
 import { quizDataP } from "../Room/Room";
 import QuizSuccess from "../../components/QuizSuccess";
 import { get_text } from "../../util/language";
@@ -73,21 +74,21 @@ export const QuizTemplate = (props: quizDataP) => {
         ),
     };
     console.log("QuizTemplate data:", data);
-    console.log("QuizTemplate hints:", data.hints);
-    console.log("QuizTemplate quiz:", data.quiz);
+    // console.log("QuizTemplate hints:", data.hints);
+    // console.log("QuizTemplate quiz:", data.quiz);
     return (
         <div className="flex flex-col relative h-full min-h-80">
             {types[data.type]}
             {showText ? (
                 <div className="fixed bottom-10 md:bottom-20 left-1/2 transform -translate-x-1/2 max-w-screen rounded-4xl m-2 text-center flex items-center justify-center px-4">
-                    <span
-                        className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
+                    {/* <span
+                        className="absolute inline-flex h-full w-full animate-bounce rounded-full opacity-75"
                         style={{
                             backgroundColor:
                                 colorPalette[roomColor as keyof typeof colorPalette].light,
-                        }}></span>
+                        }}></span> */}
                     <div
-                        className="relative rounded-full px-5 py-2.5 text-lg font-medium border-2"
+                        className="relative rounded-lg px-5 py-2.5 text-lg font-medium border-2"
                         style={{
                             backgroundColor:
                                 colorPalette[roomColor as keyof typeof colorPalette].light,
@@ -96,6 +97,7 @@ export const QuizTemplate = (props: quizDataP) => {
                         }}
                         dir="rtl">
                         {data.quizText}
+                        <TimerLine duration={5000} />
                     </div>
                 </div>
             ) : (

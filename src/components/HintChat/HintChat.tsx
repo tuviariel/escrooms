@@ -73,7 +73,7 @@ export const HintChat = (props: hintChatProps) => {
         <div className="fixed right-3 bottom-3 z-20">
             <div className="relative flex">
                 <div
-                    className={`bg-amber-500 rounded-full md:h-12 h-8 md:w-12 w-8 p-auto text-pink-800 md:text-3xl text-xl cursor-pointer border-2 ${
+                    className={`bg-amber-500 rounded-full md:h-12 h-8 md:w-12 w-8 p-auto text-pink-800 md:text-3xl text-xl text-center cursor-pointer border-2 ${
                         open ? "border-amber-600" : "border-amber-900"
                     }`}
                     onClick={() => setOpen((prev) => !prev)}

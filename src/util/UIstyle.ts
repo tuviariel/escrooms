@@ -74,3 +74,8 @@ export const fontFamily = {
     cursive: "Comic Sans MS, cursive",
     fantasy: "Impact, fantasy",
 };
+export const firstLowercaseGroup = (str: string) => {
+    const match = str.match(/[a-z]+/);
+    console.log(match ? match[0] : "");
+    return match ? match[0] : "";
+};

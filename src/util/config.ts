@@ -5,6 +5,7 @@ export const config = {
 
 export const route_paths = {
     DASHBOARD: "/",
+    HOME: "/home",
     PROFILE: "/profile",
     SUBSCRIPTION: "/subscription",
     ROOMBUILDER: "/room-builder",

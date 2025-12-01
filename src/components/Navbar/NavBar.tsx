@@ -1,5 +1,5 @@
 import { useLocation, useNavigate, Outlet } from "react-router"; //Outlet
-import Logo from "../../assets/images/vaivrach.png";
+import Logo from "../../assets/images/vaivrach-big.png";
 import Login from "../Login";
 import { useSelector } from "react-redux";
 import { userType } from "../Login/Login";
@@ -13,8 +13,8 @@ export const NavBar = () => {
     console.log("NavBar render", userRedux);
     return (
         <div className="min-h-screen h-screen">
-            <div className="h-12 w-screen border-b-8 border-cyan-700 text-xl text-center flex fixed top-0 left-0 bg-white z-10 opacity-70">
-                {location.pathname !== "/" && (
+            <div className="h-12 w-screen border-b-4 border-cyan-700 text-xl text-center flex fixed top-0 left-0 bg-white z-10 opacity-70">
+                {location.pathname !== "/" && location.pathname !== "/home" && (
                     <div
                         className="text-2xl font-bold text-cyan-700 cursor-pointer ml-3 mt-1"
                         onClick={() => {
@@ -41,11 +41,11 @@ export const NavBar = () => {
                         onClick={() => {
                             navigate("/room-builder");
                         }}
-                        className="mr-5 ml-auto bg-cyan-700 text-white hover:bg-cyan-800 inline-block h-8 border-cyan-950 border rounded-full px-4 mt-1 cursor-pointer items-center justify-center">
+                        className="mr-5 ml-auto bg-cyan-700 text-white hover:bg-cyan-600 inline-block h-8 border-black border-4 rounded-full px-3 text-sm mt-1.5 cursor-pointer items-center justify-center">
                         {get_text("new_room", "he")}
                     </div>
                 )}
-                <div className={`relative inline-block mx-5`}>
+                <div className={`relative inline-block mx-5 mt-0.5`}>
                     <Login />
                 </div>
             </div>

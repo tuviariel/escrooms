@@ -14,6 +14,7 @@ const ROOM = route_paths["ESCROOM"];
 const PROFILE = route_paths["PROFILE"];
 const SUBSCRIPTION = route_paths["SUBSCRIPTION"];
 const ROOMBUILDER = route_paths["ROOMBUILDER"];
+const HOME = route_paths["HOME"];
 const Room = React.lazy(() => import("../pages/Room"));
 
 /**
@@ -30,6 +31,7 @@ export default function AppRoutes() {
                     <Routes>
                         <Route path="/" element={<NavBar />}>
                             <Route index element={<Dashboard />} />
+                            <Route path={HOME} element={<Dashboard />} />
                             <Route path={SUBSCRIPTION} element={<Subscription />} />
                             <Route path={PROFILE} element={<Profile />} />
                             <Route path={ROOMBUILDER} element={<RoomBuilder />} />

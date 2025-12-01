@@ -7,6 +7,7 @@ interface Translations {
 
 const appContext: Translations = {
     welcome: { en: "Welcome", he: "ברוכים הבאים", ar: "" },
+    loading: { en: "Loading...", he: "טוען...", ar: "" },
     next_page: { en: "Next Page", he: "לעמוד הבא", ar: "" },
     no_next_page: { en: "No Next Page", he: "אין עמוד הבא", ar: "" },
     prev_page: { en: "Previous Page", he: "לעמוד הקודם", ar: "" },
@@ -87,6 +88,31 @@ const appContext: Translations = {
     subscription: { en: "Subscription", he: "מנוי", ar: "" },
     go_pro: { en: "Go Pro", he: "לעבור לפרו", ar: "" },
     edit_profile: { en: "Edit Profile", he: "ערוך פרופיל", ar: "" },
+    last_updated: { en: "Last Updated", he: "עודכן לאחרונה", ar: "" },
+    build_room: { en: "Build Your Own Escape Room", he: "בנה את חדר הבריחה שלך", ar: "" },
+    build_room_explanation: {
+        en: "Use AI to generate unique puzzles and quizzes. Choose from multiple templates and gimmicks to create an unforgettable experience.",
+        he: "השתמש ב-AI כדי ליצור חידות וחידונים ייחודיים. בחר מתוך תבניות וגימיקים מרובים כדי ליצור חוויה בלתי נשכחת.",
+        ar: "",
+    },
+    quick_creation: { en: "Quick Creation", he: "יצירה מהירה", ar: "" },
+    quick_creation_explanation: {
+        en: "Build a complete escape room in minutes with our guided builder",
+        he: "בנה חדר בריחה שלם תוך דקות עם הבונה המונחה שלנו",
+        ar: "",
+    },
+    share_publicly: { en: "Share Publicly", he: "שיתוף ציבורי", ar: "" },
+    share_publicly_explanation: {
+        en: "All escape rooms are free and accessible to everyone",
+        he: "כל חדרי הבריחה חינם ונגישים לכולם",
+        ar: "",
+    },
+    ai_powered: { en: "AI-Powered", he: "מופעל על ידי AI", ar: "" },
+    ai_powered_explanation: {
+        en: "Generate unique content with AI-driven prompts",
+        he: "צור תוכן ייחודי עם הנחיות מונחות AI",
+        ar: "",
+    },
 };
 
 export const get_text = (name: string, lang: string) => {

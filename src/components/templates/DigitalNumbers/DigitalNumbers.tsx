@@ -158,7 +158,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
     // console.log(roomColor);
     return (
         <div
-            className="bg-gray-100 flex flex-col w-screen h-screen rounded-md p-3"
+            className="bg-gray-100 flex flex-col w-screen h-screen p-3"
             style={{
                 backgroundImage: `url(${
                     imageStyle[roomStyle as keyof typeof imageStyle].background
@@ -284,7 +284,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
                             ? setOpenLock(true)
                             : checkAnswer(active)
                     }
-                    className="flex w-auto mx-10 min-w-fit"
+                    className="mx-10"
                 />
                 {result && (
                     <div className="mr-10 py-1 px-4 rounded-xl text-center bg-amber-50" dir="rtl">

@@ -138,15 +138,15 @@ export const Grid = (props: TemplateProps) => {
                 backgroundImage: `url(${
                     imageStyle[roomStyle as keyof typeof imageStyle].background
                 })`,
-            }}
-            dir="rtl">
+            }}>
             <div
                 className={`${
                     active[0]?.length < 4 ? "ts:flex" : "ph:flex"
-                } hidden items-center justify-center`}>
+                } hidden items-center justify-center mt-2`}
+                dir="rtl">
                 <>
                     {active.length > 0 ? (
-                        <div className="" dir="ltr">
+                        <div className=" border-4 border-amber-800" dir="ltr">
                             {active.map((line, i) => {
                                 // console.log(line);
                                 return (
@@ -155,9 +155,7 @@ export const Grid = (props: TemplateProps) => {
                                             return (
                                                 <div
                                                     key={i + " " + j}
-                                                    className={`border border-amber-800 h-10 w-8 cursor-pointer ${
-                                                        box.status ? "bg-amber-700" : "bg-amber-200"
-                                                    }`}
+                                                    className={`border border-amber-800 h-18 w-14 cursor-pointer text-4xl pt-3`}
                                                     style={{
                                                         backgroundColor: box.status
                                                             ? colorPalette[
@@ -183,7 +181,7 @@ export const Grid = (props: TemplateProps) => {
                 </>
             </div>
             <div className={`flex ${active[0]?.length < 4 ? "ts:hidden" : "ph:hidden"}`}>
-                Please turn your phone on its side
+                {get_text("phone_on_side", "he")}
             </div>
             <div className={`${active.length < 4 ? "ts:flex" : "ph:flex"} hidden`}>
                 <Button
@@ -195,7 +193,7 @@ export const Grid = (props: TemplateProps) => {
                     onClick={() =>
                         result === get_text("success", "he") ? setOpenLock(true) : checkAnswer()
                     }
-                    className="flex w-auto mx-10 min-w-fit"
+                    className="mx-10"
                 />
                 {result && (
                     <div className="mr-10 py-1 px-4 rounded-xl text-center bg-amber-50" dir="rtl">

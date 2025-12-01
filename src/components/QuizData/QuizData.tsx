@@ -137,7 +137,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
     return (
         <>
             {data && data.quiz.length > 1 ? (
-                <div className="relative w-screen h-screen font-bold">
+                <div className="relative w-full h-full font-bold">
                     <img
                         src={
                             quizDataPageNumber !== 0 ? pagePaginateArrow : pagePaginateArrowDisabled
@@ -185,19 +185,23 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                             setQuizDataPageNumber((prev) => prev + 1)
                         }
                     />
-                    <div className="flex flex-row flex-nowrap overflow-x-scroll scroll-smooth snap-x snap-mandatory">
+                    <div
+                        className="flex flex-row flex-nowrap overflow-hidden snap-x snap-mandatory no-scrollbar" //x-auto scroll-smooth
+                    >
                         {data.quiz.map((item, i) => {
                             return (
                                 <div
-                                    className={"relative h-screen flex-shrink-0 snap-center"}
+                                    className={
+                                        "relative h-screen flex-shrink-0 snap-center py-20 px-4"
+                                    }
                                     style={{
                                         backgroundImage: `url(${imageStyle[roomStyle as keyof typeof imageStyle].background})`,
-                                        backgroundSize: "cover",
+                                        // backgroundSize: "cover",
                                     }}
                                     ref={quizDataPageNumber === i ? imgContainerRef : null}
                                     key={i}>
                                     <div
-                                        className={`cursor-pointer h-full max-w-screen py-10 px-5 flex gap-4 `}
+                                        className={`cursor-pointer h-full max-w-screen flex gap-4 px-4`}
                                         onClick={() => setOpenDialog(true)}
                                         onScroll={() =>
                                             quizDataPageNumber !== i && setQuizDataPageNumber(i)
@@ -211,7 +215,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                             className="border-2 border-white"
                                         />
                                         <div
-                                            className="flex flex-col relative"
+                                            className="flex flex-col relative p-22"
                                             dir="rtl"
                                             style={{
                                                 backgroundImage: `url(${imageStyle[roomStyle as keyof typeof imageStyle].semiBackground})`,
@@ -297,7 +301,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                     className="h-11/12 w-auto"
                                 />
                                 <div
-                                    className="flex flex-col relative"
+                                    className="flex flex-col relative px-32"
                                     dir="rtl"
                                     style={{
                                         backgroundImage: `url(${imageStyle[roomStyle as keyof typeof imageStyle].semiBackground})`,

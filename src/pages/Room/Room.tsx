@@ -78,6 +78,7 @@ export const Room = () => {
     const data = location.state?.roomData;
     console.log("Room data:", data);
     useEffect(() => {
+        if (!data || !data.quizzes) return;
         const list = data.quizzes.map((quiz: any, index: number) => {
             return {
                 id: index,
@@ -89,7 +90,7 @@ export const Room = () => {
         });
         console.log("Initializing quiz list:", list);
         setQuizList(list);
-    }, []);
+    }, [data]);
 
     const roomId = location.pathname.split("/").pop();
     const [orientation, setOrientation] = useState(
@@ -152,7 +153,7 @@ export const Room = () => {
                 </>
             ) : (
                 <>
-                    <div className="h-screen w-screen relative flex justify-center items-center overflow-hidden lg:pt-20 lg:pb-20 bg-gray-900">
+                    <div className="h-screen w-screen relative flex justify-center items-center overflow-hidden lg:pt-12 lg:pb-12 bg-gray-900">
                         <div className="h-full w-full relative bg-gray-900 flex justify-center items-center">
                             <img
                                 src={URLMainImage}
@@ -178,7 +179,7 @@ export const Room = () => {
                                     return (
                                         <div
                                             key={quiz.id}
-                                            className={`absolute ${i === 0 ? "top-4 left-8 md:left-32" : i === 1 ? "top-30 left-2 md:left-22" : i === 2 ? "top-4 right-8 md:right-32" : i === 3 ? "top-30 right-2 md:right-22" : i === 4 ? "top-34 left-8 md:left-32" : i === 5 ? "top-60 left-2 md:left-22" : i === 6 ? "top-34 right-8 md:right-32" : i === 7 ? "top-60 right-2 md:right-22" : ""} z-20 h-22 w-22 rounded-full ${
+                                            className={`absolute ${i === 0 ? "top-4 left-8 md:left-32" : i === 1 ? "top-30 left-2 md:left-22" : i === 2 ? "top-4 right-8 md:right-32" : i === 3 ? "top-30 right-2 md:right-22" : i === 4 ? "top-80 left-8 md:left-32" : i === 5 ? "top-54 left-2 md:left-22" : i === 6 ? "top-80 right-8 md:right-32" : i === 7 ? "top-54 right-2 md:right-22" : ""} z-20 h-22 w-22 rounded-full ${
                                                 quiz.completed
                                                     ? ""
                                                     : "backdrop-blur-md border-2 hover:border-amber-50 cursor-pointer"
@@ -205,7 +206,7 @@ export const Room = () => {
                                                 />
                                                 {!quiz.completed && (
                                                     <div
-                                                        className="absolute top-0 right-0 blur-sm w-full h-full opacity-100"
+                                                        className="absolute top-0 right-0 rounded-full blur-sm w-full h-full opacity-100"
                                                         style={{
                                                             background:
                                                                 colorPalette[
