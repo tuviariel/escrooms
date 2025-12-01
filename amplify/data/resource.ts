@@ -11,7 +11,7 @@ const schema = a.schema({
             roomsLeft: a.integer().default(1),
             subscription: a.string().default("free"), // start, pro, etc.
             rooms: a.hasMany("Room", "creatorId"), // A user can have many rooms (FK = creatorId)
-            completed: a.hasMany("Room", "creatorId"), // A user can have many completed rooms (FK = id)
+            completed: a.json(), // A user can have many completed rooms (FK = id)
         })
         .authorization((allow) => [allow.owner(), allow.authenticated().to(["create"])]),
 
