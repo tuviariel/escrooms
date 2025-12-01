@@ -5,7 +5,8 @@ import Profile from "../pages/Profile";
 import Subscription from "../pages/Subscription";
 import RoomBuilder from "../pages/RoomBuilder";
 import NavBar from "../components/Navbar";
-import { ContextProvider } from "../contexts/roomStyleContext";
+import { RoomContextProvider } from "../contexts/roomStyleContext";
+import { UserContextProvider } from "../contexts/userStyleContext";
 import { route_paths } from "../util/config";
 // import { ContextProvider } from "./contexts/context";
 import { Provider } from "react-redux";
@@ -27,25 +28,27 @@ export default function AppRoutes() {
     return (
         <Router>
             <Suspense fallback={<div>Loading...</div>}>
-                <Provider store={store}>
-                    <Routes>
-                        <Route path="/" element={<NavBar />}>
-                            <Route index element={<Dashboard />} />
-                            <Route path={HOME} element={<Dashboard />} />
-                            <Route path={SUBSCRIPTION} element={<Subscription />} />
-                            <Route path={PROFILE} element={<Profile />} />
-                            <Route path={ROOMBUILDER} element={<RoomBuilder />} />
-                        </Route>
-                        <Route
-                            path={ROOM}
-                            element={
-                                <ContextProvider>
-                                    <Room />
-                                </ContextProvider>
-                            }
-                        />
-                    </Routes>
-                </Provider>
+                <UserContextProvider>
+                    <Provider store={store}>
+                        <Routes>
+                            <Route path="/" element={<NavBar />}>
+                                <Route index element={<Dashboard />} />
+                                <Route path={HOME} element={<Dashboard />} />
+                                <Route path={SUBSCRIPTION} element={<Subscription />} />
+                                <Route path={PROFILE} element={<Profile />} />
+                                <Route path={ROOMBUILDER} element={<RoomBuilder />} />
+                            </Route>
+                            <Route
+                                path={ROOM}
+                                element={
+                                    <RoomContextProvider>
+                                        <Room />
+                                    </RoomContextProvider>
+                                }
+                            />
+                        </Routes>
+                    </Provider>
+                </UserContextProvider>
             </Suspense>
         </Router>
     );

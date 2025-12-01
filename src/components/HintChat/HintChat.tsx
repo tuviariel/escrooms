@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import Typing from "../../assets/images/typing.gif";
 import { get_text } from "../../util/language";
+import { useUserContext } from "../../contexts/userStyleContext";
+
 interface chatContent {
     user: string;
     text: string;
@@ -11,13 +13,14 @@ interface hintChatProps {
 }
 export const HintChat = (props: hintChatProps) => {
     const { hints, quizText } = props;
+    const { userLanguage } = useUserContext();
     // const hintsAmount = hints.length;
     const [open, setOpen] = useState<boolean>(false);
     const [counter, setCounter] = useState<number>(0);
     const [chat, setChat] = useState<chatContent[]>([
-        { user: "bot", text: get_text("instructions", "he") + quizText },
-        { user: "bot", text: get_text("welcome_hint", "he") },
-        { user: "bot", text: get_text("do_want_hint", "he") },
+        { user: "bot", text: get_text("instructions", userLanguage) + quizText },
+        { user: "bot", text: get_text("welcome_hint", userLanguage) },
+        { user: "bot", text: get_text("do_want_hint", userLanguage) },
     ]);
     // const [userInput, setUserInput] = useState<string>("");
     const [botTyping, setBotTyping] = useState<boolean>(false);
@@ -44,7 +47,9 @@ export const HintChat = (props: hintChatProps) => {
                 let newArray = [...prev];
                 newArray.push({
                     user: "bot",
-                    text: hints[counter] ? hints[counter] : get_text("cant_help_more", "he"),
+                    text: hints[counter]
+                        ? hints[counter]
+                        : get_text("cant_help_more", userLanguage),
                 });
                 return newArray;
             });
@@ -57,8 +62,8 @@ export const HintChat = (props: hintChatProps) => {
                     newArray.push({
                         user: "bot",
                         text: hints[counter]
-                            ? get_text("do_want_another_hint", "he")
-                            : get_text("you_can_do_it", "he"),
+                            ? get_text("do_want_another_hint", userLanguage)
+                            : get_text("you_can_do_it", userLanguage),
                     });
                     return newArray;
                 });
@@ -77,7 +82,11 @@ export const HintChat = (props: hintChatProps) => {
                         open ? "border-amber-600" : "border-amber-900"
                     }`}
                     onClick={() => setOpen((prev) => !prev)}
-                    title={open ? get_text("close_hint", "he") : get_text("get_hint", "he")}>
+                    title={
+                        open
+                            ? get_text("close_hint", userLanguage)
+                            : get_text("get_hint", userLanguage)
+                    }>
                     ?
                 </div>
                 {open && (
@@ -141,9 +150,9 @@ export const HintChat = (props: hintChatProps) => {
                             {!botTyping && !finished && (
                                 <div
                                     dir="rtl"
-                                    onClick={() => userSend(get_text("give_hint", "he"))}
+                                    onClick={() => userSend(get_text("give_hint", userLanguage))}
                                     className={`bg-amber-600 rounded-2xl md:p-2 p-1 md:h-10 h-8 md:mt-2 mt-4 cursor-pointer border-black border-b-2`}>
-                                    {get_text("give_hint", "he")}
+                                    {get_text("give_hint", userLanguage)}
                                 </div>
                             )}
                         </div>

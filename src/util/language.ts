@@ -7,7 +7,9 @@ interface Translations {
 
 const appContext: Translations = {
     welcome: { en: "Welcome", he: "ברוכים הבאים", ar: "" },
+    hello: { en: "Hello", he: "שלום", ar: "" },
     loading: { en: "Loading...", he: "טוען...", ar: "" },
+    sign_out: { en: "Sign Out", he: "התנתק", ar: "" },
     next_page: { en: "Next Page", he: "לעמוד הבא", ar: "" },
     no_next_page: { en: "No Next Page", he: "אין עמוד הבא", ar: "" },
     prev_page: { en: "Previous Page", he: "לעמוד הקודם", ar: "" },
@@ -113,6 +115,10 @@ const appContext: Translations = {
         he: "צור תוכן ייחודי עם הנחיות מונחות AI",
         ar: "",
     },
+    language: { en: "Language", he: "שפה", ar: "" },
+    english: { en: "English", he: "אנגלית", ar: "" },
+    hebrew: { en: "Hebrew", he: "עברית", ar: "" },
+    // arabic: { en: "Arabic", he: "ערבית", ar: "" },
 };
 
 export const get_text = (name: string, lang: string) => {

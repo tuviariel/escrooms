@@ -22,8 +22,10 @@ import {
 } from "@dnd-kit/sortable";
 import SortableCard from "./SortableCard";
 
+import { useUserContext } from "../../../contexts/userStyleContext";
 export const OrderBorder = (props: TemplateProps) => {
     const { data, result, setResult, setOpenLock } = props;
+    const { userLanguage } = useUserContext();
     const [cards, setCards] = useState<
         {
             id: number;
@@ -74,12 +76,12 @@ export const OrderBorder = (props: TemplateProps) => {
             const card = cards[i];
             if (card.id !== i) {
                 finished = false;
-                setResult(get_text("wrong", "he"));
+                setResult(get_text("wrong", userLanguage));
                 break;
             }
         }
         if (finished) {
-            setResult(get_text("success", "he"));
+            setResult(get_text("success", userLanguage));
             // setDisabled(true);
         }
     };
@@ -109,7 +111,7 @@ export const OrderBorder = (props: TemplateProps) => {
 
     const handleDragEnd = (event: any) => {
         const { active, over } = event;
-        result === get_text("wrong", "he") && setResult("");
+        result === get_text("wrong", userLanguage) && setResult("");
         if (active.id !== over?.id) {
             const oldIndex = cards.findIndex((c) => c.id === active.id);
             const newIndex = cards.findIndex((c) => c.id === over.id);
@@ -144,12 +146,14 @@ export const OrderBorder = (props: TemplateProps) => {
             <div className="flex">
                 <Button
                     label={
-                        result === get_text("success", "he")
-                            ? get_text("finish", "he")
-                            : get_text("check_answer", "he")
+                        result === get_text("success", userLanguage)
+                            ? get_text("finish", userLanguage)
+                            : get_text("check_answer", userLanguage)
                     }
                     onClick={() =>
-                        result === get_text("success", "he") ? setOpenLock(true) : checkAnswer()
+                        result === get_text("success", userLanguage)
+                            ? setOpenLock(true)
+                            : checkAnswer()
                     }
                     className="flex w-auto mx-10 min-w-fit "
                 />

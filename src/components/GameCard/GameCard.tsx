@@ -4,9 +4,13 @@ import { get_text } from "../../util/language";
 import { fileStorage } from "../../services/service";
 import { useEffect, useState } from "react";
 // import { firstLowercaseGroup } from "../../util/UIstyle";
+
+import { useUserContext } from "../../contexts/userStyleContext";
+
 export const GameCard = (props: any) => {
     // console.log("GameCard props:", props);
     const { data } = props;
+    const { userLanguage } = useUserContext();
     console.log("GameCard props:", data);
     const navigate = useNavigate();
     const [URL, setURL] = useState<string>("");
@@ -39,7 +43,7 @@ export const GameCard = (props: any) => {
     return (
         <div
             className={`relative border border-black bg-white rounded-2xl h-72 w-46 cursor-pointer overflow-hidden flex flex-col hover:shadow-2xl hover:scale-105 transition-transform duration-200`}
-            title={`${get_text("enter_room", "he")} "${data.name}"`}
+            title={`${get_text("enter_room", userLanguage)} "${data.name}"`}
             onClick={() => {
                 openRoom(data.id);
             }}>
@@ -47,7 +51,8 @@ export const GameCard = (props: any) => {
             <div className="text-xl md:text-2xl font-bold">{data.name}</div>
             <p className="text-base">{data.description}</p>
             <p className="text-sm mt-auto mb-1 text-gray-600">
-                {get_text("last_updated", "he")}: {new Date(data.updatedAt).toLocaleDateString()}
+                {get_text("last_updated", userLanguage)}:{" "}
+                {new Date(data.updatedAt).toLocaleDateString()}
             </p>
         </div>
     );

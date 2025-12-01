@@ -6,6 +6,8 @@ import Loading from "../../assets/images/loading.gif";
 import { get_text } from "../../util/language";
 import { roomsService } from "../../services/service";
 // import { fileStorage } from "../../services/service";
+import { useUserContext } from "../../contexts/userStyleContext";
+
 export type Room = Schema["Room"]["type"];
 export interface ListObject {
     id: string;
@@ -23,6 +25,7 @@ export const Dashboard = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [roomsList, setRoomsList] = useState<Room[] | undefined>(undefined);
+    const { userLanguage } = useUserContext();
     const [errorMessage, setErrorMessage] = useState<string>("");
     useEffect(() => {
         if (document.exitFullscreen) {
@@ -133,36 +136,36 @@ export const Dashboard = () => {
                         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
                         onClick={() => navigate("/room-builder")}>
                         <div className="bg-teal-600 rounded-2xl p-12 text-white shadow-2xl">
-                            <h2 className="mb-4">{get_text("build_room", "he")}</h2>
+                            <h2 className="mb-4">{get_text("build_room", userLanguage)}</h2>
                             <p className="text-purple-100 mb-8 max-w-2xl mx-auto">
-                                {get_text("build_room_explanation", "he")}
+                                {get_text("build_room_explanation", userLanguage)}
                             </p>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
                                     {/* <Clock className="w-8 h-8 mb-3" /> */}
                                     <h3 className="text-white mb-2">
-                                        {get_text("quick_creation", "he")}
+                                        {get_text("quick_creation", userLanguage)}
                                     </h3>
                                     <p className="text-purple-100 text-sm">
-                                        {get_text("quick_creation_explanation", "he")}
+                                        {get_text("quick_creation_explanation", userLanguage)}
                                     </p>
                                 </div>
                                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
                                     {/* <Users className="w-8 h-8 mb-3" /> */}
                                     <h3 className="text-white mb-2">
-                                        {get_text("share_publicly", "he")}
+                                        {get_text("share_publicly", userLanguage)}
                                     </h3>
                                     <p className="text-purple-100 text-sm">
-                                        {get_text("share_publicly_explanation", "he")}
+                                        {get_text("share_publicly_explanation", userLanguage)}
                                     </p>
                                 </div>
                                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
                                     {/* <Trophy className="w-8 h-8 mb-3" /> */}
                                     <h3 className="text-white mb-2">
-                                        {get_text("ai_powered", "he")}
+                                        {get_text("ai_powered", userLanguage)}
                                     </h3>
                                     <p className="text-purple-100 text-sm">
-                                        {get_text("ai_powered_explanation", "he")}
+                                        {get_text("ai_powered_explanation", userLanguage)}
                                     </p>
                                 </div>
                             </div>
@@ -180,7 +183,7 @@ export const Dashboard = () => {
                     <div>{errorMessage}</div>
                 ) : (
                     <div className="flex flex-col-reverse">
-                        <div>{get_text("loading", "he")}</div>
+                        <div>{get_text("loading", userLanguage)}</div>
                         <img src={Loading} alt="Loading..." className="mx-auto h-24 w-24" />
                     </div>
                 )}

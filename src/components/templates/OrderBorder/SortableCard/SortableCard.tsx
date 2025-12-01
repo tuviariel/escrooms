@@ -4,6 +4,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { colorPalette } from "../../../../util/UIstyle";
 import { useRoomContext } from "../../../../contexts/roomStyleContext";
 import { get_text } from "../../../../util/language";
+import { useUserContext } from "../../../../contexts/userStyleContext";
 
 type Card = {
     index: number;
@@ -24,6 +25,7 @@ export const SortableCard = ({ index, id, data, borders, result }: Card) => {
         id,
     });
     const { roomColor } = useRoomContext();
+    const { userLanguage } = useUserContext();
     const [infoShow, setInfoShow] = useState<boolean>(false);
     const style = {
         transform: CSS.Transform.toString(transform),
@@ -48,7 +50,9 @@ export const SortableCard = ({ index, id, data, borders, result }: Card) => {
                 ${borders.includes("B") ? "border-b-8" : ""} 
                 ${index % 2 !== 0 ? "mb-4" : "mb-1"} p-4 w-4/5 rounded shadow cursor-grab relative`}
             dir="rtl">
-            {result === get_text("success", "he") && <div className="font-bold">{data.title}</div>}
+            {result === get_text("success", userLanguage) && (
+                <div className="font-bold">{data.title}</div>
+            )}
             <div className="font-semibold">{data.content}</div>
             <div className="text-sm italic text-gray-700">{data.explanation}</div>
             <div className="absolute bottom-1 right-1">

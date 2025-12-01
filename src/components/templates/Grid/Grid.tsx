@@ -6,6 +6,8 @@ import { colorPalette, imageStyle } from "../../../util/UIstyle";
 import { useRoomContext } from "../../../contexts/roomStyleContext";
 import { TemplateProps } from "../../../pages/QuizTemplate/QuizTemplate";
 import { get_text } from "../../../util/language";
+
+import { useUserContext } from "../../../contexts/userStyleContext";
 // interface GridProps {
 //     data: quizData;
 //     result: string;
@@ -17,6 +19,7 @@ import { get_text } from "../../../util/language";
 // };
 export const Grid = (props: TemplateProps) => {
     const { data, result, setResult, setOpenLock } = props;
+    const { userLanguage } = useUserContext();
     console.log(data);
     const [active, setActive] = useState<
         {
@@ -110,12 +113,12 @@ export const Grid = (props: TemplateProps) => {
                     (elem?.answer === false && elem?.status === true)
                 ) {
                     finished = false;
-                    return setResult(get_text("wrong", "he"));
+                    return setResult(get_text("wrong", userLanguage));
                 }
             });
         });
         if (finished) {
-            setResult(get_text("success", "he"));
+            setResult(get_text("success", userLanguage));
         }
     };
 
@@ -181,17 +184,19 @@ export const Grid = (props: TemplateProps) => {
                 </>
             </div>
             <div className={`flex ${active[0]?.length < 4 ? "ts:hidden" : "ph:hidden"}`}>
-                {get_text("phone_on_side", "he")}
+                {get_text("phone_on_side", userLanguage)}
             </div>
             <div className={`${active.length < 4 ? "ts:flex" : "ph:flex"} hidden`}>
                 <Button
                     label={
-                        result === get_text("success", "he")
-                            ? get_text("finish", "he")
-                            : get_text("check_answer", "he")
+                        result === get_text("success", userLanguage)
+                            ? get_text("finish", userLanguage)
+                            : get_text("check_answer", userLanguage)
                     }
                     onClick={() =>
-                        result === get_text("success", "he") ? setOpenLock(true) : checkAnswer()
+                        result === get_text("success", userLanguage)
+                            ? setOpenLock(true)
+                            : checkAnswer()
                     }
                     className="mx-10"
                 />

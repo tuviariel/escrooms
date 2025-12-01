@@ -5,11 +5,13 @@ import { useSelector } from "react-redux";
 import { userType } from "../Login/Login";
 // import Button from "../Button";
 import { get_text } from "../../util/language";
+import { useUserContext } from "../../contexts/userStyleContext";
 
 export const NavBar = () => {
     const userRedux: any = useSelector((state: { user: userType }) => state.user);
     const location = useLocation();
     const navigate = useNavigate();
+    const { userLanguage } = useUserContext();
     console.log("NavBar render", userRedux);
     return (
         <div className="min-h-screen h-screen">
@@ -33,7 +35,7 @@ export const NavBar = () => {
                 />
                 {!userRedux?.user.displayName && (
                     <h2 className="font-semibold text-3xl mx-auto flex underline">
-                        {get_text("welcome", "he")}
+                        {get_text("welcome", userLanguage)}
                     </h2>
                 )}
                 {userRedux?.user.roomsLeft > 0 && (
@@ -42,7 +44,7 @@ export const NavBar = () => {
                             navigate("/room-builder");
                         }}
                         className="mr-5 ml-auto bg-cyan-700 text-white hover:bg-cyan-600 inline-block h-8 border-black border-4 rounded-full px-3 text-sm mt-1.5 cursor-pointer items-center justify-center">
-                        {get_text("new_room", "he")}
+                        {get_text("new_room", userLanguage)}
                     </div>
                 )}
                 <div className={`relative inline-block mx-5 mt-0.5`}>

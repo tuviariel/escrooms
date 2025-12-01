@@ -20,12 +20,15 @@ import { TemplateProps } from "../../pages/QuizTemplate/QuizTemplate";
 import { get_text } from "../../util/language";
 import { imageStyle } from "../../util/UIstyle";
 import { useRoomContext } from "../../contexts/roomStyleContext";
+
+import { useUserContext } from "../../contexts/userStyleContext";
 // import { get } from "aws-amplify/api";
 export const Puzzle6: React.FC<Partial<TemplateProps>> = ({ data, setOpenLock }) => {
     const initialPositions = [5, 3, 4, 1, 0, 2]; // scattered order
     const [items, setItems] = useState(initialPositions);
     const [showEnd, setShowEnd] = useState(false);
     const { roomStyle } = useRoomContext();
+    const { userLanguage } = useUserContext();
     // --- DND Kit sensors ---
     const sensors =
         window.outerWidth > 968
@@ -97,7 +100,7 @@ export const Puzzle6: React.FC<Partial<TemplateProps>> = ({ data, setOpenLock })
                 backgroundSize: "cover",
             }}>
             <div className="text-center text-2xl font-semibold p-2 pt-5">
-                {get_text("puzzle6_inst", "he")}
+                {get_text("puzzle6_inst", userLanguage)}
             </div>
             <div className="pt-10 columns-6 gap-0" dir="rtl">
                 <DndContext
@@ -131,7 +134,7 @@ export const Puzzle6: React.FC<Partial<TemplateProps>> = ({ data, setOpenLock })
             {showEnd && (
                 <div className="flex ml-2 mr-auto">
                     <Button onClick={() => setOpenLock && setOpenLock(true)}>
-                        <div>{get_text("finish", "he")}</div>
+                        <div>{get_text("finish", userLanguage)}</div>
                     </Button>
                 </div>
             )}

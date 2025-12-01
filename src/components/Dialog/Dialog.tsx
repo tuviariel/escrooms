@@ -8,6 +8,8 @@ interface DialogProps {
     disableOverlayClose: boolean;
     children: ReactElement;
 }
+import { useUserContext } from "../../contexts/userStyleContext";
+
 /**
  * Dialog component- enables adding a dialog to any page or component
  * @param props open, setOpen, size, data, disableOverlayClose, children
@@ -22,7 +24,7 @@ export const Dialog: React.FC<DialogProps> = (props) => {
         disableOverlayClose = false,
         data = "",
     } = props;
-
+    const { userLanguage } = useUserContext();
     useEffect(() => {
         if (open) {
             document.body.style.overflow = "hidden";
@@ -57,7 +59,7 @@ export const Dialog: React.FC<DialogProps> = (props) => {
                     onClick={(e) => e.stopPropagation()}>
                     <div
                         onClick={() => setOpen(false)}
-                        title={get_text("close", "he")}
+                        title={get_text("close", userLanguage)}
                         className="absolute top-0 right-0 h-8 w-8 text-xl border-1 hover:border-2 rounded-lg border-black pl-2 pb-1 flex cursor-pointer font-bold">
                         X
                     </div>

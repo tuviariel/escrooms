@@ -7,13 +7,15 @@ import { useRoomContext } from "../../../contexts/roomStyleContext";
 import { TemplateProps } from "../../../pages/QuizTemplate/QuizTemplate";
 import { segmentsCheckObj } from "../../../util/utils";
 
+import { useUserContext } from "../../../contexts/userStyleContext";
+
 type TableContentType = {
     index: number;
     icon: string;
 };
 export const DigitalNumbers = (props: TemplateProps) => {
     const { data, result, setResult, setOpenLock } = props;
-
+    const { userLanguage } = useUserContext();
     const { roomStyle, roomColor } = useRoomContext();
     const [active, setActive] = useState<
         {
@@ -88,7 +90,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
     useEffect(() => {
         data?._id && localStorage.setItem(data?._id, JSON.stringify(active));
         return () => {
-            if (result === get_text("success", "he")) {
+            if (result === get_text("success", userLanguage)) {
                 localStorage.removeItem(data?._id);
             }
         };
@@ -115,12 +117,12 @@ export const DigitalNumbers = (props: TemplateProps) => {
                 ) {
                     // console.log("wrong");
                     finished = false;
-                    return setResult(get_text("wrong", "he"));
+                    return setResult(get_text("wrong", userLanguage));
                 }
             });
         });
         if (finished) {
-            setResult(get_text("success", "he"));
+            setResult(get_text("success", userLanguage));
         }
     };
 
@@ -179,13 +181,13 @@ export const DigitalNumbers = (props: TemplateProps) => {
                         }}>
                         <tr>
                             <th className="border border-amber-50 whitespace-nowrap">
-                                {get_text("situationAction", "he")}
+                                {get_text("situationAction", userLanguage)}
                             </th>
                             <th className="border border-amber-50 whitespace-nowrap px-2">
-                                {get_text("correct", "he")}
+                                {get_text("correct", userLanguage)}
                             </th>
                             <th className="border border-amber-50 whitespace-nowrap px-2">
-                                {get_text("incorrect", "he")}
+                                {get_text("incorrect", userLanguage)}
                             </th>
                         </tr>
                     </thead>
@@ -261,26 +263,28 @@ export const DigitalNumbers = (props: TemplateProps) => {
                                   position={i}
                                   number={number}
                                   toggleSegment={
-                                      result !== get_text("success", "he") ? toggleSegment : func
+                                      result !== get_text("success", userLanguage)
+                                          ? toggleSegment
+                                          : func
                                   }
                                   amount={active.length}
                               />
                           );
                       })
-                    : get_text("prepare", "he")}
+                    : get_text("prepare", userLanguage)}
             </div>
             <div className={`flex ${active.length < 4 ? "ts:hidden" : "ph:hidden"}`} dir="rtl">
-                {get_text("phone_on_side", "he")}
+                {get_text("phone_on_side", userLanguage)}
             </div>
             <div className={`${active.length < 4 ? "ts:flex" : "ph:flex"} hidden`}>
                 <Button
                     label={
-                        result === get_text("success", "he")
-                            ? get_text("finish", "he")
-                            : get_text("check_answer", "he")
+                        result === get_text("success", userLanguage)
+                            ? get_text("finish", userLanguage)
+                            : get_text("check_answer", userLanguage)
                     }
                     onClick={() =>
-                        result === get_text("success", "he")
+                        result === get_text("success", userLanguage)
                             ? setOpenLock(true)
                             : checkAnswer(active)
                     }

@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router";
-// import NumbersTemplate from "../../components/templates/NumbersTemplate";
-// import GridTemplate from "../../components/templates/GridTemplate";
-// import data from "../../services/dummyRoomData";
-// import ColorTemplate from "../../components/templates/Color";
-// import TurnRoundTemplate from "../../components/templates/TurnRoundTemplate";
-// import OrderBorderTemplate from "../../components/templates/OrderBorder";
 import { useRoomContext } from "../../contexts/roomStyleContext";
 import { colorPalette } from "../../util/UIstyle";
 import backArrow from "../../assets/images/backArrow.svg";
@@ -18,6 +12,8 @@ import QuizTemplate from "../QuizTemplate";
 import { fileStorage } from "../../services/service";
 import { quizListActions } from "../../reduxStor/quizList";
 import finishedRoomGif from "../../assets/images/finishedRoom.gif";
+import { useUserContext } from "../../contexts/userStyleContext";
+
 export interface quizDataProps {
     data: {
         _id: string;
@@ -69,6 +65,7 @@ export const Room = () => {
         dispatch(quizListActions.createQuizList(list));
         console.log("setQuizList", list);
     };
+    const { userLanguage } = useUserContext();
     const [checkLeave, setCheckLeave] = useState(false);
     const [completed, setCompleted] = useState(false);
     const [URLMainImage, setURLMainImage] = useState<string>("");
@@ -138,14 +135,14 @@ export const Room = () => {
         <>
             {window.innerWidth < 600 || orientation === "portrait" ? (
                 <div className="h-screen w-screen bg-gray-900 text-amber-50 text-center flex flex-col justify-center items-center p-20">
-                    {get_text("phone_on_side", "he")}
+                    {get_text("phone_on_side", userLanguage)}
                 </div>
             ) : quizNumber > -1 ? (
                 <>
                     <img
                         src={backArrow}
-                        alt={get_text("back_to_main", "he")}
-                        title={get_text("back_to_main", "he")}
+                        alt={get_text("back_to_main", userLanguage)}
+                        title={get_text("back_to_main", userLanguage)}
                         className="cursor-pointer h-8 w-8 z-20 md:h-12 md:w-12 fixed left-3 top-3 p-1 rounded-full bg-gray-100 border-2 hover:border-amber-700"
                         onClick={() => setQuizNumber(-1)}
                     />
@@ -170,7 +167,7 @@ export const Room = () => {
                                     <div
                                         className="absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 text-4xl md:text-6xl font-bold text-white bg-opacity-90 rounded-md p-4"
                                         dir="rtl">
-                                        {get_text("room_finished", "he")}
+                                        {get_text("room_finished", userLanguage)}
                                     </div>
                                 </>
                             )}
@@ -226,7 +223,7 @@ export const Room = () => {
                         </div>
                         <div
                             className="w-8 h-8 text-center fixed top-3 left-3 rounded-full font-bold z-20 border-2 text-black bg-white hover:text-red-500 hover:border-red-500 cursor-pointer"
-                            title={get_text("exit_room", "he")}
+                            title={get_text("exit_room", userLanguage)}
                             onClick={() => (!completed ? setCheckLeave(true) : navigate("/"))}>
                             x
                         </div>
@@ -240,18 +237,18 @@ export const Room = () => {
                         <>
                             <div className="p-4 text-right" dir="rtl">
                                 <h2 className="text-lg font-semibold mb-2">
-                                    {get_text("leave_room", "he")}
+                                    {get_text("leave_room", userLanguage)}
                                 </h2>
-                                <p>{get_text("are_you_sure", "he")}</p>
+                                <p>{get_text("are_you_sure", userLanguage)}</p>
                             </div>
                             <div className="flex justify-end p-4 border-t">
                                 <Button
-                                    label={get_text("cancel", "he")}
+                                    label={get_text("cancel", userLanguage)}
                                     onClick={() => setCheckLeave(false)}
                                     className="mr-2"
                                 />
                                 <Button
-                                    label={get_text("confirm", "he")}
+                                    label={get_text("confirm", userLanguage)}
                                     onClick={() => navigate("/")}
                                 />
                             </div>

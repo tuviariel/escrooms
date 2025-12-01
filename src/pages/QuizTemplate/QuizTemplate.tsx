@@ -14,6 +14,8 @@ import { quizData } from "../Room/Room";
 
 import { colorPalette } from "../../util/UIstyle";
 import { useRoomContext } from "../../contexts/roomStyleContext";
+import { useUserContext } from "../../contexts/userStyleContext";
+
 export interface TemplateProps {
     data: quizData;
     result: string;
@@ -31,8 +33,9 @@ export const QuizTemplate = (props: quizDataP) => {
     const [openLock, setOpenLock] = useState(false);
     const [showText, setShowText] = useState(true);
     const { roomColor } = useRoomContext();
+    const { userLanguage } = useUserContext();
     useEffect(() => {
-        if (result === get_text("success", "he")) {
+        if (result === get_text("success", userLanguage)) {
             data.type !== "colorChange" && setOpenLock(true);
         }
     }, [result]);

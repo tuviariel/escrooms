@@ -1,11 +1,9 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 // import data from "../services/dummyRoomData";
 interface ContextType {
-    userLanguage: string;
     roomStyle: string;
     roomColor: string;
     roomFont: string;
-    setUserLanguage: React.Dispatch<React.SetStateAction<string>>;
     setRoomStyle: React.Dispatch<React.SetStateAction<string>>;
     setRoomColor: React.Dispatch<React.SetStateAction<string>>;
     setRoomFont: React.Dispatch<React.SetStateAction<string>>;
@@ -17,20 +15,17 @@ interface ContextProviderProps {
     children: ReactNode;
 }
 // The Provider wrapped around the room component:
-const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
-    const [userLanguage, setUserLanguage] = useState<string>("he");
+const RoomContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     const [roomStyle, setRoomStyle] = useState<string>("abstract");
     const [roomColor, setRoomColor] = useState<string>("redBlueGray");
     const [roomFont, setRoomFont] = useState<string>("Arial");
-    console.log(userLanguage, roomStyle, roomColor, roomFont);
+    console.log(roomStyle, roomColor, roomFont);
     return (
         <RoomStyleContext.Provider
             value={{
-                userLanguage,
                 roomStyle,
                 roomColor,
                 roomFont,
-                setUserLanguage,
                 setRoomStyle,
                 setRoomColor,
                 setRoomFont,
@@ -43,9 +38,9 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
 const useRoomContext = (): ContextType => {
     const context = useContext(RoomStyleContext);
     if (context === undefined) {
-        throw new Error("quizNumber must be used within the Room route");
+        throw new Error("RoomStyleContext must be used within the RoomStyleProvider");
     }
     return context;
 };
 // exporting external usage:
-export { useRoomContext, ContextProvider };
+export { useRoomContext, RoomContextProvider };

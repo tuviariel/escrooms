@@ -10,6 +10,7 @@ import loading from "../../assets/images/loading.gif";
 import Button from "../Button";
 import Dialog from "../Dialog";
 
+import { useUserContext } from "../../contexts/userStyleContext";
 interface QuizDataProps {
     data: quizData;
     result: string;
@@ -18,6 +19,7 @@ interface QuizDataProps {
 export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
     const { data, result, setResult } = props;
     const { roomStyle } = useRoomContext();
+    const { userLanguage } = useUserContext();
     const [quizDataPageNumber, setQuizDataPageNumber] = useState<number>(0);
     const [colorOrder, setColorOrder] = useState<string[][]>(
         data?.type === "colorChange" ? new Array(data?.quiz.length).fill(["", ""]) : []
@@ -49,7 +51,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
         //     setColorOrder(JSON.parse(localStorage.getItem(data?._id.toString()) || "[]"));
         // }
         // return () => {
-        //     if (result === get_text("success", "he")) {
+        //     if (result === get_text("success", userLenguage)) {
         //         data?._id.toString() && localStorage.removeItem(data?._id.toString());
         //     } else {
         //         data?._id.toString() &&
@@ -127,10 +129,10 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
         setResult &&
             setResult(
                 count === i
-                    ? get_text("success", "he")
+                    ? get_text("success", userLanguage)
                     : count === 0
-                      ? get_text("wrong", "he") + ": (" + count + "/" + i + ")"
-                      : get_text("continue", "he") + ": (" + count + "/" + i + ")"
+                      ? get_text("wrong", userLanguage) + ": (" + count + "/" + i + ")"
+                      : get_text("continue", userLanguage) + ": (" + count + "/" + i + ")"
             );
     };
     console.log(quizDataPageNumber);
@@ -144,13 +146,13 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                         }
                         alt={
                             quizDataPageNumber !== 0
-                                ? get_text("prev_page", "he")
-                                : get_text("no_prev_page", "he")
+                                ? get_text("prev_page", userLanguage)
+                                : get_text("no_prev_page", userLanguage)
                         }
                         title={
                             quizDataPageNumber !== 0
-                                ? get_text("prev_page", "he")
-                                : get_text("no_prev_page", "he")
+                                ? get_text("prev_page", userLanguage)
+                                : get_text("no_prev_page", userLanguage)
                         }
                         className={`${
                             quizDataPageNumber !== 0 ? "cursor-pointer" : "cursor-not-allowed"
@@ -167,13 +169,13 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                         }
                         alt={
                             quizDataPageNumber < data.quiz.length - 1
-                                ? get_text("next_page", "he")
-                                : get_text("no_next_page", "he")
+                                ? get_text("next_page", userLanguage)
+                                : get_text("no_next_page", userLanguage)
                         }
                         title={
                             quizDataPageNumber < data.quiz.length - 1
-                                ? get_text("next_page", "he")
-                                : get_text("no_next_page", "he")
+                                ? get_text("next_page", userLanguage)
+                                : get_text("no_next_page", userLanguage)
                         }
                         className={`${
                             quizDataPageNumber < data.quiz.length - 1
@@ -324,14 +326,14 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                             )
                                         }
                                         onMouseLeave={() => setOpenStatus(-1)}
-                                        title={get_text("more_info", "he") + "..."}>
+                                        title={get_text("more_info", userLanguage) + "..."}>
                                         !
                                         {openStatus !== -1 && (
                                             <div
                                                 className="absolute left-6 top-6 flex flex-col bg-white bg-opacity-80 p-2 rounded-lg border-2 border-amber-400 text-right"
                                                 dir="rtl">
                                                 <span className="text-sm">
-                                                    {get_text("more_info", "he") + ": "}
+                                                    {get_text("more_info", userLanguage) + ": "}
                                                 </span>
                                                 {Object.keys(
                                                     data.quiz[quizDataPageNumber].status
@@ -400,7 +402,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                         <div className="absolute left-2 bottom-2 flex gap-3">
                             <Button
                                 onClick={checkOrderAnswer}
-                                label={get_text("check_answer", "he")}
+                                label={get_text("check_answer", userLanguage)}
                                 className=""
                             />
                             {result && (

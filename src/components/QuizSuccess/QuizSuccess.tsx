@@ -12,6 +12,8 @@ import { quizNumberActions } from "../../reduxStor/quizNumber";
 import { quizListActions } from "../../reduxStor/quizList";
 import { imageStyle } from "../../util/UIstyle";
 import { useRoomContext } from "../../contexts/roomStyleContext";
+
+import { useUserContext } from "../../contexts/userStyleContext";
 // import { quizData } from "../../pages/Room/Room";
 interface quizSuccessProps {
     // setOpenLock: () => void;
@@ -21,6 +23,7 @@ interface quizSuccessProps {
 export const QuizSuccess = (props: quizSuccessProps) => {
     const { data } = props;
     const { roomStyle } = useRoomContext();
+    const { userLanguage } = useUserContext();
     const quiz = useSelector((state: { quizNumber: { quizNumber: number } }) => state.quizNumber);
     const quizNumber = quiz?.quizNumber;
     const dispatch = useDispatch();
@@ -90,7 +93,9 @@ export const QuizSuccess = (props: quizSuccessProps) => {
             }, 3000);
         } else {
             setMessage(
-                (count === 0 ? get_text("wrong", "he") : get_text("continue", "he")) +
+                (count === 0
+                    ? get_text("wrong", userLanguage)
+                    : get_text("continue", userLanguage)) +
                     ": (" +
                     count +
                     "/" +
@@ -142,14 +147,17 @@ export const QuizSuccess = (props: quizSuccessProps) => {
                     })}
                 </div>
                 <div className="flex">
-                    {/* <Button label={get_text("close", "he")} onClick={setOpenLock} /> */}
+                    {/* <Button label={get_text("close", userLanguage)} onClick={setOpenLock} /> */}
                     {open ? (
                         <Button
-                            label={get_text("close_quiz", "he")}
+                            label={get_text("close_quiz", userLanguage)}
                             onClick={() => setQuizNumber(-1)}
                         />
                     ) : (
-                        <Button label={get_text("check_answer", "he")} onClick={checkAnswer} />
+                        <Button
+                            label={get_text("check_answer", userLanguage)}
+                            onClick={checkAnswer}
+                        />
                     )}
                 </div>
                 <div className="absolute bottom-9 flex justify-center font-semibold bg-amber-200 opacity-80 z-10">
