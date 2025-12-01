@@ -2,7 +2,7 @@ interface TranslationEntry {
     [key: string]: string;
 }
 interface Translations {
-    [key: string]: TranslationEntry; //{ en: string; he: string; ar: string; };
+    [key: string]: TranslationEntry;
 }
 
 const appContext: Translations = {
