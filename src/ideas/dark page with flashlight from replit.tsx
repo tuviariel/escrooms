@@ -7,7 +7,6 @@ import roomBg from "@assets/generated_images/mysterious_first_aid_room_backgroun
 export default function RoomHub() {
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
     const [, setLocation] = useLocation();
-
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
             setMousePos({ x: e.clientX, y: e.clientY });
