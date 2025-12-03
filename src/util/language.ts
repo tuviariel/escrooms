@@ -4,6 +4,7 @@ interface TranslationEntry {
 interface Translations {
     [key: string]: TranslationEntry;
 }
+
 const appContext: Translations = {
     welcome: { en: "Welcome", he: "ברוכים הבאים", ar: "" },
     hello: { en: "Hello", he: "שלום", ar: "" },
