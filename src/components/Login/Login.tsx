@@ -55,7 +55,7 @@ export function Login() {
             setUser(userToRedux as userType);
         });
     }, [localUser]);
-    console.log("Login component rendered", userRedux, userRedux.user["avatar"]);
+    console.log("Login component rendered", userRedux, userRedux?.user?.["avatar"]);
 
     return (
         <>
@@ -99,7 +99,7 @@ export function Login() {
                             <main>
                                 <h6>
                                     {get_text("hello", userLanguage)}{" "}
-                                    {userRedux.user["displayName"] ||
+                                    {userRedux?.user?.["displayName"] ||
                                         user?.userId ||
                                         user?.signInDetails?.loginId}
                                 </h6>
@@ -119,7 +119,7 @@ export function Login() {
                                         setUserOpen(false);
                                     }}>
                                     {get_text(
-                                        userRedux.user["subscription"] !== "start"
+                                        userRedux?.user?.["subscription"] !== "start"
                                             ? "go_pro"
                                             : "subscription",
                                         userLanguage

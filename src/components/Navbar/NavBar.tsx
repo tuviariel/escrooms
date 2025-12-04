@@ -33,12 +33,12 @@ export const NavBar = () => {
                     }}
                     className="ml-5 h-10 w-10 cursor-pointer"
                 />
-                {!userRedux?.user.displayName && (
+                {!userRedux?.user?.displayName && (
                     <h2 className="font-semibold text-3xl mx-auto flex underline">
                         {get_text("welcome", userLanguage)}
                     </h2>
                 )}
-                {userRedux?.user.roomsLeft > 0 && (
+                {userRedux?.user?.roomsLeft > 0 && (
                     <div
                         onClick={() => {
                             navigate("/room-builder");
