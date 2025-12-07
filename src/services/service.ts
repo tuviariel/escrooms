@@ -64,7 +64,7 @@ export const userService = {
             const newProfile = await client.models.UserProfile.create({
                 id: user.userId,
                 email: attributes.email || user.signInDetails.loginId,
-                displayName: attributes.name || user.username,
+                displayName: attributes.name || user.signInDetails.loginId.split("@")[0],
                 avatar: attributes.picture || user.avatar || "",
                 roomsLeft: 1,
                 subscription: "free",
