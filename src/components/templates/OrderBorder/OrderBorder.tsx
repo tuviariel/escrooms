@@ -158,7 +158,9 @@ export const OrderBorder = (props: TemplateProps) => {
                     className="flex w-auto mx-10 min-w-fit "
                 />
                 {result && (
-                    <div className="m-auto p-1 rounded-xl text-center bg-amber-50" dir="rtl">
+                    <div
+                        className="m-auto p-1 rounded-xl text-center bg-amber-50"
+                        dir={userLanguage === "he" ? "rtl" : "ltr"}>
                         {result}
                     </div>
                 )}

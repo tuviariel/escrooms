@@ -201,7 +201,9 @@ export const Grid = (props: TemplateProps) => {
                     className="mx-10"
                 />
                 {result && (
-                    <div className="mr-10 py-1 px-4 rounded-xl text-center bg-amber-50" dir="rtl">
+                    <div
+                        className="mr-10 py-1 px-4 rounded-xl text-center bg-amber-50"
+                        dir={userLanguage === "he" ? "rtl" : "ltr"}>
                         {result}
                     </div>
                 )}

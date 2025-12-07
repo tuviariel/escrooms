@@ -171,7 +171,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
                 style={{ borderColor: colorPalette[roomColor as keyof typeof colorPalette].dark }}>
                 <table
                     className="table-auto w-full h-full text-right border border-amber-50 text-xl text-amber-50 overflow-y-auto"
-                    dir="rtl">
+                    dir={userLanguage === "he" ? "rtl" : "ltr"}>
                     <thead
                         className="sticky top-0 z-10"
                         style={{
@@ -273,7 +273,9 @@ export const DigitalNumbers = (props: TemplateProps) => {
                       })
                     : get_text("prepare", userLanguage)}
             </div>
-            <div className={`flex ${active.length < 4 ? "ts:hidden" : "ph:hidden"}`} dir="rtl">
+            <div
+                className={`flex ${active.length < 4 ? "ts:hidden" : "ph:hidden"}`}
+                dir={userLanguage === "he" ? "rtl" : "ltr"}>
                 {get_text("phone_on_side", userLanguage)}
             </div>
             <div className={`${active.length < 4 ? "ts:flex" : "ph:flex"} hidden`}>
@@ -291,7 +293,9 @@ export const DigitalNumbers = (props: TemplateProps) => {
                     className="mx-10"
                 />
                 {result && (
-                    <div className="mr-10 py-1 px-4 rounded-xl text-center bg-amber-50" dir="rtl">
+                    <div
+                        className="mr-10 py-1 px-4 rounded-xl text-center bg-amber-50"
+                        dir={userLanguage === "he" ? "rtl" : "ltr"}>
                         {result}
                     </div>
                 )}

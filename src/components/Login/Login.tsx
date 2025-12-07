@@ -68,7 +68,7 @@ export function Login() {
                 className="h-9 w-9 m-0.5 cursor-pointer"
             />
             <div
-                className={`absolute ${userOpen ? "block" : "hidden"} top-full right-full mt-2 min-w-48 bg-white border border-gray-300 rounded shadow-lg z-10 opacity-100`}
+                className={`absolute ${userOpen ? "block" : "hidden"} top-8 right-0 mt-2 min-w-48 bg-white border border-gray-300 rounded shadow-lg z-10 opacity-100`}
                 onMouseLeave={() => setUserOpen(false)}>
                 <Authenticator
                     formFields={{

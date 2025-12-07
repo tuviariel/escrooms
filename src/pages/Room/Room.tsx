@@ -166,7 +166,7 @@ export const Room = () => {
                                     />
                                     <div
                                         className="absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 text-4xl md:text-6xl font-bold text-white bg-opacity-90 rounded-md p-4"
-                                        dir="rtl">
+                                        dir={userLanguage === "he" ? "rtl" : "ltr"}>
                                         {get_text("room_finished", userLanguage)}
                                     </div>
                                 </>
@@ -213,7 +213,7 @@ export const Room = () => {
                                                 )}
                                                 <div
                                                     className="absolute bottom-3 w-full text-center text-white text-md py-1 z-20"
-                                                    dir="rtl">
+                                                    dir={userLanguage === "he" ? "rtl" : "ltr"}>
                                                     {!quiz.completed ? quiz.name : quiz.answer}
                                                 </div>
                                             </div>
@@ -235,7 +235,9 @@ export const Room = () => {
                         disableOverlayClose={true}
                         data="">
                         <>
-                            <div className="p-4 text-right" dir="rtl">
+                            <div
+                                className="p-4 text-right"
+                                dir={userLanguage === "he" ? "rtl" : "ltr"}>
                                 <h2 className="text-lg font-semibold mb-2">
                                     {get_text("leave_room", userLanguage)}
                                 </h2>

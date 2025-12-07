@@ -218,7 +218,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                         />
                                         <div
                                             className="flex flex-col relative p-22"
-                                            dir="rtl"
+                                            dir={userLanguage === "he" ? "rtl" : "ltr"}
                                             style={{
                                                 backgroundImage: `url(${imageStyle[roomStyle as keyof typeof imageStyle].semiBackground})`,
                                                 backgroundSize: "cover",
@@ -304,7 +304,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                 />
                                 <div
                                     className="flex flex-col relative px-32"
-                                    dir="rtl"
+                                    dir={userLanguage === "he" ? "rtl" : "ltr"}
                                     style={{
                                         backgroundImage: `url(${imageStyle[roomStyle as keyof typeof imageStyle].semiBackground})`,
                                         backgroundSize: "cover",
@@ -331,7 +331,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                         {openStatus !== -1 && (
                                             <div
                                                 className="absolute left-6 top-6 flex flex-col bg-white bg-opacity-80 p-2 rounded-lg border-2 border-amber-400 text-right"
-                                                dir="rtl">
+                                                dir={userLanguage === "he" ? "rtl" : "ltr"}>
                                                 <span className="text-sm">
                                                     {get_text("more_info", userLanguage) + ": "}
                                                 </span>

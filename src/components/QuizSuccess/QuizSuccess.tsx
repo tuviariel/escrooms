@@ -124,7 +124,7 @@ export const QuizSuccess = (props: quizSuccessProps) => {
                         return (
                             <input
                                 ref={index === indexedRef ? inputRef : null}
-                                // autoFocus={index === 0}
+                                autoFocus={index === 0}
                                 key={index}
                                 type="text"
                                 // max={9}

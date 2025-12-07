@@ -49,7 +49,7 @@ export const SortableCard = ({ index, id, data, borders, result }: Card) => {
                 ${borders.includes("L") ? "border-l-8" : ""} 
                 ${borders.includes("B") ? "border-b-8" : ""} 
                 ${index % 2 !== 0 ? "mb-4" : "mb-1"} p-4 w-4/5 rounded shadow cursor-grab relative`}
-            dir="rtl">
+            dir={userLanguage === "he" ? "rtl" : "ltr"}>
             {result === get_text("success", userLanguage) && (
                 <div className="font-bold">{data.title}</div>
             )}

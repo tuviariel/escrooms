@@ -98,13 +98,13 @@ export const QuizTemplate = (props: quizDataP) => {
                             color: colorPalette[roomColor as keyof typeof colorPalette].dark,
                             borderColor: colorPalette[roomColor as keyof typeof colorPalette].dark,
                         }}
-                        dir="rtl">
+                        dir={userLanguage === "he" ? "rtl" : "ltr"}>
                         {data.quizText}
                         <TimerLine duration={5000} />
                     </div>
                 </div>
             ) : (
-                <div className="fixed right-3 bottom-3" dir="rtl">
+                <div className="fixed right-3 bottom-3" dir={userLanguage === "he" ? "rtl" : "ltr"}>
                     <HintChat hints={data.hints} quizText={data.quizText} />
                 </div>
             )}

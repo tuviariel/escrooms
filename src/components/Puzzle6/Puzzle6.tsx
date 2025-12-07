@@ -102,7 +102,7 @@ export const Puzzle6: React.FC<Partial<TemplateProps>> = ({ data, setOpenLock })
             <div className="text-center text-2xl font-semibold p-2 pt-5">
                 {get_text("puzzle6_inst", userLanguage)}
             </div>
-            <div className="pt-10 columns-6 gap-0" dir="rtl">
+            <div className="pt-10 columns-6 gap-0" dir={userLanguage === "he" ? "rtl" : "ltr"}>
                 <DndContext
                     sensors={sensors}
                     collisionDetection={closestCenter}
