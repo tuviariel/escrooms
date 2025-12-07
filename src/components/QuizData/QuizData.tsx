@@ -193,9 +193,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                         {data.quiz.map((item, i) => {
                             return (
                                 <div
-                                    className={
-                                        "relative h-screen flex-shrink-0 snap-center py-20 px-4"
-                                    }
+                                    className={"relative h-screen shrink-0 snap-center py-20 px-4"}
                                     style={{
                                         backgroundImage: `url(${imageStyle[roomStyle as keyof typeof imageStyle].background})`,
                                         // backgroundSize: "cover",
@@ -341,7 +339,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                                     return (
                                                         <span
                                                             key={i}
-                                                            className="text-sm whitespace-nowrap break-words">
+                                                            className="text-sm whitespace-nowrap wrap-break-word">
                                                             {k +
                                                                 ": " +
                                                                 Object.values(

@@ -13,7 +13,7 @@ export const GameCard = (props: any) => {
     const { userLanguage } = useUserContext();
     console.log("GameCard props:", data);
     const navigate = useNavigate();
-    const [URL, setURL] = useState<string>("");
+    const [URL, setURL] = useState<any | null>(null);
     const openRoom = async (id: string) => {
         console.log(id);
         const quizzes = await data.quizzes();
@@ -32,13 +32,15 @@ export const GameCard = (props: any) => {
     useEffect(() => {
         const getUrl = async (mainImage: string | null) => {
             if (!mainImage) return "";
+            console.log("Getting URL for image:", mainImage);
             const url = await fileStorage.getFileUrl(mainImage);
+            console.log("Got URL for image:", url);
             setURL(url);
         };
         getUrl(data.mainImage);
     }, []);
 
-    console.log("GameCard render:", data);
+    // console.log("GameCard render:", data);
 
     return (
         <div
@@ -47,7 +49,9 @@ export const GameCard = (props: any) => {
             onClick={() => {
                 openRoom(data.id);
             }}>
-            {data.mainImage && <img src={URL} alt="" className={`h-36 w-full object-cover`} />}
+            {data.mainImage && (
+                <img src={URL} alt="game image" className={`h-36 w-full object-cover`} />
+            )}
             <div className="text-xl md:text-2xl font-bold">{data.name}</div>
             <p className="text-base">{data.description}</p>
             <p className="text-sm mt-auto mb-1 text-gray-600">

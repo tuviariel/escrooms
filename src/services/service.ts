@@ -1,6 +1,6 @@
 import { getClient } from "./client";
 import { fetchUserAttributes } from "aws-amplify/auth";
-import { uploadData, getUrl } from "aws-amplify/storage";
+import { uploadData, getUrl, remove } from "aws-amplify/storage";
 /**
  * Rooms routes:
  * @returns the response data
@@ -44,6 +44,25 @@ export const roomsService = {
 };
 
 /**
+ * Quiz routes:
+ * @returns the response data
+ */
+
+export const quizService = {
+    async createQuiz(quizData: any) {
+        const client = await getClient();
+        const result = await client.models.Quiz.create(quizData);
+        return result.data;
+    },
+    async updateQuiz(quizId: string, updateData: any) {
+        const client = await getClient();
+        const existingQuiz = await client.models.Quiz.update({ id: quizId, ...updateData });
+        console.log("Updated quiz:", existingQuiz);
+        return existingQuiz.data;
+    },
+};
+
+/**
  * User routes:
  * @returns the response data
  */
@@ -82,12 +101,12 @@ export const userService = {
 
 export const fileStorage = {
     async uploadFile(file: File, roomId: string) {
+        console.log("Uploading file:", file, "to room:", roomId);
         try {
             const result = await uploadData({
                 path: `images/${roomId}/${file.name}`, // S3 prefix from backend.ts
                 data: file,
             }).result;
-
             console.log("Uploaded:", result);
             return result;
         } catch (error) {
@@ -96,6 +115,16 @@ export const fileStorage = {
     },
     async getFileUrl(pathname: string) {
         const url = await getUrl({ path: pathname });
-        return url.url.toString();
+        console.log("Got file URL:", url);
+        return url.url.href;
+    },
+    async deleteFile(pathname: string) {
+        try {
+            const result = await remove({ path: pathname });
+            console.log("Deleted file:", result);
+            return result;
+        } catch (error) {
+            console.error("Delete failed:", error);
+        }
     },
 };

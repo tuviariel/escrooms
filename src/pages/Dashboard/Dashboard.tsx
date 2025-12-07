@@ -4,10 +4,9 @@ import type { Schema } from "../../../amplify/data/resource";
 import GameCard from "../../components/GameCard";
 import Loading from "../../assets/images/loading.gif";
 import { get_text } from "../../util/language";
-import { roomsService } from "../../services/service";
-// import { fileStorage } from "../../services/service";
+import { roomsService } from "../../services/service"; // fileStorage, quizService,
 import { useUserContext } from "../../contexts/userStyleContext";
-
+// import { quizzes } from "../../services/dummyRoomData";
 export type Room = Schema["Room"]["type"];
 export interface ListObject {
     id: string;
@@ -42,8 +41,14 @@ export const Dashboard = () => {
             // const selectionSet = ["roomId", "name", "description", "mainImage"] as const; //{selectionSet}
 
             //deleting room:
-            // const rooms = await roomsService.deleteRoom("c9e8aeb8-01f1-43cc-b494-cde58418e7db");
+            // const rooms = await roomsService.deleteRoom("ef717bcc-27c9-468d-a41a-d934354a5369");
             // console.log("Fetched rooms:", rooms);
+
+            //deleting file from storage:
+            // const deleteResult = await fileStorage.deleteFile(
+            //     "images/8ec5bdcb-58c2-4ec7-8143-e09ed3756d65/First-aid.jpg"
+            // );
+            // console.log("File delete result:", deleteResult);
 
             //getting all rooms:
             try {
@@ -61,16 +66,16 @@ export const Dashboard = () => {
             // --- quizzes create:
             // try {
             //     for (const q of quizzes) {
-            //         q.roomId = "3b0c95f3-20ad-486c-9e54-8d16f48db39c";
+            //         q.roomId = "8ec5bdcb-58c2-4ec7-8143-e09ed3756d65";
             //         const cleanQuiz = JSON.stringify(q.quiz);
             //         q.quiz = cleanQuiz as any;
             //         const cleanHints = JSON.stringify(q.hints);
             //         q.hints = cleanHints as any;
-            //         const quizy = await client.models.Quiz.create(q);
+            //         const responseQuiz = await quizService.createQuiz(q);
             //         console.log("Creating quiz with data:", q);
-            //         if (quizy) {
+            //         if (responseQuiz) {
             //             // quizIds.push(quiz.id);
-            //             console.log("Quiz created:", quizy);
+            //             console.log("Quiz created:", responseQuiz);
             //         }
             //     }
             // } catch (errors) {
@@ -79,10 +84,10 @@ export const Dashboard = () => {
 
             // --- room create:
             // try {
-            //     const result = await client.models.Room.create({
-            //         creatorId: user.userId || "d06c890c-d061-7063-e269-9e3040f72e67",
+            //     const result = await roomsService.createRoom({
+            //         creatorId: "403cc9cc-d011-7073-5948-fd2fd17a9b28",
             //         name: "עזרה ראשונה",
-            //         mainImage: MainFirstAid ?? null,
+            //         mainImage: "",
             //         colorPalette: "redBlueGray",
             //         imageStyle: "realistic",
             //         fontFamily: "sansSerif",
@@ -93,17 +98,20 @@ export const Dashboard = () => {
             // try {
             //     console.log("updating room...");
             //     const result = await roomsService.updateRoom(
-            //         "3b0c95f3-20ad-486c-9e54-8d16f48db39c",
-            //         { mainImage: "images/3b0c95f3-20ad-486c-9e54-8d16f48db39c/First-aid.jpg" }
+            //         "8ec5bdcb-58c2-4ec7-8143-e09ed3756d65",
+            //         {
+            //             mainImage:
+            //                 "images/8ec5bdcb-58c2-4ec7-8143-e09ed3756d65/first-aid.png",
+            //         }
             //     );
-            //     // creatorId: "d06c890c-d061-7063-e269-9e3040f72e67",
-            //     // name: "עזרה ראשונה",
-            //     // mainImage: "images/3b0c95f3-20ad-486c-9e54-8d16f48db39c/First-aid.jpg",
-            //     // colorPalette: "redBlueGray",
-            //     // imageStyle: "realistic",
-            //     // fontFamily: "sansSerif",
-            //     // description: "משחק חינוכי ללימוד על עזרה ראשונה",
-            //     // });
+            //     //     // creatorId: "d06c890c-d061-7063-e269-9e3040f72e67",
+            //     //     // name: "עזרה ראשונה",
+            //     //     // mainImage: "images/3b0c95f3-20ad-486c-9e54-8d16f48db39c/First-aid.jpg",
+            //     //     // colorPalette: "redBlueGray",
+            //     //     // imageStyle: "realistic",
+            //     //     // fontFamily: "sansSerif",
+            //     //     // description: "משחק חינוכי ללימוד על עזרה ראשונה",
+            //     //     // });
             //     console.log("updating room...", result);
             //     if (result) {
             //         console.log("room updated:", result);
@@ -120,7 +128,7 @@ export const Dashboard = () => {
     // const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     //     if (!e.target.files?.[0]) return;
     //     fileStorage
-    //         .uploadFile(e.target.files[0], "3b0c95f3-20ad-486c-9e54-8d16f48db39c")
+    //         .uploadFile(e.target.files[0], "Room-id: 8ec5bdcb-58c2-4ec7-8143-e09ed3756d65")
     //         .then((res) => {
     //             console.log("File uploaded successfully:", res);
     //         })
@@ -130,7 +138,7 @@ export const Dashboard = () => {
     // };
     return (
         <div className="flex w-screen">
-            <div className="mx-auto flex flex-col items-center text-center lg:justify-center mt-12 bg-gradient-to-b from-[#f5f5f5] to-[#e0e0e0]">
+            <div className="mx-auto flex flex-col items-center text-center lg:justify-center mt-12 bg-linear-to-b from-[#f5f5f5] to-[#e0e0e0]">
                 {location && location.pathname === "/home" && (
                     <section
                         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
