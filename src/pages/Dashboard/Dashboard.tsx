@@ -26,10 +26,11 @@ export const Dashboard = () => {
     const [roomsList, setRoomsList] = useState<Room[] | undefined>(undefined);
     const { userLanguage } = useUserContext();
     const [errorMessage, setErrorMessage] = useState<string>("");
+    const [ableRoomCreation, setAbleRoomCreation] = useState<boolean>(true);
     useEffect(() => {
-        // if (document.exitFullscreen) {
-        //     document.exitFullscreen();
-        // }
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
         const getRooms = async () => {
             // if (!user) return;
             // console.log(quizzes);
@@ -51,7 +52,13 @@ export const Dashboard = () => {
             try {
                 const rooms = await roomsService.listRooms();
                 console.log("Fetched rooms:", rooms);
-                setRoomsList(rooms);
+                if (rooms?.length === 0) {
+                    setErrorMessage("No Escape-Rooms found");
+                    setAbleRoomCreation(true);
+                } else {
+                    setRoomsList(rooms);
+                    setAbleRoomCreation(false);
+                }
             } catch (errors) {
                 console.error("Error fetching rooms:", errors);
                 setErrorMessage("Error fetching Escape-Rooms");
@@ -118,6 +125,7 @@ export const Dashboard = () => {
     }, []);
 
     const createRoom = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        //auto creating a full first-aid room with quizzes from dummy data by uploading the main image:
         try {
             const result = await roomsService.createRoom({
                 creatorId: "403cc9cc-d011-7073-5948-fd2fd17a9b28",
@@ -211,8 +219,11 @@ export const Dashboard = () => {
                         </div>
                     </section>
                 )}
-                uploading file: <input type="file" onChange={(e) => createRoom(e)} />
-                {/* <button onClick={()=>()}>Create Room</button> */}
+                {ableRoomCreation && (
+                    <>
+                        uploading file: <input type="file" onChange={(e) => createRoom(e)} />
+                    </>
+                )}
                 {roomsList && roomsList.length > 0 ? (
                     <div className="grid grid-cols-3 gap-10 px-10 my-12 lg:my-24">
                         {roomsList.map((room) => {
