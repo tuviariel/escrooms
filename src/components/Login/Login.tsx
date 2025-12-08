@@ -69,7 +69,8 @@ export function Login() {
             />
             <div
                 className={`absolute ${userOpen ? "block" : "hidden"} top-8 right-0 mt-2 min-w-48 bg-white border border-gray-300 rounded shadow-lg z-10 opacity-100`}
-                onMouseLeave={() => setUserOpen(false)}>
+                // onMouseLeave={() => setUserOpen(false)}
+            >
                 <Authenticator
                     formFields={{
                         signIn: {

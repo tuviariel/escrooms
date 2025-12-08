@@ -158,7 +158,7 @@ export const Grid = (props: TemplateProps) => {
                                             return (
                                                 <div
                                                     key={i + " " + j}
-                                                    className={`border border-amber-800 h-18 w-14 cursor-pointer text-4xl pt-3`}
+                                                    className={`border border-amber-800 h-16 w-14 cursor-pointer text-4xl pt-3`}
                                                     style={{
                                                         backgroundColor: box.status
                                                             ? colorPalette[

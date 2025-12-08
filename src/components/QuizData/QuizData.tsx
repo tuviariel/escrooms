@@ -215,13 +215,13 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                             className="border-2 border-white"
                                         />
                                         <div
-                                            className="flex flex-col relative p-22"
+                                            className="flex flex-col relative px-22 py-3"
                                             dir={userLanguage === "he" ? "rtl" : "ltr"}
                                             style={{
                                                 backgroundImage: `url(${imageStyle[roomStyle as keyof typeof imageStyle].semiBackground})`,
                                                 backgroundSize: "cover",
                                             }}>
-                                            <div className="text-center mt-2 text-4xl">
+                                            <div className="text-center mt-2 text-3xl">
                                                 {item.title}
                                                 {/* + " " + data.quizData[i]} */}
                                             </div>
@@ -229,7 +229,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                                 {item.desc}
                                             </div>
                                             {/* {colorOrder[i][0] !== "" && ( */}
-                                            <div className="absolute right-1/2 translate-x-1/2 bottom-12 flex gap-6 text-center font-extrabold text-xl whitespace-nowrap text-black">
+                                            <div className="absolute right-1/2 translate-x-1/2 bottom-6 flex gap-6 text-center font-extrabold text-xl whitespace-nowrap text-black">
                                                 <div className="flex flex-col items-center">
                                                     {answerKeys[0]}
                                                     <div
@@ -404,7 +404,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                 className=""
                             />
                             {result && (
-                                <div className="content-center h-8 mt-1 border-amber-200 border-2 bg-white rounded-md p-1">
+                                <div className="content-center h-8 mt-2 border-amber-200 border-2 bg-white rounded-xl px-2">
                                     {result}
                                 </div>
                             )}
