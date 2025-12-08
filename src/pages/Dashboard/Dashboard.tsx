@@ -4,9 +4,9 @@ import type { Schema } from "../../../amplify/data/resource";
 import GameCard from "../../components/GameCard";
 import Loading from "../../assets/images/loading.gif";
 import { get_text } from "../../util/language";
-import { roomsService } from "../../services/service"; // fileStorage, quizService,
+import { fileStorage, quizService, roomsService } from "../../services/service"; //
 import { useUserContext } from "../../contexts/userStyleContext";
-// import { quizzes } from "../../services/dummyRoomData";
+import { quizzes } from "../../services/dummyRoomData";
 export type Room = Schema["Room"]["type"];
 export interface ListObject {
     id: string;
@@ -27,9 +27,9 @@ export const Dashboard = () => {
     const { userLanguage } = useUserContext();
     const [errorMessage, setErrorMessage] = useState<string>("");
     useEffect(() => {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        }
+        // if (document.exitFullscreen) {
+        //     document.exitFullscreen();
+        // }
         const getRooms = async () => {
             // if (!user) return;
             // console.log(quizzes);
@@ -39,17 +39,14 @@ export const Dashboard = () => {
             // console.log("client.models:", client.models);
             // console.log("Quiz model:", client.models?.Quiz);
             // const selectionSet = ["roomId", "name", "description", "mainImage"] as const; //{selectionSet}
-
             //deleting room:
             // const rooms = await roomsService.deleteRoom("ef717bcc-27c9-468d-a41a-d934354a5369");
             // console.log("Fetched rooms:", rooms);
-
             //deleting file from storage:
             // const deleteResult = await fileStorage.deleteFile(
             //     "images/8ec5bdcb-58c2-4ec7-8143-e09ed3756d65/First-aid.jpg"
             // );
             // console.log("File delete result:", deleteResult);
-
             //getting all rooms:
             try {
                 const rooms = await roomsService.listRooms();
@@ -59,10 +56,8 @@ export const Dashboard = () => {
                 console.error("Error fetching rooms:", errors);
                 setErrorMessage("Error fetching Escape-Rooms");
             }
-
             // const quizIds: string[] = [];
             // const quizData = quizzes;
-
             // --- quizzes create:
             // try {
             //     for (const q of quizzes) {
@@ -81,7 +76,6 @@ export const Dashboard = () => {
             // } catch (errors) {
             //     console.error("Error creating quiz:", errors);
             // }
-
             // --- room create:
             // try {
             //     const result = await roomsService.createRoom({
@@ -93,7 +87,6 @@ export const Dashboard = () => {
             //         fontFamily: "sansSerif",
             //         description: "משחק חינוכי ללימוד על עזרה ראשונה",
             //     });
-
             // --- room update:
             // try {
             //     console.log("updating room...");
@@ -119,11 +112,49 @@ export const Dashboard = () => {
             // } catch (error) {
             //     console.error("room updated no:", error);
             // }
-
             // console.log("Game created:", rooms);
         };
         getRooms();
     }, []);
+
+    const createRoom = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        try {
+            const result = await roomsService.createRoom({
+                creatorId: "403cc9cc-d011-7073-5948-fd2fd17a9b28",
+                name: "לעזרה ראשונה",
+                mainImage: "",
+                colorPalette: "redBlueGray",
+                imageStyle: "realistic",
+                fontFamily: "sansSerif",
+                description: "משחק חינוכי ללימוד על עזרה ראשונה",
+            });
+            console.log("Room created:", result);
+            if (result && result.id && e.target.files?.[0]) {
+                const res = await fileStorage.uploadFile(e.target.files[0], result.id);
+                console.log("File uploaded successfully:", res);
+                if (res) {
+                    const result2 = await roomsService.updateRoom(result.id, {
+                        mainImage: `images/${result.id}/${e.target.files[0].name}`,
+                    });
+                    console.log("updated room:", result2);
+                    for (const q of quizzes) {
+                        q.roomId = result.id;
+                        const cleanQuiz = JSON.stringify(q.quiz);
+                        q.quiz = cleanQuiz as any;
+                        const cleanHints = JSON.stringify(q.hints);
+                        q.hints = cleanHints as any;
+                        const responseQuiz = await quizService.createQuiz(q);
+                        console.log("Creating quiz with data:", q);
+                        if (responseQuiz) {
+                            console.log("Quiz created:", responseQuiz);
+                        }
+                    }
+                }
+            }
+        } catch (error) {
+            console.error("Error creating room:", error);
+        }
+    };
     //uploading file- image:
     // const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     //     if (!e.target.files?.[0]) return;
@@ -180,7 +211,8 @@ export const Dashboard = () => {
                         </div>
                     </section>
                 )}
-                {/* uploading file: <input type="file" onChange={(e) => handleUpload(e)} /> */}
+                uploading file: <input type="file" onChange={(e) => createRoom(e)} />
+                {/* <button onClick={()=>()}>Create Room</button> */}
                 {roomsList && roomsList.length > 0 ? (
                     <div className="grid grid-cols-3 gap-10 px-10 my-12 lg:my-24">
                         {roomsList.map((room) => {
