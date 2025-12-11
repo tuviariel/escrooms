@@ -28,6 +28,8 @@ const schema = a.schema({
             fontFamily: a.string(),
             description: a.string(),
             public: a.boolean().default(false),
+            topic: a.string(),
+            type: a.string(),
             quizzes: a.hasMany("Quiz", "roomId"), // A room has many quizzes (FK = roomId)
         })
         .authorization((allow) => [

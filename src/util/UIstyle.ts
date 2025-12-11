@@ -73,6 +73,9 @@ export const fontFamily = {
     monospace: "Courier New, monospace",
     cursive: "Comic Sans MS, cursive",
     fantasy: "Impact, fantasy",
+    inter: "Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial",
+    georgia: "Georgia, serif",
+    trebuchet: "'Trebuchet MS', sans-serif",
 };
 export const firstLowercaseGroup = (str: string) => {
     const match = str.match(/[a-z]+/);

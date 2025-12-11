@@ -41,6 +41,13 @@ export const roomsService = {
         });
         return rooms.data;
     },
+    async getRoomById(roomId: string) {
+        const client = await getClient();
+        const rooms = await client.models.Room.list({
+            filter: { id: { eq: roomId } },
+        });
+        return rooms.data;
+    },
 };
 
 /**

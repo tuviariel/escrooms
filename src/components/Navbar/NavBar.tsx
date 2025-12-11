@@ -15,30 +15,32 @@ export const NavBar = () => {
     console.log("NavBar render", userRedux);
     return (
         <div className="min-h-screen h-screen">
-            <div className="h-12 w-screen border-b-4 border-cyan-700 text-xl text-center flex fixed top-0 left-0 bg-white z-10 opacity-70">
-                {location.pathname !== "/" && location.pathname !== "/home" && (
-                    <div
-                        className="text-2xl font-bold text-cyan-700 cursor-pointer ml-3 mt-1"
-                        onClick={() => {
-                            navigate("/");
-                        }}>
-                        {"<"}
-                    </div>
-                )}
+            <div className="h-12 w-screen border-b-4 border-cyan-700 text-xl text-center flex fixed top-0 left-0 bg-white z-30">
+                {location.pathname !== "/" &&
+                    location.pathname !== "/home" &&
+                    location.pathname !== "/room-builder" && (
+                        <div
+                            className="text-2xl font-bold text-cyan-700 cursor-pointer ml-3 mt-1"
+                            onClick={() => {
+                                navigate("/");
+                            }}>
+                            {"<"}
+                        </div>
+                    )}
                 <img
                     src={Logo}
                     alt="Vaivrach"
                     onClick={() => {
                         location.pathname !== "/" && navigate("/");
                     }}
-                    className="ml-5 h-10 w-10 cursor-pointer"
+                    className="ml-5 h-9 w-12 my-auto cursor-pointer"
                 />
                 {!userRedux?.user?.displayName && (
                     <h2 className="font-semibold text-3xl mx-auto flex underline">
                         {get_text("welcome", userLanguage)}
                     </h2>
                 )}
-                {userRedux?.user?.roomsLeft > 0 && (
+                {userRedux?.user?.roomsLeft > 0 && location.pathname !== "/room-builder" && (
                     <div
                         onClick={() => {
                             navigate("/room-builder");
@@ -47,7 +49,8 @@ export const NavBar = () => {
                         {get_text("new_room", userLanguage)}
                     </div>
                 )}
-                <div className={`relative inline-block mx-5 mt-0.5`}>
+                <div
+                    className={`relative inline-block ${userRedux?.user?.roomsLeft === 0 || location.pathname === "/room-builder" ? "ml-auto" : "ml-5"} mr-5 mt-0.5`}>
                     <Login />
                 </div>
             </div>
