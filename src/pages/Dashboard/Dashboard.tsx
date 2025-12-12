@@ -7,6 +7,7 @@ import { get_text } from "../../util/language";
 import { fileStorage, quizService, roomsService } from "../../services/service"; //
 import { useUserContext } from "../../contexts/userStyleContext";
 import { quizzes } from "../../services/dummyRoomData";
+
 export type Room = Schema["Room"]["type"];
 export interface ListObject {
     id: string;
@@ -26,11 +27,25 @@ export const Dashboard = () => {
     const [roomsList, setRoomsList] = useState<Room[] | undefined>(undefined);
     const { userLanguage } = useUserContext();
     const [errorMessage, setErrorMessage] = useState<string>("");
-    const [ableRoomCreation, setAbleRoomCreation] = useState<boolean>(true);
+    const [ableRoomCreation, setAbleRoomCreation] = useState<boolean>(false);
+
     useEffect(() => {
         if (document.exitFullscreen) {
             document.exitFullscreen();
         }
+        const stored = sessionStorage.getItem("roomsList");
+        if (stored) {
+            try {
+                const parsed = JSON.parse(stored) as Room[];
+                if (parsed && parsed.length > 0) {
+                    setRoomsList(parsed);
+                    return; // use cached rooms and skip fetch
+                }
+            } catch (err) {
+                console.warn("Invalid roomsList in sessionStorage, will refetch.", err);
+            }
+        }
+
         const getRooms = async () => {
             // if (!user) return;
             // console.log(quizzes);
@@ -57,7 +72,11 @@ export const Dashboard = () => {
                     setAbleRoomCreation(true);
                 } else {
                     setRoomsList(rooms);
-                    setAbleRoomCreation(false);
+                    try {
+                        sessionStorage.setItem("roomsList", JSON.stringify(rooms));
+                    } catch (err) {
+                        console.warn("Failed to save rooms to sessionStorage", err);
+                    }
                 }
             } catch (errors) {
                 console.error("Error fetching rooms:", errors);
