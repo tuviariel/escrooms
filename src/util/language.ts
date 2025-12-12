@@ -88,9 +88,10 @@ const appContext: Translations = {
     room_finished: { en: "Room Completed!", he: "החדר הושלם!", ar: "" },
     new_room: { en: "New Room", he: "חדר חדש", ar: "" },
     subscription: { en: "Subscription", he: "מנוי", ar: "" },
-    go_pro: { en: "Go Pro", he: "לעבור לפרו", ar: "" },
+    upgrade: { en: "Upgrade", he: "שדרג", ar: "" },
     edit_profile: { en: "Edit Profile", he: "ערוך פרופיל", ar: "" },
     last_updated: { en: "Last Updated", he: "עודכן לאחרונה", ar: "" },
+    created_at: { en: "Date Created", he: "תאריך יצירה", ar: "" },
     build_room: { en: "Build Your Own Escape Room", he: "בנה את חדר הבריחה שלך", ar: "" },
     build_room_explanation: {
         en: "Use AI to generate unique puzzles and quizzes. Choose from multiple templates and gimmicks to create an unforgettable experience.",
@@ -154,7 +155,10 @@ const appContext: Translations = {
     },
     mandatory_field: { en: "Mandatory Input Field", he: "שדה חובה", ar: "" },
     clear_draft: { en: "Clear Draft", he: "אפס את התשובות", ar: "" },
-
+    my_rooms: { en: "My Escape Rooms", he: "חדרי הבריחה שלי", ar: "" },
+    edit: { en: "Edit", he: "ערוך", ar: "" },
+    share: { en: "Share", he: "שתף", ar: "" },
+    delete: { en: "Delete", he: "מחק", ar: "" },
     example: { en: "", he: "", ar: "" },
 };
 

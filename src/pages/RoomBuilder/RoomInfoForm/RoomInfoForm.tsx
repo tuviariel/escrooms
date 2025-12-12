@@ -138,7 +138,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
     };
 
     return (
-        <div className="max-w-4xl mt-0 mx-auto p-4" dir={userLanguage === "he" ? "rtl" : "ltr"}>
+        <div className="max-w-3xl mt-0 mx-auto py-4" dir={userLanguage === "he" ? "rtl" : "ltr"}>
             {/* Type */}
             <div className="mb-3">
                 <label className="flex text-base mb-1.5">

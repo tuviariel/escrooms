@@ -1,0 +1,111 @@
+import { get_text } from "../../../../util/language";
+import { Edit2, EllipsisVertical, Share2, Trash2 } from "lucide-react";
+import { useUserContext } from "../../../../contexts/userStyleContext";
+import { useEffect, useState } from "react";
+import { fileStorage } from "../../../../services/service";
+import { Room } from "../../../Dashboard/Dashboard";
+
+type RoomCardProps = {
+    room: Room;
+    i: number;
+    sidebarOpen: boolean;
+    openOptions: boolean[];
+    handleOpenDots: (i: number) => void;
+    handleDeleteRoom: (id: string) => void;
+};
+
+export const RoomCard = ({
+    room,
+    i,
+    sidebarOpen,
+    openOptions,
+    handleOpenDots,
+    handleDeleteRoom,
+}: RoomCardProps) => {
+    const [imageUrl, setImageUrl] = useState<string>("");
+    const { userLanguage } = useUserContext();
+
+    useEffect(() => {
+        const getUrl = async (mainImage: string | null) => {
+            if (!mainImage) return "";
+            console.log("Getting URL for image:", mainImage);
+            const url = await fileStorage.getFileUrl(mainImage);
+            console.log("Got URL for image:", url);
+            setImageUrl(url);
+        };
+        getUrl(room.mainImage || "");
+    }, []);
+    return (
+        <div
+            key={room.id}
+            className={`bg-cyan-300 hover:bg-cyan-400 rounded-lg p-3 transition-colors cursor-pointer ${
+                !sidebarOpen && "flex justify-center"
+            }`}
+            onClick={() => console.log("preview room-" + room.id)}
+            onMouseLeave={() => openOptions[i] && handleOpenDots(i)}>
+            {sidebarOpen ? (
+                <>
+                    <div className="flex relative justify-between">
+                        {room.mainImage && (
+                            <img src={imageUrl} alt="image" className="h-11 w-11 mr-1" />
+                        )}
+                        <div className="space-y-2">
+                            <h3 className="font-semibold text-sm truncate">{room.name}</h3>
+                            {/* <p className="text-xs text-gray-300 truncate">{room.description}</p> */}
+                            <p className="text-xs text-gray-400">
+                                {get_text("created_at", userLanguage)}:{" "}
+                                {new Date(room.createdAt).toLocaleDateString()}
+                            </p>
+                        </div>
+                        <div className="px-1">
+                            <EllipsisVertical
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleOpenDots(i);
+                                }}
+                                size={14}
+                            />
+                        </div>
+                        {openOptions[i] && (
+                            <div
+                                onMouseLeave={() => handleOpenDots(i)}
+                                className="absolute right-4 top-1 flex flex-row-reverse gap-2 m-2 bg-white p-1 rounded-lg">
+                                <button
+                                    title={get_text("edit", userLanguage)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        console.log("edit room-" + room.id);
+                                    }}
+                                    className="flex-1 flex items-center justify-center gap-1 hover:bg-blue-700 p-1.5 rounded text-xs transition-colors">
+                                    <Edit2 size={14} />
+                                </button>
+                                <button
+                                    title={get_text("share", userLanguage)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        console.log("share room-" + room.id);
+                                    }}
+                                    className="flex-1 flex items-center justify-center gap-1 hover:bg-blue-700 p-1.5 rounded text-xs transition-colors">
+                                    <Share2 size={14} />
+                                </button>
+                                <button
+                                    title={get_text("delete", userLanguage)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleDeleteRoom(room.id);
+                                    }}
+                                    className="flex-1 flex items-center justify-center gap-1 hover:bg-red-700 p-1.5 rounded text-xs transition-colors">
+                                    <Trash2 size={14} />
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </>
+            ) : (
+                <div className="w-10 h-10 bg-gray-600 rounded flex items-center justify-center">
+                    <span className="text-xs font-bold">{room.name.charAt(0)}</span>
+                </div>
+            )}
+        </div>
+    );
+};

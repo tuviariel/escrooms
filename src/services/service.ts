@@ -10,7 +10,9 @@ export const roomsService = {
     async listRooms() {
         try {
             const client = await getClient();
-            const rooms = await client.models.Room.list();
+            const rooms = await client.models.Room.list({
+                filter: { public: { eq: true } },
+            });
             console.log("Fetched rooms:", rooms);
             return rooms.data;
         } catch (errors) {
@@ -36,6 +38,7 @@ export const roomsService = {
     },
     async getRoomByUser(userId: string) {
         const client = await getClient();
+        console.log(userId);
         const rooms = await client.models.Room.list({
             filter: { creatorId: { eq: userId } },
         });

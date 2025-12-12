@@ -6,6 +6,7 @@ import { userType } from "../Login/Login";
 // import Button from "../Button";
 import { get_text } from "../../util/language";
 import { useUserContext } from "../../contexts/userStyleContext";
+import { Plus } from "lucide-react";
 
 export const NavBar = () => {
     const userRedux: any = useSelector((state: { user: userType }) => state.user);
@@ -14,8 +15,8 @@ export const NavBar = () => {
     const { userLanguage } = useUserContext();
     console.log("NavBar render", userRedux);
     return (
-        <div className="min-h-screen h-screen">
-            <div className="h-12 w-screen border-b-4 border-cyan-700 text-xl text-center flex fixed top-0 left-0 bg-white z-30">
+        <div className="h-screen">
+            <div className="h-12 w-screen border-b-2 border-cyan-700 text-xl text-center flex fixed top-0 left-0 bg-white z-30">
                 {location.pathname !== "/" &&
                     location.pathname !== "/home" &&
                     location.pathname !== "/room-builder" && (
@@ -41,13 +42,14 @@ export const NavBar = () => {
                     </h2>
                 )}
                 {userRedux?.user?.roomsLeft > 0 && location.pathname !== "/room-builder" && (
-                    <div
+                    <button
                         onClick={() => {
                             navigate("/room-builder");
                         }}
-                        className="mr-5 ml-auto bg-cyan-700 text-white hover:bg-cyan-600 inline-block h-8 border-black border-4 rounded-full px-3 text-sm mt-1.5 cursor-pointer items-center justify-center">
+                        className="flex mr-5 ml-auto bg-cyan-700 text-white hover:bg-cyan-600 h-8 border-black border-2 rounded-full px-3 text-sm mt-1.5 cursor-pointer items-center justify-center">
+                        <Plus size={20} />
                         {get_text("new_room", userLanguage)}
-                    </div>
+                    </button>
                 )}
                 <div
                     className={`relative inline-block ${userRedux?.user?.roomsLeft === 0 || location.pathname === "/room-builder" ? "ml-auto" : "ml-5"} mr-5 mt-0.5`}>

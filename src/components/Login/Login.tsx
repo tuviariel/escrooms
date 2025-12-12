@@ -72,27 +72,29 @@ export function Login() {
                 // onMouseLeave={() => setUserOpen(false)}
             >
                 <Authenticator
-                    formFields={{
-                        signIn: {
-                            password: {
-                                placeholder: "הכנס סיסמה",
-                            },
-                        },
-                        signUp: {
-                            password: {
-                                placeholder: "בחר סיסמה",
-                            },
-                            confirm_password: {
-                                placeholder: "אישור סיסמה",
-                            },
-                        },
-                        forgotPassword: {
-                            username: {
-                                label: "מייל",
-                                placeholder: "הכנס את המייל שלך",
-                            },
-                        },
-                    }}>
+                    // formFields={{
+                    //     signIn: {
+                    //         password: {
+                    //             placeholder: "הכנס סיסמה",
+                    //         },
+                    //     },
+                    //     signUp: {
+                    //         password: {
+                    //             placeholder: "בחר סיסמה",
+                    //         },
+                    //         confirm_password: {
+                    //             placeholder: "אישור סיסמה",
+                    //         },
+                    //     },
+                    //     forgotPassword: {
+                    //         username: {
+                    //             label: "מייל",
+                    //             placeholder: "הכנס את המייל שלך",
+                    //         },
+                    //     },
+                    // }}
+                    socialProviders={["google"]}
+                    hideSignUp={true}>
                     {({ signOut, user }) => {
                         console.log("Authenticator render", user);
                         setLocalUser(user);
@@ -101,8 +103,8 @@ export function Login() {
                                 <h6>
                                     {get_text("hello", userLanguage)}{" "}
                                     {userRedux?.user?.["displayName"] ||
-                                        user?.userId ||
-                                        user?.signInDetails?.loginId}
+                                        user?.signInDetails?.loginId ||
+                                        user?.userId}
                                 </h6>
                                 <h6
                                     className={`${location.pathname === "/profile" ? "font-bold text-teal-600" : "font-normal text-gray-600 cursor-pointer hover:text-teal-400"}`}

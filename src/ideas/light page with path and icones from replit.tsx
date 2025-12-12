@@ -1,7 +1,7 @@
 // import React, { useEffect, useState, useRef } from "react";
 // import { useLocation } from "wouter";
 // import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
-// import { Lock, Activity, Sun, CheckCircle2, HeartPulse, Zap, Bandage, Pill, DoorOpen, ArrowRight } from "lucide-react";
+// // import { Lock, Activity, Sun, CheckCircle2, HeartPulse, Zap, Bandage, Pill, DoorOpen, ArrowRight } from "lucide-react";
 // import roomBg from "@assets/generated_images/bright_sunlit_medical_room.png";
 
 // // Quiz Modules Configuration

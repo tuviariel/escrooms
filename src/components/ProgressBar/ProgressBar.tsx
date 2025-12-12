@@ -34,15 +34,15 @@ export const ProgressBar: React.FC<Props> = ({ step, setStep, stepInfo, classNam
 
     return (
         <div
-            className={`w-3/4 py-4 px-2 mx-auto ${className}`}
-            style={{ boxSizing: "border-box" }}
+            className={`w-9/12 py-4 px-2 mx-auto ${className}`}
+            // style={{ boxSizing: "border-box" }}
             dir={userLanguage === "he" ? "rtl" : "ltr"}>
             <div className="relative h-5">
                 {/* Track */}
                 <div className="absolute top-4 left-0 right-0 h-2 rounded-full bg-gray-600" />
                 {/* Progress */}
                 <div
-                    className="absolute top-4 left-0 h-2 rounded-full bg-blue-600"
+                    className="absolute top-4 left-0 h-2 rounded-full bg-cyan-600"
                     style={{
                         width: `${progressPercent}%`,
                         transition: "width 300ms ease",
@@ -56,14 +56,13 @@ export const ProgressBar: React.FC<Props> = ({ step, setStep, stepInfo, classNam
                     return (
                         <button
                             key={i}
-                            className="absolute top-2 -translate-x-1/2 w-6 h-6 rounded-xl border-none p-0 flex items-center justify-center cursor-pointer"
+                            className={`absolute top-2 -translate-x-1/2 w-6 h-6 rounded-xl border-none p-0 flex items-center justify-center cursor-pointer ${isActive ? "bg-cyan-500" : "bg-[#ffffff]"}`}
                             onClick={() => completed && setStep(i)}
                             onKeyDown={(e) => handleKeyDown(e, i)}
                             aria-current={isActive ? "step" : undefined}
                             aria-label={`Go to step ${i + 1}: ${info.name}`}
                             style={{
                                 left: `${leftPercent}%`,
-                                background: isActive ? "#2563eb" : "#ffffff",
                                 boxShadow: completed
                                     ? "0 0 0 4px rgba(37,99,235,0.12)"
                                     : "0 0 0 1px rgba(0,0,0,0.06)",
@@ -72,14 +71,8 @@ export const ProgressBar: React.FC<Props> = ({ step, setStep, stepInfo, classNam
                             }}>
                             {/* small inner dot for visual contrast when completed */}
                             <span
+                                className={`w-2.5 h-2.5 rounded-md ${completed ? "bg-[#ffffff]" : "bg-cyan-600"} block`}
                                 aria-hidden
-                                style={{
-                                    width: 10,
-                                    height: 10,
-                                    borderRadius: 5,
-                                    background: completed ? "#fff" : "#9aa4b2",
-                                    display: "block",
-                                }}
                             />
                         </button>
                     );
