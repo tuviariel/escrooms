@@ -1,7 +1,7 @@
 import { Authenticator } from "@aws-amplify/ui-react";
 import UserIn from "../../assets/images/icons/user.svg";
 import UserOut from "../../assets/images/icons/noUser.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { I18n } from "aws-amplify/utils";
 import { translations } from "@aws-amplify/ui-react";
 import { userService } from "../../services/service";
@@ -11,6 +11,7 @@ import { get_text } from "../../util/language";
 import { useLocation, useNavigate } from "react-router";
 import { useUserContext } from "../../contexts/userStyleContext";
 import Language from "../Language";
+import { Gem, Settings } from "lucide-react";
 
 export interface userType {
     id: string;
@@ -26,7 +27,7 @@ export function Login() {
     const dispatch = useDispatch();
     const setUser = (user: userType | undefined) => {
         dispatch(userActions.updateUserData(user));
-        console.log("setUserRedux", user);
+        // console.log("setUserRedux", user);
     };
     const navigate = useNavigate();
     const location = useLocation();
@@ -34,8 +35,23 @@ export function Login() {
     const [localUser, setLocalUser] = useState<any>(null);
     I18n.putVocabularies(translations);
     I18n.setLanguage("he");
-    // const userRef = useRef<any>(null);
+    const popupRef = useRef<HTMLDivElement | null>(null);
 
+    const handleMouseLeave = (e: React.MouseEvent) => {
+        const related = (e as any).relatedTarget as Node | null;
+
+        // If moving to an element inside the popup, ignore
+        if (related && popupRef.current?.contains(related)) return;
+
+        // Some browser UI (autofill / external UI) set relatedTarget to null.
+        // If relatedTarget is null but an element inside the popup currently has focus,
+        // treat this as "still inside" (user interacting with inputs/autofill).
+        const active = document.activeElement;
+        if (!related && popupRef.current?.contains(active)) return;
+
+        // Otherwise treat as a real leave
+        setUserOpen(false);
+    };
     const { userLanguage } = useUserContext();
     console.log("userLanguage in NavBar:", userLanguage);
     useEffect(() => {
@@ -68,9 +84,7 @@ export function Login() {
                 className="h-9 w-9 m-0.5 cursor-pointer"
             />
             <div
-                className={`absolute ${userOpen ? "block" : "hidden"} top-8 right-0 mt-2 min-w-48 bg-white border border-gray-300 rounded shadow-lg z-10 opacity-100`}
-                // onMouseLeave={() => setUserOpen(false)}
-            >
+                className={`absolute ${userOpen ? "block" : "hidden"} top-8 right-0 mt-2 min-w-48 bg-white border border-gray-300 rounded shadow-lg z-40`}>
                 <Authenticator
                     // formFields={{
                     //     signIn: {
@@ -99,35 +113,37 @@ export function Login() {
                         console.log("Authenticator render", user);
                         setLocalUser(user);
                         return (
-                            <main>
-                                <h6>
+                            <main
+                                className="flex flex-col z-40"
+                                ref={popupRef}
+                                onMouseLeave={handleMouseLeave}>
+                                <div className="border-b border-gray-300">
                                     {get_text("hello", userLanguage)}{" "}
                                     {userRedux?.user?.["displayName"] ||
                                         user?.signInDetails?.loginId ||
                                         user?.userId}
-                                </h6>
-                                <h6
-                                    className={`${location.pathname === "/profile" ? "font-bold text-teal-600" : "font-normal text-gray-600 cursor-pointer hover:text-teal-400"}`}
+                                </div>
+                                <button
+                                    className={`flex items-center gap-2 p-2 rounded mx-auto ${location.pathname === "/profile" ? "font-bold text-cyan-600" : "font-normal text-gray-600 cursor-pointer hover:text-cyan-400 hover:border-cyan-700 hover:border"}`}
                                     onClick={() => {
                                         navigate("/profile");
                                         setUserOpen(false);
                                     }}>
-                                    {get_text("edit_profile", userLanguage)}
-                                </h6>
-                                <Language />
-                                <h6
-                                    className={`${location.pathname === "/subscription" ? "font-bold text-teal-600" : "font-normal text-gray-600 cursor-pointer hover:text-teal-400"}`}
-                                    onClick={() => {
-                                        navigate("/subscription");
-                                        setUserOpen(false);
-                                    }}>
-                                    {get_text(
-                                        userRedux?.user?.["subscription"] !== "start"
-                                            ? "go_pro"
-                                            : "subscription",
-                                        userLanguage
-                                    )}
-                                </h6>
+                                    <Settings size={14} /> {get_text("edit_profile", userLanguage)}
+                                </button>
+                                <div className="flex mx-auto font-normal text-gray-600 cursor-pointer hover:border-cyan-700 hover:border">
+                                    <Language />
+                                </div>
+                                {userRedux?.user?.["subscription"] === "free" && (
+                                    <button
+                                        className={`flex items-center gap-2 p-2 rounded mx-auto ${location.pathname === "/subscription" ? "font-bold text-cyan-600" : "font-normal text-gray-600 cursor-pointer hover:text-cyan-400 hover:border-cyan-700 hover:border"}`}
+                                        onClick={() => {
+                                            navigate("/subscription");
+                                            setUserOpen(false);
+                                        }}>
+                                        <Gem size={14} /> {get_text("upgrade", userLanguage)}
+                                    </button>
+                                )}
                                 <div
                                     className="my-2 border-t border-gray-300 cursor-pointer hover:text-red-400"
                                     onClick={() => {
