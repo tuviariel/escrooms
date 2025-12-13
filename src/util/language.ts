@@ -159,6 +159,8 @@ const appContext: Translations = {
     edit: { en: "Edit", he: "ערוך", ar: "" },
     share: { en: "Share", he: "שתף", ar: "" },
     delete: { en: "Delete", he: "מחק", ar: "" },
+    publish: { en: "Publish (turn to Public)", he: "פרסם (הפוך לציבורי)", ar: "" },
+    unpublish: { en: "UnPublish (turn to Private)", he: "הסתר (הפוך לפרטי)", ar: "" },
     example: { en: "", he: "", ar: "" },
 };
 

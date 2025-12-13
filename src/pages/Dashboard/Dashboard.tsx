@@ -142,7 +142,16 @@ export const Dashboard = () => {
         };
         getRooms();
     }, []);
-
+    const makePublic = async () => {
+        try {
+            const result = await roomsService.updateRoom("4e8c8920-0fae-4872-8d1e-a82b517ea84b", {
+                public: true,
+            });
+            console.log(result);
+        } catch (error) {
+            console.error("room updated no:", error);
+        }
+    };
     const createRoom = async (e: React.ChangeEvent<HTMLInputElement>) => {
         //auto creating a full first-aid room with quizzes from dummy data by uploading the main image:
         try {
@@ -241,6 +250,7 @@ export const Dashboard = () => {
                 {ableRoomCreation && (
                     <>
                         uploading file: <input type="file" onChange={(e) => createRoom(e)} />
+                        <button onClick={() => makePublic()}>public update</button>
                     </>
                 )}
                 {roomsList && roomsList.length > 0 ? (

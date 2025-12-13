@@ -1,9 +1,11 @@
 import { get_text } from "../../../../util/language";
-import { Edit2, EllipsisVertical, Share2, Trash2 } from "lucide-react";
+import { Edit2, EllipsisVertical, Eye, EyeOff, Share2, Trash2 } from "lucide-react";
 import { useUserContext } from "../../../../contexts/userStyleContext";
 import { useEffect, useState } from "react";
 import { fileStorage } from "../../../../services/service";
 import { Room } from "../../../Dashboard/Dashboard";
+import { useSelector } from "react-redux";
+import { userType } from "../../../../components/Login/Login";
 
 type RoomCardProps = {
     room: Room;
@@ -12,6 +14,7 @@ type RoomCardProps = {
     openOptions: boolean[];
     handleOpenDots: (i: number) => void;
     handleDeleteRoom: (id: string) => void;
+    publishRoom: (id: string, i: boolean) => void;
 };
 
 export const RoomCard = ({
@@ -21,9 +24,11 @@ export const RoomCard = ({
     openOptions,
     handleOpenDots,
     handleDeleteRoom,
+    publishRoom,
 }: RoomCardProps) => {
     const [imageUrl, setImageUrl] = useState<string>("");
     const { userLanguage } = useUserContext();
+    const userRedux: any = useSelector((state: { user: userType }) => state.user);
 
     useEffect(() => {
         const getUrl = async (mainImage: string | null) => {
@@ -35,6 +40,7 @@ export const RoomCard = ({
         };
         getUrl(room.mainImage || "");
     }, []);
+
     return (
         <div
             key={room.id}
@@ -79,24 +85,45 @@ export const RoomCard = ({
                                     className="flex-1 flex items-center justify-center gap-1 hover:bg-blue-700 p-1.5 rounded text-xs transition-colors">
                                     <Edit2 size={14} />
                                 </button>
-                                <button
-                                    title={get_text("share", userLanguage)}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        console.log("share room-" + room.id);
-                                    }}
-                                    className="flex-1 flex items-center justify-center gap-1 hover:bg-blue-700 p-1.5 rounded text-xs transition-colors">
-                                    <Share2 size={14} />
-                                </button>
-                                <button
-                                    title={get_text("delete", userLanguage)}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleDeleteRoom(room.id);
-                                    }}
-                                    className="flex-1 flex items-center justify-center gap-1 hover:bg-red-700 p-1.5 rounded text-xs transition-colors">
-                                    <Trash2 size={14} />
-                                </button>
+                                {room.public && (
+                                    <button
+                                        title={get_text("share", userLanguage)}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            console.log("share room-" + room.id);
+                                        }}
+                                        className="flex-1 flex items-center justify-center gap-1 hover:bg-blue-700 p-1.5 rounded text-xs transition-colors">
+                                        <Share2 size={14} />
+                                    </button>
+                                )}
+                                {room.public && (
+                                    <button
+                                        title={
+                                            room.public
+                                                ? get_text("unpublish", userLanguage)
+                                                : get_text("publish", userLanguage)
+                                        }
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            room.public && userRedux.subscription === "free"
+                                                ? console.log("show subscribe dialog")
+                                                : publishRoom(room.id, !room.public || true);
+                                        }}
+                                        className="flex-1 flex items-center justify-center gap-1 hover:bg-green-700 p-1.5 rounded text-xs transition-colors">
+                                        {room.public ? <EyeOff size={14} /> : <Eye size={14} />}
+                                    </button>
+                                )}
+                                {userRedux.subscription !== "free" && (
+                                    <button
+                                        title={get_text("delete", userLanguage)}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDeleteRoom(room.id);
+                                        }}
+                                        className="flex-1 flex items-center justify-center gap-1 hover:bg-red-700 p-1.5 rounded text-xs transition-colors">
+                                        <Trash2 size={14} />
+                                    </button>
+                                )}
                             </div>
                         )}
                     </div>

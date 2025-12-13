@@ -40,6 +40,26 @@ export const CreatorConsole = ({ user, setSidebarOpen, sidebarOpen }: CreatorCon
             return [...prev, (prev[index] = !prev[index])];
         });
     };
+    const publishRoom = async (roomId: string, isPublic: boolean) => {
+        try {
+            const result = await roomsService.updateRoom(roomId, {
+                public: isPublic,
+            });
+            console.log(result);
+            // if(result) {
+            //     setRooms(prev=>{
+            //         return prev.map(room => {
+            //             if(room.id === roomId) {
+            //                 room.public = isPublic
+            //             }
+            //         })
+            //     })
+            // }
+        } catch (error) {
+            console.error("room updated no:", error);
+        }
+    };
+
     return (
         <div
             className={`fixed ${sidebarOpen ? "w-3/12" : "w-1/12"} bg-white transition-all duration-300 flex flex-col border-r h-full border-cyan-600 pt-12`}>
@@ -75,6 +95,7 @@ export const CreatorConsole = ({ user, setSidebarOpen, sidebarOpen }: CreatorCon
                         openOptions={openOptions}
                         handleOpenDots={handleOpenDots}
                         handleDeleteRoom={handleDeleteRoom}
+                        publishRoom={publishRoom}
                     />
                 ))}
             </div>
