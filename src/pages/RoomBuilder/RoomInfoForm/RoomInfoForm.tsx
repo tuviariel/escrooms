@@ -28,7 +28,7 @@ const FONT_OPTIONS = Object.keys(fontFamily);
 
 export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
     const [roomInfo, setRoomInfo] = useState<RoomInfo>({
-        roomType: "",
+        roomType: "educational",
         roomTopic: "",
         roomName: "",
         roomDescription: "",
@@ -54,7 +54,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                     const res = await roomsService.getRoomById(roomId);
                     if (res && res[0]) {
                         const info = {
-                            roomType: res[0].type || "",
+                            roomType: res[0].type || "educational",
                             roomTopic: res[0].topic || "",
                             roomName: res[0].name,
                             roomDescription: res[0].description || "",
@@ -138,9 +138,9 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
     };
 
     return (
-        <div className="max-w-3xl mt-0 mx-auto py-4" dir={userLanguage === "he" ? "rtl" : "ltr"}>
+        <div className="max-w-3xl mt-0 mx-20 py-4" dir={userLanguage === "he" ? "rtl" : "ltr"}>
             {/* Type */}
-            <div className="mb-3">
+            {/* <div className="mb-3">
                 <label className="flex text-base mb-1.5">
                     {get_text("room_type", userLanguage)}{" "}
                     <span
@@ -158,7 +158,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                     <option value="personal">{get_text("personal", userLanguage)}</option>
                     <option value="educational">{get_text("educational", userLanguage)}</option>
                 </select>
-            </div>
+            </div> */}
             {/* Topic */}
             {roomInfo.roomType === "educational" && (
                 <div className="mb-3">
@@ -362,7 +362,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                     onClick={() => {
                         localStorage.removeItem(LOCAL_KEY);
                         setRoomInfo({
-                            roomType: "",
+                            roomType: "educational",
                             roomTopic: "",
                             roomName: "",
                             roomDescription: "",

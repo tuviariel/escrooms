@@ -63,69 +63,76 @@ export const RoomCard = ({
                                 {new Date(room.createdAt).toLocaleDateString()}
                             </p>
                         </div>
-                        <div className="px-1">
-                            <EllipsisVertical
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleOpenDots(i);
-                                }}
-                                size={14}
-                            />
-                        </div>
-                        {openOptions[i] && (
-                            <div
-                                onMouseLeave={() => handleOpenDots(i)}
-                                className="absolute right-4 top-1 flex flex-row-reverse gap-2 m-2 bg-white p-1 rounded-lg">
-                                <button
-                                    title={get_text("edit", userLanguage)}
+                        <div className="flex flex-col justify-between">
+                            <div className="px-1">
+                                <EllipsisVertical
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        console.log("edit room-" + room.id);
+                                        handleOpenDots(i);
                                     }}
-                                    className="flex-1 flex items-center justify-center gap-1 hover:bg-blue-700 p-1.5 rounded text-xs transition-colors">
-                                    <Edit2 size={14} />
-                                </button>
-                                {room.public && (
+                                    size={14}
+                                />
+                            </div>
+                            {openOptions[i] && (
+                                <div
+                                    onMouseLeave={() => handleOpenDots(i)}
+                                    className="absolute right-4 top-1 flex flex-row-reverse gap-2 m-2 bg-white p-1 rounded-lg">
                                     <button
-                                        title={get_text("share", userLanguage)}
+                                        title={get_text("edit", userLanguage)}
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            console.log("share room-" + room.id);
+                                            console.log("edit room-" + room.id);
                                         }}
                                         className="flex-1 flex items-center justify-center gap-1 hover:bg-blue-700 p-1.5 rounded text-xs transition-colors">
-                                        <Share2 size={14} />
+                                        <Edit2 size={14} />
                                     </button>
-                                )}
-                                {room.public && (
-                                    <button
-                                        title={
-                                            room.public
-                                                ? get_text("unpublish", userLanguage)
-                                                : get_text("publish", userLanguage)
-                                        }
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            room.public && userRedux.subscription === "free"
-                                                ? console.log("show subscribe dialog")
-                                                : publishRoom(room.id, !room.public || true);
-                                        }}
-                                        className="flex-1 flex items-center justify-center gap-1 hover:bg-green-700 p-1.5 rounded text-xs transition-colors">
-                                        {room.public ? <EyeOff size={14} /> : <Eye size={14} />}
-                                    </button>
-                                )}
-                                {userRedux.subscription !== "free" && (
-                                    <button
-                                        title={get_text("delete", userLanguage)}
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleDeleteRoom(room.id);
-                                        }}
-                                        className="flex-1 flex items-center justify-center gap-1 hover:bg-red-700 p-1.5 rounded text-xs transition-colors">
-                                        <Trash2 size={14} />
-                                    </button>
-                                )}
+                                    {room.public && (
+                                        <button
+                                            title={get_text("share", userLanguage)}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                console.log("share room-" + room.id);
+                                            }}
+                                            className="flex-1 flex items-center justify-center gap-1 hover:bg-blue-700 p-1.5 rounded text-xs transition-colors">
+                                            <Share2 size={14} />
+                                        </button>
+                                    )}
+                                    {room.public && (
+                                        <button
+                                            title={
+                                                room.public
+                                                    ? get_text("unpublish", userLanguage)
+                                                    : get_text("publish", userLanguage)
+                                            }
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                room.public && userRedux.subscription === "free"
+                                                    ? console.log("show subscribe dialog")
+                                                    : publishRoom(room.id, !room.public || true);
+                                            }}
+                                            className="flex-1 flex items-center justify-center gap-1 hover:bg-green-700 p-1.5 rounded text-xs transition-colors">
+                                            {room.public ? <EyeOff size={14} /> : <Eye size={14} />}
+                                        </button>
+                                    )}
+                                    {userRedux.subscription !== "free" && (
+                                        <button
+                                            title={get_text("delete", userLanguage)}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleDeleteRoom(room.id);
+                                            }}
+                                            className="flex-1 flex items-center justify-center gap-1 hover:bg-red-700 p-1.5 rounded text-xs transition-colors">
+                                            <Trash2 size={14} />
+                                        </button>
+                                    )}
+                                </div>
+                            )}
+                            <div
+                                className="px-1"
+                                title={get_text(room.public ? "public" : "private", userLanguage)}>
+                                {room.public ? <Eye size={14} /> : <EyeOff size={14} />}
                             </div>
-                        )}
+                        </div>
                     </div>
                 </>
             ) : (

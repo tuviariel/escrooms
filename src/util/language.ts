@@ -120,7 +120,11 @@ const appContext: Translations = {
     english: { en: "English", he: "אנגלית", ar: "" },
     hebrew: { en: "Hebrew", he: "עברית", ar: "" },
     // arabic: { en: "Arabic", he: "ערבית", ar: "" },
-    room_info: { en: "Room information", he: "מידע כללי אודות החדר", ar: "" },
+    room_info: {
+        en: "Information for Creating an Escape Room",
+        he: "מידע כללי ליצירת חדר בריחה",
+        ar: "",
+    },
     gen_image: { en: "generate Main Image", he: "יצירת תמונה ראשית", ar: "" },
     create_quizzes: { en: "Create Quizzes", he: "יצירת חידות", ar: "" },
     preview_publish: { en: "Preview & Publish", he: "בדיקה ופרסום", ar: "" },
@@ -161,6 +165,9 @@ const appContext: Translations = {
     delete: { en: "Delete", he: "מחק", ar: "" },
     publish: { en: "Publish (turn to Public)", he: "פרסם (הפוך לציבורי)", ar: "" },
     unpublish: { en: "UnPublish (turn to Private)", he: "הסתר (הפוך לפרטי)", ar: "" },
+    public: { en: "Escape room is Public", he: "החדר בריחה ציבורי", ar: "" },
+    private: { en: "Escape room is Private", he: "החדר בריחה פרטי", ar: "" },
+
     example: { en: "", he: "", ar: "" },
 };
 

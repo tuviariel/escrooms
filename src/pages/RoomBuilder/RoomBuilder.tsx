@@ -1,5 +1,5 @@
 import { JSX, useEffect, useState } from "react";
-import ProgressBar from "../../components/ProgressBar";
+// import ProgressBar from "../../components/ProgressBar";
 import RoomInfoForm from "./RoomInfoForm";
 import GeneratingMainImage from "./GeneratingMainImage";
 import CreateQuizzes from "./CreateQuizzes";
@@ -9,7 +9,7 @@ import { get_text } from "../../util/language";
 import { useUserContext } from "../../contexts/userStyleContext";
 import { userType } from "../../components/Login/Login";
 import { useSelector } from "react-redux";
-import Prev from "../../assets/images/pagePaginate.svg";
+// import Prev from "../../assets/images/pagePaginate.svg";
 type stepInfo = {
     key: number;
     name: string;
@@ -72,9 +72,9 @@ export const RoomBuilder = () => {
                 />
             </div>
             <div
-                className={`${sidebarOpen ? "w-9/12" : "w-11/12"} text-left flex-col mx-auto lg:justify-center"`}
+                className={`${sidebarOpen ? "w-9/12" : "w-11/12"} text-left flex-col lg:justify-center"`}
                 dir={userLanguage === "he" ? "rtl" : "ltr"}>
-                <div
+                {/* <div
                     className={`fixed ${sidebarOpen ? "w-9/12" : "w-11/12"} mt-12 bg-white border-b border-cyan-700 z-30`}>
                     <h5 className="text-center text-3xl">
                         {get_text("creating_room", userLanguage)}
@@ -94,9 +94,9 @@ export const RoomBuilder = () => {
                         />
                         {get_text("prev_page", userLanguage)}
                     </button>
-                )}
+                )} */}
                 <h5
-                    className={`${sidebarOpen ? "w-9/12" : "w-11/12"} text-2xl font-bold mb-4 ${userLanguage === "he" ? "text-right mr-3" : "text-left ml-3"} `}
+                    className={`mt-22 text-center text-2xl font-bold mb-4 ${userLanguage === "he" ? "text-right mr-14" : "text-left ml-14"} `}
                     dir={userLanguage === "he" ? "rtl" : "ltr"}>
                     {stepInfo[step].name}
                 </h5>

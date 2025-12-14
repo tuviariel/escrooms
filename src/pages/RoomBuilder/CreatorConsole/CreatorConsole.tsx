@@ -33,7 +33,8 @@ export const CreatorConsole = ({ user, setSidebarOpen, sidebarOpen }: CreatorCon
         getUserRooms();
     }, []);
     const handleDeleteRoom = (id: string) => {
-        setRooms(rooms.filter((room) => room.id !== id));
+        // setRooms(rooms.filter((room) => room.id !== id));
+        console.log("delete room: " + id);
     };
     const handleOpenDots = (index: number) => {
         setOpenOptions((prev) => {
