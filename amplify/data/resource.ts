@@ -9,11 +9,15 @@ const schema = a.schema({
             avatar: a.string(),
             email: a.string().required(),
             roomsLeft: a.integer().default(1),
-            subscription: a.string().default("free"), // start, pro, etc.
+            subscription: a.string().default("free"), // start, pro, admin, etc.
             rooms: a.hasMany("Room", "creatorId"), // A user can have many rooms (FK = creatorId)
             completed: a.json(), // A user can have many completed rooms (FK = id)
         })
-        .authorization((allow) => [allow.owner(), allow.authenticated().to(["create"])]),
+        .authorization((allow) => [
+            allow.owner(),
+            allow.authenticated().to(["create"]),
+            allow.groups(["admin"]).to(["create", "read", "update", "delete"]),
+        ]),
 
     // ROOM
     Room: a
@@ -34,8 +38,9 @@ const schema = a.schema({
         })
         .authorization((allow) => [
             allow.authenticated().to(["read"]),
+            allow.groups(["admin"]).to(["create", "read", "update", "delete"]),
             allow.guest().to(["read"]),
-            allow.owner(),
+            allow.owner().to(["read", "create", "delete", "update"]),
         ]),
 
     // QUIZ
@@ -54,8 +59,9 @@ const schema = a.schema({
         })
         .authorization((allow) => [
             allow.authenticated().to(["read"]),
+            allow.groups(["admin"]).to(["create", "read", "update", "delete"]),
             allow.guest().to(["read"]),
-            allow.owner(),
+            allow.owner().to(["read", "create", "delete", "update"]),
         ]),
 });
 

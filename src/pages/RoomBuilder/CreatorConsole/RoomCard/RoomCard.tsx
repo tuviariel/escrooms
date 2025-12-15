@@ -97,23 +97,21 @@ export const RoomCard = ({
                                             <Share2 size={14} />
                                         </button>
                                     )}
-                                    {room.public && (
-                                        <button
-                                            title={
-                                                room.public
-                                                    ? get_text("unpublish", userLanguage)
-                                                    : get_text("publish", userLanguage)
-                                            }
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                room.public && userRedux.subscription === "free"
-                                                    ? console.log("show subscribe dialog")
-                                                    : publishRoom(room.id, !room.public || true);
-                                            }}
-                                            className="flex-1 flex items-center justify-center gap-1 hover:bg-green-700 p-1.5 rounded text-xs transition-colors">
-                                            {room.public ? <EyeOff size={14} /> : <Eye size={14} />}
-                                        </button>
-                                    )}
+                                    <button
+                                        title={
+                                            room.public
+                                                ? get_text("unpublish", userLanguage)
+                                                : get_text("publish", userLanguage)
+                                        }
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            room.public && userRedux.subscription === "free"
+                                                ? console.log("show subscribe dialog")
+                                                : publishRoom(room.id, !room.public || true);
+                                        }}
+                                        className="flex-1 flex items-center justify-center gap-1 hover:bg-green-700 p-1.5 rounded text-xs transition-colors">
+                                        {room.public ? <EyeOff size={14} /> : <Eye size={14} />}
+                                    </button>
                                     {userRedux.subscription !== "free" && (
                                         <button
                                             title={get_text("delete", userLanguage)}

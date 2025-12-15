@@ -15,7 +15,7 @@ export const GameCard = (props: any) => {
     const navigate = useNavigate();
     const [URL, setURL] = useState<any | null>(null);
     const openRoom = async (id: string) => {
-        console.log(id);
+        console.log(id, data);
         const quizzes = await data.quizzes();
         console.log("Fetched quizzes for room:", quizzes);
         const cleanQuizzes = quizzes.data.map((quiz: any) => {

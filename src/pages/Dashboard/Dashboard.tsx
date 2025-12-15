@@ -203,6 +203,21 @@ export const Dashboard = () => {
     //             console.error("Error uploading file:", err);
     //         });
     // };
+
+    // const recreateQuizzes = async (id: string) => {
+    //     for (const q of quizzes) {
+    //         q.roomId = id;
+    //         const cleanQuiz = JSON.stringify(q.quiz);
+    //         q.quiz = cleanQuiz as any;
+    //         const cleanHints = JSON.stringify(q.hints);
+    //         q.hints = cleanHints as any;
+    //         const responseQuiz = await quizService.createQuiz(q);
+    //         console.log("Creating quiz with data:", q);
+    //         if (responseQuiz) {
+    //             console.log("Quiz created:", responseQuiz);
+    //         }
+    //     }
+    // };
     return (
         <div className="flex w-screen">
             <div className="mx-auto flex flex-col items-center text-center lg:justify-center mt-12 bg-linear-to-b from-[#f5f5f5] to-[#e0e0e0]">
@@ -242,6 +257,8 @@ export const Dashboard = () => {
                                     <p className="text-purple-100 text-sm">
                                         {get_text("ai_powered_explanation", userLanguage)}
                                     </p>
+                                    {/* uploading file:{" "}
+                                    <input type="file" onChange={(e) => createRoom(e)} /> */}
                                 </div>
                             </div>
                         </div>
@@ -256,7 +273,13 @@ export const Dashboard = () => {
                 {roomsList && roomsList.length > 0 ? (
                     <div className="grid grid-cols-3 gap-10 px-10 my-12 lg:my-24">
                         {roomsList.map((room) => {
-                            return <GameCard key={room.id} data={room} />;
+                            return (
+                                <GameCard
+                                    key={room.id}
+                                    data={room}
+                                    // recreateQuizzes={recreateQuizzes}
+                                />
+                            );
                         })}
                     </div>
                 ) : errorMessage ? (
