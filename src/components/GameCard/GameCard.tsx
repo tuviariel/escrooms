@@ -29,7 +29,7 @@ export const GameCard = (props: any) => {
             className={`relative border border-black bg-white rounded-2xl h-72 w-46 cursor-pointer overflow-hidden flex flex-col hover:shadow-2xl hover:scale-105 transition-transform duration-200`}
             title={`${get_text("enter_room", userLanguage)} "${data.name}"`}
             onClick={() => {
-                navigate(data.id);
+                navigate("/room/" + data.id);
             }}>
             {data.mainImage && (
                 <img src={URL} alt="game image" className={`h-36 w-full object-cover`} />

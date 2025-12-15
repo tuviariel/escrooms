@@ -167,6 +167,9 @@ const appContext: Translations = {
     unpublish: { en: "UnPublish (turn to Private)", he: "הסתר (הפוך לפרטי)", ar: "" },
     public: { en: "Escape room is Public", he: "החדר בריחה ציבורי", ar: "" },
     private: { en: "Escape room is Private", he: "החדר בריחה פרטי", ar: "" },
+    room_progress: { en: "Escape room Progress", he: "התקדמות בחדר בריחה", ar: "" },
+    current_objective: { en: "Current Objective:", he: "משימה נוכחית:", ar: "" },
+    find_quiz_num: { en: "Find Quiz #", he: "מצא חידה #", ar: "" },
 
     example: { en: "", he: "", ar: "" },
 };
