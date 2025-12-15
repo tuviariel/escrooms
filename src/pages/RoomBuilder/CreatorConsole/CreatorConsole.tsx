@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Plus, Settings } from "lucide-react";
-import { Room } from "../../Dashboard/Dashboard";
+import { RoomType } from "../../Dashboard/Dashboard";
 import { userType } from "../../../components/Login/Login";
 import { roomsService } from "../../../services/service";
 import { get_text } from "../../../util/language";
@@ -14,7 +14,7 @@ type CreatorConsoleProps = {
 };
 
 export const CreatorConsole = ({ user, setSidebarOpen, sidebarOpen }: CreatorConsoleProps) => {
-    const [rooms, setRooms] = useState<Room[]>([]);
+    const [rooms, setRooms] = useState<RoomType[]>([]);
     const [openOptions, setOpenOptions] = useState<boolean[]>([]);
     const { userLanguage } = useUserContext();
     useEffect(() => {

@@ -8,27 +8,11 @@ import { useEffect, useState } from "react";
 import { useUserContext } from "../../contexts/userStyleContext";
 
 export const GameCard = (props: any) => {
-    // console.log("GameCard props:", props);
     const { data } = props;
     const { userLanguage } = useUserContext();
     console.log("GameCard props:", data);
     const navigate = useNavigate();
     const [URL, setURL] = useState<any | null>(null);
-    const openRoom = async (id: string) => {
-        console.log(id, data);
-        const quizzes = await data.quizzes();
-        console.log("Fetched quizzes for room:", quizzes);
-        const cleanQuizzes = quizzes.data.map((quiz: any) => {
-            return { ...quiz, room: "" };
-        });
-        const roomWithQuizzes = await {
-            ...data,
-            quizzes: cleanQuizzes,
-            creator: [], //await data.creator(),
-        };
-        console.log("Navigating to room with data:", roomWithQuizzes);
-        navigate("/room/" + id, { state: { roomData: roomWithQuizzes } });
-    };
     useEffect(() => {
         const getUrl = async (mainImage: string | null) => {
             if (!mainImage) return "";
@@ -40,14 +24,12 @@ export const GameCard = (props: any) => {
         getUrl(data.mainImage);
     }, []);
 
-    // console.log("GameCard render:", data);
-
     return (
         <div
             className={`relative border border-black bg-white rounded-2xl h-72 w-46 cursor-pointer overflow-hidden flex flex-col hover:shadow-2xl hover:scale-105 transition-transform duration-200`}
             title={`${get_text("enter_room", userLanguage)} "${data.name}"`}
             onClick={() => {
-                openRoom(data.id);
+                navigate(data.id);
             }}>
             {data.mainImage && (
                 <img src={URL} alt="game image" className={`h-36 w-full object-cover`} />

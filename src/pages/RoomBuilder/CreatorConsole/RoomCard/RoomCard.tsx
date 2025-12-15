@@ -3,12 +3,12 @@ import { Edit2, EllipsisVertical, Eye, EyeOff, Share2, Trash2 } from "lucide-rea
 import { useUserContext } from "../../../../contexts/userStyleContext";
 import { useEffect, useState } from "react";
 import { fileStorage } from "../../../../services/service";
-import { Room } from "../../../Dashboard/Dashboard";
+import { RoomType } from "../../../Dashboard/Dashboard";
 import { useSelector } from "react-redux";
 import { userType } from "../../../../components/Login/Login";
 
 type RoomCardProps = {
-    room: Room;
+    room: RoomType;
     i: number;
     sidebarOpen: boolean;
     openOptions: boolean[];

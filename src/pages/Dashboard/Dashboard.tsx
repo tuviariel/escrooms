@@ -8,7 +8,7 @@ import { fileStorage, quizService, roomsService } from "../../services/service";
 import { useUserContext } from "../../contexts/userStyleContext";
 import { quizzes } from "../../services/dummyRoomData";
 
-export type Room = Schema["Room"]["type"];
+export type RoomType = Schema["Room"]["type"];
 export interface ListObject {
     id: string;
     name: string;
@@ -24,7 +24,7 @@ export interface ListObject {
 export const Dashboard = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const [roomsList, setRoomsList] = useState<Room[] | undefined>(undefined);
+    const [roomsList, setRoomsList] = useState<ListObject[] | undefined>(undefined);
     const { userLanguage } = useUserContext();
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [ableRoomCreation, setAbleRoomCreation] = useState<boolean>(false);
@@ -36,7 +36,7 @@ export const Dashboard = () => {
         const stored = sessionStorage.getItem("roomsList");
         if (stored) {
             try {
-                const parsed = JSON.parse(stored) as Room[];
+                const parsed = JSON.parse(stored) as ListObject[];
                 if (parsed && parsed.length > 0) {
                     setRoomsList(parsed);
                     return; // use cached rooms and skip fetch

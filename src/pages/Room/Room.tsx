@@ -9,10 +9,11 @@ import Button from "../../components/Button";
 import { useSelector, useDispatch } from "react-redux";
 import { quizNumberActions } from "../../reduxStor/quizNumber";
 import QuizTemplate from "../QuizTemplate";
-import { fileStorage } from "../../services/service";
+import { fileStorage, roomsService } from "../../services/service";
 import { quizListActions } from "../../reduxStor/quizList";
 import finishedRoomGif from "../../assets/images/finishedRoom.gif";
 import { useUserContext } from "../../contexts/userStyleContext";
+import { RoomType } from "../Dashboard/Dashboard";
 
 export interface quizDataProps {
     data: {
@@ -68,51 +69,60 @@ export const Room = () => {
     const { userLanguage } = useUserContext();
     const [checkLeave, setCheckLeave] = useState(false);
     const [completed, setCompleted] = useState(false);
+    const [roomData, setRoomData] = useState<RoomType>();
+    const [roomQuizzes, setRoomQuizzes] = useState<any[]>([]);
     const [URLMainImage, setURLMainImage] = useState<string>("");
-    // const [quizList, setQuizList] = useState<{ id: number; completed: boolean }[]>([]);
     const navigate = useNavigate();
     const location = useLocation();
-    const data = location.state?.roomData;
-    console.log("Room data:", data);
-    useEffect(() => {
-        if (!data || !data.quizzes) return;
-        const list = data.quizzes.map((quiz: any, index: number) => {
-            return {
-                id: index,
-                completed: false,
-                name: quiz.name,
-                answer: quiz.answer,
-                image: quiz.quizImg,
-            };
-        });
-        console.log("Initializing quiz list:", list);
-        setQuizList(list);
-    }, [data]);
+    const { setRoomColor, setRoomStyle, setRoomFont, roomColor } = useRoomContext();
 
-    const roomId = location.pathname.split("/").pop();
+    const id = location.pathname.split("/").pop();
+    console.log("Room id:", id);
+    useEffect(() => {
+        const setRoom = async () => {
+            if (!id) return;
+            const roomDataFromServer = await roomsService.getRoomById(id);
+            // console.log(roomDataFromServer);
+            setRoomData(roomDataFromServer[0]);
+            const quizzes = await roomDataFromServer[0].quizzes();
+            console.log("Fetched quizzes for room:", quizzes);
+            const cleanQuizzes = quizzes.data.map((quiz: any) => {
+                return { ...quiz, room: "" };
+            });
+            setRoomQuizzes(cleanQuizzes);
+            const list = cleanQuizzes.map((quiz: any, index: number) => {
+                return {
+                    id: index,
+                    completed: false,
+                    name: quiz.name,
+                    answer: quiz.answer,
+                    image: quiz.quizImg,
+                };
+            });
+            console.log("Initializing quiz list:", list);
+            setQuizList(list);
+            setRoomStyle(roomDataFromServer[0].imageStyle || "");
+            setRoomColor(roomDataFromServer[0].colorPalette || "");
+            setRoomFont(roomDataFromServer[0].fontFamily || "");
+        };
+        setRoom();
+    }, []);
+
     const [orientation, setOrientation] = useState(
         window.matchMedia("(orientation: portrait)").matches ? "portrait" : "landscape"
     );
-    const { setRoomColor, setRoomStyle, setRoomFont, roomColor } = useRoomContext();
     useEffect(() => {
-        if (roomId !== data.id) {
-            navigate("/");
-        } else {
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen();
-            }
-            window.matchMedia("(orientation: portrait)").addEventListener("change", (event) => {
-                if (event.matches) {
-                    setOrientation("portrait");
-                } else {
-                    setOrientation("landscape");
-                }
-            });
-            console.log("orientation:", screen.orientation.type);
-            setRoomStyle(data.imageStyle);
-            setRoomColor(data.colorPalette);
-            setRoomFont(data.fontFamily);
+        if (document.documentElement.requestFullscreen) {
+            document.documentElement.requestFullscreen();
         }
+        window.matchMedia("(orientation: portrait)").addEventListener("change", (event) => {
+            if (event.matches) {
+                setOrientation("portrait");
+            } else {
+                setOrientation("landscape");
+            }
+        });
+        console.log("orientation:", screen.orientation.type);
     }, [screen.orientation.type]);
     useEffect(() => {
         if (quizList && quizList.length > 0) {
@@ -123,13 +133,14 @@ export const Room = () => {
         }
     }, [quizList]);
     useEffect(() => {
+        if (!roomData) return;
         const getUrl = async (mainImage: string | null) => {
             if (!mainImage) return;
             const url = await fileStorage.getFileUrl(mainImage);
             setURLMainImage(url);
         };
-        getUrl(data.mainImage);
-    }, []);
+        getUrl(roomData.mainImage || "");
+    }, [roomData]);
     console.log(quizList);
     return (
         <>
@@ -146,7 +157,7 @@ export const Room = () => {
                         className="cursor-pointer h-8 w-8 z-20 md:h-12 md:w-12 fixed left-3 top-3 p-1 rounded-full bg-gray-100 border-2 hover:border-amber-700"
                         onClick={() => setQuizNumber(-1)}
                     />
-                    <QuizTemplate data={data.quizzes[quizNumber]} />
+                    <QuizTemplate data={roomQuizzes[quizNumber]} />
                 </>
             ) : (
                 <>

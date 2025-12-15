@@ -12,6 +12,7 @@ export const roomsService = {
             const client = await getClient();
             const rooms = await client.models.Room.list({
                 filter: { public: { eq: true } },
+                selectionSet: ["id", "name", "description", "mainImage"],
             });
             console.log("Fetched rooms:", rooms);
             return rooms.data;
