@@ -5,9 +5,11 @@ import { colorPalette, fontFamily, imageStyle } from "../../../util/UIstyle";
 import { roomsService } from "../../../services/service";
 import { useSelector } from "react-redux";
 import { userType } from "../../../components/Login/Login";
+import { fieldsOfStudy } from "../../../util/utils";
 
 type RoomInfo = {
     roomType: string;
+    roomField: string;
     roomTopic: string;
     roomName: string;
     roomDescription: string;
@@ -29,6 +31,7 @@ const FONT_OPTIONS = Object.keys(fontFamily);
 export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
     const [roomInfo, setRoomInfo] = useState<RoomInfo>({
         roomType: "educational",
+        roomField: "",
         roomTopic: "",
         roomName: "",
         roomDescription: "",
@@ -139,7 +142,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
 
     return (
         <div className="max-w-3xl mt-0 mx-20 py-4" dir={userLanguage === "he" ? "rtl" : "ltr"}>
-            {/* Type */}
+            {/* Type- for adding options like non generated rooms for private events */}
             {/* <div className="mb-3">
                 <label className="flex text-base mb-1.5">
                     {get_text("room_type", userLanguage)}{" "}
@@ -159,6 +162,27 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                     <option value="educational">{get_text("educational", userLanguage)}</option>
                 </select>
             </div> */}
+            {/* Field */}
+            <div className="mb-3">
+                <label className="flex text-base mb-1.5">
+                    {get_text("room_field", userLanguage)}{" "}
+                    <span
+                        className="text-red-500 cursor-pointer"
+                        title={get_text("mandatory_field", userLanguage)}>
+                        *
+                    </span>
+                </label>
+                <select
+                    // disabled={roomInfo.mainImage}
+                    value={roomInfo.roomField}
+                    onChange={(e) => update({ roomField: e.target.value })}
+                    className="w-full p-2 rounded-lg border border-[#e5e7eb]">
+                    <option>{get_text("choose_room_field", userLanguage)}</option>
+                    {fieldsOfStudy.map((field) => {
+                        return <>{field}</>; //<option value={field.en}>{field[userLanguage]}</option>;
+                    })}
+                </select>
+            </div>
             {/* Topic */}
             {roomInfo.roomType === "educational" && (
                 <div className="mb-3">
@@ -363,6 +387,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                         localStorage.removeItem(LOCAL_KEY);
                         setRoomInfo({
                             roomType: "educational",
+                            roomField: "",
                             roomTopic: "",
                             roomName: "",
                             roomDescription: "",

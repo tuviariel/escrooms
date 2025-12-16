@@ -1,7 +1,7 @@
 interface TranslationEntry {
     [key: string]: string;
 }
-interface Translations {
+export interface Translations {
     [key: string]: TranslationEntry;
 }
 

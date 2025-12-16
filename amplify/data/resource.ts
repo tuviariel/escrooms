@@ -33,6 +33,7 @@ const schema = a.schema({
             description: a.string(),
             public: a.boolean().default(false),
             topic: a.string(),
+            field: a.string(),
             type: a.string(),
             quizzes: a.hasMany("Quiz", "roomId"), // A room has many quizzes (FK = roomId)
         })
