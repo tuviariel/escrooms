@@ -25,9 +25,6 @@ export interface TemplateProps {
 
 export const QuizTemplate = (props: quizDataP) => {
     let { data } = props;
-    const hints = JSON.parse(data.hints);
-    const quiz = JSON.parse(data.quiz);
-    data = { ...data, hints: hints.hints, quiz: quiz.questions };
     const [result, setResult] = useState("");
     // const [open, setOpen] = useState(false);
     const [openLock, setOpenLock] = useState(false);
@@ -80,7 +77,7 @@ export const QuizTemplate = (props: quizDataP) => {
     // console.log("QuizTemplate hints:", data.hints);
     // console.log("QuizTemplate quiz:", data.quiz);
     return (
-        <div className="flex flex-col relative h-full min-h-80">
+        <div className="flex flex-col relative h-screen w-screen overflow-auto">
             {types[data.type]}
             {showText ? (
                 <div className="fixed bottom-10 md:bottom-20 left-1/2 transform -translate-x-1/2 max-w-screen rounded-4xl m-2 text-center flex items-center justify-center px-4">

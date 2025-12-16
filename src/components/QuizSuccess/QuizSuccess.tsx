@@ -12,11 +12,9 @@ import { quizNumberActions } from "../../reduxStor/quizNumber";
 import { quizListActions } from "../../reduxStor/quizList";
 import { imageStyle } from "../../util/UIstyle";
 import { useRoomContext } from "../../contexts/roomStyleContext";
-
 import { useUserContext } from "../../contexts/userStyleContext";
-// import { quizData } from "../../pages/Room/Room";
+
 interface quizSuccessProps {
-    // setOpenLock: () => void;
     data: string;
 }
 
@@ -30,10 +28,6 @@ export const QuizSuccess = (props: quizSuccessProps) => {
     const setQuizNumber = (number: number) => {
         dispatch(quizNumberActions.changeQuizNumber(number));
     };
-    // const quizL = useSelector(
-    //     (state: { quizList: { quizList: { id: number; completed: boolean }[] } }) => state.quizList
-    // );
-    // const quizList = quizL?.quizList;
     const setQuizList = (number: number) => {
         dispatch(quizListActions.changeQuizList(number));
     };
@@ -87,10 +81,12 @@ export const QuizSuccess = (props: quizSuccessProps) => {
         // console.log(count, i);
         if (count === i) {
             setOpen(true);
-            setQuizList(quizNumber);
             setTimeout(() => {
                 setQuizNumber(-1);
-            }, 3000);
+                setTimeout(() => {
+                    setQuizList(quizNumber);
+                }, 1000);
+            }, 5000);
         } else {
             setMessage(
                 (count === 0
@@ -147,11 +143,15 @@ export const QuizSuccess = (props: quizSuccessProps) => {
                     })}
                 </div>
                 <div className="flex">
-                    {/* <Button label={get_text("close", userLanguage)} onClick={setOpenLock} /> */}
                     {open ? (
                         <Button
                             label={get_text("close_quiz", userLanguage)}
-                            onClick={() => setQuizNumber(-1)}
+                            onClick={() => {
+                                setQuizNumber(-1);
+                                setTimeout(() => {
+                                    setQuizList(quizNumber);
+                                }, 1000);
+                            }}
                         />
                     ) : (
                         <Button

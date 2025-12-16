@@ -38,13 +38,14 @@ export const OrderBorder = (props: TemplateProps) => {
             borders: string;
         }[]
     >([]);
-    // const [disabled, setDisabled] = useState(false);
+    const [disabled, setDisabled] = useState(false);
+    const [finishedStart, setFinishedStart] = useState(false);
     const { roomStyle } = useRoomContext();
     useEffect(() => {
         const setList = () => {
             setCards(() => {
                 let answer = "";
-                if (/\d/.test(data.answer[0])) {
+                if (/\d/.test(data.answer[0]) && data.answer.length % 2 === 0) {
                     //checking if answer is a number-
                     answer = data.answer;
                 } else {
@@ -66,23 +67,28 @@ export const OrderBorder = (props: TemplateProps) => {
                 // console.log(create);
                 return create;
             });
+            setFinishedStart(true);
         };
         setList();
     }, []);
-
-    const checkAnswer = () => {
+    useEffect(() => {
+        finishedStart && checkAnswer(false);
+    }, [cards]);
+    const checkAnswer = (buttonClicked: boolean) => {
         let finished = true;
         for (let i = 0; i < cards.length; i++) {
             const card = cards[i];
             if (card.id !== i) {
                 finished = false;
-                setResult(get_text("wrong", userLanguage));
+                console.log("at finished: ", finished);
+                buttonClicked && setResult(get_text("wrong", userLanguage));
                 break;
             }
         }
         if (finished) {
-            setResult(get_text("success", userLanguage));
-            // setDisabled(true);
+            console.log("at finished: ", finished);
+            buttonClicked && setResult(get_text("success", userLanguage));
+            setDisabled(true);
         }
     };
 
@@ -110,6 +116,7 @@ export const OrderBorder = (props: TemplateProps) => {
               );
 
     const handleDragEnd = (event: any) => {
+        if (disabled) return;
         const { active, over } = event;
         result === get_text("wrong", userLanguage) && setResult("");
         if (active.id !== over?.id) {
@@ -118,6 +125,9 @@ export const OrderBorder = (props: TemplateProps) => {
             const newCards = arrayMove(cards, oldIndex, newIndex);
             setCards(newCards);
             // onOrderChange?.(newCards);
+            // setTimeout(() => {
+            //     checkAnswer(false);
+            // }, 3000);
         }
     };
 
@@ -138,7 +148,7 @@ export const OrderBorder = (props: TemplateProps) => {
                     strategy={verticalListSortingStrategy}>
                     <div className="flex flex-col items-center">
                         {cards.map((card, i) => (
-                            <SortableCard key={card.id} {...card} index={i} result={result} />
+                            <SortableCard key={card.id} {...card} index={i} disabled={disabled} />
                         ))}
                     </div>
                 </SortableContext>
@@ -153,7 +163,7 @@ export const OrderBorder = (props: TemplateProps) => {
                     onClick={() =>
                         result === get_text("success", userLanguage)
                             ? setOpenLock(true)
-                            : checkAnswer()
+                            : checkAnswer(true)
                     }
                     className="flex w-auto mx-10 min-w-fit "
                 />

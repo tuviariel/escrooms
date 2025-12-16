@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router";
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useRoomContext } from "../../contexts/roomStyleContext";
 import { colorPalette } from "../../util/UIstyle";
 import backArrow from "../../assets/images/backArrow.svg";
@@ -79,11 +79,13 @@ export const Room = () => {
     const [roomData, setRoomData] = useState<RoomType>();
     const [roomQuizzes, setRoomQuizzes] = useState<any[]>([]);
     const [URLMainImage, setURLMainImage] = useState<string>("");
-    const [activeModuleId, setActiveModuleId] = useState(1); // Simulate progress
+    const [activeModuleId, setActiveModuleId] = useState<number>(1);
 
     useEffect(() => {
-        quizNumber > activeModuleId && setActiveModuleId(quizNumber);
-    }, [quizNumber]);
+        quizList.map((quiz) => {
+            quiz.status === "active" && setActiveModuleId(quiz.id);
+        });
+    }, [quizList]);
     const navigate = useNavigate();
     const location = useLocation();
     const { setRoomColor, setRoomStyle, setRoomFont, roomColor } = useRoomContext();
@@ -140,10 +142,17 @@ export const Room = () => {
             const quizzes = await roomDataFromServer[0].quizzes();
             console.log("Fetched quizzes for room:", quizzes);
             const cleanQuizzes = quizzes.data.map((quiz: any) => {
-                return { ...quiz, room: "" };
+                const updatedHints = parseQuizData(quiz.hints);
+                const updatedQuiz = parseQuizData(quiz.quiz);
+                return {
+                    ...quiz,
+                    hints: updatedHints.hints,
+                    quiz: updatedQuiz.questions,
+                    room: "",
+                };
             });
             setRoomQuizzes(cleanQuizzes);
-            console.log();
+            console.log(cleanQuizzes);
             const list = cleanQuizzes.map((quiz: any, i: number) => {
                 return {
                     id: i + 1,
@@ -160,6 +169,20 @@ export const Room = () => {
             setRoomStyle(roomDataFromServer[0].imageStyle || "");
             setRoomColor(roomDataFromServer[0].colorPalette || "");
             setRoomFont(roomDataFromServer[0].fontFamily || "");
+        };
+        const parseQuizData = (d: any) => {
+            if (typeof d === "object" && d !== null) {
+                console.log("1");
+                return d;
+            }
+            const parsed1 = JSON.parse(d);
+            if (typeof parsed1 === "object" && parsed1 !== null) {
+                console.log(parsed1);
+                return parsed1;
+            } else {
+                console.log("3");
+                return JSON.parse(parsed1);
+            }
         };
         setRoom();
     }, []);
@@ -197,27 +220,29 @@ export const Room = () => {
         };
         getUrl(roomData.mainImage || "");
     }, [roomData]);
-    console.log(quizList);
+    console.log(roomQuizzes);
     return (
         <>
             {window.innerWidth < 600 || orientation === "portrait" ? (
                 <div className="h-screen w-screen bg-gray-900 text-amber-50 text-center flex flex-col justify-center items-center p-20">
                     {get_text("phone_on_side", userLanguage)}
                 </div>
-            ) : quizNumber > -1 ? (
-                <>
-                    <img
-                        src={backArrow}
-                        alt={get_text("back_to_main", userLanguage)}
-                        title={get_text("back_to_main", userLanguage)}
-                        className="cursor-pointer h-8 w-8 z-20 md:h-12 md:w-12 fixed left-3 top-3 p-1 rounded-full bg-gray-100 border-2 hover:border-amber-700"
-                        onClick={() => setQuizNumber(-1)}
-                    />
-                    <QuizTemplate data={roomQuizzes[quizNumber]} />
-                </>
             ) : (
                 <>
                     <div className="h-screen w-screen relative flex justify-center items-center overflow-hidden lg:pt-12 lg:pb-12 bg-gray-900 perspective-1000">
+                        {quizNumber > -1 && (
+                            <div className="z-60 w-screen">
+                                <img
+                                    src={backArrow}
+                                    alt={get_text("back_to_main", userLanguage)}
+                                    title={get_text("back_to_main", userLanguage)}
+                                    className="cursor-pointer h-8 w-8 z-70 md:h-12 md:w-12 fixed left-3 top-3 p-1 rounded-full bg-gray-100 border-2 hover:border-amber-700"
+                                    onClick={() => setQuizNumber(-1)}
+                                />
+                                <QuizTemplate data={roomQuizzes[quizNumber]} />
+                            </div>
+                        )}
+
                         <div className="h-full w-full relative bg-gray-900 flex justify-center items-center">
                             <motion.div
                                 className="relative w-full h-full"
@@ -228,7 +253,7 @@ export const Room = () => {
                                 }}>
                                 {/* Layer 1: Background */}
                                 <motion.div
-                                    className="absolute inset-[-10%] w-[120%] h-[120%] bg-cover bg-center z-0"
+                                    className={`absolute inset-[-10%] w-[120%] h-[120%] bg-cover bg-center z-0`}
                                     style={{
                                         backgroundImage: `url(${URLMainImage})`,
                                         x: bgX,
@@ -275,8 +300,8 @@ export const Room = () => {
                                                 isCompleted={module.id < activeModuleId}
                                                 total={quizList.length}
                                                 onClick={() =>
-                                                    quizList[index].status === "active" &&
-                                                    setQuizNumber(quizList[index].id)
+                                                    // quizList[index].status === "active" &&
+                                                    setQuizNumber(quizList[index].id - 1)
                                                 }
                                                 delay={index * 0.2}
                                                 roomColor={roomColor}
@@ -307,17 +332,13 @@ export const Room = () => {
                                     roomColor={roomColor}
                                 />
                             </motion.div>
-                            {/* <img
-                                src={URLMainImage}
-                                alt="mainImage"
-                                className="h-full w-auto object-cover"
-                            />
+                            {/*
                             {completed && (
                                 <>
                                     <img
                                         src={finishedRoomGif}
                                         alt="mainImage"
-                                        className="h-full w-auto object-cover z-30 blur-sm opacity-90 absolute top-0"
+                                        className="h-full w-auto object-cover z-90 blur-sm opacity-90 absolute top-0"
                                     />
                                     <div
                                         className="absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 text-4xl md:text-6xl font-bold text-white bg-opacity-90 rounded-md p-4"
@@ -326,55 +347,7 @@ export const Room = () => {
                                     </div>
                                 </>
                             )}
-                            {quizList &&
-                                quizList.map((quiz: any, i: number) => {
-                                    return (
-                                        <div
-                                            key={quiz.id}
-                                            className={`absolute ${i === 0 ? "top-4 left-8 md:left-32" : i === 1 ? "top-30 left-2 md:left-22" : i === 2 ? "top-4 right-8 md:right-32" : i === 3 ? "top-30 right-2 md:right-22" : i === 4 ? "top-80 left-8 md:left-32" : i === 5 ? "top-54 left-2 md:left-22" : i === 6 ? "top-80 right-8 md:right-32" : i === 7 ? "top-54 right-2 md:right-22" : ""} z-20 h-22 w-22 rounded-full ${
-                                                quiz.completed
-                                                    ? ""
-                                                    : "backdrop-blur-md border-2 hover:border-amber-50 cursor-pointer"
-                                            }`}
-                                            onClick={() => {
-                                                console.log("quiz:", quiz);
-                                                !quiz.completed && setQuizNumber(quiz.id);
-                                            }}
-                                            style={{
-                                                borderColor: quiz.completed
-                                                    ? colorPalette[
-                                                          roomColor as keyof typeof colorPalette
-                                                      ].dark
-                                                    : colorPalette[
-                                                          roomColor as keyof typeof colorPalette
-                                                      ].bright,
-                                            }}
-                                            title={quiz.name}>
-                                            <div className="relative w-full h-full rounded-full">
-                                                <img
-                                                    src={quiz.image}
-                                                    alt="Quiz Image"
-                                                    className="w-full h-full rounded-full"
-                                                />
-                                                {!quiz.completed && (
-                                                    <div
-                                                        className="absolute top-0 right-0 rounded-full blur-sm w-full h-full opacity-100"
-                                                        style={{
-                                                            background:
-                                                                colorPalette[
-                                                                    roomColor as keyof typeof colorPalette
-                                                                ].dark,
-                                                        }}></div>
-                                                )}
-                                                <div
-                                                    className="absolute bottom-3 w-full text-center text-white text-md py-1 z-20"
-                                                    dir={userLanguage === "he" ? "rtl" : "ltr"}>
-                                                    {!quiz.completed ? quiz.name : quiz.answer}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    );
-                                })}*/}
+                            */}
                         </div>
                         <div
                             className="w-8 h-8 text-center fixed top-3 left-3 rounded-full font-bold z-20 border-2 text-black bg-white hover:text-red-500 hover:border-red-500 cursor-pointer"
@@ -443,6 +416,7 @@ function InteractiveNode({
       `}>
             {/* Status Ring */}
             <div
+                onClick={isActive ? onClick : undefined}
                 className={`
         relative p-4 rounded-full border-4 shadow-2xl backdrop-blur-xl
         transition-all duration-500
@@ -462,6 +436,7 @@ function InteractiveNode({
                 {/* Orbiting Particle for Active State */}
                 {isActive && (
                     <motion.div
+                        onClick={isActive ? onClick : undefined}
                         className="absolute -inset-2 border-2 border-primary/30 rounded-full"
                         animate={{ rotate: 360 }}
                         transition={{ duration: 8, repeat: Infinity, ease: "linear" }}>
@@ -478,6 +453,7 @@ function InteractiveNode({
 
             {/* Label Plate */}
             <div
+                onClick={isActive ? onClick : undefined}
                 className={`
         -mt-2 px-4 py-2 rounded-lg font-mono font-bold text-sm tracking-widest shadow-lg
         transition-all duration-300
@@ -503,7 +479,7 @@ function HUD({
     total: number;
     roomColor: string;
 }) {
-    const progress = (activeId / total) * 100;
+    const progress = ((activeId - 1) / total) * 100;
     const { userLanguage } = useUserContext();
 
     return (
@@ -515,7 +491,7 @@ function HUD({
                 <div className="text-xs font-mono font-bold text-gray-400">
                     {get_text("room_progress", userLanguage)}
                 </div>
-                <div className="text-2xl font-black text-primary">{Math.round(progress)}%</div>
+                <div className="text-2xl font-black text-primary">{Math.round(progress) || 0}%</div>
             </div>
 
             <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
