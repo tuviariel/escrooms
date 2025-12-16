@@ -17,5 +17,5 @@ export const auth = defineAuth({
             logoutUrls: ["http://localhost:5173/", "https://main.dddnthg1xuaur.amplifyapp.com/"],
         },
     },
-    groups: ["admin"],
+    // groups: ["admin"],
 });
