@@ -16,7 +16,7 @@ const schema = a.schema({
         .authorization((allow) => [
             allow.owner(),
             allow.authenticated().to(["create"]),
-            allow.groups(["admin"]).to(["create", "read", "update", "delete"]),
+            // allow.groups(["admin"]).to(["create", "read", "update", "delete"]),
         ]),
 
     // ROOM
@@ -39,7 +39,7 @@ const schema = a.schema({
         })
         .authorization((allow) => [
             allow.authenticated().to(["read"]),
-            allow.groups(["admin"]).to(["create", "read", "update", "delete"]),
+            // allow.groups(["admin"]).to(["create", "read", "update", "delete"]),
             allow.guest().to(["read"]),
             allow.owner().to(["read", "create", "delete", "update"]),
         ]),
@@ -60,7 +60,7 @@ const schema = a.schema({
         })
         .authorization((allow) => [
             allow.authenticated().to(["read"]),
-            allow.groups(["admin"]).to(["create", "read", "update", "delete"]),
+            // allow.groups(["admin"]).to(["create", "read", "update", "delete"]),
             allow.guest().to(["read"]),
             allow.owner().to(["read", "create", "delete", "update"]),
         ]),
