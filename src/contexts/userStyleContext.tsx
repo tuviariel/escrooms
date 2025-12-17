@@ -1,8 +1,9 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 // import data from "../services/dummyRoomData";
+type Language = "he" | "en" | "ar";
 interface ContextType {
-    userLanguage: string;
-    setUserLanguage: React.Dispatch<React.SetStateAction<string>>;
+    userLanguage: Language;
+    setUserLanguage: React.Dispatch<React.SetStateAction<Language>>;
 }
 // Create the context with a default value:
 const UserStyleContext = createContext<ContextType | undefined>(undefined);
@@ -12,7 +13,7 @@ interface ContextProviderProps {
 }
 // The Provider wrapped around the room component:
 const UserContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
-    const [userLanguage, setUserLanguage] = useState<string>("he");
+    const [userLanguage, setUserLanguage] = useState<Language>("he");
     console.log(userLanguage);
     return (
         <UserStyleContext.Provider

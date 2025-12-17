@@ -1,8 +1,8 @@
 import { JSX, useEffect, useState } from "react";
 // import ProgressBar from "../../components/ProgressBar";
 import RoomInfoForm from "./RoomInfoForm";
-import GeneratingMainImage from "./GeneratingMainImage";
-import CreateQuizzes from "./CreateQuizzes";
+// import GeneratingMainImage from "./GeneratingMainImage";
+// import CreateQuizzes from "./CreateQuizzes";
 import PreviewPublish from "./PreviewPublish";
 import CreatorConsole from "./CreatorConsole";
 import { get_text } from "../../util/language";
@@ -30,18 +30,18 @@ export const RoomBuilder = () => {
             isComplete: false,
             component: <RoomInfoForm setRoomId={setRoomId} roomId={roomId} setStep={setStep} />,
         },
-        {
-            key: 2,
-            name: get_text("gen_image", userLanguage),
-            isComplete: false,
-            component: <GeneratingMainImage />,
-        },
-        {
-            key: 3,
-            name: get_text("create_quizzes", userLanguage),
-            isComplete: false,
-            component: <CreateQuizzes />,
-        },
+        // {
+        //     key: 2,
+        //     name: get_text("gen_image", userLanguage),
+        //     isComplete: false,
+        //     component: <GeneratingMainImage />,
+        // },
+        // {
+        //     key: 3,
+        //     name: get_text("create_quizzes", userLanguage),
+        //     isComplete: false,
+        //     component: <CreateQuizzes />,
+        // },
         {
             key: 4,
             name: get_text("preview_publish", userLanguage),
@@ -69,10 +69,12 @@ export const RoomBuilder = () => {
                     user={userRedux}
                     setSidebarOpen={setSidebarOpen}
                     sidebarOpen={sidebarOpen}
+                    setStep={setStep}
+                    step={step}
                 />
             </div>
             <div
-                className={`${sidebarOpen ? "w-9/12" : "w-11/12"} text-left flex-col lg:justify-center"`}
+                className={`${sidebarOpen ? "w-9/12" : "w-11/12"} text-left flex-col lg:justify-center overflow-x-hidden"`}
                 dir={userLanguage === "he" ? "rtl" : "ltr"}>
                 {/* <div
                     className={`fixed ${sidebarOpen ? "w-9/12" : "w-11/12"} mt-12 bg-white border-b border-cyan-700 z-30`}>

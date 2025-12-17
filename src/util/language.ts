@@ -129,7 +129,11 @@ const appContext: Translations = {
     create_quizzes: { en: "Create Quizzes", he: "יצירת חידות", ar: "" },
     preview_publish: { en: "Preview & Publish", he: "בדיקה ופרסום", ar: "" },
     eg_first_aid: { en: "e.g. First Aid", he: "דוג' עזרה ראשונה", ar: "" },
-    topic: { en: "Topic", he: "נושא", ar: "" },
+    topic: {
+        en: "Specific Topic (being detailed and precise is recomended) ",
+        he: "נושא ממוקד (מומלץ לפרט ולדייק)",
+        ar: "",
+    },
     room_name: { en: "Room name", he: "שם החדר בריחה", ar: "" },
     name: { en: "Name", he: "שם", ar: "" },
     room_desc: { en: "Short description for the room", he: "תיאור קצר של החדר בריחה", ar: "" },
@@ -170,6 +174,8 @@ const appContext: Translations = {
     room_progress: { en: "Escape room Progress", he: "התקדמות בחדר בריחה", ar: "" },
     current_objective: { en: "Current Objective:", he: "משימה נוכחית:", ar: "" },
     find_quiz_num: { en: "Find Quiz #", he: "מצא חידה #", ar: "" },
+    room_field: { en: "Field of Studies", he: "תחום לימודים עיקרי", ar: "" },
+    choose_room_field: { en: "Choose Field of Studies", he: "בחר תחום לימודים עיקרי", ar: "" },
 
     example: { en: "", he: "", ar: "" },
 };

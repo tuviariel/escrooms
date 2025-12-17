@@ -11,9 +11,17 @@ type CreatorConsoleProps = {
     user: userType;
     setSidebarOpen: (o: boolean) => void;
     sidebarOpen: boolean;
+    setStep: (i: number) => void;
+    step: number;
 };
 
-export const CreatorConsole = ({ user, setSidebarOpen, sidebarOpen }: CreatorConsoleProps) => {
+export const CreatorConsole = ({
+    user,
+    setSidebarOpen,
+    sidebarOpen,
+    setStep,
+    step,
+}: CreatorConsoleProps) => {
     const [rooms, setRooms] = useState<RoomType[]>([]);
     const [openOptions, setOpenOptions] = useState<boolean[]>([]);
     const { userLanguage } = useUserContext();
@@ -66,23 +74,31 @@ export const CreatorConsole = ({ user, setSidebarOpen, sidebarOpen }: CreatorCon
             className={`fixed ${sidebarOpen ? "w-3/12" : "w-1/12"} bg-white transition-all duration-300 flex flex-col border-r h-full border-cyan-600 pt-12`}>
             {/* Create New Room Button */}
             <div className="p-3 border-b border-gray-700 flex">
-                <button
-                    className={` ml-auto bg-cyan-700 text-white hover:bg-cyan-600 h-8 border-black border-2 px-3 text-sm cursor-pointer items-center justify-center w-full flex gap-2 p-3 rounded-lg font-semibold transition-colors ${
-                        !sidebarOpen && ""
-                    }`}>
-                    <Plus size={20} />
-                    {sidebarOpen && <span>{get_text("new_room", userLanguage)}</span>}
-                </button>
+                {step !== 0 && (
+                    <button
+                        className={` ml-auto bg-cyan-700 text-white hover:bg-cyan-600 h-8 border-black border-2 px-3 text-sm cursor-pointer items-center justify-center w-full flex gap-2 p-3 rounded-lg font-semibold transition-colors ${
+                            !sidebarOpen && ""
+                        }`}
+                        onClick={() => {
+                            setStep(0);
+                        }}>
+                        <Plus size={20} />
+                        {sidebarOpen && <span>{get_text("new_room", userLanguage)}</span>}
+                    </button>
+                )}
                 <button
                     onClick={() => setSidebarOpen(!sidebarOpen)}
-                    className={`p-2 ${sidebarOpen ? "ml-2" : "mx-auto"} hover:bg-cyan-200 rounded-lg transition-colors h-8`}>
+                    className={`p-2 ${sidebarOpen ? "ml-auto" : "mx-auto"} hover:bg-cyan-200 rounded-lg transition-colors h-8`}>
                     {sidebarOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
                 </button>
             </div>
             {/* Header with Toggle Button */}
             <div className="flex items-center justify-between p-4">
                 {sidebarOpen && (
-                    <h1 className="text-xl font-bold">{get_text("my_rooms", userLanguage)}</h1>
+                    <h1
+                        className={`text-xl font-bold ${userLanguage === "en" ? "text-left" : "text-right"}`}>
+                        {get_text("my_rooms", userLanguage)}
+                    </h1>
                 )}
             </div>
 

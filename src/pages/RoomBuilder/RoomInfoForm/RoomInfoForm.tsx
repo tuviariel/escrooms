@@ -178,8 +178,12 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                     onChange={(e) => update({ roomField: e.target.value })}
                     className="w-full p-2 rounded-lg border border-[#e5e7eb]">
                     <option>{get_text("choose_room_field", userLanguage)}</option>
-                    {fieldsOfStudy.map((field) => {
-                        return <>{field}</>; //<option value={field.en}>{field[userLanguage]}</option>;
+                    {Object.keys(fieldsOfStudy).map((field) => {
+                        return (
+                            <option key={field} value={field}>
+                                {fieldsOfStudy[field][userLanguage]}
+                            </option>
+                        );
                     })}
                 </select>
             </div>
