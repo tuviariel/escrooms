@@ -227,7 +227,7 @@ export const Room = () => {
                 <>
                     <div className="h-screen w-screen relative flex justify-center items-center overflow-hidden lg:pt-12 lg:pb-12 bg-gray-900 perspective-1000">
                         {(window.innerWidth < 600 || orientation === "portrait") && (
-                            <div className="absolute h-screen w-screen z-90 bg-gray-900 text-white text-center flex flex-col justify-center items-center p-30">
+                            <div className="absolute h-screen w-screen z-90 bg-gray-900 text-white text-center flex flex-col justify-center items-center">
                                 {get_text("phone_on_side", userLanguage)}
                                 <Smartphone />
                             </div>

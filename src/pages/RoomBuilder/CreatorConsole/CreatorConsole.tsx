@@ -46,7 +46,8 @@ export const CreatorConsole = ({
     };
     const handleOpenDots = (index: number) => {
         setOpenOptions((prev) => {
-            return [...prev, (prev[index] = !prev[index])];
+            const isOpen = prev[index];
+            return [...prev, (prev[index] = !isOpen)];
         });
     };
     const publishRoom = async (roomId: string, isPublic: boolean) => {
