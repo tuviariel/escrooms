@@ -15,7 +15,7 @@ import { quizListActions } from "../../reduxStor/quizList";
 // import finishedRoomGif from "../../assets/images/finishedRoom.gif";
 import { useUserContext } from "../../contexts/userStyleContext";
 import { RoomType } from "../Dashboard/Dashboard";
-import { CheckCircle2, Lock, Activity } from "lucide-react";
+import { CheckCircle2, Lock, Activity, Smartphone } from "lucide-react";
 
 export interface quizDataProps {
     data: {
@@ -223,13 +223,16 @@ export const Room = () => {
     console.log(roomQuizzes);
     return (
         <>
-            {window.innerWidth < 600 || orientation === "portrait" ? (
-                <div className="h-screen w-screen bg-gray-900 text-amber-50 text-center flex flex-col justify-center items-center p-20">
-                    {get_text("phone_on_side", userLanguage)}
-                </div>
-            ) : (
+            {
                 <>
                     <div className="h-screen w-screen relative flex justify-center items-center overflow-hidden lg:pt-12 lg:pb-12 bg-gray-900 perspective-1000">
+                        {(window.innerWidth < 600 || orientation === "portrait") && (
+                            <div className="absolute h-screen w-screen z-90 bg-gray-900 text-white text-center flex flex-col justify-center items-center p-30">
+                                {get_text("phone_on_side", userLanguage)}
+                                <Smartphone />
+                            </div>
+                        )}
+
                         {quizNumber > -1 && (
                             <div className="z-60 w-screen">
                                 <img
@@ -385,7 +388,7 @@ export const Room = () => {
                         </>
                     </Dialog>
                 </>
-            )}
+            }
         </>
     );
 };

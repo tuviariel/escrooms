@@ -64,13 +64,15 @@ export const RoomCard = ({
                             </p>
                         </div>
                         <div className="flex flex-col justify-between">
-                            <div className="px-1">
+                            <div
+                                className={`px-1 rounded-full ${openOptions[i] ? "border-white border" : ""}`}>
                                 <EllipsisVertical
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         handleOpenDots(i);
                                     }}
                                     size={14}
+                                    color={!openOptions[i] ? "black" : "white"}
                                 />
                             </div>
                             {openOptions[i] && (
