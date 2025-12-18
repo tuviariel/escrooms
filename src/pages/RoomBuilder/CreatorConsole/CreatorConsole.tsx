@@ -47,6 +47,7 @@ export const CreatorConsole = ({
     const handleOpenDots = (index: number) => {
         setOpenOptions((prev) => {
             const isOpen = prev[index];
+            console.log(isOpen);
             return [...prev, (prev[index] = !isOpen)];
         });
     };
