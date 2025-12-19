@@ -47,8 +47,7 @@ export const CreatorConsole = ({
     const handleOpenDots = (index: number) => {
         setOpenOptions((prev) => {
             const isOpen = prev[index];
-            console.log(isOpen);
-            return [...prev, (prev[index] = !isOpen)];
+            return prev.map((item, i) => (i === index ? !isOpen : item));
         });
     };
     const publishRoom = async (roomId: string, isPublic: boolean) => {
@@ -57,15 +56,13 @@ export const CreatorConsole = ({
                 public: isPublic,
             });
             console.log(result);
-            // if(result) {
-            //     setRooms(prev=>{
-            //         return prev.map(room => {
-            //             if(room.id === roomId) {
-            //                 room.public = isPublic
-            //             }
-            //         })
-            //     })
-            // }
+            if (result) {
+                setRooms((prev) => {
+                    return prev.map((room) =>
+                        room.id === roomId ? { ...room, public: isPublic } : room
+                    );
+                });
+            }
         } catch (error) {
             console.error("room updated no:", error);
         }
