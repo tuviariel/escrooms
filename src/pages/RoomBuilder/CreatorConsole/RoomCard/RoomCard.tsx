@@ -45,7 +45,7 @@ export const RoomCard = ({
         <div
             key={room.id}
             className={`bg-cyan-300 hover:bg-cyan-400 rounded-lg p-3 transition-colors cursor-pointer ${
-                !sidebarOpen && "flex justify-center"
+                !sidebarOpen ? "flex justify-center" : ""
             }`}
             onClick={() => console.log("preview room-" + room.id)}
             onMouseLeave={() => openOptions[i] && handleOpenDots(i)}>
