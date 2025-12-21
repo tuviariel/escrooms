@@ -19,7 +19,9 @@ export const quizListSlice = createSlice({
         },
         changeQuizList: (state, action) => {
             state.list[action.payload].status = "completed";
-            state.list[action.payload + 1].status = "active";
+            if (action.payload < state.list.length) {
+                state.list[action.payload + 1].status = "active";
+            }
         },
     },
 });

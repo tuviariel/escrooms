@@ -82,9 +82,13 @@ export const Room = () => {
     const [activeModuleId, setActiveModuleId] = useState<number>(1);
 
     useEffect(() => {
-        quizList.map((quiz) => {
-            quiz.status === "active" && setActiveModuleId(quiz.id);
-        });
+        if (quizList[quizList.length].status === "completed") {
+            setCompleted(true);
+        } else {
+            quizList.map((quiz) => {
+                quiz.status === "active" && setActiveModuleId(quiz.id);
+            });
+        }
     }, [quizList]);
     const navigate = useNavigate();
     const location = useLocation();
