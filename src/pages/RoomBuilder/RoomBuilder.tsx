@@ -9,7 +9,6 @@ import { get_text } from "../../util/language";
 import { useUserContext } from "../../contexts/userStyleContext";
 import { userType } from "../../components/Login/Login";
 import { useSelector } from "react-redux";
-// import Prev from "../../assets/images/pagePaginate.svg";
 type stepInfo = {
     key: number;
     name: string;

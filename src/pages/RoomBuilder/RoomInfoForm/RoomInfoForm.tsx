@@ -106,7 +106,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                     topic: roomInfo.roomTopic,
                     name: roomInfo.roomName,
                     colorPalette: roomInfo.roomColor || "redBlueGray",
-                    imageStyle: roomInfo.roomStyle || "realistic",
+                    imageStyle: roomInfo.roomStyle || "",
                     fontFamily: roomInfo.roomFont || "sansSerif",
                     description: roomInfo.roomDescription,
                 });
@@ -119,7 +119,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                     name: roomInfo.roomName,
                     mainImage: "",
                     colorPalette: roomInfo.roomColor || "redBlueGray",
-                    imageStyle: roomInfo.roomStyle || "realistic",
+                    imageStyle: roomInfo.roomStyle || "",
                     fontFamily: roomInfo.roomFont || "sansSerif",
                     description: roomInfo.roomDescription,
                 });
@@ -144,7 +144,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
         <div className="max-w-3xl mt-0 mx-20 py-4" dir={userLanguage === "he" ? "rtl" : "ltr"}>
             {/* Type- for adding options like non generated rooms for private events */}
             {/* <div className="mb-3">
-                <label className="flex text-base mb-1.5">
+                <label className="flex text-lg mb-1.5">
                     {get_text("room_type", userLanguage)}{" "}
                     <span
                         className="text-red-500 cursor-pointer"
@@ -164,7 +164,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
             </div> */}
             {/* Field */}
             <div className="mb-3">
-                <label className="flex text-base mb-1.5">
+                <label className="flex text-lg mb-1.5">
                     {get_text("room_field", userLanguage)}{" "}
                     <span
                         className="text-red-500 cursor-pointer"
@@ -190,7 +190,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
             {/* Topic */}
             {roomInfo.roomType === "educational" && (
                 <div className="mb-3">
-                    <label className="flex text-base mb-1.5">
+                    <label className="flex text-lg mb-1.5">
                         {get_text("topic", userLanguage)}{" "}
                         <span
                             className="text-red-500 cursor-pointer"
@@ -209,7 +209,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
             )}
             {/* Name */}
             <div className="mb-3">
-                <label className="flex text-base mb-1.5">
+                <label className="flex text-lg mb-1.5">
                     {get_text("name", userLanguage)}{" "}
                     <span
                         className="text-red-500 cursor-pointer"
@@ -226,7 +226,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
             </div>
             {/* Description */}
             <div className="mb-4">
-                <label className="flex text-base mb-1.5">{get_text("desc", userLanguage)}</label>
+                <label className="flex text-lg mb-1.5">{get_text("desc", userLanguage)}</label>
                 <textarea
                     value={roomInfo.roomDescription}
                     onChange={(e) => update({ roomDescription: e.target.value })}
@@ -240,7 +240,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
             </div>
             {/* Style selection */}
             <div className="mb-5">
-                <label className="flex text-base mb-2">{get_text("style", userLanguage)}</label>
+                <label className="flex text-lg mb-2">{get_text("style", userLanguage)}</label>
                 <div className="flex gap-3 flex-wrap">
                     {BACKGROUNDS.map((style, i) => {
                         const active = roomInfo.roomStyle === style;
@@ -267,36 +267,56 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                             </div>
                         );
                     })}
+                    {/* <div className="flex flex-col overflow-hidden">
+                        <label className={`flex mb-1 ${roomInfo.roomStyle === ""}`}>
+                            {get_text("main_background_image", userLanguage)}
+                        </label>
+                        <div
+                            onClick={() => update({ roomStyle: "" })}
+                            className={`cursor-pointer w-36 h-24 rounded-lg p-0 ${roomInfo.roomStyle === "" ? "border-2 border-[#2563eb]" : "border border-[#e5e7eb]"}`}
+                            aria-pressed={roomInfo.roomStyle === ""}
+                            style={{
+                                backgroundImage: "", //get background image
+                                backgroundSize: "cover",
+                            }}></div>
+                    </div> */}
                 </div>
             </div>
             {/* Color selection */}
             <div className="mb-5">
-                <label className="flex text-base mb-2">{get_text("color", userLanguage)}</label>
-                <div className="flex gap-3 flex-wrap">
+                <label className="flex text-lg mb-4">{get_text("color", userLanguage)}</label>
+                <div className="flex gap-x-6 gap-y-10 flex-wrap">
                     {COLOR_GROUPS.map((colorGroup, i) => {
                         const active = roomInfo.roomColor === colorGroup;
                         return (
                             <div
                                 key={i}
                                 onClick={() => update({ roomColor: colorGroup })}
-                                className={`relative cursor-pointer w-20 h-12 rounded-full ${active ? "border-4 border-[#2563eb]" : "border border-[#e5e7eb]"}`}
+                                className={`relative cursor-pointer w-20 h-14 rounded-full ${active ? "border-4 border-[#2563eb]" : "border border-[#e5e7eb]"}`}
                                 aria-pressed={active}>
                                 <div
-                                    className={`absolute -top-3 right-1/2 translate-x-1/2 cursor-pointer w-10 h-10 rounded-full z-10 border border-black`}
-                                    style={{
-                                        background:
-                                            colorPalette[colorGroup as keyof typeof colorPalette]
-                                                .bright,
-                                    }}></div>
-                                <div
-                                    className={`absolute top-3 right-0 cursor-pointer w-10 h-10 rounded-full z-20 border border-black`}
+                                    className={`absolute -top-3 right-0 cursor-pointer w-10 h-10 rounded-full z-10 border border-black`}
                                     style={{
                                         background:
                                             colorPalette[colorGroup as keyof typeof colorPalette]
                                                 .dark,
                                     }}></div>
                                 <div
-                                    className={`absolute top-3 left-0 cursor-pointer w-10 h-10 rounded-full z-20 border border-black`}
+                                    className={`absolute -top-3 left-0 cursor-pointer w-10 h-10 rounded-full z-10 border border-black`}
+                                    style={{
+                                        background:
+                                            colorPalette[colorGroup as keyof typeof colorPalette]
+                                                .second,
+                                    }}></div>
+                                <div
+                                    className={`absolute -bottom-3 right-0 cursor-pointer w-10 h-10 rounded-full z-20 border border-black`}
+                                    style={{
+                                        background:
+                                            colorPalette[colorGroup as keyof typeof colorPalette]
+                                                .bright,
+                                    }}></div>
+                                <div
+                                    className={`absolute -bottom-3 left-0 cursor-pointer w-10 h-10 rounded-full z-20 border border-black`}
                                     style={{
                                         background:
                                             colorPalette[colorGroup as keyof typeof colorPalette]
@@ -309,7 +329,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
             </div>
             {/* Font selection */}
             <div className="mb-5">
-                <label className="flex text-base mb-2">{get_text("font", userLanguage)}</label>
+                <label className="flex text-lg mb-2">{get_text("font", userLanguage)}</label>
                 <div className="flex gap-3 flex-wrap">
                     {FONT_OPTIONS.map((f, idx) => {
                         const active = roomInfo.roomFont === f;
@@ -334,17 +354,26 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
             </div>
             {/* Preview */}
             <div className="mt-3 mb-5">
-                <label className="flex text-base mb-2">{get_text("preview", userLanguage)}</label>
+                <label className="flex text-lg mb-2">{get_text("preview", userLanguage)}</label>
                 <div
-                    className="rounded-lg corder border-[#e5e7eb] p-4 min-h-32 w-full h-full"
+                    className="rounded-lg corder border-black border p-4 min-h-32 w-full h-full"
                     style={{
-                        backgroundImage: `url(${imageStyle[roomInfo.roomStyle as keyof typeof imageStyle].background})`,
+                        backgroundImage: roomInfo.roomStyle
+                            ? `url(${imageStyle[roomInfo.roomStyle as keyof typeof imageStyle].background})`
+                            : "", //get background image
                         backgroundSize: "cover",
                     }}>
                     <div
                         className="w-2/3 h-2/3 px-8 border-2 ml-auto"
                         style={{
-                            backgroundImage: `url(${imageStyle[roomInfo.roomStyle as keyof typeof imageStyle].semiBackground})`,
+                            backgroundImage: roomInfo.roomStyle
+                                ? `url(${imageStyle[roomInfo.roomStyle as keyof typeof imageStyle].semiBackground})`
+                                : "", //get semi background image
+                            backgroundColor:
+                                roomInfo.roomStyle === ""
+                                    ? colorPalette[roomInfo.roomColor as keyof typeof colorPalette]
+                                          .light
+                                    : "",
                             backgroundSize: "cover",
                             borderColor:
                                 colorPalette[roomInfo.roomColor as keyof typeof colorPalette].light,
