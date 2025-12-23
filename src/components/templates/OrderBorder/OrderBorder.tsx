@@ -83,7 +83,7 @@ export const OrderBorder = (props: TemplateProps) => {
                 console.log("at finished: ", finished);
                 buttonClicked && setResult(get_text("wrong", userLanguage));
                 break;
-            }
+            } //maybe add a validator to check if the some answers are correct
         }
         if (finished) {
             console.log("at finished: ", finished);
@@ -138,21 +138,36 @@ export const OrderBorder = (props: TemplateProps) => {
                 backgroundImage: `url(${imageStyle[roomStyle as keyof typeof imageStyle].background})`,
                 backgroundSize: "cover",
             }}
-            className="py-4">
-            <DndContext
-                sensors={sensors}
-                collisionDetection={closestCenter}
-                onDragEnd={handleDragEnd}>
-                <SortableContext
-                    items={cards.map((c) => c.id)}
-                    strategy={verticalListSortingStrategy}>
-                    <div className="flex flex-col items-center">
-                        {cards.map((card, i) => (
-                            <SortableCard key={card.id} {...card} index={i} disabled={disabled} />
-                        ))}
-                    </div>
-                </SortableContext>
-            </DndContext>
+            className="h-screen">
+            <div
+                className={`py-4 h-8/9 px-10 ${
+                    cards.length === 8
+                        ? "columns-4"
+                        : cards.length === 6
+                          ? "columns-3"
+                          : "columns-2"
+                }`}
+                dir="rtl">
+                <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}>
+                    <SortableContext
+                        items={cards.map((c) => c.id)}
+                        strategy={verticalListSortingStrategy}>
+                        <div className="flex flex-col items-center h-full">
+                            {cards.map((card, i) => (
+                                <SortableCard
+                                    key={card.id}
+                                    {...card}
+                                    index={i}
+                                    disabled={disabled}
+                                />
+                            ))}
+                        </div>
+                    </SortableContext>
+                </DndContext>
+            </div>
             <div className="flex">
                 <Button
                     label={

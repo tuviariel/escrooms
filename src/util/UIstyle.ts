@@ -11,9 +11,13 @@ import VSBG from "../assets/images/UIelements/semiBackgrounds/realistic.png";
 
 export const colorPalette = {
     //1 - dark/dominant/chosen color, 2 - bright/positive color, 3 - light color
-    redBlueGray: { dark: "#E50113", bright: "#0255db", light: "#9ea5b0" },
-    orangeGreenWhite: { dark: "#e38202", bright: "#36e039", light: "#ffffff" },
-    purpleLightblueYellow: { dark: "#a002ab", bright: "#5093fa", light: "#f0f002" },
+    redBlueGray: { dark: "#5A0E24", second: "#76153C", bright: "#BF124D", light: "#67B2D8" },
+    blueToRed: { dark: "#050E3C", second: "#002455", bright: "#DC0000", light: "#FF3838" },
+    blueToYellow: { dark: "#360185", second: "#8F0177", bright: "#DE1A58", light: "#F4B342" },
+    greenToPink: { dark: "#B8DB80", second: "#F7F6D3", bright: "#FFE4EF", light: "#F39EB6" },
+    greenToRed: { dark: "#BBCB64", second: "#FFE52A", bright: "#F79A19", light: "#CF0F0F" },
+    greenToWhite: { dark: "#005461", second: "#018790", bright: "#00B7B5", light: "#F4F4F4" },
+    blueToPink: { dark: "#301CA0", second: "#7132CA", bright: "#C47BE4", light: "#F29AAE" },
 };
 export const imageStyle = {
     realistic: {

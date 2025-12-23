@@ -138,7 +138,7 @@ const appContext: Translations = {
     name: { en: "Name", he: "שם", ar: "" },
     room_desc: { en: "Short description for the room", he: "תיאור קצר של החדר בריחה", ar: "" },
     desc: { en: "Description", he: "תיאור", ar: "" },
-    style: { en: "Style (background)", he: "סגנון (רקע)", ar: "" },
+    style: { en: "Style (quizzes background)", he: "סגנון (רקע החידות)", ar: "" },
     realistic: { en: "Realistic", he: "ראליסטי", ar: "" },
     abstract: { en: "Abstract", he: "אבסרקטי", ar: "" },
     minimalistic: { en: "Minimalistic", he: "מינימליסטי", ar: "" },
@@ -176,7 +176,9 @@ const appContext: Translations = {
     find_quiz_num: { en: "Find Quiz #", he: "מצא חידה #", ar: "" },
     room_field: { en: "Field of Studies", he: "תחום לימודים עיקרי", ar: "" },
     choose_room_field: { en: "Choose Field of Studies", he: "בחר תחום לימודים עיקרי", ar: "" },
-
+    main_background_image: { en: "Main Background Image", he: "תמונת רקע מסך ראשי", ar: "" },
+    interesting_insights: { en: "Interesting Insights", he: "תובנות מעניינות", ar: "" },
+    explanation: { en: "Explanation", he: "הסבר", ar: "" },
     example: { en: "", he: "", ar: "" },
 };
 

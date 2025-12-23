@@ -18,21 +18,24 @@ export const Button: React.FC<Partial<ButtonProps>> = (props) => {
     const { className = "", onClick, label, children = "", disabled = false } = props;
     const { roomColor, roomFont } = useRoomContext();
     return (
-        <button
-            onClick={onClick}
-            className={`flex h-8 mx-4 my-2 px-6 py-auto font-light rounded-xl w-auto min-w-fit ${
-                disabled
-                    ? "cursor-not-allowed bg-gray-500"
-                    : "cursor-pointer bg-blue-500 hover:bg-blue-700"
-            } ${className}`}
-            style={{
-                backgroundColor: colorPalette[roomColor as keyof typeof colorPalette].bright,
-                color: colorPalette[roomColor as keyof typeof colorPalette].dark,
-                fontFamily: fontFamily[roomFont as keyof typeof fontFamily],
-            }}
-            disabled={disabled}>
-            {children}
-            {label}
-        </button>
+        <div className="flex justify-center items-center">
+            <button
+                onClick={onClick}
+                className={`flex h-7 mx-4 my-2 px-6 py-auto font-light rounded-xl w-auto min-w-fit border ${
+                    disabled
+                        ? "cursor-not-allowed bg-gray-500"
+                        : "cursor-pointer bg-blue-500 hover:bg-blue-700"
+                } ${className}`}
+                style={{
+                    backgroundColor: colorPalette[roomColor as keyof typeof colorPalette].light,
+                    // color: colorPalette[roomColor as keyof typeof colorPalette].bright,
+                    borderColor: colorPalette[roomColor as keyof typeof colorPalette].bright,
+                    fontFamily: fontFamily[roomFont as keyof typeof fontFamily],
+                }}
+                disabled={disabled}>
+                {children}
+                {label}
+            </button>
+        </div>
     );
 };

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { get_text } from "../../util/language";
 import pagePaginateArrow from "../../assets/images/pagePaginate.svg";
 import pagePaginateArrowDisabled from "../../assets/images/pagePaginateDis.svg";
-import { imageStyle } from "../../util/UIstyle";
+import { colorPalette, imageStyle } from "../../util/UIstyle";
 import { useRoomContext } from "../../contexts/roomStyleContext";
 import { quizData } from "../../pages/Room/Room";
 import loading from "../../assets/images/loading.gif";
@@ -18,7 +18,7 @@ interface QuizDataProps {
 }
 export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
     const { data, result, setResult } = props;
-    const { roomStyle } = useRoomContext();
+    const { roomStyle, roomColor } = useRoomContext();
     const { userLanguage } = useUserContext();
     const [quizDataPageNumber, setQuizDataPageNumber] = useState<number>(0);
     const [colorOrder, setColorOrder] = useState<string[][]>(
@@ -141,6 +141,12 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
             {data && data.quiz.length > 1 ? (
                 <div className="relative w-full h-full font-bold">
                     <img
+                        style={{
+                            backgroundColor:
+                                quizDataPageNumber !== 0
+                                    ? colorPalette[roomColor as keyof typeof colorPalette].light
+                                    : "white",
+                        }}
                         src={
                             quizDataPageNumber !== 0 ? pagePaginateArrow : pagePaginateArrowDisabled
                         }
@@ -155,13 +161,21 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                 : get_text("no_prev_page", userLanguage)
                         }
                         className={`${
-                            quizDataPageNumber !== 0 ? "cursor-pointer" : "cursor-not-allowed"
-                        } h-12 w-12 absolute left-24 top-2 z-20 p-1 rounded-full bg-gray-100 border-2 hover:border-amber-500`}
+                            quizDataPageNumber !== 0
+                                ? "cursor-pointer hover:border-amber-500"
+                                : "cursor-not-allowed"
+                        } h-12 w-12 absolute left-24 top-2 z-20 p-1 rounded-full bg-gray-100 border-2`}
                         onClick={() =>
                             quizDataPageNumber !== 0 && setQuizDataPageNumber((prev) => prev - 1)
                         }
                     />
                     <img
+                        style={{
+                            backgroundColor:
+                                quizDataPageNumber < data.quiz.length - 1
+                                    ? colorPalette[roomColor as keyof typeof colorPalette].light
+                                    : "white",
+                        }}
                         src={
                             quizDataPageNumber < data.quiz.length - 1
                                 ? pagePaginateArrow
@@ -179,9 +193,9 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                         }
                         className={`${
                             quizDataPageNumber < data.quiz.length - 1
-                                ? "cursor-pointer"
-                                : "cursor-not-allowed"
-                        } h-12 w-12 absolute right-24 top-2 z-20 p-1 rounded-full bg-gray-100 border-2 hover:border-amber-500 rotate-180`}
+                                ? "cursor-pointer hover:border-amber-500"
+                                : "cursor-not-allowed opacity-50"
+                        } h-12 w-12 absolute right-24 top-2 z-20 p-1 rounded-full border-2 rotate-180`}
                         onClick={() =>
                             quizDataPageNumber < data.quiz.length - 1 &&
                             setQuizDataPageNumber((prev) => prev + 1)
@@ -221,17 +235,40 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                                 backgroundImage: `url(${imageStyle[roomStyle as keyof typeof imageStyle].semiBackground})`,
                                                 backgroundSize: "cover",
                                             }}>
-                                            <div className="text-center mt-2 text-3xl">
+                                            <div
+                                                className="text-center mt-2 text-3xl p-1 rounded-md "
+                                                style={{
+                                                    backgroundColor:
+                                                        colorPalette[
+                                                            roomColor as keyof typeof colorPalette
+                                                        ].light,
+                                                }}>
                                                 {item.title}
                                                 {/* + " " + data.quizData[i]} */}
                                             </div>
-                                            <div className="text-right mt-2 mx-3 text-2xl font-semibold">
+                                            <div
+                                                className="text-right mt-2 mx-3 text-2xl font-semibold p-1 rounded-md"
+                                                style={{
+                                                    backgroundColor:
+                                                        colorPalette[
+                                                            roomColor as keyof typeof colorPalette
+                                                        ].light,
+                                                }}>
                                                 {item.desc}
                                             </div>
                                             {/* {colorOrder[i][0] !== "" && ( */}
                                             <div className="absolute right-1/2 translate-x-1/2 bottom-6 flex gap-6 text-center font-extrabold text-xl whitespace-nowrap text-black">
                                                 <div className="flex flex-col items-center">
-                                                    {answerKeys[0]}
+                                                    <div
+                                                        className="p-1 rounded-md"
+                                                        style={{
+                                                            backgroundColor:
+                                                                colorPalette[
+                                                                    roomColor as keyof typeof colorPalette
+                                                                ].light,
+                                                        }}>
+                                                        {answerKeys[0]}
+                                                    </div>
                                                     <div
                                                         className={`w-16 h-16 flex flex-col content-center rounded-full items-center justify-center text-white 
                                                             ${
@@ -251,7 +288,16 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-col items-center">
-                                                    {answerKeys[1]}
+                                                    <div
+                                                        className="p-1 rounded-md"
+                                                        style={{
+                                                            backgroundColor:
+                                                                colorPalette[
+                                                                    roomColor as keyof typeof colorPalette
+                                                                ].light,
+                                                        }}>
+                                                        {answerKeys[1]}
+                                                    </div>
                                                     <div
                                                         className={`w-20 h-12 flex flex-col content-center rounded-xl my-auto py-auto items-center justify-center text-white
                                                             ${

@@ -82,7 +82,8 @@ export const Room = () => {
     const [activeModuleId, setActiveModuleId] = useState<number>(1);
 
     useEffect(() => {
-        if (quizList[quizList.length].status === "completed") {
+        if (quizList.length === 0) return;
+        if (quizList[quizList.length - 1].status === "completed") {
             setCompleted(true);
         } else {
             quizList.map((quiz) => {
@@ -241,6 +242,11 @@ export const Room = () => {
                             <div className="z-60 w-screen">
                                 <img
                                     src={backArrow}
+                                    style={{
+                                        backgroundColor:
+                                            colorPalette[roomColor as keyof typeof colorPalette]
+                                                .light,
+                                    }}
                                     alt={get_text("back_to_main", userLanguage)}
                                     title={get_text("back_to_main", userLanguage)}
                                     className="cursor-pointer h-8 w-8 z-70 md:h-12 md:w-12 fixed left-3 top-3 p-1 rounded-full bg-gray-100 border-2 hover:border-amber-700"
