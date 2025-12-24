@@ -70,7 +70,7 @@ export const CreatorConsole = ({
 
     return (
         <div
-            className={`fixed ${sidebarOpen ? "w-3/12" : "w-1/12"} bg-gray-800 transition-all duration-300 flex flex-col border-r h-full border-cyan-500/30 pt-12`}>
+            className={`fixed ${sidebarOpen ? "w-3/12" : "w-1/12"} bg-gray-800 transition-all duration-300 flex flex-col border-r h-full border-cyan-500/30`}>
             {/* Create New Room Button */}
             <div className="p-3 border-b border-gray-700 flex">
                 {step !== 0 && (

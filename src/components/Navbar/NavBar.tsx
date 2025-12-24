@@ -37,17 +37,19 @@ export const NavBar = () => {
                 </div>
 
                 {/* Navigation Links */}
-                <nav className="hidden md:flex items-center gap-6">
+                <nav
+                    className="hidden md:flex items-center gap-6 ml-auto mr-12"
+                    dir={userLanguage === "he" ? "rtl" : "ltr"}>
+                    {/* <button className="text-white hover:text-cyan-400 transition-colors">
+                        {get_text("examples", userLanguage)}
+                    </button> */}
                     <button
                         onClick={() => navigate("/")}
                         className="text-white hover:text-cyan-400 transition-colors">
                         {get_text("home", userLanguage)}
                     </button>
-                    {/* <button className="text-white hover:text-cyan-400 transition-colors">
-                        {get_text("examples", userLanguage)}
-                    </button> */}
                     <button className="text-white hover:text-cyan-400 transition-colors">
-                        {get_text("prices", userLanguage)}
+                        {get_text("subscription", userLanguage)}
                     </button>
                     <button className="text-white hover:text-cyan-400 transition-colors">
                         {get_text("about", userLanguage)}

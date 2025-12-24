@@ -49,7 +49,7 @@ export const GameCard = (props: any) => {
                             e.stopPropagation();
                             navigate("/room/" + data.id);
                         }}
-                        className="flex-1 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded transition-colors">
+                        className="flex-1 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded transition-colors cursor-pointer">
                         {get_text("play_now", userLanguage)}
                     </button>
                     {/* <button

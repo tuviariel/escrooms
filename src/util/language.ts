@@ -194,7 +194,7 @@ const appContext: Translations = {
     },
     hero_subtitle: {
         en: "An intuitive platform for creating learning and team-building experiences, no technical knowledge required.",
-        he: "פלטפורמה אינטואיטיבית ליצית חוויות למידה וגיבוש, ללא צורך בידע טכני.",
+        he: "פלטפורמה אינטואיטיבית ליצירת חוויות למידה וגיבוש, ללא צורך בידע טכני.",
         ar: "",
     },
     start_creating_free: { en: "Start creating for free", he: "התחל ליצור בחינם", ar: "" },

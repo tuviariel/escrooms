@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { get_text } from "../../../util/language";
 import { useUserContext } from "../../../contexts/userStyleContext";
-import { colorPalette, fontFamily, imageStyle } from "../../../util/UIstyle";
+import { colorPalette, fontFamily } from "../../../util/UIstyle";
 import { roomsService } from "../../../services/service";
 import { useSelector } from "react-redux";
 import { userType } from "../../../components/Login/Login";
 import { fieldsOfStudy } from "../../../util/utils";
-
+import { COLOR_BACKGROUND_MAP } from "../../../util/UIstyle";
 type RoomInfo = {
     roomType: string;
     roomField: string;
@@ -24,7 +24,6 @@ type RoomInfoProps = {
 };
 const LOCAL_KEY = "roomInfoData";
 
-const BACKGROUNDS = Object.keys(imageStyle);
 const COLOR_GROUPS = Object.keys(colorPalette);
 const FONT_OPTIONS = Object.keys(fontFamily);
 
@@ -35,7 +34,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
         roomTopic: "",
         roomName: "",
         roomDescription: "",
-        roomStyle: BACKGROUNDS[0],
+        roomStyle: "realistic", // Default style, will be set based on color selection
         roomColor: COLOR_GROUPS[0],
         roomFont: FONT_OPTIONS[0],
     });
@@ -242,94 +241,72 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                     }}
                 />
             </div>
-            {/* Style selection */}
-            <div className="mb-5">
-                <label className="flex text-lg mb-2 text-white">
-                    {get_text("style", userLanguage)}
-                </label>
-                <div className="flex gap-3 flex-wrap">
-                    {BACKGROUNDS.map((style, i) => {
-                        const active = roomInfo.roomStyle === style;
-                        return (
-                            <div className="flex flex-col overflow-hidden" key={i}>
-                                <label className={`flex mb-1 ${active}`}>
-                                    {get_text(style, userLanguage)}
-                                </label>
-                                <div
-                                    onClick={() => update({ roomStyle: style })}
-                                    className={`cursor-pointer w-36 h-24 rounded-lg p-0 ${active ? "border-2 border-cyan-500" : "border border-gray-600"}`}
-                                    aria-pressed={active}
-                                    style={{
-                                        backgroundImage: `url(${imageStyle[style as keyof typeof imageStyle].background})`,
-                                        backgroundSize: "cover",
-                                    }}>
-                                    <div
-                                        className={`mt-10 mr-10 z-10 w-30 h-20 overflow-hidden rounded-lg ${active ? "border-b-2 border-l-2 border-cyan-500" : "border-b border-l border-gray-600"}`}
-                                        style={{
-                                            backgroundImage: `url(${imageStyle[style as keyof typeof imageStyle].semiBackground})`,
-                                            backgroundSize: "cover",
-                                        }}></div>
-                                </div>
-                            </div>
-                        );
-                    })}
-                    {/* <div className="flex flex-col overflow-hidden">
-                        <label className={`flex mb-1 ${roomInfo.roomStyle === ""}`}>
-                            {get_text("main_background_image", userLanguage)}
-                        </label>
-                        <div
-                            onClick={() => update({ roomStyle: "" })}
-                            className={`cursor-pointer w-36 h-24 rounded-lg p-0 ${roomInfo.roomStyle === "" ? "border-2 border-[#2563eb]" : "border border-[#e5e7eb]"}`}
-                            aria-pressed={roomInfo.roomStyle === ""}
-                            style={{
-                                backgroundImage: "", //get background image
-                                backgroundSize: "cover",
-                            }}></div>
-                    </div> */}
-                </div>
-            </div>
-            {/* Color selection */}
+            {/* Color selection with background preview */}
             <div className="mb-5">
                 <label className="flex text-lg mb-4 text-white">
                     {get_text("color", userLanguage)}
                 </label>
-                <div className="flex gap-x-6 gap-y-10 flex-wrap">
+                <div className="flex gap-x-6 gap-y-6 flex-wrap">
                     {COLOR_GROUPS.map((colorGroup, i) => {
                         const active = roomInfo.roomColor === colorGroup;
+                        const backgroundImage = COLOR_BACKGROUND_MAP[colorGroup];
                         return (
                             <div
                                 key={i}
-                                onClick={() => update({ roomColor: colorGroup })}
-                                className={`relative cursor-pointer w-20 h-14 rounded-full ${active ? "border-4 border-cyan-500" : "border border-gray-600"}`}
+                                onClick={() =>
+                                    update({ roomColor: colorGroup, roomStyle: "realistic" })
+                                }
+                                className={`relative cursor-pointer ${active ? "border-4 border-cyan-500" : "border-4 border-gray-600"} rounded-lg overflow-hidden bg-gray-800`}
                                 aria-pressed={active}>
+                                {/* Background Image Preview */}
                                 <div
-                                    className={`absolute -top-3 right-0 cursor-pointer w-10 h-10 rounded-full z-10 border border-black`}
+                                    className="w-48 h-32 bg-cover bg-center"
                                     style={{
-                                        background:
-                                            colorPalette[colorGroup as keyof typeof colorPalette]
-                                                .dark,
+                                        backgroundImage: `url(${backgroundImage})`,
                                     }}></div>
-                                <div
-                                    className={`absolute -top-3 left-0 cursor-pointer w-10 h-10 rounded-full z-10 border border-black`}
-                                    style={{
-                                        background:
-                                            colorPalette[colorGroup as keyof typeof colorPalette]
-                                                .second,
-                                    }}></div>
-                                <div
-                                    className={`absolute -bottom-3 right-0 cursor-pointer w-10 h-10 rounded-full z-20 border border-black`}
-                                    style={{
-                                        background:
-                                            colorPalette[colorGroup as keyof typeof colorPalette]
-                                                .bright,
-                                    }}></div>
-                                <div
-                                    className={`absolute -bottom-3 left-0 cursor-pointer w-10 h-10 rounded-full z-20 border border-black`}
-                                    style={{
-                                        background:
-                                            colorPalette[colorGroup as keyof typeof colorPalette]
-                                                .light,
-                                    }}></div>
+                                {/* Color Palette Preview */}
+                                <div className="p-3 flex items-center justify-center gap-2 rounded-lg min-h-12">
+                                    <div
+                                        className={`rounded-full border border-gray-600 transition-transform duration-300 w-8 h-8 ${
+                                            active ? "scale-125" : "scale-100"
+                                        }`}
+                                        style={{
+                                            background:
+                                                colorPalette[
+                                                    colorGroup as keyof typeof colorPalette
+                                                ].dark,
+                                        }}></div>
+                                    <div
+                                        className={`rounded-full border border-gray-600 transition-transform duration-300 w-8 h-8 ${
+                                            active ? "scale-125" : "scale-100"
+                                        }`}
+                                        style={{
+                                            background:
+                                                colorPalette[
+                                                    colorGroup as keyof typeof colorPalette
+                                                ].second,
+                                        }}></div>
+                                    <div
+                                        className={`rounded-full border border-gray-600 transition-transform duration-300 w-8 h-8 ${
+                                            active ? "scale-125" : "scale-100"
+                                        }`}
+                                        style={{
+                                            background:
+                                                colorPalette[
+                                                    colorGroup as keyof typeof colorPalette
+                                                ].bright,
+                                        }}></div>
+                                    <div
+                                        className={`rounded-full border border-gray-600 transition-transform duration-300 w-8 h-8 ${
+                                            active ? "scale-125" : "scale-100"
+                                        }`}
+                                        style={{
+                                            background:
+                                                colorPalette[
+                                                    colorGroup as keyof typeof colorPalette
+                                                ].light,
+                                        }}></div>
+                                </div>
                             </div>
                         );
                     })}
@@ -368,28 +345,17 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                     {get_text("preview", userLanguage)}
                 </label>
                 <div
-                    className="rounded-lg corder border-black border p-4 min-h-32 w-full h-full"
+                    className="rounded-lg border border-gray-600 p-4 min-h-32 w-full h-full"
                     style={{
-                        backgroundImage: roomInfo.roomStyle
-                            ? `url(${imageStyle[roomInfo.roomStyle as keyof typeof imageStyle].background})`
-                            : "", //get background image
+                        backgroundImage: `url(${COLOR_BACKGROUND_MAP[roomInfo.roomColor]})`,
                         backgroundSize: "cover",
                     }}>
                     <div
-                        className="w-2/3 h-2/3 px-8 border-2 ml-auto"
+                        className="w-2/3 h-2/3 px-8 border-2 ml-auto bg-gray-900/80 backdrop-blur-sm rounded-lg"
                         style={{
-                            backgroundImage: roomInfo.roomStyle
-                                ? `url(${imageStyle[roomInfo.roomStyle as keyof typeof imageStyle].semiBackground})`
-                                : "", //get semi background image
-                            backgroundColor:
-                                roomInfo.roomStyle === ""
-                                    ? colorPalette[roomInfo.roomColor as keyof typeof colorPalette]
-                                          .light
-                                    : "",
-                            backgroundSize: "cover",
                             borderColor:
                                 colorPalette[roomInfo.roomColor as keyof typeof colorPalette].light,
-                            fontFamily: roomInfo.roomFont,
+                            fontFamily: fontFamily[roomInfo.roomFont as keyof typeof fontFamily],
                         }}>
                         <h3
                             className="my-2 w-fit ml-auto rounded-lg p-1"
@@ -436,7 +402,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                             roomTopic: "",
                             roomName: "",
                             roomDescription: "",
-                            roomStyle: BACKGROUNDS[0],
+                            roomStyle: "realistic",
                             roomColor: COLOR_GROUPS[0],
                             roomFont: FONT_OPTIONS[0],
                         });
