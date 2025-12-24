@@ -141,7 +141,9 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
     };
 
     return (
-        <div className="max-w-3xl mt-0 mx-20 py-4" dir={userLanguage === "he" ? "rtl" : "ltr"}>
+        <div
+            className="max-w-3xl mt-0 mx-20 py-4 text-white"
+            dir={userLanguage === "he" ? "rtl" : "ltr"}>
             {/* Type- for adding options like non generated rooms for private events */}
             {/* <div className="mb-3">
                 <label className="flex text-lg mb-1.5">
@@ -164,10 +166,10 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
             </div> */}
             {/* Field */}
             <div className="mb-3">
-                <label className="flex text-lg mb-1.5">
+                <label className="flex text-lg mb-1.5 text-white">
                     {get_text("room_field", userLanguage)}{" "}
                     <span
-                        className="text-red-500 cursor-pointer"
+                        className="text-red-400 cursor-pointer"
                         title={get_text("mandatory_field", userLanguage)}>
                         *
                     </span>
@@ -176,7 +178,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                     // disabled={roomInfo.mainImage}
                     value={roomInfo.roomField}
                     onChange={(e) => update({ roomField: e.target.value })}
-                    className="w-full p-2 rounded-lg border border-[#e5e7eb]">
+                    className="w-full p-2 rounded-lg border border-gray-600 bg-gray-800 text-white">
                     <option>{get_text("choose_room_field", userLanguage)}</option>
                     {Object.keys(fieldsOfStudy).map((field) => {
                         return (
@@ -190,10 +192,10 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
             {/* Topic */}
             {roomInfo.roomType === "educational" && (
                 <div className="mb-3">
-                    <label className="flex text-lg mb-1.5">
+                    <label className="flex text-lg mb-1.5 text-white">
                         {get_text("topic", userLanguage)}{" "}
                         <span
-                            className="text-red-500 cursor-pointer"
+                            className="text-red-400 cursor-pointer"
                             title={get_text("mandatory_field", userLanguage)}>
                             *
                         </span>
@@ -203,16 +205,16 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                         disabled={roomInfo.roomType !== "educational"}
                         onChange={(e) => update({ roomTopic: e.target.value })}
                         placeholder={get_text("eg_first_aid", userLanguage)}
-                        className="w-full p-2 rounded-lg border border-[#e5e7eb]"
+                        className="w-full p-2 rounded-lg border border-gray-600 bg-gray-800 text-white placeholder-gray-400"
                     />
                 </div>
             )}
             {/* Name */}
             <div className="mb-3">
-                <label className="flex text-lg mb-1.5">
+                <label className="flex text-lg mb-1.5 text-white">
                     {get_text("name", userLanguage)}{" "}
                     <span
-                        className="text-red-500 cursor-pointer"
+                        className="text-red-400 cursor-pointer"
                         title={get_text("mandatory_field", userLanguage)}>
                         *
                     </span>
@@ -221,18 +223,20 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                     value={roomInfo.roomName}
                     onChange={(e) => update({ roomName: e.target.value })}
                     placeholder={get_text("room_name", userLanguage)}
-                    className="w-full p-2 rounded-lg border border-[#e5e7eb]"
+                    className="w-full p-2 rounded-lg border border-gray-600 bg-gray-800 text-white placeholder-gray-400"
                 />
             </div>
             {/* Description */}
             <div className="mb-4">
-                <label className="flex text-lg mb-1.5">{get_text("desc", userLanguage)}</label>
+                <label className="flex text-lg mb-1.5 text-white">
+                    {get_text("desc", userLanguage)}
+                </label>
                 <textarea
                     value={roomInfo.roomDescription}
                     onChange={(e) => update({ roomDescription: e.target.value })}
                     placeholder={get_text("room_desc", userLanguage)}
                     rows={4}
-                    className="w-full p-2 rounded-lg border border-[#e5e7eb]"
+                    className="w-full p-2 rounded-lg border border-gray-600 bg-gray-800 text-white placeholder-gray-400"
                     style={{
                         resize: "vertical",
                     }}
@@ -240,7 +244,9 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
             </div>
             {/* Style selection */}
             <div className="mb-5">
-                <label className="flex text-lg mb-2">{get_text("style", userLanguage)}</label>
+                <label className="flex text-lg mb-2 text-white">
+                    {get_text("style", userLanguage)}
+                </label>
                 <div className="flex gap-3 flex-wrap">
                     {BACKGROUNDS.map((style, i) => {
                         const active = roomInfo.roomStyle === style;
@@ -251,14 +257,14 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                                 </label>
                                 <div
                                     onClick={() => update({ roomStyle: style })}
-                                    className={`cursor-pointer w-36 h-24 rounded-lg p-0 ${active ? "border-2 border-[#2563eb]" : "border border-[#e5e7eb]"}`}
+                                    className={`cursor-pointer w-36 h-24 rounded-lg p-0 ${active ? "border-2 border-cyan-500" : "border border-gray-600"}`}
                                     aria-pressed={active}
                                     style={{
                                         backgroundImage: `url(${imageStyle[style as keyof typeof imageStyle].background})`,
                                         backgroundSize: "cover",
                                     }}>
                                     <div
-                                        className={`mt-10 mr-10 z-10 w-30 h-20 overflow-hidden rounded-lg ${active ? "border-b-2 border-l-2 border-[#2563eb]" : "border-b border-l border-[#e5e7eb]"}`}
+                                        className={`mt-10 mr-10 z-10 w-30 h-20 overflow-hidden rounded-lg ${active ? "border-b-2 border-l-2 border-cyan-500" : "border-b border-l border-gray-600"}`}
                                         style={{
                                             backgroundImage: `url(${imageStyle[style as keyof typeof imageStyle].semiBackground})`,
                                             backgroundSize: "cover",
@@ -284,7 +290,9 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
             </div>
             {/* Color selection */}
             <div className="mb-5">
-                <label className="flex text-lg mb-4">{get_text("color", userLanguage)}</label>
+                <label className="flex text-lg mb-4 text-white">
+                    {get_text("color", userLanguage)}
+                </label>
                 <div className="flex gap-x-6 gap-y-10 flex-wrap">
                     {COLOR_GROUPS.map((colorGroup, i) => {
                         const active = roomInfo.roomColor === colorGroup;
@@ -292,7 +300,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                             <div
                                 key={i}
                                 onClick={() => update({ roomColor: colorGroup })}
-                                className={`relative cursor-pointer w-20 h-14 rounded-full ${active ? "border-4 border-[#2563eb]" : "border border-[#e5e7eb]"}`}
+                                className={`relative cursor-pointer w-20 h-14 rounded-full ${active ? "border-4 border-cyan-500" : "border border-gray-600"}`}
                                 aria-pressed={active}>
                                 <div
                                     className={`absolute -top-3 right-0 cursor-pointer w-10 h-10 rounded-full z-10 border border-black`}
@@ -329,7 +337,9 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
             </div>
             {/* Font selection */}
             <div className="mb-5">
-                <label className="flex text-lg mb-2">{get_text("font", userLanguage)}</label>
+                <label className="flex text-lg mb-2 text-white">
+                    {get_text("font", userLanguage)}
+                </label>
                 <div className="flex gap-3 flex-wrap">
                     {FONT_OPTIONS.map((f, idx) => {
                         const active = roomInfo.roomFont === f;
@@ -338,7 +348,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                                 key={idx}
                                 onClick={() => update({ roomFont: f })}
                                 aria-pressed={active}
-                                className={`py-2.5 px-3 rounded-lg cursor-pointer h-24 w-32 bg-[#ffffff] text-center min-w-28 ${active ? "border-2 border-[#2563eb]" : "border border-[#e5e7eb]"}`}>
+                                className={`py-2.5 px-3 rounded-lg cursor-pointer h-24 w-32 bg-gray-800 text-white text-center min-w-28 ${active ? "border-2 border-cyan-500" : "border border-gray-600"}`}>
                                 <div
                                     style={{
                                         fontSize: 30,
@@ -346,7 +356,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                                     }}>
                                     {userLanguage === "he" ? "אב גד" : "Aa Bb"}
                                 </div>
-                                <div className="text-base text-[#6b7280] mt-1.5">{f}</div>
+                                <div className="text-base text-gray-400 mt-1.5">{f}</div>
                             </button>
                         );
                     })}
@@ -354,7 +364,9 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
             </div>
             {/* Preview */}
             <div className="mt-3 mb-5">
-                <label className="flex text-lg mb-2">{get_text("preview", userLanguage)}</label>
+                <label className="flex text-lg mb-2 text-white">
+                    {get_text("preview", userLanguage)}
+                </label>
                 <div
                     className="rounded-lg corder border-black border p-4 min-h-32 w-full h-full"
                     style={{
@@ -410,9 +422,9 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                 <button
                     onClick={handleEnd}
                     disabled={loading}
-                    className="text-[#ffffff] bg-blue-600 border-0 py-2.5 px-3.5 rounded-lg cursor-pointer">
+                    className="text-white bg-cyan-500 hover:bg-cyan-600 border-0 py-2.5 px-3.5 rounded-lg cursor-pointer transition-colors">
                     {loading
-                        ? get_text("saving...", userLanguage)
+                        ? get_text("saving", userLanguage)
                         : get_text("next_page", userLanguage)}
                 </button>
                 <button
@@ -431,10 +443,10 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                         setStatus("Draft cleared");
                     }}
                     disabled={loading}
-                    className="bg-[#ffffff] border border-[#e5e7eb] py-2.5 px-3 rounded-lg cursor-pointer">
+                    className="bg-gray-700 hover:bg-gray-600 border border-gray-600 text-white py-2.5 px-3 rounded-lg cursor-pointer transition-colors">
                     {get_text("clear_draft", userLanguage)}
                 </button>
-                {status && <div className="ml-2 text-[#374151]">{status}</div>}
+                {status && <div className="ml-2 text-gray-300">{status}</div>}
             </div>
         </div>
     );

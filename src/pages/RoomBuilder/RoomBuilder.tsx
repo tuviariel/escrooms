@@ -62,7 +62,7 @@ export const RoomBuilder = () => {
     }, [step]);
 
     return (
-        <div className="flex w-screen">
+        <div className="flex w-full bg-gray-900 min-h-screen pt-16 overflow-x-hidden">
             <div className={`${sidebarOpen ? "w-3/12" : "w-1/12"}`}>
                 <CreatorConsole
                     user={userRedux}
@@ -73,35 +73,14 @@ export const RoomBuilder = () => {
                 />
             </div>
             <div
-                className={`${sidebarOpen ? "w-9/12" : "w-11/12"} text-left flex-col lg:justify-center overflow-x-hidden"`}
+                className={`${sidebarOpen ? "w-9/12" : "w-11/12"} text-left flex-col lg:justify-center overflow-x-hidden bg-gray-900`}
                 dir={userLanguage === "he" ? "rtl" : "ltr"}>
-                {/* <div
-                    className={`fixed ${sidebarOpen ? "w-9/12" : "w-11/12"} mt-12 bg-white border-b border-cyan-700 z-30`}>
-                    <h5 className="text-center text-3xl">
-                        {get_text("creating_room", userLanguage)}
-                    </h5>
-                    <ProgressBar step={step} setStep={setStep} stepInfo={stepInfo} className="" />
-                </div>
-                <div className={`${sidebarOpen ? "w-9/12" : "w-11/12"} h-48 bg-white`}></div>
-                {step > 0 && (
-                    <button
-                        className={`bg-teal-400 py-2 px-4 rounded-full border-2 border-gray-700 flex ${userLanguage === "he" ? "ml-auto mr-5 flex-row-reverse" : "mr-auto ml-5"}`}
-                        onClick={() => setStep((prev) => (prev > 0 ? prev - 1 : prev))}
-                        disabled={step === 0}>
-                        <img
-                            src={Prev}
-                            alt="back"
-                            className={`${userLanguage === "he" ? "rotate-180" : ""} h-6 w-auto`}
-                        />
-                        {get_text("prev_page", userLanguage)}
-                    </button>
-                )} */}
                 <h5
-                    className={`mt-22 text-center text-2xl font-bold mb-4 ${userLanguage === "he" ? "text-right mr-14" : "text-left ml-14"} `}
+                    className={`mt-8 text-center text-2xl font-bold mb-4 text-white ${userLanguage === "he" ? "text-right mr-14" : "text-left ml-14"}`}
                     dir={userLanguage === "he" ? "rtl" : "ltr"}>
                     {stepInfo[step].name}
                 </h5>
-                <div className={sidebarOpen ? "w-9/12" : "w-11/12"}>{stepInfo[step].component}</div>
+                <div className="w-full">{stepInfo[step].component}</div>
             </div>
         </div>
     );

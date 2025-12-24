@@ -70,12 +70,12 @@ export const CreatorConsole = ({
 
     return (
         <div
-            className={`fixed ${sidebarOpen ? "w-3/12" : "w-1/12"} bg-white transition-all duration-300 flex flex-col border-r h-full border-cyan-600 pt-12`}>
+            className={`fixed ${sidebarOpen ? "w-3/12" : "w-1/12"} bg-gray-800 transition-all duration-300 flex flex-col border-r h-full border-cyan-500/30 pt-12`}>
             {/* Create New Room Button */}
             <div className="p-3 border-b border-gray-700 flex">
                 {step !== 0 && (
                     <button
-                        className={` ml-auto bg-cyan-700 text-white hover:bg-cyan-600 h-8 border-black border-2 px-3 text-sm cursor-pointer items-center justify-center w-full flex gap-2 p-3 rounded-lg font-semibold transition-colors ${
+                        className={`ml-auto bg-cyan-500 text-white hover:bg-cyan-600 h-8 px-3 text-sm cursor-pointer items-center justify-center w-full flex gap-2 p-3 rounded-lg font-semibold transition-colors ${
                             !sidebarOpen && ""
                         }`}
                         onClick={() => {
@@ -87,7 +87,7 @@ export const CreatorConsole = ({
                 )}
                 <button
                     onClick={() => setSidebarOpen(!sidebarOpen)}
-                    className={`p-2 ${sidebarOpen ? "ml-auto" : "mx-auto"} hover:bg-cyan-200 rounded-lg transition-colors h-8`}>
+                    className={`p-2 ${sidebarOpen ? "ml-auto" : "mx-auto"} hover:bg-gray-700 rounded-lg transition-colors h-8 text-white`}>
                     {sidebarOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
                 </button>
             </div>
@@ -95,7 +95,7 @@ export const CreatorConsole = ({
             <div className="flex items-center justify-between p-4">
                 {sidebarOpen && (
                     <h1
-                        className={`text-xl font-bold ${userLanguage === "en" ? "text-left" : "text-right"}`}>
+                        className={`text-xl font-bold text-white ${userLanguage === "en" ? "text-left" : "text-right"}`}>
                         {get_text("my_rooms", userLanguage)}
                     </h1>
                 )}
@@ -105,6 +105,7 @@ export const CreatorConsole = ({
             <div className="flex-1 overflow-y-auto px-3 py-4 space-y-3">
                 {rooms.map((room, i) => (
                     <RoomCard
+                        key={room.id}
                         room={room}
                         i={i}
                         sidebarOpen={sidebarOpen}
@@ -118,7 +119,7 @@ export const CreatorConsole = ({
 
             {/* User Options at Bottom */}
             <div className="p-3 border-t border-gray-700 space-y-2">
-                <button className="w-full flex items-center gap-2 hover:bg-gray-700 p-2 rounded-lg transition-colors text-sm">
+                <button className="w-full flex items-center gap-2 hover:bg-gray-700 p-2 rounded-lg transition-colors text-sm text-white">
                     <Settings size={18} />
                     {sidebarOpen && <span>Settings</span>}
                 </button>

@@ -44,7 +44,7 @@ export const RoomCard = ({
     return (
         <div
             key={room.id}
-            className={`bg-cyan-300 hover:bg-cyan-400 rounded-lg p-3 transition-colors cursor-pointer ${
+            className={`bg-gray-700 hover:bg-gray-600 rounded-lg p-3 transition-colors cursor-pointer ${
                 !sidebarOpen ? "flex justify-center" : ""
             }`}
             onClick={() => console.log("preview room-" + room.id)}
@@ -53,10 +53,12 @@ export const RoomCard = ({
                 <>
                     <div className="flex relative justify-between">
                         {room.mainImage && (
-                            <img src={imageUrl} alt="image" className="h-11 w-11 mr-1" />
+                            <img src={imageUrl} alt="image" className="h-11 w-11 mr-1 rounded" />
                         )}
                         <div className="space-y-2">
-                            <h3 className="font-semibold text-sm truncate">{room.name}</h3>
+                            <h3 className="font-semibold text-sm truncate text-white">
+                                {room.name}
+                            </h3>
                             {/* <p className="text-xs text-gray-300 truncate">{room.description}</p> */}
                             <p className="text-xs text-gray-400">
                                 {get_text("created_at", userLanguage)}:{" "}
@@ -65,27 +67,27 @@ export const RoomCard = ({
                         </div>
                         <div className="flex flex-col justify-between">
                             <div
-                                className={`px-1 rounded-full ${openOptions[i] ? "border-white border" : ""}`}>
+                                className={`px-1 rounded-full ${openOptions[i] ? "border-cyan-400 border" : ""}`}>
                                 <EllipsisVertical
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         handleOpenDots(i);
                                     }}
                                     size={14}
-                                    color={!openOptions[i] ? "black" : "white"}
+                                    color={!openOptions[i] ? "white" : "cyan"}
                                 />
                             </div>
                             {openOptions[i] && (
                                 <div
                                     onMouseLeave={() => handleOpenDots(i)}
-                                    className="absolute right-4 top-1 flex flex-row-reverse gap-2 m-2 bg-white p-1 rounded-lg">
+                                    className="absolute right-4 top-1 flex flex-row-reverse gap-2 m-2 bg-gray-800 border border-gray-600 p-1 rounded-lg shadow-lg">
                                     <button
                                         title={get_text("edit", userLanguage)}
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             console.log("edit room-" + room.id);
                                         }}
-                                        className="flex-1 flex items-center justify-center gap-1 hover:bg-blue-700 p-1.5 rounded text-xs transition-colors">
+                                        className="flex-1 flex items-center justify-center gap-1 hover:bg-cyan-600 text-white p-1.5 rounded text-xs transition-colors">
                                         <Edit2 size={14} />
                                     </button>
                                     {room.public && (
@@ -95,7 +97,7 @@ export const RoomCard = ({
                                                 e.stopPropagation();
                                                 console.log("share room-" + room.id);
                                             }}
-                                            className="flex-1 flex items-center justify-center gap-1 hover:bg-blue-700 p-1.5 rounded text-xs transition-colors">
+                                            className="flex-1 flex items-center justify-center gap-1 hover:bg-cyan-600 text-white p-1.5 rounded text-xs transition-colors">
                                             <Share2 size={14} />
                                         </button>
                                     )}
@@ -111,7 +113,7 @@ export const RoomCard = ({
                                                 ? console.log("show subscribe dialog")
                                                 : publishRoom(room.id, !room.public || true);
                                         }}
-                                        className="flex-1 flex items-center justify-center gap-1 hover:bg-green-700 p-1.5 rounded text-xs transition-colors">
+                                        className="flex-1 flex items-center justify-center gap-1 hover:bg-green-600 text-white p-1.5 rounded text-xs transition-colors">
                                         {room.public ? <EyeOff size={14} /> : <Eye size={14} />}
                                     </button>
                                     {userRedux.subscription !== "free" && (
@@ -121,23 +123,27 @@ export const RoomCard = ({
                                                 e.stopPropagation();
                                                 handleDeleteRoom(room.id);
                                             }}
-                                            className="flex-1 flex items-center justify-center gap-1 hover:bg-red-700 p-1.5 rounded text-xs transition-colors">
+                                            className="flex-1 flex items-center justify-center gap-1 hover:bg-red-600 text-white p-1.5 rounded text-xs transition-colors">
                                             <Trash2 size={14} />
                                         </button>
                                     )}
                                 </div>
                             )}
                             <div
-                                className="px-1"
+                                className="px-1 text-white"
                                 title={get_text(room.public ? "public" : "private", userLanguage)}>
-                                {room.public ? <Eye size={14} /> : <EyeOff size={14} />}
+                                {room.public ? (
+                                    <Eye size={14} color="white" />
+                                ) : (
+                                    <EyeOff size={14} color="white" />
+                                )}
                             </div>
                         </div>
                     </div>
                 </>
             ) : (
                 <div className="w-10 h-10 bg-gray-600 rounded flex items-center justify-center">
-                    <span className="text-xs font-bold">{room.name.charAt(0)}</span>
+                    <span className="text-xs font-bold text-white">{room.name.charAt(0)}</span>
                 </div>
             )}
         </div>
