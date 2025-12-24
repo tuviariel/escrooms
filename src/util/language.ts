@@ -180,6 +180,32 @@ const appContext: Translations = {
     interesting_insights: { en: "Interesting Insights", he: "תובנות מעניינות", ar: "" },
     explanation: { en: "Explanation", he: "הסבר", ar: "" },
     example: { en: "", he: "", ar: "" },
+    // Navigation
+    home: { en: "Home", he: "ראשי", ar: "" },
+    examples: { en: "Examples", he: "דוגמאות", ar: "" },
+    prices: { en: "Prices", he: "מחירים", ar: "" },
+    about: { en: "About", he: "אודות", ar: "" },
+    create_escape_room: { en: "Create Escape Room", he: "צור חדר בריחה", ar: "" },
+    // Hero Section
+    hero_title: {
+        en: "Turn every subject into an adventure: Create an online escape room tailored to you",
+        he: "הפכו כל נושא להרפתקה: צרו חדר בריחה מקוון בהתאמה אישית",
+        ar: "",
+    },
+    hero_subtitle: {
+        en: "An intuitive platform for creating learning and team-building experiences, no technical knowledge required.",
+        he: "פלטפורמה אינטואיטיבית ליצית חוויות למידה וגיבוש, ללא צורך בידע טכני.",
+        ar: "",
+    },
+    start_creating_free: { en: "Start creating for free", he: "התחל ליצור בחינם", ar: "" },
+    // Game Cards
+    my_recent_games: { en: "My Recent Games", he: "המשחקים האחרונים שלי", ar: "" },
+    play_now: { en: "Play now", he: "שחק עכשיו", ar: "" },
+    // edit: { en: "Edit", he: "ערוך", ar: "" },
+    // Footer
+    easy_to_use: { en: "Easy to use", he: "קל לשימוש", ar: "" },
+    full_customization: { en: "Full customization", he: "התאמה אישית מלאה", ar: "" },
+    mobile_adapted: { en: "Mobile adapted", he: "מותאם למובייל", ar: "" },
 };
 
 export const get_text = (name: string, lang: string) => {

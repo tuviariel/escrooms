@@ -3,7 +3,6 @@ import Logo from "../../assets/images/vaivrach-big.png";
 import Login from "../Login";
 import { useSelector } from "react-redux";
 import { userType } from "../Login/Login";
-// import Button from "../Button";
 import { get_text } from "../../util/language";
 import { useUserContext } from "../../contexts/userStyleContext";
 import { Plus } from "lucide-react";
@@ -16,44 +15,58 @@ export const NavBar = () => {
     console.log("NavBar render", userRedux);
     return (
         <div className="h-screen">
-            <div className="h-12 w-screen border-b-2 border-cyan-700 text-xl text-center flex fixed top-0 left-0 bg-white z-30">
-                {location.pathname !== "/" &&
-                    location.pathname !== "/home" &&
-                    location.pathname !== "/room-builder" && (
-                        <div
-                            className="text-2xl font-bold text-cyan-700 cursor-pointer ml-3 mt-1"
-                            onClick={() => {
-                                navigate("/");
-                            }}>
-                            {"<"}
-                        </div>
-                    )}
-                <img
-                    src={Logo}
-                    alt="Vaivrach"
-                    onClick={() => {
-                        location.pathname !== "/" && navigate("/");
-                    }}
-                    className="ml-5 h-9 w-12 my-auto cursor-pointer"
-                />
-                {!userRedux?.user?.displayName && (
-                    <h2 className="font-semibold text-3xl mx-auto flex underline">
-                        {get_text("welcome", userLanguage)}
-                    </h2>
-                )}
-                {userRedux?.user?.roomsLeft > 0 && location.pathname !== "/room-builder" && (
-                    <button
+            <div className="h-16 w-screen bg-gray-900 text-white flex items-center justify-between px-6 fixed top-0 left-0 z-30 border-b border-cyan-500/20">
+                {/* Logo Section */}
+                <div className="flex items-center gap-2">
+                    {location.pathname !== "/" &&
+                        location.pathname !== "/home" &&
+                        location.pathname !== "/room-builder" && (
+                            <button
+                                className="text-cyan-400 hover:text-cyan-300 mr-4"
+                                onClick={() => navigate("/")}>
+                                {"<"}
+                            </button>
+                        )}
+                    <div
+                        className="flex items-center gap-2 cursor-pointer"
                         onClick={() => {
-                            navigate("/room-builder");
-                        }}
-                        className="flex mr-5 ml-auto bg-cyan-700 text-white hover:bg-cyan-600 h-8 border-black border-2 rounded-full px-3 text-sm mt-1.5 cursor-pointer items-center justify-center">
-                        <Plus size={20} />
-                        {get_text("new_room", userLanguage)}
+                            location.pathname !== "/" && navigate("/");
+                        }}>
+                        <img src={Logo} alt="Logo" className="w-12 h-10" />
+                    </div>
+                </div>
+
+                {/* Navigation Links */}
+                <nav className="hidden md:flex items-center gap-6">
+                    <button
+                        onClick={() => navigate("/")}
+                        className="text-white hover:text-cyan-400 transition-colors">
+                        {get_text("home", userLanguage)}
                     </button>
-                )}
-                <div
-                    className={`relative inline-block ${userRedux?.user?.roomsLeft === 0 || location.pathname === "/room-builder" ? "ml-auto" : "ml-5"} mr-5 mt-0.5`}>
-                    <Login />
+                    {/* <button className="text-white hover:text-cyan-400 transition-colors">
+                        {get_text("examples", userLanguage)}
+                    </button> */}
+                    <button className="text-white hover:text-cyan-400 transition-colors">
+                        {get_text("prices", userLanguage)}
+                    </button>
+                    <button className="text-white hover:text-cyan-400 transition-colors">
+                        {get_text("about", userLanguage)}
+                    </button>
+                </nav>
+
+                {/* Right Section */}
+                <div className="flex items-center gap-4">
+                    {userRedux?.user?.roomsLeft > 0 && location.pathname !== "/room-builder" && (
+                        <button
+                            onClick={() => navigate("/room-builder")}
+                            className="flex items-center gap-2 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold px-4 py-2 rounded-full transition-colors shadow-lg shadow-cyan-500/50">
+                            <Plus size={20} />
+                            {get_text("create_escape_room", userLanguage)}
+                        </button>
+                    )}
+                    <div className="relative">
+                        <Login />
+                    </div>
                 </div>
             </div>
             <Outlet />

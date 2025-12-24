@@ -1,6 +1,10 @@
-export const dateDisplay = (ts: number) => {
-    const date = new Date(ts);
-    return date.toLocaleDateString("he-IL");
+export const formatDate = (userLanguage: string, dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString(userLanguage === "he" ? "he-IL" : "en-US", {
+        month: "2-digit",
+        day: "2-digit",
+        year: "numeric",
+    });
 };
 
 interface literalObject {
