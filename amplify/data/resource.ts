@@ -14,9 +14,10 @@ const schema = a.schema({
             completed: a.json(), // A user can have many completed rooms (FK = id)
         })
         .authorization((allow) => [
+            allow.groups(["admin"]),
             allow.owner(),
             allow.authenticated().to(["create"]),
-            // allow.groups(["admin"]).to(["create", "read", "update", "delete"]),
+            // .to(["create", "read", "update", "delete"]),
         ]),
 
     // ROOM
@@ -27,6 +28,7 @@ const schema = a.schema({
 
             name: a.string().required(),
             mainImage: a.string(),
+            coverImage: a.string(),
             colorPalette: a.string(),
             imageStyle: a.string(),
             fontFamily: a.string(),
@@ -38,10 +40,11 @@ const schema = a.schema({
             quizzes: a.hasMany("Quiz", "roomId"), // A room has many quizzes (FK = roomId)
         })
         .authorization((allow) => [
+            allow.groups(["admin"]),
+            allow.owner(),
             allow.authenticated().to(["read"]),
-            // allow.groups(["admin"]).to(["create", "read", "update", "delete"]),
+            // .to(["create", "read", "update", "delete"]),
             allow.guest().to(["read"]),
-            allow.owner().to(["read", "create", "delete", "update"]),
         ]),
 
     // QUIZ
@@ -59,10 +62,11 @@ const schema = a.schema({
             hints: a.json(),
         })
         .authorization((allow) => [
+            allow.groups(["admin"]),
+            allow.owner(),
             allow.authenticated().to(["read"]),
-            // allow.groups(["admin"]).to(["create", "read", "update", "delete"]),
+            // .to(["create", "read", "update", "delete"]),
             allow.guest().to(["read"]),
-            allow.owner().to(["read", "create", "delete", "update"]),
         ]),
 });
 
