@@ -17,7 +17,7 @@ interface DigitalNumberProps {
 // Using fixed NEON_CYAN color for segments - background color handled by parent
 
 const INACTIVE_COLOR = "#535353";
-const SEGMENT_WIDTH = 12; // Thickness of segments
+// const SEGMENT_WIDTH = 12; // Thickness of segments
 const ICON_SIZE = "2.5rem";
 
 // Helper component for rendering an icon in a segment
@@ -73,8 +73,8 @@ export const DigitalNumber = (props: DigitalNumberProps) => {
     // SVG viewBox dimensions - responsive
     const viewBoxWidth = 300;
     const viewBoxHeight = 450;
-    const segmentLength = 80; // Length of horizontal segments
-    const segmentHeight = 60; // Height of vertical segments
+    // const segmentLength = 80; // Length of horizontal segments
+    // const segmentHeight = 60; // Height of vertical segments
 
     // Calculate positions for icons (center of each segment)
     const iconPositions = [
