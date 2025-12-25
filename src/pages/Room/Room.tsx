@@ -16,6 +16,7 @@ import { quizListActions } from "../../reduxStor/quizList";
 import { useUserContext } from "../../contexts/userStyleContext";
 import { RoomType } from "../Dashboard/Dashboard";
 import { CheckCircle2, Lock, Activity, Smartphone } from "lucide-react";
+import RoomTimer from "../../components/RoomTimer";
 
 export interface quizDataProps {
     data: {
@@ -219,9 +220,13 @@ export const Room = () => {
             const allCompleted = quizList.every((quiz: any) => quiz.completed);
             if (allCompleted) {
                 setCompleted(true);
+                // Clear timer when room is completed
+                if (id) {
+                    localStorage.removeItem(`roomTimer_${id}`);
+                }
             }
         }
-    }, [quizList]);
+    }, [quizList, id]);
     useEffect(() => {
         if (!roomData) return;
         const getUrl = async (mainImage: string | null) => {
@@ -263,6 +268,18 @@ export const Room = () => {
                         )}
 
                         <div className="h-full w-full relative bg-gray-900 flex justify-center items-center">
+                            {/* Emergency Protocol Display - shown when not in a quiz */}
+                            {quizNumber === -1 && (
+                                <RoomTimer
+                                    totalHotspots={quizList.length}
+                                    completedHotspots={
+                                        quizList.filter((q: any) => q.status === "completed").length
+                                    }
+                                    roomId={id}
+                                    completed={completed}
+                                    roomName={roomData?.name || ""}
+                                />
+                            )}
                             <motion.div
                                 className="relative w-full h-full"
                                 style={{
@@ -272,7 +289,7 @@ export const Room = () => {
                                 }}>
                                 {/* Layer 1: Background */}
                                 <motion.div
-                                    className={`absolute inset-[-10%] w-[120%] h-[120%] bg-cover bg-center z-0`}
+                                    className={`absolute inset-0 w-full h-full bg-cover bg-center z-0`}
                                     style={{
                                         backgroundImage: `url(${URLMainImage})`,
                                         x: bgX,
@@ -503,9 +520,14 @@ function HUD({
 
     return (
         <motion.div
-            className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 w-96 bg-white/90 backdrop-blur-md rounded-2xl px-6 py-2 shadow-2xl border border-white/20"
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 w-96 border-2 backdrop-blur-md rounded-2xl px-6 py-2 shadow-2xl"
             initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}>
+            animate={{ y: 0, opacity: 1 }}
+            style={{
+                borderColor: colorPalette[roomColor as keyof typeof colorPalette].light,
+                color: colorPalette[roomColor as keyof typeof colorPalette].light,
+            }}
+            dir={userLanguage === "he" ? "rtl" : "ltr"}>
             <div className="flex justify-between items-end mb-2">
                 <div className="text-xs font-mono font-bold text-gray-400">
                     {get_text("room_progress", userLanguage)}
@@ -525,11 +547,9 @@ function HUD({
                 />
             </div>
 
-            <div
-                className="mt-4 flex justify-between text-xs font-mono text-gray-500"
-                dir={userLanguage === "he" ? "rtl" : "ltr"}>
+            <div className="mt-4 flex justify-between text-xs font-mono text-gray-500">
                 <span>{get_text("current_objective", userLanguage)}</span>
-                <span className="font-bold text-black flex items-center gap-1">
+                <span className="font-bold flex items-center gap-1">
                     <Activity className="w-3 h-3" /> {get_text("find_quiz_num", userLanguage)}{" "}
                     {activeId}
                 </span>
