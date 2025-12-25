@@ -206,6 +206,17 @@ const appContext: Translations = {
     easy_to_use: { en: "Easy to use", he: "קל לשימוש", ar: "" },
     full_customization: { en: "Full customization", he: "התאמה אישית מלאה", ar: "" },
     mobile_adapted: { en: "Mobile adapted", he: "מותאם למובייל", ar: "" },
+    // Emergency Protocol Display
+    emergency_protocol: {
+        en: "Emergency Protocol: ",
+        he: "פרוטוקול חירום: ",
+        ar: "",
+    },
+    emergency_protocol_instruction: {
+        en: "Instruction: Break into the {count} locked elements",
+        he: "הנחיה: פריצו את {count} המוקדים הנעולים",
+        ar: "",
+    },
 };
 
 export const get_text = (name: string, lang: string) => {
