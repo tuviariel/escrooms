@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Button from "../../Button";
 import { GridCharObj } from "../../../util/utils";
 // import { quizData } from "../../../pages/Room/Room";
-import { colorPalette, imageStyle } from "../../../util/UIstyle";
+import { colorPalette } from "../../../util/UIstyle";
 import { useRoomContext } from "../../../contexts/roomStyleContext";
 import { TemplateProps } from "../../../pages/QuizTemplate/QuizTemplate";
 import { get_text } from "../../../util/language";
@@ -32,7 +32,7 @@ export const Grid = (props: TemplateProps) => {
         }[][]
     >([]);
     const [disabled, setDisabled] = useState(true);
-    const { roomStyle, roomColor } = useRoomContext();
+    const { roomColor } = useRoomContext();
     useEffect(() => {
         const setGrid = () => {
             setActive(() => {
@@ -139,7 +139,7 @@ export const Grid = (props: TemplateProps) => {
             className="bg-gray-100 flex flex-col w-screen h-screen p-3"
             style={{
                 backgroundImage: `url(${
-                    imageStyle[roomStyle as keyof typeof imageStyle].background
+                    colorPalette[roomColor as keyof typeof colorPalette].background
                 })`,
             }}>
             <div

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Button from "../../Button";
 import { ListNumObj } from "../../../util/utils";
 import { TemplateProps } from "../../../pages/QuizTemplate/QuizTemplate";
-import { imageStyle } from "../../../util/UIstyle";
+import { colorPalette } from "../../../util/UIstyle";
 import { useRoomContext } from "../../../contexts/roomStyleContext";
 import { get_text } from "../../../util/language";
 import {
@@ -40,7 +40,7 @@ export const OrderBorder = (props: TemplateProps) => {
     >([]);
     const [disabled, setDisabled] = useState(false);
     const [finishedStart, setFinishedStart] = useState(false);
-    const { roomStyle } = useRoomContext();
+    const { roomColor } = useRoomContext();
     useEffect(() => {
         const setList = () => {
             setCards(() => {
@@ -135,7 +135,7 @@ export const OrderBorder = (props: TemplateProps) => {
     return (
         <div
             style={{
-                backgroundImage: `url(${imageStyle[roomStyle as keyof typeof imageStyle].background})`,
+                backgroundImage: `url(${colorPalette[roomColor as keyof typeof colorPalette].background})`,
                 backgroundSize: "cover",
             }}
             className="h-screen">

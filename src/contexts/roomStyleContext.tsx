@@ -17,7 +17,7 @@ interface ContextProviderProps {
 // The Provider wrapped around the room component:
 const RoomContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     const [roomStyle, setRoomStyle] = useState<string>("abstract");
-    const [roomColor, setRoomColor] = useState<string>("redBlueGray");
+    const [roomColor, setRoomColor] = useState<string>("blueToRed");
     const [roomFont, setRoomFont] = useState<string>("Arial");
     console.log(roomStyle, roomColor, roomFont);
     return (

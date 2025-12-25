@@ -8,17 +8,61 @@ import ASBG from "../assets/images/UIelements/semiBackgrounds/abstract.png";
 import MSBG from "../assets/images/UIelements/semiBackgrounds/realistic.png";
 import CSBG from "../assets/images/UIelements/semiBackgrounds/realistic.png";
 import VSBG from "../assets/images/UIelements/semiBackgrounds/realistic.png";
+// Import color background images
+import blueToRedBg from "../assets/images/colorBackgrounds/blueToRed.png";
+import blueToGreenBg from "../assets/images/colorBackgrounds/blueToGreen.png";
+import purpleToOrangeBg from "../assets/images/colorBackgrounds/purpleToOrange.png";
+// import redToWhiteBg from "../assets/images/colorBackgrounds/redToWhite.png";
+import blueToYellowBg from "../assets/images/colorBackgrounds/blueToYellow.png";
+import purpleToGreenBg from "../assets/images/colorBackgrounds/purpleToGreen.png";
+import greenToRedBg from "../assets/images/colorBackgrounds/greenToRed.png";
 
 export const colorPalette = {
-    //1 - dark/dominant/chosen color, 2 - bright/positive color, 3 - light color
-    redBlueGray: { dark: "#5A0E24", second: "#76153C", bright: "#BF124D", light: "#67B2D8" },
-    blueToRed: { dark: "#050E3C", second: "#002455", bright: "#DC0000", light: "#FF3838" },
-    blueToYellow: { dark: "#360185", second: "#8F0177", bright: "#DE1A58", light: "#F4B342" },
-    greenToPink: { dark: "#B8DB80", second: "#F7F6D3", bright: "#FFE4EF", light: "#F39EB6" },
-    greenToRed: { dark: "#BBCB64", second: "#FFE52A", bright: "#F79A19", light: "#CF0F0F" },
-    greenToWhite: { dark: "#005461", second: "#018790", bright: "#00B7B5", light: "#F4F4F4" },
-    blueToPink: { dark: "#301CA0", second: "#7132CA", bright: "#C47BE4", light: "#F29AAE" },
+    //1 - dark/dominant/chosen border-color, 2 - bright/positive clickable-color, 3 - light text-color
+    redBlueGray: {
+        dark: "#BF124D",
+        bright: "#67B2D8",
+        light: "#BDE8F5",
+        background: blueToRedBg,
+    },
+    blueToRed: {
+        dark: "#BF124D",
+        bright: "#67B2D8",
+        light: "#BDE8F5",
+        background: blueToRedBg,
+    },
+    blueToYellow: {
+        dark: "#360185",
+        bright: "#F4B342",
+        light: "#F6F3C2",
+        background: blueToYellowBg,
+    },
+    purpleToOrange: {
+        dark: "#8F0177",
+        bright: "#F79A19",
+        light: "#F39EB6",
+        background: purpleToOrangeBg,
+    },
+    blueToGreen: {
+        dark: "#73AF6F",
+        bright: "#3291B6",
+        light: "#F4F4F4",
+        background: blueToGreenBg,
+    },
+    greenToRed: {
+        dark: "#CF0F0F",
+        bright: "#BBCB64",
+        light: "#CCE5CF",
+        background: greenToRedBg,
+    },
+    purpleToGreen: {
+        dark: "#7132CA",
+        bright: "#5C6F2B",
+        light: "#F29AAE",
+        background: purpleToGreenBg,
+    },
 };
+
 export const imageStyle = {
     realistic: {
         background: RBG,

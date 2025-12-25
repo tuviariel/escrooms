@@ -6,7 +6,6 @@ import { roomsService } from "../../../services/service";
 import { useSelector } from "react-redux";
 import { userType } from "../../../components/Login/Login";
 import { fieldsOfStudy } from "../../../util/utils";
-import { COLOR_BACKGROUND_MAP } from "../../../util/UIstyle";
 type RoomInfo = {
     roomType: string;
     roomField: string;
@@ -104,7 +103,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                     type: roomInfo.roomType,
                     topic: roomInfo.roomTopic,
                     name: roomInfo.roomName,
-                    colorPalette: roomInfo.roomColor || "redBlueGray",
+                    colorPalette: roomInfo.roomColor || "blueToRed",
                     imageStyle: roomInfo.roomStyle || "",
                     fontFamily: roomInfo.roomFont || "sansSerif",
                     description: roomInfo.roomDescription,
@@ -117,7 +116,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                     topic: roomInfo.roomTopic,
                     name: roomInfo.roomName,
                     mainImage: "",
-                    colorPalette: roomInfo.roomColor || "redBlueGray",
+                    colorPalette: roomInfo.roomColor || "blueToRed",
                     imageStyle: roomInfo.roomStyle || "",
                     fontFamily: roomInfo.roomFont || "sansSerif",
                     description: roomInfo.roomDescription,
@@ -138,7 +137,7 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
             setLoading(false);
         }
     };
-
+    console.log(roomInfo.roomColor, colorPalette[roomInfo.roomColor as keyof typeof colorPalette]);
     return (
         <div
             className="max-w-3xl mt-0 mx-20 py-4 text-white"
@@ -249,7 +248,6 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                 <div className="flex gap-x-6 gap-y-6 flex-wrap">
                     {COLOR_GROUPS.map((colorGroup, i) => {
                         const active = roomInfo.roomColor === colorGroup;
-                        const backgroundImage = COLOR_BACKGROUND_MAP[colorGroup];
                         return (
                             <div
                                 key={i}
@@ -262,7 +260,10 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                                 <div
                                     className="w-48 h-32 bg-cover bg-center"
                                     style={{
-                                        backgroundImage: `url(${backgroundImage})`,
+                                        backgroundImage: `url(${
+                                            colorPalette[colorGroup as keyof typeof colorPalette]
+                                                .background
+                                        })`,
                                     }}></div>
                                 {/* Color Palette Preview */}
                                 <div className="p-3 flex items-center justify-center gap-2 rounded-lg min-h-12">
@@ -275,16 +276,6 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                                                 colorPalette[
                                                     colorGroup as keyof typeof colorPalette
                                                 ].dark,
-                                        }}></div>
-                                    <div
-                                        className={`rounded-full border border-gray-600 transition-transform duration-300 w-8 h-8 ${
-                                            active ? "scale-125" : "scale-100"
-                                        }`}
-                                        style={{
-                                            background:
-                                                colorPalette[
-                                                    colorGroup as keyof typeof colorPalette
-                                                ].second,
                                         }}></div>
                                     <div
                                         className={`rounded-full border border-gray-600 transition-transform duration-300 w-8 h-8 ${
@@ -347,7 +338,9 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                 <div
                     className="rounded-lg border border-gray-600 p-4 min-h-32 w-full h-full"
                     style={{
-                        backgroundImage: `url(${COLOR_BACKGROUND_MAP[roomInfo.roomColor]})`,
+                        backgroundImage: `url(${
+                            colorPalette[roomInfo.roomColor as keyof typeof colorPalette].background
+                        })`,
                         backgroundSize: "cover",
                     }}>
                     <div

@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from "react";
 import DigitalNumber from "./DigitalNumber";
 import Button from "../../Button";
 import { get_text } from "../../../util/language";
-import { colorPalette, imageStyle } from "../../../util/UIstyle";
+import { colorPalette } from "../../../util/UIstyle";
 import { useRoomContext } from "../../../contexts/roomStyleContext";
 import { TemplateProps } from "../../../pages/QuizTemplate/QuizTemplate";
 import { segmentsCheckObj } from "../../../util/utils";
@@ -16,26 +16,28 @@ type TableContentType = {
 export const DigitalNumbers = (props: TemplateProps) => {
     const { data, result, setResult, setOpenLock } = props;
     const { userLanguage } = useUserContext();
-    const { roomStyle, roomColor } = useRoomContext();
-    const [active, setActive] = useState<
-        {
-            status: boolean;
-            elem: {
-                index: number;
-                icon: string;
-            };
-        }[][]
-    >(
-        []
-        // Array.from({ length: data.answer.toString().length }, () =>
-        //     Array.from({ length: 7 }, () => ({ status: false, elem: "" }))
-        // )
-    );
+    const { roomColor } = useRoomContext();
     const nextLineRef = useRef<HTMLTableRowElement>(null);
     const digitsRef = useRef<HTMLDivElement>(null);
     const [nextLine, setNextLine] = useState(1);
     const [disabled, setDisabled] = useState(true);
-    useEffect(() => {
+    const [isInitialized, setIsInitialized] = useState(false);
+
+    // Initialize active state from localStorage or create default
+    const initializeActive = () => {
+        const check = localStorage.getItem(data?.id);
+        console.log("check", check);
+        if (check && check !== "[]") {
+            console.log("localStorage", check);
+            try {
+                const parsed = JSON.parse(check);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    return parsed;
+                }
+            } catch (e) {
+                console.error("Failed to parse localStorage:", e);
+            }
+        }
         const correct: TableContentType[] = [],
             incorrect: TableContentType[] = [];
         data.quiz.map((q, i) => {
@@ -47,54 +49,59 @@ export const DigitalNumbers = (props: TemplateProps) => {
                 incorrect.push({ index: i, icon: q.correctIcon });
             }
         });
-        // console.log("correct", correct);
-        // console.log("incorrect", incorrect);
-        const setRiddle = () => {
-            const check = localStorage.getItem(data?._id);
-            if (check && check !== "[]") {
-                console.log("localStorage", check);
-                setActive(JSON.parse(localStorage.getItem(data?._id) || "[]"));
-            } else {
-                setActive(() => {
-                    let create = [];
-                    let correctI = -1,
-                        incorrectI = -1,
-                        correctMax = correct.length - 1,
-                        incorrectMax = incorrect.length - 1;
-                    for (let i = 0; i < data.answer.toString().length; i++) {
-                        let number: any = data.answer.toString()[i];
-                        const arr = new Array(7).fill(null).map((_, i) => {
-                            const isCorrect = segmentsCheckObj[Number(number)].includes(i);
-                            isCorrect
-                                ? correctI === correctMax
-                                    ? (correctI = 0)
-                                    : correctI++
-                                : incorrectI === incorrectMax
-                                  ? (incorrectI = 0)
-                                  : incorrectI++;
-                            return {
-                                status: false,
-                                elem: isCorrect ? correct[correctI] : incorrect[incorrectI],
-                            };
-                        });
-                        // console.log(arr);
-                        create.push(arr);
-                    }
-                    return create;
-                });
-            }
-        };
-        setRiddle();
+        // Create default state
+        let create = [];
+        let correctI = -1,
+            incorrectI = -1,
+            correctMax = correct.length - 1,
+            incorrectMax = incorrect.length - 1;
+        for (let i = 0; i < data.answer.toString().length; i++) {
+            let number: any = data.answer.toString()[i];
+            const arr = new Array(7).fill(null).map((_, i) => {
+                const isCorrect = segmentsCheckObj[Number(number)].includes(i);
+                isCorrect
+                    ? correctI === correctMax
+                        ? (correctI = 0)
+                        : correctI++
+                    : incorrectI === incorrectMax
+                      ? (incorrectI = 0)
+                      : incorrectI++;
+                return {
+                    status: false,
+                    elem: isCorrect ? correct[correctI] : incorrect[incorrectI],
+                };
+            });
+            create.push(arr);
+        }
+        return create;
+    };
+
+    const [active, setActive] = useState<
+        {
+            status: boolean;
+            elem: {
+                index: number;
+                icon: string;
+            };
+        }[][]
+    >(() => initializeActive());
+
+    useEffect(() => {
+        setIsInitialized(true);
     }, []);
 
     useEffect(() => {
-        data?._id && localStorage.setItem(data?._id, JSON.stringify(active));
+        console.log("data?.id", data?.id);
+        // Only save to localStorage after initialization and if active is not empty
+        if (isInitialized && data?.id && active.length > 0) {
+            localStorage.setItem(data?.id, JSON.stringify(active));
+        }
         return () => {
             if (result === get_text("success", userLanguage)) {
-                localStorage.removeItem(data?._id);
+                localStorage.removeItem(data?.id);
             }
         };
-    }, [active]);
+    }, [active, isInitialized, data?.id]);
 
     const checkAnswer = (
         answerArr: {
@@ -160,17 +167,18 @@ export const DigitalNumbers = (props: TemplateProps) => {
     // console.log(roomColor);
     return (
         <div
-            className="bg-gray-100 flex flex-col w-screen h-screen p-3"
+            className="bg-gray-100 flex flex-col w-screen h-screen p-3 pt-5 relative"
             style={{
                 backgroundImage: `url(${
-                    imageStyle[roomStyle as keyof typeof imageStyle].background
+                    colorPalette[roomColor as keyof typeof colorPalette].background
                 })`,
+                backgroundSize: "cover",
             }}>
             <div
-                className={`h-full max-h-96 sm:max-h-24 lg:max-h-72 w-full overflow-y-auto border-4`}
+                className={`h-full max-h-96 sm:max-h-24 lg:max-h-72 w-3/4  mx-auto overflow-y-auto border-4`}
                 style={{ borderColor: colorPalette[roomColor as keyof typeof colorPalette].dark }}>
                 <table
-                    className="table-auto w-full h-full text-right border border-amber-50 text-xl text-amber-50 overflow-y-auto"
+                    className="table-auto w-full h-full text-right border border-amber-50 text-xl text-amber-50 overflow-y-auto "
                     dir={userLanguage === "he" ? "rtl" : "ltr"}>
                     <thead
                         className="sticky top-0 z-10"
@@ -292,14 +300,18 @@ export const DigitalNumbers = (props: TemplateProps) => {
                     }
                     className="mx-10"
                 />
-                {result && (
-                    <div
-                        className="mr-10 py-1 px-4 rounded-xl text-center bg-amber-50"
-                        dir={userLanguage === "he" ? "rtl" : "ltr"}>
-                        {result}
-                    </div>
-                )}
             </div>
+            {result && (
+                <div
+                    className="absolute bottom-4 left-1/2 -translate-x-1/2 w-fit py-1 px-4 rounded-xl text-center border-2"
+                    style={{
+                        color: colorPalette[roomColor as keyof typeof colorPalette].light,
+                        borderColor: colorPalette[roomColor as keyof typeof colorPalette].light,
+                    }}
+                    dir={userLanguage === "he" ? "rtl" : "ltr"}>
+                    {result}
+                </div>
+            )}
         </div>
     );
 };

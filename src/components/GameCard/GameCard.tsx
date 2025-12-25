@@ -20,7 +20,7 @@ export const GameCard = (props: any) => {
             console.log("Got URL for image:", url);
             setURL(url);
         };
-        getUrl(data.mainImage);
+        getUrl(data.coverImage);
     }, []);
 
     return (
@@ -28,7 +28,7 @@ export const GameCard = (props: any) => {
             className="relative border-2 border-cyan-500 bg-gray-800 rounded-lg overflow-hidden flex flex-col hover:shadow-2xl hover:shadow-cyan-500/50 hover:scale-105 transition-all duration-300"
             dir={userLanguage === "he" ? "rtl" : "ltr"}>
             {/* Image */}
-            {data.mainImage && URL && (
+            {data.coverImage && URL && (
                 <div className="relative h-48 w-full overflow-hidden">
                     <img src={URL} alt="game image" className="w-full h-full object-cover" />
                 </div>

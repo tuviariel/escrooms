@@ -80,7 +80,7 @@ export const QuizTemplate = (props: quizDataP) => {
         <div className="flex flex-col relative h-screen w-screen overflow-auto">
             {types[data.type]}
             {showText ? (
-                <div className="fixed bottom-10 md:bottom-20 left-1/2 transform -translate-x-1/2 max-w-screen rounded-4xl m-2 text-center flex items-center justify-center px-4">
+                <div className="fixed bottom-10 md:bottom-20 left-1/2 transform -translate-x-1/2 max-w-screen rounded-4xl m-2 text-center flex items-center justify-center px-4 z-20">
                     {/* <span
                         className="absolute inline-flex h-full w-full animate-bounce rounded-full opacity-75"
                         style={{
@@ -88,12 +88,10 @@ export const QuizTemplate = (props: quizDataP) => {
                                 colorPalette[roomColor as keyof typeof colorPalette].light,
                         }}></span> */}
                     <div
-                        className="relative rounded-lg px-5 py-2.5 text-lg font-medium border-2"
+                        className="relative rounded-lg px-5 py-2.5 text-lg font-medium border-2 bg-gray-950"
                         style={{
-                            backgroundColor:
-                                colorPalette[roomColor as keyof typeof colorPalette].light,
-                            color: colorPalette[roomColor as keyof typeof colorPalette].dark,
-                            borderColor: colorPalette[roomColor as keyof typeof colorPalette].dark,
+                            color: colorPalette[roomColor as keyof typeof colorPalette].light,
+                            borderColor: colorPalette[roomColor as keyof typeof colorPalette].light,
                         }}
                         dir={userLanguage === "he" ? "rtl" : "ltr"}>
                         {data.quizText}

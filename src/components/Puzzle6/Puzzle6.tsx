@@ -18,7 +18,7 @@ import Button from "../Button";
 import { Sortable } from "./Sortable/Sortable";
 import { TemplateProps } from "../../pages/QuizTemplate/QuizTemplate";
 import { get_text } from "../../util/language";
-import { imageStyle } from "../../util/UIstyle";
+import { colorPalette } from "../../util/UIstyle";
 import { useRoomContext } from "../../contexts/roomStyleContext";
 
 import { useUserContext } from "../../contexts/userStyleContext";
@@ -27,7 +27,7 @@ export const Puzzle6: React.FC<Partial<TemplateProps>> = ({ data, setOpenLock })
     const initialPositions = [5, 3, 4, 1, 0, 2]; // scattered order
     const [items, setItems] = useState(initialPositions);
     const [showEnd, setShowEnd] = useState(false);
-    const { roomStyle } = useRoomContext();
+    const { roomColor } = useRoomContext();
     const { userLanguage } = useUserContext();
     // --- DND Kit sensors ---
     const sensors =
@@ -96,7 +96,7 @@ export const Puzzle6: React.FC<Partial<TemplateProps>> = ({ data, setOpenLock })
         <div
             className="w-screen h-screen"
             style={{
-                backgroundImage: `url(${imageStyle[roomStyle as keyof typeof imageStyle].semiBackground})`,
+                backgroundImage: `url(${colorPalette[roomColor as keyof typeof colorPalette].background})`,
                 backgroundSize: "cover",
             }}>
             <div className="text-center text-2xl font-semibold p-2 pt-5">

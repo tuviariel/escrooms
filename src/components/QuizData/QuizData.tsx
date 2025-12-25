@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { get_text } from "../../util/language";
 import pagePaginateArrow from "../../assets/images/pagePaginate.svg";
 import pagePaginateArrowDisabled from "../../assets/images/pagePaginateDis.svg";
-import { colorPalette, imageStyle } from "../../util/UIstyle";
+import { colorPalette } from "../../util/UIstyle";
 import { useRoomContext } from "../../contexts/roomStyleContext";
 import { quizData } from "../../pages/Room/Room";
 import loading from "../../assets/images/loading.gif";
@@ -18,7 +18,7 @@ interface QuizDataProps {
 }
 export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
     const { data, result, setResult } = props;
-    const { roomStyle, roomColor } = useRoomContext();
+    const { roomColor } = useRoomContext();
     const { userLanguage } = useUserContext();
     const [quizDataPageNumber, setQuizDataPageNumber] = useState<number>(0);
     const [colorOrder, setColorOrder] = useState<string[][]>(
@@ -101,7 +101,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
             setOpenDialog(false);
         }
         setColorOrder(updatedColorOrder);
-        data?._id && localStorage.setItem(data?._id.toString(), JSON.stringify(updatedColorOrder));
+        data?.id && localStorage.setItem(data?.id.toString(), JSON.stringify(updatedColorOrder));
     };
     // const pickFrom2 = (choose: number) => {
     //     console.log(choose);
@@ -209,7 +209,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                 <div
                                     className={"relative h-screen shrink-0 snap-center py-20 px-4"}
                                     style={{
-                                        backgroundImage: `url(${imageStyle[roomStyle as keyof typeof imageStyle].background})`,
+                                        backgroundImage: `url(${colorPalette[roomColor as keyof typeof colorPalette].background})`,
                                         // backgroundSize: "cover",
                                     }}
                                     ref={quizDataPageNumber === i ? imgContainerRef : null}
@@ -232,7 +232,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                             className="flex flex-col relative px-22 py-3"
                                             dir={userLanguage === "he" ? "rtl" : "ltr"}
                                             style={{
-                                                backgroundImage: `url(${imageStyle[roomStyle as keyof typeof imageStyle].semiBackground})`,
+                                                backgroundImage: `url(${colorPalette[roomColor as keyof typeof colorPalette].background})`,
                                                 backgroundSize: "cover",
                                             }}>
                                             <div
@@ -338,7 +338,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                             <div
                                 className="relative flex h-full"
                                 style={{
-                                    backgroundImage: `url(${imageStyle[roomStyle as keyof typeof imageStyle].background})`,
+                                    backgroundImage: `url(${colorPalette[roomColor as keyof typeof colorPalette].background})`,
                                     backgroundSize: "cover",
                                 }}>
                                 <img
@@ -350,7 +350,7 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                     className="flex flex-col relative px-32"
                                     dir={userLanguage === "he" ? "rtl" : "ltr"}
                                     style={{
-                                        backgroundImage: `url(${imageStyle[roomStyle as keyof typeof imageStyle].semiBackground})`,
+                                        backgroundImage: `url(${colorPalette[roomColor as keyof typeof colorPalette].background})`,
                                         backgroundSize: "cover",
                                     }}>
                                     <div className="text-center mt-2 text-xl">

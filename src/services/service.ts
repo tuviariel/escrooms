@@ -1,4 +1,4 @@
-import { getClient } from "./client";
+import { getClient, isAdmin } from "./client";
 import { fetchUserAttributes } from "aws-amplify/auth";
 import { uploadData, getUrl, remove } from "aws-amplify/storage";
 /**
@@ -12,7 +12,7 @@ export const roomsService = {
             const client = await getClient();
             const rooms = await client.models.Room.list({
                 filter: { public: { eq: true } },
-                selectionSet: ["id", "name", "description", "mainImage", "updatedAt"],
+                selectionSet: ["id", "name", "description", "coverImage", "updatedAt"],
             });
             console.log("Fetched rooms:", rooms);
             return rooms.data;
@@ -97,7 +97,7 @@ export const userService = {
                 displayName: attributes.name || user.signInDetails.loginId.split("@")[0],
                 avatar: attributes.picture || user.avatar || "",
                 roomsLeft: 1,
-                subscription: "free",
+                subscription: (await isAdmin()) ? "admin" : "free",
             });
             console.log("end ensure function:", user, newProfile);
             return newProfile.data;
@@ -122,6 +122,24 @@ export const fileStorage = {
             return result;
         } catch (error) {
             console.error("Upload failed:", error);
+        }
+    },
+    async uploadFiles(files: File[], roomId: string) {
+        console.log("Uploading files:", files, "to room:", roomId);
+        try {
+            const uploadPromises = files.map(
+                (file) =>
+                    uploadData({
+                        path: `images/${roomId}/${file.name}`,
+                        data: file,
+                    }).result
+            );
+            const results = await Promise.all(uploadPromises);
+            console.log("Uploaded all files:", results);
+            return results;
+        } catch (error) {
+            console.error("Upload failed:", error);
+            throw error;
         }
     },
     async getFileUrl(pathname: string) {

@@ -31,7 +31,7 @@ export interface quizDataP {
     data: quizData | any;
 }
 export interface quizData {
-    _id: string;
+    id: string;
     type: string;
     name: string;
     answer: string;
@@ -182,11 +182,17 @@ export const Room = () => {
             }
             const parsed1 = JSON.parse(d);
             if (typeof parsed1 === "object" && parsed1 !== null) {
-                console.log(parsed1);
+                console.log("2", parsed1);
                 return parsed1;
-            } else {
-                console.log("3");
-                return JSON.parse(parsed1);
+            } else if (typeof parsed1 === "string" && parsed1 !== "") {
+                const parsed2 = JSON.parse(parsed1);
+                if (typeof parsed2 === "object" && parsed2 !== null) {
+                    console.log("3", parsed2);
+                    return parsed2;
+                } else if (typeof parsed2 === "string" && parsed2 !== "") {
+                    console.log("4", parsed2);
+                    return JSON.parse(parsed2);
+                }
             }
         };
         setRoom();

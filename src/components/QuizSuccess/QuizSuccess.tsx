@@ -10,7 +10,7 @@ import { get_text } from "../../util/language";
 import { useSelector, useDispatch } from "react-redux";
 import { quizNumberActions } from "../../reduxStor/quizNumber";
 import { quizListActions } from "../../reduxStor/quizList";
-import { imageStyle } from "../../util/UIstyle";
+import { colorPalette } from "../../util/UIstyle";
 import { useRoomContext } from "../../contexts/roomStyleContext";
 import { useUserContext } from "../../contexts/userStyleContext";
 
@@ -20,7 +20,7 @@ interface quizSuccessProps {
 
 export const QuizSuccess = (props: quizSuccessProps) => {
     const { data } = props;
-    const { roomStyle } = useRoomContext();
+    const { roomColor } = useRoomContext();
     const { userLanguage } = useUserContext();
     const quiz = useSelector((state: { quizNumber: { quizNumber: number } }) => state.quizNumber);
     const quizNumber = quiz?.quizNumber;
@@ -104,7 +104,7 @@ export const QuizSuccess = (props: quizSuccessProps) => {
         <div
             className="h-full w-full cover"
             style={{
-                backgroundImage: `url(${imageStyle[roomStyle as keyof typeof imageStyle].semiBackground})`,
+                backgroundImage: `url(${colorPalette[roomColor as keyof typeof colorPalette].background})`,
                 backgroundSize: "cover",
             }}>
             <div className="relative flex flex-col items-center gap-2">

@@ -52,7 +52,7 @@ export const DigitalNumber = (props: DigitalNumberProps) => {
 
             {/* Top-left vertical line */}
             <div
-                className={`absolute cursor-pointer hover:opacity-90 top-8 left-6 w-6 h-18 rounded-r-full content-center`}
+                className={`absolute cursor-pointer hover:opacity-90 top-4 left-6 w-6 h-26 rounded-r-full content-center z-10`}
                 style={{
                     backgroundColor: number[1]?.status
                         ? colorPalette[roomColor as keyof typeof colorPalette].dark
@@ -78,7 +78,7 @@ export const DigitalNumber = (props: DigitalNumberProps) => {
 
             {/* Top-right vertical line */}
             <div
-                className={`absolute cursor-pointer hover:opacity-90 top-8 right-6 w-6 h-18 rounded-l-full content-center`}
+                className={`absolute cursor-pointer hover:opacity-90 top-4 right-6 w-6 h-26 rounded-l-full content-center z-10`}
                 style={{
                     backgroundColor: number[2]?.status
                         ? colorPalette[roomColor as keyof typeof colorPalette].dark
@@ -129,7 +129,7 @@ export const DigitalNumber = (props: DigitalNumberProps) => {
 
             {/* Bottom-left vertical line */}
             <div
-                className={`absolute cursor-pointer hover:opacity-90 bottom-8 left-6 w-6 h-20 rounded-r-full content-center`}
+                className={`absolute cursor-pointer hover:opacity-90 bottom-4 left-6 w-6 h-26 rounded-r-full content-center z-10`}
                 style={{
                     backgroundColor: number[4]?.status
                         ? colorPalette[roomColor as keyof typeof colorPalette].dark
@@ -155,7 +155,7 @@ export const DigitalNumber = (props: DigitalNumberProps) => {
 
             {/* Bottom-right vertical line */}
             <div
-                className={`absolute cursor-pointer hover:opacity-90 bottom-8 right-6 w-6 h-20 rounded-l-full content-center`}
+                className={`absolute cursor-pointer hover:opacity-90 bottom-4 right-6 w-6 h-26 rounded-l-full content-center z-10`}
                 style={{
                     backgroundColor: number[5]?.status
                         ? colorPalette[roomColor as keyof typeof colorPalette].dark

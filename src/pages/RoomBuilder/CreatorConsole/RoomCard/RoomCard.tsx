@@ -38,7 +38,7 @@ export const RoomCard = ({
             console.log("Got URL for image:", url);
             setImageUrl(url);
         };
-        getUrl(room.mainImage || "");
+        getUrl(room.coverImage || "");
     }, []);
 
     return (
@@ -52,7 +52,7 @@ export const RoomCard = ({
             {sidebarOpen ? (
                 <>
                     <div className="flex relative justify-between">
-                        {room.mainImage && (
+                        {room.coverImage && (
                             <img src={imageUrl} alt="image" className="h-11 w-11 mr-1 rounded" />
                         )}
                         <div className="space-y-2">
