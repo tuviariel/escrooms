@@ -99,7 +99,7 @@ export const QuizTemplate = (props: quizDataP) => {
                     </div>
                 </div>
             ) : (
-                <div className="fixed right-3 bottom-3" dir={userLanguage === "he" ? "rtl" : "ltr"}>
+                <div dir={userLanguage === "he" ? "rtl" : "ltr"}>
                     <HintChat hints={data.hints} quizText={data.quizText} />
                 </div>
             )}

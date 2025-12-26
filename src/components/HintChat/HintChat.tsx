@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import Typing from "../../assets/images/typing.gif";
 import { get_text } from "../../util/language";
 import { useUserContext } from "../../contexts/userStyleContext";
-
+import { colorPalette } from "../../util/UIstyle";
+import { useRoomContext } from "../../contexts/roomStyleContext";
 interface chatContent {
     user: string;
     text: string;
@@ -14,6 +15,7 @@ interface hintChatProps {
 export const HintChat = (props: hintChatProps) => {
     const { hints, quizText } = props;
     const { userLanguage } = useUserContext();
+    const { roomColor } = useRoomContext();
     // const hintsAmount = hints.length;
     const [open, setOpen] = useState<boolean>(false);
     const [counter, setCounter] = useState<number>(0);
@@ -75,12 +77,17 @@ export const HintChat = (props: hintChatProps) => {
     //TODO: add ability to check which stage the user got to and give him the relevant hint.
 
     return (
-        <div className="fixed right-3 bottom-3 z-20">
+        <div className="fixed right-6 bottom-1 z-20">
             <div className="relative flex">
                 <div
-                    className={`bg-amber-500 rounded-full md:h-12 h-8 md:w-12 w-8 p-auto text-pink-800 md:text-3xl text-xl text-center cursor-pointer border-2 ${
+                    className={`bg-amber-500 rounded-full md:h-12 h-8 md:w-12 w-8 p-auto text-black md:text-3xl text-xl text-center cursor-pointer border-2 border-black ${
                         open ? "border-amber-600" : "border-amber-900"
                     }`}
+                    style={{
+                        backgroundColor: open
+                            ? colorPalette[roomColor as keyof typeof colorPalette].light
+                            : colorPalette[roomColor as keyof typeof colorPalette].bright,
+                    }}
                     onClick={() => setOpen((prev) => !prev)}
                     title={
                         open

@@ -5,6 +5,7 @@ import { colorPalette, fontFamily } from "../../util/UIstyle";
 interface ButtonProps {
     onClick: (e: any) => void;
     className: string;
+    style: React.CSSProperties;
     disabled: boolean;
     label: string;
     children: ReactElement;
@@ -15,7 +16,7 @@ interface ButtonProps {
  * @returns a button that can be wrapped around more tsx elements (children)
  */
 export const Button: React.FC<Partial<ButtonProps>> = (props) => {
-    const { className = "", onClick, label, children = "", disabled = false } = props;
+    const { className = "", onClick, label, children = "", disabled = false, style = {} } = props;
     const { roomColor, roomFont } = useRoomContext();
     return (
         <div className="flex justify-center items-center">
@@ -23,12 +24,13 @@ export const Button: React.FC<Partial<ButtonProps>> = (props) => {
                 onClick={onClick}
                 className={`flex h-7 mx-4 my-2 px-6 py-auto font-light rounded-xl w-auto min-w-fit border ${
                     disabled
-                        ? "cursor-not-allowed bg-gray-500"
-                        : "cursor-pointer bg-blue-500 hover:bg-blue-700"
+                        ? "cursor-not-allowed bg-gray-500 "
+                        : "cursor-pointer bg-gray-950 hover:bg-gray-700"
                 } ${className}`}
                 style={{
-                    backgroundColor: colorPalette[roomColor as keyof typeof colorPalette].light,
-                    // color: colorPalette[roomColor as keyof typeof colorPalette].bright,
+                    ...style,
+                    // backgroundColor: colorPalette[roomColor as keyof typeof colorPalette].light,
+                    color: colorPalette[roomColor as keyof typeof colorPalette].bright,
                     borderColor: colorPalette[roomColor as keyof typeof colorPalette].bright,
                     fontFamily: fontFamily[roomFont as keyof typeof fontFamily],
                 }}

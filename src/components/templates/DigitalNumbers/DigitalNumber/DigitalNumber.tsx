@@ -56,7 +56,7 @@ const SegmentIcon = ({
                 {isImage ? (
                     <img src={elem.elem.icon} alt="" className="w-6 h-6 object-contain" />
                 ) : (
-                    <div className="text-white text-sm font-bold">{elem.elem.icon}</div>
+                    <div className="text-white text-3xl font-bold">{elem.elem.icon}</div>
                 )}
             </div>
         </div>
@@ -68,7 +68,7 @@ export const DigitalNumber = (props: DigitalNumberProps) => {
     const { roomColor } = useRoomContext();
     const NEON_CYAN = colorPalette[roomColor as keyof typeof colorPalette].bright;
     const baseWidth = amount < 4 ? "w-32 md:w-36" : "w-28 ph:w-32 sm:w-36 md:w-40";
-    const baseHeight = amount < 4 ? "h-60 md:h-72" : "h-60";
+    const baseHeight = amount < 4 ? "h-48 md:h-60" : "h-48";
 
     // SVG viewBox dimensions - responsive
     const viewBoxWidth = 300;
@@ -78,13 +78,13 @@ export const DigitalNumber = (props: DigitalNumberProps) => {
 
     // Calculate positions for icons (center of each segment)
     const iconPositions = [
-        { x: 50, y: 20 }, // Segment 0: Top horizontal center
-        { x: 15, y: 37 }, // Segment 1: Top-left vertical center
-        { x: 85, y: 37 }, // Segment 2: Top-right vertical center
-        { x: 50, y: 50 }, // Segment 3: Middle horizontal center
-        { x: 15, y: 75 }, // Segment 4: Bottom-left vertical center
-        { x: 80, y: 73 }, // Segment 5: Bottom-right vertical center
-        { x: 50, y: 85 }, // Segment 6: Bottom horizontal center
+        { x: 50, y: 14 }, // Segment 0: Top horizontal center
+        { x: 13, y: 35 }, // Segment 1: Top-left vertical center
+        { x: 87, y: 35 }, // Segment 2: Top-right vertical center
+        { x: 50, y: 55 }, // Segment 3: Middle horizontal center
+        { x: 13, y: 76 }, // Segment 4: Bottom-left vertical center
+        { x: 87, y: 76 }, // Segment 5: Bottom-right vertical center
+        { x: 50, y: 95 }, // Segment 6: Bottom horizontal center
     ];
 
     // SVG path definitions for each segment
@@ -141,7 +141,7 @@ export const DigitalNumber = (props: DigitalNumberProps) => {
 
     return (
         <div
-            className={`relative ${baseWidth} ${baseHeight} flex items-center justify-center bg-black rounded-lg`}>
+            className={`relative ${baseWidth} ${baseHeight} flex items-center justify-center rounded-lg`}>
             <svg
                 className="absolute inset-0 w-full h-full"
                 viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}

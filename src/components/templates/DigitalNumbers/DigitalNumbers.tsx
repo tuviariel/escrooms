@@ -261,7 +261,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
             <div
                 className={`${
                     active.length < 4 ? "ts:flex" : "ph:flex"
-                } hidden items-center justify-center`}
+                } hidden items-center justify-center gap-5`}
                 ref={digitsRef}>
                 {active.length > 0 && active[0]
                     ? active.map((number, i) => {
@@ -298,7 +298,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
                             ? setOpenLock(true)
                             : checkAnswer(active)
                     }
-                    className="mx-10"
+                    className="mx-10 absolute bottom-2 left-1/2 -translate-x-1/2 z-20"
                 />
             </div>
             {result && (

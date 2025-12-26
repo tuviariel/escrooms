@@ -214,7 +214,7 @@ const appContext: Translations = {
     },
     emergency_protocol_instruction: {
         en: "Instruction: Break into the {count} locked elements",
-        he: "הנחיה: פריצו את {count} המוקדים הנעולים",
+        he: "הנחיה: פירצו את {count} המוקדים הנעולים",
         ar: "",
     },
 };

@@ -256,11 +256,11 @@ export const Room = () => {
                                     style={{
                                         backgroundColor:
                                             colorPalette[roomColor as keyof typeof colorPalette]
-                                                .light,
+                                                .bright,
                                     }}
                                     alt={get_text("back_to_main", userLanguage)}
                                     title={get_text("back_to_main", userLanguage)}
-                                    className="cursor-pointer h-8 w-8 z-70 md:h-12 md:w-12 fixed left-3 top-3 p-1 rounded-full bg-gray-100 border-2 hover:border-amber-700"
+                                    className="cursor-pointer h-8 w-8 z-70 md:h-12 md:w-12 fixed left-10 bottom-0 p-1 rounded-full bg-gray-100 border-2 hover:border-amber-700"
                                     onClick={() => setQuizNumber(-1)}
                                 />
                                 <QuizTemplate data={roomQuizzes[quizNumber]} />
@@ -268,18 +268,17 @@ export const Room = () => {
                         )}
 
                         <div className="h-full w-full relative bg-gray-900 flex justify-center items-center">
-                            {/* Emergency Protocol Display - shown when not in a quiz */}
-                            {quizNumber === -1 && (
-                                <RoomTimer
-                                    totalHotspots={quizList.length}
-                                    completedHotspots={
-                                        quizList.filter((q: any) => q.status === "completed").length
-                                    }
-                                    roomId={id}
-                                    completed={completed}
-                                    roomName={roomData?.name || ""}
-                                />
-                            )}
+                            {/* Emergency Protocol Display */}
+                            <RoomTimer
+                                totalHotspots={quizList.length}
+                                completedHotspots={
+                                    quizList.filter((q: any) => q.status === "completed").length
+                                }
+                                roomId={id}
+                                completed={completed}
+                                roomName={roomData?.name}
+                                small={quizNumber !== -1 || checkLeave}
+                            />
                             <motion.div
                                 className="relative w-full h-full"
                                 style={{
