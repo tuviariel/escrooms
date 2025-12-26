@@ -10,7 +10,7 @@ import CSBG from "../assets/images/UIelements/semiBackgrounds/realistic.png";
 import VSBG from "../assets/images/UIelements/semiBackgrounds/realistic.png";
 // Import color background images
 import blueToRedBg from "../assets/images/colorBackgrounds/blueToRed.png";
-import blueToGreenBg from "../assets/images/colorBackgrounds/blueToGreen.png";
+// import blueToGreenBg from "../assets/images/colorBackgrounds/blueToGreen.png";
 import purpleToOrangeBg from "../assets/images/colorBackgrounds/purpleToOrange.png";
 import blueToYellowBg from "../assets/images/colorBackgrounds/blueToYellow.png";
 import purpleToGreenBg from "../assets/images/colorBackgrounds/purpleToGreen.png";
@@ -46,7 +46,7 @@ export const colorPalette = {
         dark: "#73AF6F",
         bright: "#3291B6",
         light: "#F4F4F4",
-        background: blueToGreenBg,
+        background: blueToRedBg,
     },
     greenToRed: {
         dark: "#CF0F0F",
