@@ -12,7 +12,6 @@ import VSBG from "../assets/images/UIelements/semiBackgrounds/realistic.png";
 import blueToRedBg from "../assets/images/colorBackgrounds/blueToRed.png";
 import blueToGreenBg from "../assets/images/colorBackgrounds/blueToGreen.png";
 import purpleToOrangeBg from "../assets/images/colorBackgrounds/purpleToOrange.png";
-// import redToWhiteBg from "../assets/images/colorBackgrounds/redToWhite.png";
 import blueToYellowBg from "../assets/images/colorBackgrounds/blueToYellow.png";
 import purpleToGreenBg from "../assets/images/colorBackgrounds/purpleToGreen.png";
 import greenToRedBg from "../assets/images/colorBackgrounds/greenToRed.png";
