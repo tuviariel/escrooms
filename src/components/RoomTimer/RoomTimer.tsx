@@ -11,6 +11,7 @@ interface RoomTimerProps {
     roomId?: string;
     completed?: boolean;
     roomName?: string;
+    small?: boolean;
 }
 
 export const RoomTimer = ({
@@ -19,6 +20,7 @@ export const RoomTimer = ({
     roomId,
     completed = false,
     roomName = "",
+    small = false,
 }: RoomTimerProps) => {
     const { roomColor } = useRoomContext();
     const { userLanguage } = useUserContext();
@@ -65,11 +67,12 @@ export const RoomTimer = ({
     };
 
     const timeDisplay = formatTimeForDisplay(timeRemaining);
-    const displayColor = completed || timeRemaining === 0 ? completedColor : activeColor; // Green when completed
+    const displayColor =
+        completed || timeRemaining > 600 || timeRemaining === 0 ? completedColor : activeColor;
 
     return (
         <motion.div
-            className="absolute top-4 right-8 z-90 pointer-events-none"
+            className={`absolute z-90 pointer-events-none ${small ? "right-0 top-2" : "right-8 top-4"}`}
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -83,25 +86,27 @@ export const RoomTimer = ({
                     borderColor: displayColor,
                     backgroundColor: "rgba(0, 0, 0, 0.7)",
                     boxShadow: `0 0 30px ${displayColor}40, inset 0 0 20px ${displayColor}20`,
-                    transform: "rotateY(-25deg) rotateX(5deg)",
+                    transform: "rotateY(-35deg) rotateX(5deg)",
                     transformStyle: "preserve-3d",
                 }}>
                 {/* Title */}
-                <h3
-                    className="text-xl md:text-2xl font-bold mb-3 text-center"
-                    style={{
-                        color: displayColor,
-                        textShadow: `0 0 10px ${displayColor}, 0 0 20px ${displayColor}80`,
-                    }}
-                    dir={userLanguage === "he" ? "rtl" : "ltr"}>
-                    {get_text("emergency_protocol", userLanguage)}
-                    {roomName}
-                </h3>
+                {!small && (
+                    <h3
+                        className="text-xl md:text-2xl font-bold mb-3 text-center"
+                        style={{
+                            color: displayColor,
+                            textShadow: `0 0 10px ${displayColor}, 0 0 20px ${displayColor}80`,
+                        }}
+                        dir={userLanguage === "he" ? "rtl" : "ltr"}>
+                        {get_text("emergency_protocol", userLanguage)}
+                        {roomName}
+                    </h3>
+                )}
 
                 {/* Timer Display */}
                 <div className="flex items-center justify-center gap-2 mb-2">
                     <div
-                        className="text-2xl md:text-4xl font-mono font-bold tracking-wider"
+                        className={`font-mono font-bold tracking-wider ${small ? "text-xl md:text-2xl" : "text-2xl md:text-4xl"}`}
                         style={{
                             color: displayColor,
                             textShadow: `0 0 15px ${displayColor}, 0 0 30px ${displayColor}80, 0 0 45px ${displayColor}60`,
@@ -112,20 +117,22 @@ export const RoomTimer = ({
                 </div>
 
                 {/* Instruction */}
-                <p
-                    className="text-sm md:text-base text-center"
-                    style={{
-                        color: displayColor,
-                        textShadow: `0 0 5px ${displayColor}60`,
-                    }}
-                    dir={userLanguage === "he" ? "rtl" : "ltr"}>
-                    {completed
-                        ? get_text("room_finished", userLanguage)
-                        : get_text("emergency_protocol_instruction", userLanguage).replace(
-                              "{count}",
-                              (totalHotspots - completedHotspots).toString()
-                          )}
-                </p>
+                {!small && (
+                    <p
+                        className="text-sm md:text-base text-center"
+                        style={{
+                            color: displayColor,
+                            textShadow: `0 0 5px ${displayColor}60`,
+                        }}
+                        dir={userLanguage === "he" ? "rtl" : "ltr"}>
+                        {completed
+                            ? get_text("room_finished", userLanguage)
+                            : get_text("emergency_protocol_instruction", userLanguage).replace(
+                                  "{count}",
+                                  (totalHotspots - completedHotspots).toString()
+                              )}
+                    </p>
+                )}
             </div>
         </motion.div>
     );
