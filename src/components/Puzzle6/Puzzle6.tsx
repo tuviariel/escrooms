@@ -99,7 +99,11 @@ export const Puzzle6: React.FC<Partial<TemplateProps>> = ({ data, setOpenLock })
                 backgroundImage: `url(${colorPalette[roomColor as keyof typeof colorPalette].background})`,
                 backgroundSize: "cover",
             }}>
-            <div className="text-center text-2xl font-semibold p-2 pt-5">
+            <div
+                className="text-center text-2xl font-semibold p-2 pt-5"
+                style={{
+                    color: colorPalette[roomColor as keyof typeof colorPalette].light,
+                }}>
                 {get_text("puzzle6_inst", userLanguage)}
             </div>
             <div className="pt-10 columns-6 gap-0" dir={userLanguage === "he" ? "rtl" : "ltr"}>
@@ -120,7 +124,13 @@ export const Puzzle6: React.FC<Partial<TemplateProps>> = ({ data, setOpenLock })
                                             className="cursor-grab w-full h-auto"
                                         />
                                         {image.answerSrc && (
-                                            <div className="absolute z-20 top-0 right-1/2 translate-1/2 text-xl bg-white rounded-md p-1 whitespace-nowrap">
+                                            <div
+                                                className="absolute z-20 top-0 right-1/2 translate-1/2 text-xl bg-gray-800 text-white rounded-md p-1 whitespace-nowrap"
+                                                style={{
+                                                    color: colorPalette[
+                                                        roomColor as keyof typeof colorPalette
+                                                    ].light,
+                                                }}>
                                                 {image.answerSrc}
                                             </div>
                                         )}
