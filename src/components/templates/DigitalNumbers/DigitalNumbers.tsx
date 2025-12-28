@@ -295,11 +295,6 @@ export const DigitalNumbers = (props: TemplateProps) => {
                     : get_text("prepare", userLanguage)}
             </div>
             <div
-                className={`flex ${active.length < 4 ? "ts:hidden" : "ph:hidden"}`}
-                dir={userLanguage === "he" ? "rtl" : "ltr"}>
-                {get_text("phone_on_side", userLanguage)}
-            </div>
-            <div
                 className={`${active.length < 4 ? "ts:flex" : "ph:flex"} absolute bottom-2 lg:bottom-6 left-1/2 -translate-x-1/2 z-20 hidden flex-col-reverse items-center justify-center`}>
                 <Button
                     label={

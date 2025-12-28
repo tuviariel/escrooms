@@ -195,7 +195,9 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                         {data.quiz.map((item, i) => {
                             return (
                                 <div
-                                    className={"relative h-screen shrink-0 snap-center py-12"}
+                                    className={
+                                        "relative h-screen shrink-0 snap-center py-12 overflow-y-auto"
+                                    }
                                     ref={quizDataPageNumber === i ? imgContainerRef : null}
                                     key={i}
                                     style={{
