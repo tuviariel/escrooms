@@ -16,10 +16,11 @@ import { useUserContext } from "../../contexts/userStyleContext";
 
 interface quizSuccessProps {
     data: string;
+    id: string;
 }
 
 export const QuizSuccess = (props: quizSuccessProps) => {
-    const { data } = props;
+    const { data, id } = props;
     const { roomColor } = useRoomContext();
     const { userLanguage } = useUserContext();
     const quiz = useSelector((state: { quizNumber: { quizNumber: number } }) => state.quizNumber);
@@ -85,6 +86,7 @@ export const QuizSuccess = (props: quizSuccessProps) => {
                 setQuizNumber(-1);
                 setTimeout(() => {
                     setQuizList(quizNumber);
+                    localStorage.removeItem(id);
                 }, 1000);
             }, 5000);
         } else {
@@ -105,7 +107,9 @@ export const QuizSuccess = (props: quizSuccessProps) => {
             className="h-full w-full cover"
             style={{
                 backgroundImage: `url(${colorPalette[roomColor as keyof typeof colorPalette].background})`,
-                backgroundSize: "cover",
+                backgroundSize: "100% auto",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center center",
             }}>
             <div className="relative flex flex-col items-center gap-2">
                 {!open ? (

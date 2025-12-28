@@ -167,18 +167,28 @@ export const DigitalNumbers = (props: TemplateProps) => {
     // console.log(roomColor);
     return (
         <div
-            className="bg-gray-100 flex flex-col w-screen h-screen p-3 pt-5 relative"
+            className="bg-gray-100 flex flex-col w-screen h-screen p-3 pt-5 lg:p-20 relative"
             style={{
                 backgroundImage: `url(${
                     colorPalette[roomColor as keyof typeof colorPalette].background
                 })`,
-                backgroundSize: "cover",
+                backgroundSize: "100% auto",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center center",
             }}>
             <div
-                className={`h-full max-h-96 sm:max-h-24 lg:max-h-72 w-3/4  mx-auto overflow-y-auto border-4`}
-                style={{ borderColor: colorPalette[roomColor as keyof typeof colorPalette].dark }}>
+                className={`h-full max-h-96 sm:max-h-24 lg:max-h-72 w-3/4 lg:w-3/5 mx-auto overflow-y-auto`}
+                style={{
+                    perspective: "1000px",
+                    transformStyle: "preserve-3d",
+                }}>
                 <table
-                    className="table-auto w-full h-full text-right border border-amber-50 text-xl text-amber-50 overflow-y-auto "
+                    className="table-auto w-full h-full text-right border-amber-50 text-medium overflow-y-auto border-4"
+                    style={{
+                        borderColor: colorPalette[roomColor as keyof typeof colorPalette].dark,
+                        transform: "rotateX(20deg)",
+                        transformOrigin: "bottom center",
+                    }}
                     dir={userLanguage === "he" ? "rtl" : "ltr"}>
                     <thead
                         className="sticky top-0 z-10"
@@ -199,7 +209,10 @@ export const DigitalNumbers = (props: TemplateProps) => {
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody
+                        style={{
+                            color: colorPalette[roomColor as keyof typeof colorPalette].light,
+                        }}>
                         {data?.quiz &&
                             data.quiz.map((q, i) => {
                                 return (
@@ -286,7 +299,8 @@ export const DigitalNumbers = (props: TemplateProps) => {
                 dir={userLanguage === "he" ? "rtl" : "ltr"}>
                 {get_text("phone_on_side", userLanguage)}
             </div>
-            <div className={`${active.length < 4 ? "ts:flex" : "ph:flex"} hidden`}>
+            <div
+                className={`${active.length < 4 ? "ts:flex" : "ph:flex"} absolute bottom-2 lg:bottom-6 left-1/2 -translate-x-1/2 z-20 hidden flex-col-reverse items-center justify-center`}>
                 <Button
                     label={
                         result === get_text("success", userLanguage)
@@ -298,20 +312,20 @@ export const DigitalNumbers = (props: TemplateProps) => {
                             ? setOpenLock(true)
                             : checkAnswer(active)
                     }
-                    className="mx-10 absolute bottom-2 left-1/2 -translate-x-1/2 z-20"
+                    className="text-xl lg:text-3xl"
                 />
+                {result && (
+                    <div
+                        className="w-fit py-1 px-4 rounded-xl text-center border-2"
+                        style={{
+                            color: colorPalette[roomColor as keyof typeof colorPalette].light,
+                            borderColor: colorPalette[roomColor as keyof typeof colorPalette].light,
+                        }}
+                        dir={userLanguage === "he" ? "rtl" : "ltr"}>
+                        {result}
+                    </div>
+                )}
             </div>
-            {result && (
-                <div
-                    className="absolute bottom-4 left-1/2 -translate-x-1/2 w-fit py-1 px-4 rounded-xl text-center border-2"
-                    style={{
-                        color: colorPalette[roomColor as keyof typeof colorPalette].light,
-                        borderColor: colorPalette[roomColor as keyof typeof colorPalette].light,
-                    }}
-                    dir={userLanguage === "he" ? "rtl" : "ltr"}>
-                    {result}
-                </div>
-            )}
         </div>
     );
 };

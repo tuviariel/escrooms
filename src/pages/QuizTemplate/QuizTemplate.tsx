@@ -99,9 +99,7 @@ export const QuizTemplate = (props: quizDataP) => {
                     </div>
                 </div>
             ) : (
-                <div dir={userLanguage === "he" ? "rtl" : "ltr"}>
-                    <HintChat hints={data.hints} quizText={data.quizText} />
-                </div>
+                <HintChat hints={data.hints} quizText={data.quizText} />
             )}
             <Dialog
                 open={openLock}
@@ -109,7 +107,7 @@ export const QuizTemplate = (props: quizDataP) => {
                 size="small"
                 disableOverlayClose={true}
                 data="quizSuccess">
-                <QuizSuccess data={data.answer} />
+                <QuizSuccess data={data.answer} id={data.id} />
             </Dialog>
         </div>
     );

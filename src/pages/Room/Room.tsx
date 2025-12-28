@@ -260,7 +260,7 @@ export const Room = () => {
                                     }}
                                     alt={get_text("back_to_main", userLanguage)}
                                     title={get_text("back_to_main", userLanguage)}
-                                    className="cursor-pointer h-8 w-8 z-70 md:h-12 md:w-12 fixed left-10 bottom-0 p-1 rounded-full bg-gray-100 border-2 hover:border-amber-700"
+                                    className="cursor-pointer h-8 lg:h-16 w-8 lg:w-16 z-70 md:h-12 md:w-12 fixed left-10 lg:left-19 bottom-0 lg:bottom-8 p-1 rounded-full bg-gray-100 border-2 hover:border-amber-700"
                                     onClick={() => setQuizNumber(-1)}
                                 />
                                 <QuizTemplate data={roomQuizzes[quizNumber]} />

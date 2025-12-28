@@ -77,10 +77,12 @@ export const HintChat = (props: hintChatProps) => {
     //TODO: add ability to check which stage the user got to and give him the relevant hint.
 
     return (
-        <div className="fixed right-6 bottom-1 z-20">
+        <div
+            className="fixed right-9 lg:right-18 bottom-1 lg:bottom-8 z-20"
+            dir={userLanguage === "he" ? "rtl" : "ltr"}>
             <div className="relative flex">
                 <div
-                    className={`bg-amber-500 rounded-full md:h-12 h-8 md:w-12 w-8 p-auto text-black md:text-3xl text-xl text-center cursor-pointer border-2 border-black ${
+                    className={`bg-amber-500 rounded-full w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 p-auto text-black md:text-3xl text-xl lg:text-5xl text-center cursor-pointer border-2 border-black ${
                         open ? "border-amber-600" : "border-amber-900"
                     }`}
                     style={{
