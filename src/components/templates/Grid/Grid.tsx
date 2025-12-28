@@ -136,20 +136,33 @@ export const Grid = (props: TemplateProps) => {
     console.log(active);
     return (
         <div
-            className="bg-gray-100 flex flex-col w-screen h-screen p-3"
+            className="flex flex-col w-screen h-screen p-3"
             style={{
                 backgroundImage: `url(${
                     colorPalette[roomColor as keyof typeof colorPalette].background
                 })`,
+                backgroundSize: "100% auto",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center center",
             }}>
             <div
                 className={`${
                     active[0]?.length < 4 ? "ts:flex" : "ph:flex"
-                } hidden items-center justify-center mt-2`}
+                } hidden items-center justify-center mt-14 overflow-y-auto`}
+                style={{
+                    perspective: "1000px",
+                    transformStyle: "preserve-3d",
+                }}
                 dir="rtl">
                 <>
                     {active.length > 0 ? (
-                        <div className=" border-4 border-amber-800" dir="ltr">
+                        <div
+                            className=" border-4 border-amber-800"
+                            dir="ltr"
+                            style={{
+                                transform: "rotateX(20deg)",
+                                transformOrigin: "bottom center",
+                            }}>
                             {active.map((line, i) => {
                                 // console.log(line);
                                 return (
@@ -158,7 +171,7 @@ export const Grid = (props: TemplateProps) => {
                                             return (
                                                 <div
                                                     key={i + " " + j}
-                                                    className={`border border-amber-800 h-16 w-14 cursor-pointer text-4xl pt-3`}
+                                                    className={`border border-amber-800 h-12 lg:h-16 w-10 lg:w-14 cursor-pointer text-2xl lg:text-4xl pt-3`}
                                                     style={{
                                                         backgroundColor: box.status
                                                             ? colorPalette[
@@ -166,7 +179,7 @@ export const Grid = (props: TemplateProps) => {
                                                               ].dark
                                                             : colorPalette[
                                                                   roomColor as keyof typeof colorPalette
-                                                              ].light,
+                                                              ].bright,
                                                     }}
                                                     onClick={() => toggleSegment(i, j)}
                                                     title={box.elem.title}>
@@ -183,10 +196,8 @@ export const Grid = (props: TemplateProps) => {
                     )}
                 </>
             </div>
-            <div className={`flex ${active[0]?.length < 4 ? "ts:hidden" : "ph:hidden"}`}>
-                {get_text("phone_on_side", userLanguage)}
-            </div>
-            <div className={`${active.length < 4 ? "ts:flex" : "ph:flex"} hidden`}>
+            <div
+                className={`${active.length < 4 ? "ts:flex" : "ph:flex"} absolute bottom-2 lg:bottom-6 left-1/2 -translate-x-1/2 z-20 hidden flex-col-reverse items-center justify-center`}>
                 <Button
                     label={
                         result === get_text("success", userLanguage)
@@ -198,11 +209,15 @@ export const Grid = (props: TemplateProps) => {
                             ? setOpenLock(true)
                             : checkAnswer()
                     }
-                    className="mx-10"
+                    className="text-xl lg:text-3xl"
                 />
                 {result && (
                     <div
-                        className="mr-10 py-1 px-4 rounded-xl text-center bg-amber-50"
+                        className="w-fit py-1 px-4 rounded-xl text-center border-2"
+                        style={{
+                            color: colorPalette[roomColor as keyof typeof colorPalette].light,
+                            borderColor: colorPalette[roomColor as keyof typeof colorPalette].light,
+                        }}
                         dir={userLanguage === "he" ? "rtl" : "ltr"}>
                         {result}
                     </div>
