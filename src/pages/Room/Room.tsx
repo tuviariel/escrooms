@@ -87,9 +87,21 @@ export const Room = () => {
         if (quizList[quizList.length - 1].status === "completed") {
             setCompleted(true);
         } else {
-            quizList.map((quiz) => {
-                quiz.status === "active" && setActiveModuleId(quiz.id);
-            });
+            let foundActive = false;
+            for (const quiz of quizList) {
+                if (quiz.status === "active") {
+                    setActiveModuleId(quiz.id);
+                    foundActive = true;
+                    break;
+                }
+            }
+            if (!foundActive) {
+                setActiveModuleId(quizList.length + 1);
+                setCompleted(true);
+                if (id) {
+                    localStorage.removeItem(`roomTimer_${id}`);
+                }
+            }
         }
     }, [quizList]);
     const navigate = useNavigate();
@@ -215,18 +227,18 @@ export const Room = () => {
         });
         console.log("orientation:", screen.orientation.type);
     }, [screen.orientation.type]);
-    useEffect(() => {
-        if (quizList && quizList.length > 0) {
-            const allCompleted = quizList.every((quiz: any) => quiz.completed);
-            if (allCompleted) {
-                setCompleted(true);
-                // Clear timer when room is completed
-                if (id) {
-                    localStorage.removeItem(`roomTimer_${id}`);
-                }
-            }
-        }
-    }, [quizList, id]);
+    // useEffect(() => {
+    //     if (quizList && quizList.length > 0) {
+    //         const allCompleted = quizList.every((quiz: any) => quiz.completed);
+    //         if (allCompleted) {
+    //             setCompleted(true);
+    //             // Clear timer when room is completed
+    //             if (id) {
+    //                 localStorage.removeItem(`roomTimer_${id}`);
+    //             }
+    //         }
+    //     }
+    // }, [quizList, id]);
     useEffect(() => {
         if (!roomData) return;
         const getUrl = async (mainImage: string | null) => {

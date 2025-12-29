@@ -52,7 +52,7 @@ export const QuizSuccess = (props: quizSuccessProps) => {
         inputRef.current?.focus();
         const getAnswerType = () => {
             if (/[0-9]/.test(data[0]) && type === "orderBorder" && userLanguage === "he") {
-                return "number";
+                return "hebrew";
             } else if (/[0-9]/.test(data[0])) {
                 return "number";
             } else if (/[A-Za-z]/.test(data[0])) {
