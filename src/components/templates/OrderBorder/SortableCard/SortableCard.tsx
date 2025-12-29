@@ -30,8 +30,7 @@ export const SortableCard = ({ index, id, data, borders, disabled }: Card) => {
         transform: CSS.Transform.toString(transform),
         transition,
         opacity: isDragging ? 0.8 : 1,
-        cursor: "grab",
-        borderColor: colorPalette[roomColor as keyof typeof colorPalette].bright,
+        borderColor: colorPalette[roomColor as keyof typeof colorPalette].dark,
         backgroundColor: isDragging
             ? "white"
             : colorPalette[roomColor as keyof typeof colorPalette].light,
@@ -66,8 +65,9 @@ export const SortableCard = ({ index, id, data, borders, disabled }: Card) => {
                     // onTouchCancel={() => setInfoShow(false)}
                     className="rounded-4xl h-7 w-7 font-bold text-white text-center p-0.5 cursor-pointer"
                     style={{
-                        backgroundColor:
-                            colorPalette[roomColor as keyof typeof colorPalette].bright,
+                        backgroundColor: !disabled
+                            ? colorPalette[roomColor as keyof typeof colorPalette].dark
+                            : colorPalette[roomColor as keyof typeof colorPalette].bright,
                     }}>
                     {!disabled ? "?" : "i"}
                 </div>

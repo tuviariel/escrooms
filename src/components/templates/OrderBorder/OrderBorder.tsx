@@ -39,10 +39,26 @@ export const OrderBorder = (props: TemplateProps) => {
         }[]
     >([]);
     const [disabled, setDisabled] = useState(false);
-    const [finishedStart, setFinishedStart] = useState(false);
+    const [initial, setInitial] = useState(false);
     const { roomColor } = useRoomContext();
     useEffect(() => {
         const setList = () => {
+            // Check if saved state exists in localStorage
+            const savedState = data?.id && localStorage.getItem(data.id);
+            if (savedState) {
+                try {
+                    const parsed = JSON.parse(savedState);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        setCards(parsed);
+                        setInitial(true);
+                        return;
+                    }
+                } catch (e) {
+                    console.error("Failed to parse localStorage:", e);
+                }
+            }
+
+            // If no saved state, create new cards
             setCards(() => {
                 let answer = "";
                 if (/\d/.test(data.answer[0]) && data.answer.length % 2 === 0) {
@@ -67,13 +83,19 @@ export const OrderBorder = (props: TemplateProps) => {
                 // console.log(create);
                 return create;
             });
-            setFinishedStart(true);
+            setInitial(true);
         };
         setList();
     }, []);
     useEffect(() => {
-        finishedStart && checkAnswer(false);
-    }, [cards]);
+        if (initial && cards.length > 0) {
+            checkAnswer(false);
+            // Save to localStorage on every change
+            if (data?.id) {
+                localStorage.setItem(data.id, JSON.stringify(cards));
+            }
+        }
+    }, [cards, initial]);
     const checkAnswer = (buttonClicked: boolean) => {
         let finished = true;
         for (let i = 0; i < cards.length; i++) {
@@ -136,11 +158,13 @@ export const OrderBorder = (props: TemplateProps) => {
         <div
             style={{
                 backgroundImage: `url(${colorPalette[roomColor as keyof typeof colorPalette].background})`,
-                backgroundSize: "cover",
+                backgroundSize: "100% auto",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center center",
             }}
             className="h-screen">
             <div
-                className={`py-4 h-8/9 px-10 ${
+                className={`py-4 ${disabled ? "h-8/9 mt-3" : "h-4/5 mt-10"} px-10 ${
                     cards.length === 8
                         ? "columns-4"
                         : cards.length === 6
@@ -168,7 +192,8 @@ export const OrderBorder = (props: TemplateProps) => {
                     </SortableContext>
                 </DndContext>
             </div>
-            <div className="flex">
+            <div
+                className={`${cards.length < 8 ? "ts:flex" : "ph:flex"} absolute bottom-2 lg:bottom-6 left-1/2 -translate-x-1/2 z-20 hidden flex-col-reverse items-center justify-center`}>
                 <Button
                     label={
                         result === get_text("success", userLanguage)
@@ -180,11 +205,15 @@ export const OrderBorder = (props: TemplateProps) => {
                             ? setOpenLock(true)
                             : checkAnswer(true)
                     }
-                    className="flex w-auto mx-10 min-w-fit "
+                    className="text-xl lg:text-3xl"
                 />
                 {result && (
                     <div
-                        className="m-auto p-1 rounded-xl text-center bg-amber-50"
+                        className="w-fit py-1 px-4 rounded-xl text-center border-2"
+                        style={{
+                            color: colorPalette[roomColor as keyof typeof colorPalette].light,
+                            borderColor: colorPalette[roomColor as keyof typeof colorPalette].light,
+                        }}
                         dir={userLanguage === "he" ? "rtl" : "ltr"}>
                         {result}
                     </div>

@@ -107,7 +107,7 @@ export const QuizTemplate = (props: quizDataP) => {
                 size="small"
                 disableOverlayClose={true}
                 data="quizSuccess">
-                <QuizSuccess data={data.answer} id={data.id} />
+                <QuizSuccess data={data.answer} id={data.id} type={data.type} />
             </Dialog>
         </div>
     );

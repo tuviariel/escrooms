@@ -16,11 +16,12 @@ import { useUserContext } from "../../contexts/userStyleContext";
 
 interface quizSuccessProps {
     data: string;
+    type: string;
     id: string;
 }
 
 export const QuizSuccess = (props: quizSuccessProps) => {
-    const { data, id } = props;
+    const { data, id, type } = props;
     const { roomColor } = useRoomContext();
     const { userLanguage } = useUserContext();
     const quiz = useSelector((state: { quizNumber: { quizNumber: number } }) => state.quizNumber);
@@ -50,7 +51,9 @@ export const QuizSuccess = (props: quizSuccessProps) => {
     useEffect(() => {
         inputRef.current?.focus();
         const getAnswerType = () => {
-            if (/[0-9]/.test(data[0])) {
+            if (/[0-9]/.test(data[0]) && type === "orderBorder" && userLanguage === "he") {
+                return "number";
+            } else if (/[0-9]/.test(data[0])) {
                 return "number";
             } else if (/[A-Za-z]/.test(data[0])) {
                 return "english";
