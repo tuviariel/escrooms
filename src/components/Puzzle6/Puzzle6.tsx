@@ -74,6 +74,7 @@ export const Puzzle6: React.FC<Partial<TemplateProps>> = ({ data, setOpenLock })
     // --- DND Kit drag end handler ---
     const handleDragEnd = (event: any) => {
         const { active, over } = event;
+        // if (!showEnd) return;
         if (active.id !== over.id) {
             setItems((items) => {
                 const oldIndex = items.indexOf(active.id);
@@ -86,7 +87,7 @@ export const Puzzle6: React.FC<Partial<TemplateProps>> = ({ data, setOpenLock })
     useEffect(() => {
         const isCorrectOrder = items.every((item, index) => item === index);
         if (isCorrectOrder) {
-            setOpenLock && setOpenLock(true);
+            // setOpenLock && setOpenLock(true);
             setShowEnd(true);
         }
     }, [items]);
@@ -106,7 +107,7 @@ export const Puzzle6: React.FC<Partial<TemplateProps>> = ({ data, setOpenLock })
                 }}>
                 {get_text("puzzle6_inst", userLanguage)}
             </div>
-            <div className="pt-10 columns-6 gap-0" dir={userLanguage === "he" ? "rtl" : "ltr"}>
+            <div className="lg:pt-10 columns-6 gap-1" dir={userLanguage === "he" ? "rtl" : "ltr"}>
                 <DndContext
                     sensors={sensors}
                     collisionDetection={closestCenter}
@@ -142,8 +143,10 @@ export const Puzzle6: React.FC<Partial<TemplateProps>> = ({ data, setOpenLock })
                 </DndContext>
             </div>
             {showEnd && (
-                <div className="flex ml-2 mr-auto">
-                    <Button onClick={() => setOpenLock && setOpenLock(true)}>
+                <div className="flex mx-auto justify-center">
+                    <Button
+                        onClick={() => setOpenLock && setOpenLock(true)}
+                        className="text-medium lg:text-2xl">
                         <div>{get_text("finish", userLanguage)}</div>
                     </Button>
                 </div>

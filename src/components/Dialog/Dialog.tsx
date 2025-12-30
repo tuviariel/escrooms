@@ -38,7 +38,7 @@ export const Dialog: React.FC<DialogProps> = (props) => {
 
     return (
         <div
-            className={open ? "fixed z-20 inset-0 w-screen h-screen" : "hidden"}
+            className={open ? "fixed z-70 inset-0 w-screen h-screen" : "hidden"}
             // Overlay click closes only if NOT disabled
             onClick={disableOverlayClose ? (e) => e.stopPropagation() : () => setOpen(false)}>
             <div className={`fixed inset-0 w-full h-full bg-white/30 backdrop-blur-lg z-0`} />

@@ -12,7 +12,7 @@ import { quizNumberActions } from "../../reduxStor/quizNumber";
 import QuizTemplate from "../QuizTemplate";
 import { fileStorage, roomsService } from "../../services/service";
 import { quizListActions } from "../../reduxStor/quizList";
-// import finishedRoomGif from "../../assets/images/finishedRoom.gif";
+import finishedRoomGif from "../../assets/images/finishedRoom.gif";
 import { useUserContext } from "../../contexts/userStyleContext";
 import { RoomType } from "../Dashboard/Dashboard";
 import { CheckCircle2, Lock, Activity, Smartphone } from "lucide-react";
@@ -85,24 +85,26 @@ export const Room = () => {
     useEffect(() => {
         if (quizList.length === 0) return;
         if (quizList[quizList.length - 1].status === "completed") {
+            // console.log("completed");
             setCompleted(true);
             setActiveModuleId(quizList.length + 1);
         } else {
-            let foundActive = false;
+            // let foundActive = false;
             for (const quiz of quizList) {
                 if (quiz.status === "active") {
                     setActiveModuleId(quiz.id);
-                    foundActive = true;
+                    // foundActive = true;
                     break;
                 }
             }
-            if (!foundActive) {
-                // setActiveModuleId(quizList.length);
-                // setCompleted(true);
-                if (id) {
-                    localStorage.removeItem(`roomTimer_${id}`);
-                }
-            }
+            // if (!foundActive) {
+            //     console.log("no active");
+            //     // setActiveModuleId(quizList.length);
+            //     // setCompleted(true);
+            //     if (id) {
+            //         localStorage.removeItem(`roomTimer_${id}`);
+            //     }
+            // }
         }
     }, [quizList]);
     const navigate = useNavigate();
@@ -151,7 +153,7 @@ export const Room = () => {
         window.addEventListener("mousemove", handleMouseMove);
         return () => window.removeEventListener("mousemove", handleMouseMove);
     }, []);
-    console.log("Room id:", id);
+    // console.log("Room id:", id);
     useEffect(() => {
         const setRoom = async () => {
             if (!id) return;
@@ -159,7 +161,7 @@ export const Room = () => {
             // console.log(roomDataFromServer);
             setRoomData(roomDataFromServer[0]);
             const quizzes = await roomDataFromServer[0].quizzes();
-            console.log("Fetched quizzes for room:", quizzes);
+            // console.log("Fetched quizzes for room:", quizzes);
             const cleanQuizzes = quizzes.data.map((quiz: any) => {
                 const updatedHints = parseQuizData(quiz.hints);
                 const updatedQuiz = parseQuizData(quiz.quiz);
@@ -171,7 +173,7 @@ export const Room = () => {
                 };
             });
             setRoomQuizzes(cleanQuizzes);
-            console.log(cleanQuizzes);
+            // console.log(cleanQuizzes);
             const list = cleanQuizzes.map((quiz: any, i: number) => {
                 return {
                     id: i + 1,
@@ -183,7 +185,7 @@ export const Room = () => {
                     y: quizLocation[i].y,
                 };
             });
-            console.log("Initializing quiz list:", list);
+            // console.log("Initializing quiz list:", list);
             setQuizList(list);
             setRoomStyle(roomDataFromServer[0].imageStyle || "");
             setRoomColor(roomDataFromServer[0].colorPalette || "");
@@ -191,20 +193,20 @@ export const Room = () => {
         };
         const parseQuizData = (d: any) => {
             if (typeof d === "object" && d !== null) {
-                console.log("1");
+                // console.log("1");
                 return d;
             }
             const parsed1 = JSON.parse(d);
             if (typeof parsed1 === "object" && parsed1 !== null) {
-                console.log("2", parsed1);
+                // console.log("2", parsed1);
                 return parsed1;
             } else if (typeof parsed1 === "string" && parsed1 !== "") {
                 const parsed2 = JSON.parse(parsed1);
                 if (typeof parsed2 === "object" && parsed2 !== null) {
-                    console.log("3", parsed2);
+                    // console.log("3", parsed2);
                     return parsed2;
                 } else if (typeof parsed2 === "string" && parsed2 !== "") {
-                    console.log("4", parsed2);
+                    // console.log("4", parsed2);
                     return JSON.parse(parsed2);
                 }
             }
@@ -226,20 +228,8 @@ export const Room = () => {
                 setOrientation("landscape");
             }
         });
-        console.log("orientation:", screen.orientation.type);
+        // console.log("orientation:", screen.orientation.type);
     }, [screen.orientation.type]);
-    // useEffect(() => {
-    //     if (quizList && quizList.length > 0) {
-    //         const allCompleted = quizList.every((quiz: any) => quiz.completed);
-    //         if (allCompleted) {
-    //             setCompleted(true);
-    //             // Clear timer when room is completed
-    //             if (id) {
-    //                 localStorage.removeItem(`roomTimer_${id}`);
-    //             }
-    //         }
-    //     }
-    // }, [quizList, id]);
     useEffect(() => {
         if (!roomData) return;
         const getUrl = async (mainImage: string | null) => {
@@ -249,7 +239,7 @@ export const Room = () => {
         };
         getUrl(roomData.mainImage || "");
     }, [roomData]);
-    console.log("activeModuleId:", activeModuleId);
+    console.log("activeModuleId:", activeModuleId, quizList);
     return (
         <>
             {
@@ -263,7 +253,7 @@ export const Room = () => {
                         )}
 
                         {quizNumber > -1 && (
-                            <div className="z-60 w-screen">
+                            <div className="z-60 w-screen h-screen bg-gray-900">
                                 <img
                                     src={backArrow}
                                     style={{
@@ -348,7 +338,7 @@ export const Room = () => {
                                                 isCompleted={module.id < activeModuleId}
                                                 total={quizList.length}
                                                 onClick={() =>
-                                                    // quizList[index].status === "active" &&
+                                                    quizList[index].status === "active" &&
                                                     setQuizNumber(quizList[index].id - 1)
                                                 }
                                                 delay={index * 0.2}
@@ -380,7 +370,7 @@ export const Room = () => {
                                     roomColor={roomColor}
                                 />
                             </motion.div>
-                            {/*
+
                             {completed && (
                                 <>
                                     <img
@@ -395,10 +385,13 @@ export const Room = () => {
                                     </div>
                                 </>
                             )}
-                            */}
                         </div>
                         <div
-                            className="w-8 h-8 text-center fixed top-3 left-3 rounded-full font-bold z-20 border-2 text-black bg-white hover:text-red-500 hover:border-red-500 cursor-pointer"
+                            className="w-8 h-8 text-center fixed top-3 left-3 rounded-full font-bold z-20 border-2 text-black hover:text-red-500 hover:border-red-500 cursor-pointer"
+                            style={{
+                                backgroundColor:
+                                    colorPalette[roomColor as keyof typeof colorPalette].bright,
+                            }}
                             title={get_text("exit_room", userLanguage)}
                             onClick={() => (!completed ? setCheckLeave(true) : navigate("/"))}>
                             x
@@ -455,18 +448,29 @@ function InteractiveNode({
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay, type: "spring" }}
-            onClick={isActive ? onClick : undefined}
+            onClick={(e) => {
+                e.stopPropagation();
+                if (isActive && onClick) {
+                    onClick();
+                }
+            }}
+            disabled={!isActive}
+            style={{
+                pointerEvents: isActive ? "auto" : "none",
+                position: "relative",
+                zIndex: isActive ? 50 : 10,
+            }}
             className={`
         group relative flex flex-col items-center justify-center
         transition-all duration-500
+        min-w-[80px] min-h-[80px]
         ${isActive ? "scale-125 z-50" : "scale-90 grayscale hover:grayscale-0"}
         ${isLocked ? "opacity-50 cursor-not-allowed" : "opacity-100 cursor-pointer"}
       `}>
             {/* Status Ring */}
             <div
-                onClick={isActive ? onClick : undefined}
                 className={`
-        relative p-4 rounded-full border-4 shadow-2xl backdrop-blur-xl
+        relative p-4 rounded-full border-4 shadow-2xl backdrop-blur-xl pointer-events-auto
         transition-all duration-500
         ${isActive ? "bg-white border-primary animate-pulse shadow-primary/50" : ""}
         ${isCompleted ? "bg-green-500/20 border-green-500 text-green-600" : ""}
@@ -477,19 +481,21 @@ function InteractiveNode({
                 ) : isLocked ? (
                     <Lock className="w-6 h-6" />
                 ) : (
-                    <img src={image} alt="" className="w-10 h-10 text-primary" />
-                    //<div className="w-8 h-8 text-primary">{icon}</div>
+                    <img
+                        src={image}
+                        alt=""
+                        className="w-10 h-10 text-primary pointer-events-auto"
+                    />
                 )}
 
                 {/* Orbiting Particle for Active State */}
                 {isActive && (
                     <motion.div
-                        onClick={isActive ? onClick : undefined}
-                        className="absolute -inset-2 border-2 border-primary/30 rounded-full"
+                        className="absolute -inset-2 border-2 border-primary/30 rounded-full pointer-events-auto"
                         animate={{ rotate: 360 }}
                         transition={{ duration: 8, repeat: Infinity, ease: "linear" }}>
                         <div
-                            className="absolute top-0 left-1/2 w-3 h-3 bg-black rounded-full -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-primary"
+                            className="absolute top-0 left-1/2 w-3 h-3 bg-black rounded-full -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-primary pointer-events-auto"
                             style={{
                                 backgroundColor:
                                     colorPalette[roomColor as keyof typeof colorPalette].dark,
@@ -501,9 +507,8 @@ function InteractiveNode({
 
             {/* Label Plate */}
             <div
-                onClick={isActive ? onClick : undefined}
                 className={`
-        -mt-2 px-4 py-2 rounded-lg font-mono font-bold text-sm tracking-widest shadow-lg
+        -mt-2 px-4 py-2 rounded-lg font-mono font-bold text-sm tracking-widest shadow-lg pointer-events-none
         transition-all duration-300
         ${isActive ? "bg-primary text-white translate-y-0 opacity-100" : "bg-white/80 text-gray-500 translate-y-2 opacity-0 group-hover:opacity-100 group-hover:translate-y-0"}
       `}>
@@ -512,7 +517,7 @@ function InteractiveNode({
 
             {/* Connecting Line Stub */}
             {!isLocked && id < total && (
-                <div className="absolute top-full left-1/2 w-0.5 h-8 bg-primary/20 -z-10 origin-top" />
+                <div className="absolute top-full left-1/2 w-0.5 h-8 bg-primary/20 -z-10 origin-top pointer-events-none" />
             )}
         </motion.button>
     );
@@ -563,7 +568,7 @@ function HUD({
                 <span>{get_text("current_objective", userLanguage)}</span>
                 <span className="font-bold flex items-center gap-1">
                     <Activity className="w-3 h-3" /> {get_text("find_quiz_num", userLanguage)}{" "}
-                    {activeId}
+                    {activeId + 1}
                 </span>
             </div>
         </motion.div>

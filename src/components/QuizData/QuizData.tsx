@@ -66,6 +66,7 @@ export const QuizData: React.FC<Partial<TemplateProps>> = (props) => {
     }, [quizDataPageNumber]);
     useEffect(() => {
         setChoseOpen(0);
+        result && setResult && setResult("");
     }, [colorOrder]);
 
     const colorChange = (choose: string) => {
@@ -118,6 +119,7 @@ export const QuizData: React.FC<Partial<TemplateProps>> = (props) => {
                 backgroundSize: "100% auto",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center center",
+                backgroundAttachment: "fixed",
             }}>
             <img
                 style={{
@@ -185,7 +187,7 @@ export const QuizData: React.FC<Partial<TemplateProps>> = (props) => {
                         return (
                             <div
                                 className={
-                                    "relative h-screen shrink-0 snap-center pb-12 pt-12 lg:pt-18 overflow-y-auto"
+                                    "relative h-screen w-screen shrink-0 snap-center pb-12 pt-12 lg:pt-18 overflow-y-auto"
                                 }
                                 ref={quizDataPageNumber === i ? imgContainerRef : null}
                                 key={i}

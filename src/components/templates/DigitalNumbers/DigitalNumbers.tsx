@@ -183,7 +183,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
                     transformStyle: "preserve-3d",
                 }}>
                 <table
-                    className="table-auto w-full h-full text-right border-amber-50 text-medium overflow-y-auto border-4"
+                    className="table-auto w-full h-full text-right border-amber-50 text-medium overflow-y-scroll no-scrollbar border-4"
                     style={{
                         borderColor: colorPalette[roomColor as keyof typeof colorPalette].dark,
                         transform: "rotateX(20deg)",
@@ -191,20 +191,20 @@ export const DigitalNumbers = (props: TemplateProps) => {
                     }}
                     dir={userLanguage === "he" ? "rtl" : "ltr"}>
                     <thead
-                        className="sticky top-0 z-10"
+                        className="sticky top-0 z-10 font-normal"
                         style={{
                             backgroundColor:
                                 colorPalette[roomColor as keyof typeof colorPalette].light,
                             color: colorPalette[roomColor as keyof typeof colorPalette].dark,
                         }}>
                         <tr>
-                            <th className="border border-amber-50 whitespace-nowrap">
+                            <th className="border border-amber-50 whitespace-nowrap px-2">
                                 {get_text("situationAction", userLanguage)}
                             </th>
-                            <th className="border border-amber-50 whitespace-nowrap px-2">
+                            <th className="border border-amber-50 whitespace-nowrap px-2 text-center">
                                 {get_text("correct", userLanguage)}
                             </th>
-                            <th className="border border-amber-50 whitespace-nowrap px-2">
+                            <th className="border border-amber-50 whitespace-nowrap px-2 text-center">
                                 {get_text("incorrect", userLanguage)}
                             </th>
                         </tr>

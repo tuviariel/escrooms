@@ -33,8 +33,8 @@ export const QuizSuccess = (props: quizSuccessProps) => {
     const setQuizList = (number: number) => {
         dispatch(quizListActions.changeQuizList(number));
     };
-    const [honk] = useSound(honkMP3, { volume: 1.25 });
-    const [play, setPlay] = useState(false);
+    // const [honk] = useSound(honkMP3, { volume: 1.25 });
+    // const [play, setPlay] = useState(false);
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState("");
     const [digits, setDigits] = useState<string[]>(new Array(data.length).fill(""));
@@ -43,10 +43,21 @@ export const QuizSuccess = (props: quizSuccessProps) => {
         "other"
     );
     const inputRef = useRef<HTMLInputElement | null>(null);
+    const timeoutRef = useRef<any | null>(null);
+
+    // useEffect(() => {
+    //     honk();
+    //     setPlay(false);
+    // }, [play]);
+
+    // Cleanup timeouts on unmount
     useEffect(() => {
-        honk();
-        setPlay(false);
-    }, [play]);
+        return () => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+        };
+    }, []);
 
     useEffect(() => {
         inputRef.current?.focus();
@@ -85,7 +96,8 @@ export const QuizSuccess = (props: quizSuccessProps) => {
         // console.log(count, i);
         if (count === i) {
             setOpen(true);
-            setTimeout(() => {
+            // Set up the automatic timeout
+            timeoutRef.current = setTimeout(() => {
                 setQuizNumber(-1);
                 setTimeout(() => {
                     setQuizList(quizNumber);
@@ -154,9 +166,16 @@ export const QuizSuccess = (props: quizSuccessProps) => {
                         <Button
                             label={get_text("close_quiz", userLanguage)}
                             onClick={() => {
+                                // Cancel the automatic timeouts
+                                if (timeoutRef.current) {
+                                    clearTimeout(timeoutRef.current);
+                                    timeoutRef.current = null;
+                                }
+                                // Execute immediately
                                 setQuizNumber(-1);
                                 setTimeout(() => {
                                     setQuizList(quizNumber);
+                                    localStorage.removeItem(id);
                                 }, 1000);
                             }}
                         />
