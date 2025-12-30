@@ -1,6 +1,8 @@
 import { getClient, isAdmin } from "./client";
 import { fetchUserAttributes } from "aws-amplify/auth";
 import { uploadData, getUrl, remove } from "aws-amplify/storage";
+import { createAIHooks } from "@aws-amplify/ui-react-ai";
+
 /**
  * Rooms routes:
  * @returns the response data
@@ -157,3 +159,5 @@ export const fileStorage = {
         }
     },
 };
+const client = await getClient();
+export const { useAIConversation, useAIGeneration } = createAIHooks(client);

@@ -68,6 +68,33 @@ const schema = a.schema({
             // .to(["create", "read", "update", "delete"]),
             allow.guest().to(["read"]),
         ]),
+
+    generateRoom: a
+        .generation({
+            aiModel: a.ai.model("Claude 3.5 Haiku"),
+            systemPrompt: "You are a helpful assistant that generates escape rooms in json format.",
+        })
+        .arguments({
+            description: a.string(),
+        })
+        .returns(
+            // a.json()
+            a.customType({
+                name: a.string(),
+                // mainImage: a.string(),
+                // coverImage: a.string(),
+                subTopics: a.string().array(),
+                // cardSortingQuizTopics: a.string().array(),
+                // categorizingQuizTopics: a.string().array(),
+                // trueFalseQuizTopics: a.string().array(),
+                // choosingIconQuizTopics: a.string().array(),
+                // matchingQuizTopics: a.string().array(),
+                // fillInTheBlankQuizTopics: a.string().array(),
+                // multipleChoiceQuizTopics: a.string().array(),
+                // flipCardQuizTopics: a.string().array(),
+            })
+        )
+        .authorization((allow) => allow.authenticated()),
 });
 
 export type Schema = ClientSchema<typeof schema>;
