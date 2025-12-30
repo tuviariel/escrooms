@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { useRoomContext } from "../../contexts/roomStyleContext";
 import { colorPalette } from "../../util/UIstyle";
@@ -25,23 +25,53 @@ export const RoomTimer = ({
     const { roomColor } = useRoomContext();
     const { userLanguage } = useUserContext();
     const [timeRemaining, setTimeRemaining] = useState(3600); // 60 minutes in seconds
+    const timeRemainingRef = useRef(3600); // Keep ref for cleanup
 
     const activeColor = colorPalette[roomColor as keyof typeof colorPalette]?.dark || "#06b6d4";
     const completedColor = colorPalette[roomColor as keyof typeof colorPalette]?.light || "#10b981";
-    const timerKey = roomId ? `roomTimer_${roomId}` : "roomTimer";
+    const timerKey = `roomTimer_${roomId || roomName || "default"}`;
+
+    // Keep ref in sync with state
+    useEffect(() => {
+        timeRemainingRef.current = timeRemaining;
+    }, [timeRemaining]);
 
     useEffect(() => {
-        // Load saved time from localStorage or start with default
-        const savedTime = localStorage.getItem(timerKey);
-        if (savedTime && savedTime !== "0") {
-            const savedTimestamp = parseInt(savedTime);
-            const elapsed = Math.floor((Date.now() - savedTimestamp) / 1000);
-            const remaining = Math.max(0, 3600 - elapsed);
-            setTimeRemaining(remaining);
+        // Load saved timer data from localStorage
+        const savedData = localStorage.getItem(timerKey);
+        if (savedData) {
+            try {
+                const { remaining, timestamp } = JSON.parse(savedData);
+                console.log("last played time:", timestamp);
+                // const now = Date.now();
+                // const elapsed = Math.floor((now - timestamp) / 1000);
+                // const newRemaining = Math.max(0, remaining - elapsed);
+                setTimeRemaining(remaining);
+                timeRemainingRef.current = remaining;
+
+                // Update saved data with new remaining time and current timestamp
+                localStorage.setItem(
+                    timerKey,
+                    JSON.stringify({ remaining: remaining, timestamp: Date.now() })
+                );
+            } catch (e) {
+                console.error("Failed to parse saved timer data:", e);
+                // Start new timer if parsing fails
+                setTimeRemaining(3600);
+                timeRemainingRef.current = 3600;
+                localStorage.setItem(
+                    timerKey,
+                    JSON.stringify({ remaining: 3600, timestamp: Date.now() })
+                );
+            }
         } else {
             // Start new timer
-            localStorage.setItem(timerKey, Date.now().toString());
             setTimeRemaining(3600);
+            timeRemainingRef.current = 3600;
+            localStorage.setItem(
+                timerKey,
+                JSON.stringify({ remaining: 3600, timestamp: Date.now() })
+            );
         }
 
         // Only run countdown if not completed
@@ -49,13 +79,42 @@ export const RoomTimer = ({
 
         const interval = setInterval(() => {
             setTimeRemaining((prev) => {
-                if (prev <= 0) return 0;
-                return prev - 1;
+                if (prev <= 0) {
+                    // Clear timer data when it reaches 0
+                    localStorage.removeItem(timerKey);
+                    return 0;
+                }
+                const newTime = prev - 1;
+                timeRemainingRef.current = newTime;
+                // Save remaining time and timestamp on each update
+                localStorage.setItem(
+                    timerKey,
+                    JSON.stringify({ remaining: newTime, timestamp: Date.now() })
+                );
+                return newTime;
             });
         }, 1000);
 
-        return () => clearInterval(interval);
+        return () => {
+            clearInterval(interval);
+            // Save remaining time on unmount using ref to get current value
+            const currentTime = timeRemainingRef.current;
+            if (currentTime > 0 && !completed) {
+                localStorage.setItem(
+                    timerKey,
+                    JSON.stringify({ remaining: currentTime, timestamp: Date.now() })
+                );
+            }
+        };
     }, [timerKey, completed]);
+
+    // Clear timer data when room is completed
+    useEffect(() => {
+        if (completed && roomId) {
+            localStorage.removeItem(timerKey);
+            // TODO- here would be the best place to update the users score of the room.
+        }
+    }, [completed, timerKey, roomId]);
 
     // Format time for digital display (large segmented style)
     const formatTimeForDisplay = (seconds: number) => {
@@ -105,7 +164,8 @@ export const RoomTimer = ({
                 )}
 
                 {/* Timer Display */}
-                <div className="flex items-center justify-center gap-2 mb-2">
+                <div
+                    className={`flex items-center justify-center gap-2 ${small ? "mb-0" : "mb-2"}`}>
                     <div
                         className={`font-mono font-bold tracking-wider ${small ? "text-xl md:text-2xl" : "text-2xl md:text-4xl"}`}
                         style={{
