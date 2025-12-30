@@ -116,17 +116,17 @@ export const RoomCard = ({
                                         className="flex-1 flex items-center justify-center gap-1 hover:bg-green-600 text-white p-1.5 rounded text-xs transition-colors">
                                         {room.public ? <EyeOff size={14} /> : <Eye size={14} />}
                                     </button>
-                                    {userRedux.subscription !== "free" && (
-                                        <button
-                                            title={get_text("delete", userLanguage)}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleDeleteRoom(room.id);
-                                            }}
-                                            className="flex-1 flex items-center justify-center gap-1 hover:bg-red-600 text-white p-1.5 rounded text-xs transition-colors">
-                                            <Trash2 size={14} />
-                                        </button>
-                                    )}
+                                    {/* {userRedux.subscription !== "free" && ( */}
+                                    <button
+                                        title={get_text("delete", userLanguage)}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDeleteRoom(room.id);
+                                        }}
+                                        className="flex-1 flex items-center justify-center gap-1 hover:bg-red-600 text-white p-1.5 rounded text-xs transition-colors">
+                                        <Trash2 size={14} />
+                                    </button>
+                                    {/* )} */}
                                 </div>
                             )}
                             <div

@@ -40,9 +40,22 @@ export const CreatorConsole = ({
         };
         getUserRooms();
     }, []);
-    const handleDeleteRoom = (id: string) => {
-        // setRooms(rooms.filter((room) => room.id !== id));
-        console.log("delete room: " + id);
+    const handleDeleteRoom = async (id: string) => {
+        try {
+            const result = await roomsService.deleteRoom(id);
+            console.log(result);
+            if (result) {
+                setRooms((prev) => {
+                    return prev.filter((room) => room.id !== id);
+                });
+                setOpenOptions((prev) => {
+                    const newLength = prev.length - 1;
+                    return Array(newLength).fill(false);
+                });
+            }
+        } catch (error) {
+            console.error("room deleted no:", error);
+        }
     };
     const handleOpenDots = (index: number) => {
         setOpenOptions((prev) => {

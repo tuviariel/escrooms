@@ -391,7 +391,7 @@ export const quizzes = [
     {
         roomId: "",
         type: "gridPlay",
-        name: "מה בתיק?",
+        name: "ציוד מציל חיים",
         answer: "בדה",
         quiz: {
             questions: [
@@ -436,7 +436,7 @@ export const quizzes = [
     {
         roomId: "",
         type: "colorChange",
-        name: "דרגות פינוי",
+        name: "סדר פינוי",
         answer: "1491",
         quiz: {
             questions: [

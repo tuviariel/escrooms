@@ -175,8 +175,8 @@ export const Dashboard = () => {
                 if (res && res.length > 0) {
                     // Use first file as main image
                     const result2 = await roomsService.updateRoom(result.id, {
-                        mainImage: `images/${result.id}/${filesArray[0].name}`,
-                        coverImage: `images/${result.id}/${filesArray[1].name}`,
+                        mainImage: `images/${result.id}/${filesArray.find((file) => file.name.startsWith("main"))?.name}`,
+                        coverImage: `images/${result.id}/${filesArray.find((file) => file.name.startsWith("cover"))?.name}`,
                     });
                     console.log("updated room:", result2);
                     for (const q of quizzes) {
