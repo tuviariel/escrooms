@@ -35,6 +35,9 @@ export const QuizTemplate = (props: quizDataP) => {
         if (result === get_text("success", userLanguage)) {
             data.type !== "colorChange" && setOpenLock(true);
         }
+        // setTimeout(() => {
+        //     setResult("");
+        // }, 7000);
     }, [result]);
     useEffect(() => {
         setTimeout(() => {

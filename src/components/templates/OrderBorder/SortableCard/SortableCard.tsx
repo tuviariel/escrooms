@@ -49,7 +49,7 @@ export const SortableCard = ({ index, id, data, borders, disabled }: Card) => {
                 p-1 w-9/10 rounded shadow cursor-grab relative min-h-1/2`}
             dir={userLanguage === "he" ? "rtl" : "ltr"}>
             <div
-                className="flex items-center absolute top-0 -right-8 text-white rounded-lg opacity-50 p-2 z-10"
+                className="flex items-center absolute top-0 -right-8 text-white rounded-lg opacity-80 p-2"
                 style={{
                     backgroundColor: colorPalette[roomColor as keyof typeof colorPalette].bright,
                 }}>

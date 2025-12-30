@@ -8,6 +8,7 @@ import { TemplateProps } from "../../../pages/QuizTemplate/QuizTemplate";
 import { segmentsCheckObj } from "../../../util/utils";
 
 import { useUserContext } from "../../../contexts/userStyleContext";
+import AnswerButton from "../../AnswerButton";
 
 type TableContentType = {
     index: number;
@@ -167,7 +168,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
     // console.log(roomColor);
     return (
         <div
-            className="bg-gray-100 flex flex-col w-screen h-screen p-3 pt-5 lg:p-20 relative"
+            className="bg-gray-900 flex flex-col w-screen h-screen p-3 pt-5 lg:p-44 relative"
             style={{
                 backgroundImage: `url(${
                     colorPalette[roomColor as keyof typeof colorPalette].background
@@ -220,7 +221,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
                                         key={i}
                                         className=""
                                         ref={i === nextLine ? nextLineRef : null}>
-                                        <td className="border border-amber-50">
+                                        <td className="border border-amber-50 px-2">
                                             {q.situationAndAction}
                                         </td>
                                         <td
@@ -294,33 +295,15 @@ export const DigitalNumbers = (props: TemplateProps) => {
                       })
                     : get_text("prepare", userLanguage)}
             </div>
-            <div
-                className={`${active.length < 4 ? "ts:flex" : "ph:flex"} absolute bottom-2 lg:bottom-6 left-1/2 -translate-x-1/2 z-20 hidden flex-col-reverse items-center justify-center`}>
-                <Button
-                    label={
-                        result === get_text("success", userLanguage)
-                            ? get_text("finish", userLanguage)
-                            : get_text("check_answer", userLanguage)
-                    }
-                    onClick={() =>
-                        result === get_text("success", userLanguage)
-                            ? setOpenLock(true)
-                            : checkAnswer(active)
-                    }
-                    className="text-xl lg:text-3xl"
-                />
-                {result && (
-                    <div
-                        className="w-fit py-1 px-4 rounded-xl text-center border-2"
-                        style={{
-                            color: colorPalette[roomColor as keyof typeof colorPalette].light,
-                            borderColor: colorPalette[roomColor as keyof typeof colorPalette].light,
-                        }}
-                        dir={userLanguage === "he" ? "rtl" : "ltr"}>
-                        {result}
-                    </div>
-                )}
-            </div>
+            <AnswerButton
+                result={result}
+                onClick={() => {
+                    result === get_text("success", userLanguage)
+                        ? setOpenLock(true)
+                        : checkAnswer(active);
+                }}
+                active={active}
+            />
         </div>
     );
 };

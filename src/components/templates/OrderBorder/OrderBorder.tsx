@@ -23,6 +23,7 @@ import {
 import SortableCard from "./SortableCard";
 
 import { useUserContext } from "../../../contexts/userStyleContext";
+import AnswerButton from "../../AnswerButton";
 export const OrderBorder = (props: TemplateProps) => {
     const { data, result, setResult, setOpenLock } = props;
     const { userLanguage } = useUserContext();
@@ -164,7 +165,7 @@ export const OrderBorder = (props: TemplateProps) => {
             }}
             className="h-screen">
             <div
-                className={`py-4 ${disabled ? "h-8/9 mt-3" : "h-4/5 mt-10"} px-10 ${
+                className={`${disabled ? "h-8/9 lg:h-1/2 mt-3 lg:mt-56" : "h-4/5 lg:h-1/2 mt-10 lg:mt-56"} py-4 px-10 lg:px-40 ${
                     cards.length === 8
                         ? "columns-4"
                         : cards.length === 6
@@ -192,7 +193,7 @@ export const OrderBorder = (props: TemplateProps) => {
                     </SortableContext>
                 </DndContext>
             </div>
-            <div
+            {/* <div
                 className={`${cards.length < 8 ? "ts:flex" : "ph:flex"} absolute bottom-2 lg:bottom-6 left-1/2 -translate-x-1/2 z-20 hidden flex-col-reverse items-center justify-center`}>
                 <Button
                     label={
@@ -218,7 +219,16 @@ export const OrderBorder = (props: TemplateProps) => {
                         {result}
                     </div>
                 )}
-            </div>
+            </div> */}
+            <AnswerButton
+                result={result}
+                onClick={() => {
+                    result === get_text("success", userLanguage)
+                        ? setOpenLock(true)
+                        : checkAnswer(true);
+                }}
+                active={cards}
+            />
         </div>
     );
 };

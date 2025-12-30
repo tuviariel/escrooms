@@ -78,7 +78,7 @@ export const HintChat = (props: hintChatProps) => {
 
     return (
         <div
-            className="fixed right-9 lg:right-18 bottom-1 lg:bottom-8 z-20"
+            className="fixed right-9 lg:right-18 bottom-1 lg:bottom-24 z-20"
             dir={userLanguage === "he" ? "rtl" : "ltr"}>
             <div className="relative flex">
                 <div

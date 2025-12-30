@@ -1,22 +1,12 @@
 import { useEffect, useState } from "react";
-import Button from "../../Button";
 import { GridCharObj } from "../../../util/utils";
-// import { quizData } from "../../../pages/Room/Room";
 import { colorPalette } from "../../../util/UIstyle";
 import { useRoomContext } from "../../../contexts/roomStyleContext";
 import { TemplateProps } from "../../../pages/QuizTemplate/QuizTemplate";
 import { get_text } from "../../../util/language";
-
+import AnswerButton from "../../AnswerButton";
 import { useUserContext } from "../../../contexts/userStyleContext";
-// interface GridProps {
-//     data: quizData;
-//     result: string;
-//     setResult: (newResult: string) => void;
-// }
-// type TableContentType = {
-//     index: number;
-//     icon: string;
-// };
+
 export const Grid = (props: TemplateProps) => {
     const { data, result, setResult, setOpenLock } = props;
     const { userLanguage } = useUserContext();
@@ -148,7 +138,7 @@ export const Grid = (props: TemplateProps) => {
             <div
                 className={`${
                     active[0]?.length < 4 ? "ts:flex" : "ph:flex"
-                } hidden items-center justify-center mt-14 overflow-y-auto`}
+                } hidden items-center justify-center mt-14 lg:mt-44 overflow-y-auto`}
                 style={{
                     perspective: "1000px",
                     transformStyle: "preserve-3d",
@@ -196,7 +186,7 @@ export const Grid = (props: TemplateProps) => {
                     )}
                 </>
             </div>
-            <div
+            {/* <div
                 className={`${active.length < 4 ? "ts:flex" : "ph:flex"} absolute bottom-2 lg:bottom-6 left-1/2 -translate-x-1/2 z-20 hidden flex-col-reverse items-center justify-center`}>
                 <Button
                     label={
@@ -222,7 +212,16 @@ export const Grid = (props: TemplateProps) => {
                         {result}
                     </div>
                 )}
-            </div>
+            </div> */}
+            <AnswerButton
+                result={result}
+                onClick={() => {
+                    result === get_text("success", userLanguage)
+                        ? setOpenLock(true)
+                        : checkAnswer();
+                }}
+                active={active}
+            />
         </div>
     );
 };

@@ -22,7 +22,7 @@ export const Button: React.FC<Partial<ButtonProps>> = (props) => {
         <div className="flex justify-center items-center">
             <button
                 onClick={onClick}
-                className={`flex h-7 mx-4 my-2 px-6 py-auto font-light rounded-xl w-auto min-w-fit border ${
+                className={`flex h-7 mx-4 my-2 px-6 py-auto rounded-xl w-auto min-w-fit border ${
                     disabled
                         ? "cursor-not-allowed bg-gray-500 "
                         : "cursor-pointer bg-gray-950 hover:bg-gray-700"

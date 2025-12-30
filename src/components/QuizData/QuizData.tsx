@@ -4,18 +4,20 @@ import pagePaginateArrow from "../../assets/images/pagePaginate.svg";
 import pagePaginateArrowDisabled from "../../assets/images/pagePaginateDis.svg";
 import { colorPalette } from "../../util/UIstyle";
 import { useRoomContext } from "../../contexts/roomStyleContext";
-import { quizData } from "../../pages/Room/Room";
+// import { quizData } from "../../pages/Room/Room";
 import loading from "../../assets/images/loading.gif";
-import Button from "../Button";
+// import Button from "../Button";
 import { useUserContext } from "../../contexts/userStyleContext";
+import AnswerButton from "../AnswerButton";
+import { TemplateProps } from "../../pages/QuizTemplate/QuizTemplate";
 
-interface QuizDataProps {
-    data: quizData;
-    result: string;
-    setResult: (newResult: string) => void;
-}
+// interface QuizDataProps {
+//     data: quizData;
+//     result: string | undefined;
+//     setResult: (newResult: string) => void;
+// }
 
-export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
+export const QuizData: React.FC<Partial<TemplateProps>> = (props) => {
     const { data, result, setResult } = props;
     const { roomColor } = useRoomContext();
     const { userLanguage } = useUserContext();
@@ -118,190 +120,183 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
     };
     // console.log(quizDataPageNumber);
     return (
-        <>
-            {data && data.quiz.length > 1 ? (
-                <div
-                    className="relative w-full h-full font-bold"
-                    style={{
-                        backgroundImage: `url(${colorPalette[roomColor as keyof typeof colorPalette].background})`,
-                        backgroundSize: "100% auto",
-                        backgroundRepeat: "no-repeat",
-                        backgroundPosition: "center center",
-                    }}>
-                    <img
-                        style={{
-                            backgroundColor:
-                                quizDataPageNumber !== 0
-                                    ? colorPalette[roomColor as keyof typeof colorPalette].bright
-                                    : "white",
-                        }}
-                        src={
-                            quizDataPageNumber !== 0 ? pagePaginateArrow : pagePaginateArrowDisabled
-                        }
-                        alt={
-                            quizDataPageNumber !== 0
-                                ? get_text("prev_page", userLanguage)
-                                : get_text("no_prev_page", userLanguage)
-                        }
-                        title={
-                            quizDataPageNumber !== 0
-                                ? get_text("prev_page", userLanguage)
-                                : get_text("no_prev_page", userLanguage)
-                        }
-                        className={`${
-                            quizDataPageNumber !== 0
-                                ? "cursor-pointer hover:border-amber-500"
-                                : "cursor-not-allowed opacity-50"
-                        } h-12 w-12 absolute left-26 bottom-28 z-20 p-1 rounded-full bg-gray-100 border-2`}
-                        onClick={() =>
-                            quizDataPageNumber !== 0 && setQuizDataPageNumber((prev) => prev - 1)
-                        }
-                    />
-                    <img
-                        style={{
-                            backgroundColor:
-                                quizDataPageNumber < data.quiz.length - 1
-                                    ? colorPalette[roomColor as keyof typeof colorPalette].bright
-                                    : "white",
-                        }}
-                        src={
-                            quizDataPageNumber < data.quiz.length - 1
-                                ? pagePaginateArrow
-                                : pagePaginateArrowDisabled
-                        }
-                        alt={
-                            quizDataPageNumber < data.quiz.length - 1
-                                ? get_text("next_page", userLanguage)
-                                : get_text("no_next_page", userLanguage)
-                        }
-                        title={
-                            quizDataPageNumber < data.quiz.length - 1
-                                ? get_text("next_page", userLanguage)
-                                : get_text("no_next_page", userLanguage)
-                        }
-                        className={`${
-                            quizDataPageNumber < data.quiz.length - 1
-                                ? "cursor-pointer hover:border-amber-500"
-                                : "cursor-not-allowed opacity-50"
-                        } h-12 w-12 absolute right-26 bottom-28 z-20 p-1 rounded-full border-2 rotate-180`}
-                        onClick={() =>
-                            quizDataPageNumber < data.quiz.length - 1 &&
-                            setQuizDataPageNumber((prev) => prev + 1)
-                        }
-                    />
-                    <div
-                        className="flex flex-row flex-nowrap overflow-hidden snap-x snap-mandatory no-scrollbar" //x-auto scroll-smooth
-                    >
-                        {data.quiz.map((item, i) => {
-                            return (
+        <div
+            className="relative w-full h-full font-bold"
+            style={{
+                backgroundImage: `url(${colorPalette[roomColor as keyof typeof colorPalette].background})`,
+                backgroundSize: "100% auto",
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center center",
+            }}>
+            <img
+                style={{
+                    backgroundColor:
+                        quizDataPageNumber !== 0
+                            ? colorPalette[roomColor as keyof typeof colorPalette].bright
+                            : "white",
+                }}
+                src={quizDataPageNumber !== 0 ? pagePaginateArrow : pagePaginateArrowDisabled}
+                alt={
+                    quizDataPageNumber !== 0
+                        ? get_text("prev_page", userLanguage)
+                        : get_text("no_prev_page", userLanguage)
+                }
+                title={
+                    quizDataPageNumber !== 0
+                        ? get_text("prev_page", userLanguage)
+                        : get_text("no_prev_page", userLanguage)
+                }
+                className={`${
+                    quizDataPageNumber !== 0
+                        ? "cursor-pointer hover:border-amber-500"
+                        : "cursor-not-allowed opacity-50"
+                } h-12 w-12 absolute left-26 bottom-28 lg:bottom-72 lg:left-52 z-20 p-1 rounded-full bg-gray-100 border-2`}
+                onClick={() =>
+                    quizDataPageNumber !== 0 && setQuizDataPageNumber((prev) => prev - 1)
+                }
+            />
+            <img
+                style={{
+                    backgroundColor:
+                        data && quizDataPageNumber < data.quiz.length - 1
+                            ? colorPalette[roomColor as keyof typeof colorPalette].bright
+                            : "white",
+                }}
+                src={
+                    data && quizDataPageNumber < data.quiz.length - 1
+                        ? pagePaginateArrow
+                        : pagePaginateArrowDisabled
+                }
+                alt={
+                    data && quizDataPageNumber < data.quiz.length - 1
+                        ? get_text("next_page", userLanguage)
+                        : get_text("no_next_page", userLanguage)
+                }
+                title={
+                    data && quizDataPageNumber < data.quiz.length - 1
+                        ? get_text("next_page", userLanguage)
+                        : get_text("no_next_page", userLanguage)
+                }
+                className={`${
+                    data && quizDataPageNumber < data.quiz.length - 1
+                        ? "cursor-pointer hover:border-amber-500"
+                        : "cursor-not-allowed opacity-50"
+                } h-12 w-12 absolute right-26 bottom-28 lg:bottom-72 lg:right-52 z-20 p-1 rounded-full border-2 rotate-180`}
+                onClick={() =>
+                    data &&
+                    quizDataPageNumber < data.quiz.length - 1 &&
+                    setQuizDataPageNumber((prev) => prev + 1)
+                }
+            />
+            <div className="flex flex-row flex-nowrap overflow-hidden snap-x snap-mandatory no-scrollbar">
+                {data &&
+                    data.quiz.map((item, i) => {
+                        return (
+                            <div
+                                className={
+                                    "relative h-screen shrink-0 snap-center pb-12 pt-12 lg:pt-18 overflow-y-auto"
+                                }
+                                ref={quizDataPageNumber === i ? imgContainerRef : null}
+                                key={i}
+                                style={{
+                                    perspective: "1000px",
+                                    transformStyle: "preserve-3d",
+                                }}>
                                 <div
-                                    className={
-                                        "relative h-screen shrink-0 snap-center py-12 overflow-y-auto"
-                                    }
-                                    ref={quizDataPageNumber === i ? imgContainerRef : null}
-                                    key={i}
+                                    className={`h-full lg:h-5/6 max-w-screen w-2/3 mx-auto flex border`}
                                     style={{
-                                        perspective: "1000px",
-                                        transformStyle: "preserve-3d",
+                                        transform: "rotateX(30deg)",
+                                        transformOrigin: "bottom center",
+                                        borderColor:
+                                            colorPalette[roomColor as keyof typeof colorPalette]
+                                                .light,
+                                        pointerEvents: "none",
                                     }}>
+                                    <img
+                                        src={item.image}
+                                        alt={`Quiz image ${i + 1}`}
+                                        className="border-r border-white"
+                                    />
                                     <div
-                                        className={`h-full max-w-screen w-2/3 mx-auto flex border`}
-                                        style={{
-                                            transform: "rotateX(35deg)",
-                                            transformOrigin: "bottom center",
-                                            borderColor:
-                                                colorPalette[roomColor as keyof typeof colorPalette]
-                                                    .light,
-                                            pointerEvents: "none",
-                                        }}>
-                                        <img
-                                            src={item.image}
-                                            alt={`Quiz image ${i + 1}`}
-                                            className="border-r border-white"
-                                        />
+                                        className="flex flex-col relative px-2 py-3"
+                                        dir={userLanguage === "he" ? "rtl" : "ltr"}>
                                         <div
-                                            className="flex flex-col relative px-2 py-3"
-                                            dir={userLanguage === "he" ? "rtl" : "ltr"}>
-                                            <div
-                                                className="text-center mt-2 text-3xl p-1 rounded-md "
-                                                style={{
-                                                    color: colorPalette[
-                                                        roomColor as keyof typeof colorPalette
-                                                    ].light,
-                                                }}>
-                                                {item.title}
-                                            </div>
-                                            <div
-                                                className="text-right mt-2 mx-3 text-2xl font-semibold p-1 rounded-md"
-                                                style={{
-                                                    color: colorPalette[
-                                                        roomColor as keyof typeof colorPalette
-                                                    ].light,
-                                                }}>
-                                                {item.desc}
-                                            </div>
+                                            className="text-center mt-2 text-3xl p-1 rounded-md "
+                                            style={{
+                                                color: colorPalette[
+                                                    roomColor as keyof typeof colorPalette
+                                                ].light,
+                                            }}>
+                                            {item.title}
+                                        </div>
+                                        <div
+                                            className="text-right mt-2 mx-3 text-2xl font-semibold p-1 rounded-md"
+                                            style={{
+                                                color: colorPalette[
+                                                    roomColor as keyof typeof colorPalette
+                                                ].light,
+                                            }}>
+                                            {item.desc}
                                         </div>
                                     </div>
-                                    <div className="z-10 absolute left-1/3 translate-x-1/2 bottom-14 flex flex-col gap-2 text-center font-extrabold text-xl whitespace-nowrap text-black">
-                                        <div
-                                            className={`-ml-10 p-auto rounded-full ${openStatus === -1 ? "bg-emerald-300" : "bg-amber-300"} w-6 h-6 text-center cursor-pointer relative`}
-                                            onClick={() => {
-                                                setOpenStatus((prev) =>
-                                                    prev === -1 ? quizDataPageNumber : -1
-                                                );
-                                            }}
-                                            onMouseLeave={() => setOpenStatus(-1)}
-                                            title={get_text("more_info", userLanguage) + "..."}>
-                                            !
-                                            {openStatus !== -1 && (
-                                                <div
-                                                    className="absolute left-6 bottom-6 flex flex-col bg-white bg-opacity-80 p-2 rounded-lg border-2 border-amber-400 text-right"
-                                                    dir={userLanguage === "he" ? "rtl" : "ltr"}>
-                                                    <span className="text-sm">
-                                                        {get_text("more_info", userLanguage) + ": "}
-                                                    </span>
-                                                    {Object.keys(
-                                                        data.quiz[quizDataPageNumber].status
-                                                    ).map((k, i) => {
-                                                        return (
-                                                            <span
-                                                                key={i}
-                                                                className="text-sm whitespace-nowrap wrap-break-word">
-                                                                {k +
-                                                                    ": " +
-                                                                    Object.values(
-                                                                        data.quiz[
-                                                                            quizDataPageNumber
-                                                                        ].status
-                                                                    )[i]}
-                                                            </span>
-                                                        );
-                                                    })}
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="flex flex-row gap-6">
-                                            <div className="flex flex-col items-center">
-                                                <div
-                                                    className="mb-1 border-b-2"
-                                                    style={{
-                                                        borderColor:
-                                                            colorPalette[
-                                                                roomColor as keyof typeof colorPalette
-                                                            ].light,
-                                                        color: colorPalette[
+                                </div>
+                                <div className="z-10 absolute left-1/3 lg:left-1/2 translate-x-1/2 bottom-14 lg:bottom-1/3 flex flex-col gap-2 text-center font-extrabold text-xl whitespace-nowrap text-black">
+                                    <div
+                                        className={`-ml-10 p-auto rounded-full ${openStatus === -1 ? "bg-emerald-300" : "bg-amber-300"} w-6 h-6 text-center cursor-pointer relative`}
+                                        onClick={() => {
+                                            setOpenStatus((prev) =>
+                                                prev === -1 ? quizDataPageNumber : -1
+                                            );
+                                        }}
+                                        onMouseLeave={() => setOpenStatus(-1)}
+                                        title={get_text("more_info", userLanguage) + "..."}>
+                                        !
+                                        {openStatus !== -1 && (
+                                            <div
+                                                className="absolute left-6 bottom-6 flex flex-col bg-white bg-opacity-80 p-2 rounded-lg border-2 border-amber-400 text-right"
+                                                dir={userLanguage === "he" ? "rtl" : "ltr"}>
+                                                <span className="text-sm">
+                                                    {get_text("more_info", userLanguage) + ": "}
+                                                </span>
+                                                {Object.keys(
+                                                    data?.quiz[quizDataPageNumber].status
+                                                ).map((k, i) => {
+                                                    return (
+                                                        <span
+                                                            key={i}
+                                                            className="text-sm whitespace-nowrap wrap-break-word">
+                                                            {k +
+                                                                ": " +
+                                                                Object.values(
+                                                                    data?.quiz[quizDataPageNumber]
+                                                                        .status
+                                                                )[i]}
+                                                        </span>
+                                                    );
+                                                })}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="flex flex-row gap-6">
+                                        <div className="flex flex-col items-center">
+                                            <div
+                                                className="mb-1 border-b-2"
+                                                style={{
+                                                    borderColor:
+                                                        colorPalette[
                                                             roomColor as keyof typeof colorPalette
                                                         ].light,
-                                                    }}>
-                                                    {answerKeys[0]}
-                                                </div>
-                                                <div
-                                                    onClick={() => {
-                                                        setChoseOpen((prev) =>
-                                                            prev === 2 ? 0 : 2
-                                                        );
-                                                    }}
-                                                    className={`relative w-16 h-16 flex flex-col content-center rounded-full items-center justify-center text-white 
+                                                    color: colorPalette[
+                                                        roomColor as keyof typeof colorPalette
+                                                    ].light,
+                                                }}>
+                                                {answerKeys[0]}
+                                            </div>
+                                            <div
+                                                onClick={() => {
+                                                    setChoseOpen((prev) => (prev === 2 ? 0 : 2));
+                                                }}
+                                                className={`relative w-16 h-16 flex flex-col content-center rounded-full items-center justify-center text-white 
                                                             ${
                                                                 answerData &&
                                                                 answerData[0][0] ===
@@ -313,52 +308,48 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                                                       ? "bg-purple-500"
                                                                       : "bg-gray-500"
                                                             }`}>
-                                                    {colorOrder[i][0] !== ""
-                                                        ? colorOrder[i][0]
-                                                        : "?"}
-                                                    {choseOpen === 2 && (
-                                                        <>
-                                                            <div
-                                                                onClick={() =>
-                                                                    answerData &&
-                                                                    colorChange(answerData[0][0])
-                                                                }
-                                                                className={`absolute top-2 -left-4 w-fit min-w-10 h-10 z-20 cursor-pointer whitespace-nowrap bg-amber-500 rounded-full flex items-center justify-center text-white border border-black`}>
-                                                                {answerData && answerData[0][0]}
-                                                            </div>
-                                                            <div
-                                                                onClick={() =>
-                                                                    answerData &&
-                                                                    colorChange(answerData[0][1])
-                                                                }
-                                                                className={`absolute top-2 -right-4 w-fit min-w-10 h-10 z-20 cursor-pointer whitespace-nowrap bg-purple-500 rounded-full flex items-center justify-center text-white border border-black`}>
-                                                                {answerData && answerData[0][1]}
-                                                            </div>
-                                                        </>
-                                                    )}
-                                                </div>
+                                                {colorOrder[i][0] !== "" ? colorOrder[i][0] : "?"}
+                                                {choseOpen === 2 && (
+                                                    <>
+                                                        <div
+                                                            onClick={() =>
+                                                                answerData &&
+                                                                colorChange(answerData[0][0])
+                                                            }
+                                                            className={`absolute top-2 -left-4 w-fit min-w-10 h-10 z-20 cursor-pointer whitespace-nowrap bg-amber-500 rounded-full flex items-center justify-center text-white border border-black`}>
+                                                            {answerData && answerData[0][0]}
+                                                        </div>
+                                                        <div
+                                                            onClick={() =>
+                                                                answerData &&
+                                                                colorChange(answerData[0][1])
+                                                            }
+                                                            className={`absolute top-2 -right-4 w-fit min-w-10 h-10 z-20 cursor-pointer whitespace-nowrap bg-purple-500 rounded-full flex items-center justify-center text-white border border-black`}>
+                                                            {answerData && answerData[0][1]}
+                                                        </div>
+                                                    </>
+                                                )}
                                             </div>
-                                            <div className="flex flex-col items-center">
-                                                <div
-                                                    className="mb-1 border-b-2"
-                                                    style={{
-                                                        color: colorPalette[
+                                        </div>
+                                        <div className="flex flex-col items-center">
+                                            <div
+                                                className="mb-1 border-b-2"
+                                                style={{
+                                                    color: colorPalette[
+                                                        roomColor as keyof typeof colorPalette
+                                                    ].light,
+                                                    borderColor:
+                                                        colorPalette[
                                                             roomColor as keyof typeof colorPalette
                                                         ].light,
-                                                        borderColor:
-                                                            colorPalette[
-                                                                roomColor as keyof typeof colorPalette
-                                                            ].light,
-                                                    }}>
-                                                    {answerKeys[1]}
-                                                </div>
-                                                <div
-                                                    onClick={() => {
-                                                        setChoseOpen((prev) =>
-                                                            prev === 3 ? 0 : 3
-                                                        );
-                                                    }}
-                                                    className={`relative w-20 h-12 flex flex-col content-center rounded-xl my-auto py-auto items-center justify-center text-white cursor-pointer
+                                                }}>
+                                                {answerKeys[1]}
+                                            </div>
+                                            <div
+                                                onClick={() => {
+                                                    setChoseOpen((prev) => (prev === 3 ? 0 : 3));
+                                                }}
+                                                className={`relative w-20 h-12 flex flex-col content-center rounded-xl my-auto py-auto items-center justify-center text-white cursor-pointer
                                                             ${
                                                                 answerData &&
                                                                 answerData[1][0] ===
@@ -374,87 +365,51 @@ export const QuizData: React.FC<Partial<QuizDataProps>> = (props) => {
                                                                         ? "bg-cyan-500"
                                                                         : "bg-gray-500"
                                                             }`}>
-                                                    {colorOrder[i][1] !== ""
-                                                        ? colorOrder[i][1]
-                                                        : "?"}
-                                                    {choseOpen === 3 && (
-                                                        <>
-                                                            <div
-                                                                onClick={() =>
-                                                                    answerData &&
-                                                                    colorChange(answerData[1][0])
-                                                                }
-                                                                className={`absolute -top-4 -left-4 w-fit min-w-10 h-10 cursor-pointer whitespace-nowrap bg-emerald-500 rounded-lg flex items-center justify-center text-white border border-black z-20`}>
-                                                                {answerData && answerData[1][0]}
-                                                            </div>
-                                                            <div
-                                                                onClick={() =>
-                                                                    answerData &&
-                                                                    colorChange(answerData[1][1])
-                                                                }
-                                                                className={`absolute -top-4 -right-4 w-fit min-w-10 h-10 cursor-pointer whitespace-nowrap bg-pink-500 rounded-lg flex items-center justify-center text-white border border-black z-20`}>
-                                                                {answerData && answerData[1][1]}
-                                                            </div>
-                                                            <div
-                                                                onClick={() =>
-                                                                    answerData &&
-                                                                    colorChange(answerData[1][2])
-                                                                }
-                                                                className={`absolute -bottom-5 right-1/2 translate-x-1/2 w-fit min-w-10 h-10 cursor-pointer whitespace-nowrap bg-cyan-500 rounded-lg flex items-center justify-center text-white border border-black z-20`}>
-                                                                {answerData && answerData[1][2]}
-                                                            </div>
-                                                        </>
-                                                    )}
-                                                </div>
+                                                {colorOrder[i][1] !== "" ? colorOrder[i][1] : "?"}
+                                                {choseOpen === 3 && (
+                                                    <>
+                                                        <div
+                                                            onClick={() =>
+                                                                answerData &&
+                                                                colorChange(answerData[1][0])
+                                                            }
+                                                            className={`absolute -top-4 -left-4 w-fit min-w-10 h-10 cursor-pointer whitespace-nowrap bg-emerald-500 rounded-lg flex items-center justify-center text-white border border-black z-20`}>
+                                                            {answerData && answerData[1][0]}
+                                                        </div>
+                                                        <div
+                                                            onClick={() =>
+                                                                answerData &&
+                                                                colorChange(answerData[1][1])
+                                                            }
+                                                            className={`absolute -top-4 -right-4 w-fit min-w-10 h-10 cursor-pointer whitespace-nowrap bg-pink-500 rounded-lg flex items-center justify-center text-white border border-black z-20`}>
+                                                            {answerData && answerData[1][1]}
+                                                        </div>
+                                                        <div
+                                                            onClick={() =>
+                                                                answerData &&
+                                                                colorChange(answerData[1][2])
+                                                            }
+                                                            className={`absolute -bottom-5 right-1/2 translate-x-1/2 w-fit min-w-10 h-10 cursor-pointer whitespace-nowrap bg-cyan-500 rounded-lg flex items-center justify-center text-white border border-black z-20`}>
+                                                            {answerData && answerData[1][2]}
+                                                        </div>
+                                                    </>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            );
-                        })}
-                    </div>
-                    {/* {data.type === "colorChange" && (
-                        <div className="absolute left-2 bottom-2 flex gap-3">
-                            <Button
-                                onClick={checkOrderAnswer}
-                                label={get_text("check_answer", userLanguage)}
-                                className=""
-                            />
-                            {result && (
-                                <div className="content-center h-8 mt-2 border-amber-200 border-2 bg-white rounded-xl px-2">
-                                    {result}
-                                </div>
-                            )}
-                        </div>
-                    )} */}
-                    <div
-                        className={`absolute bottom-2 lg:bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col-reverse items-center justify-center`}>
-                        <Button
-                            label={get_text("check_answer", userLanguage)}
-                            onClick={() => {
-                                checkOrderAnswer();
-                                setChoseOpen(0);
-                            }}
-                            className="text-xl lg:text-3xl"
-                        />
-                        {result && (
-                            <div
-                                className="w-fit py-1 px-4 rounded-xl text-center border-2 bg-gray-900 text-white"
-                                style={{
-                                    color: colorPalette[roomColor as keyof typeof colorPalette]
-                                        .light,
-                                    borderColor:
-                                        colorPalette[roomColor as keyof typeof colorPalette].light,
-                                }}
-                                dir={userLanguage === "he" ? "rtl" : "ltr"}>
-                                {result}
                             </div>
-                        )}
-                    </div>
-                </div>
-            ) : (
-                <img src={loading} alt="riddle - error..." className="h-screen w-full" />
-            )}
-        </>
+                        );
+                    })}
+            </div>
+            <AnswerButton
+                result={result || ""}
+                onClick={() => {
+                    checkOrderAnswer();
+                    setChoseOpen(0);
+                }}
+                active={colorOrder}
+            />
+        </div>
     );
 };
