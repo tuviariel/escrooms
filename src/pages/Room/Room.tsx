@@ -86,6 +86,7 @@ export const Room = () => {
         if (quizList.length === 0) return;
         if (quizList[quizList.length - 1].status === "completed") {
             setCompleted(true);
+            setActiveModuleId(quizList.length + 1);
         } else {
             let foundActive = false;
             for (const quiz of quizList) {
@@ -96,8 +97,8 @@ export const Room = () => {
                 }
             }
             if (!foundActive) {
-                setActiveModuleId(quizList.length + 1);
-                setCompleted(true);
+                // setActiveModuleId(quizList.length);
+                // setCompleted(true);
                 if (id) {
                     localStorage.removeItem(`roomTimer_${id}`);
                 }
@@ -248,7 +249,7 @@ export const Room = () => {
         };
         getUrl(roomData.mainImage || "");
     }, [roomData]);
-    console.log(roomQuizzes);
+    console.log("activeModuleId:", activeModuleId);
     return (
         <>
             {
@@ -374,7 +375,7 @@ export const Room = () => {
 
                                 {/* HUD */}
                                 <HUD
-                                    activeId={activeModuleId}
+                                    activeId={activeModuleId - 1}
                                     total={quizList.length}
                                     roomColor={roomColor}
                                 />
@@ -526,7 +527,7 @@ function HUD({
     total: number;
     roomColor: string;
 }) {
-    const progress = ((activeId - 1) / total) * 100;
+    const progress = (activeId / total) * 100;
     const { userLanguage } = useUserContext();
 
     return (

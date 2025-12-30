@@ -1,6 +1,5 @@
 import { useRef, useEffect, useState } from "react";
 import DigitalNumber from "./DigitalNumber";
-import Button from "../../Button";
 import { get_text } from "../../../util/language";
 import { colorPalette } from "../../../util/UIstyle";
 import { useRoomContext } from "../../../contexts/roomStyleContext";

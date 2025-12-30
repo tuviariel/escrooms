@@ -1,4 +1,3 @@
-import Button from "../Button";
 import { get_text } from "../../util/language";
 import { useUserContext } from "../../contexts/userStyleContext";
 import { useRoomContext } from "../../contexts/roomStyleContext";
@@ -30,10 +29,10 @@ export const AnswerButton = (props: AnswerButtonProps) => {
             ) : (
                 <div
                     onClick={() => onClick()}
-                    className="text-xl lg:text-3xl cursor-pointer border-2 rounded-xl px-4 py-1"
+                    className="text-xl lg:text-3xl cursor-pointer border-2 border-gray-950 rounded-xl px-4 py-1 text-gray-950 hover:bg-gray-700"
                     style={{
-                        color: colorPalette[roomColor as keyof typeof colorPalette].light,
-                        borderColor: colorPalette[roomColor as keyof typeof colorPalette].light,
+                        backgroundColor:
+                            colorPalette[roomColor as keyof typeof colorPalette].bright,
                     }}>
                     {result === get_text("success", userLanguage)
                         ? get_text("finish", userLanguage)

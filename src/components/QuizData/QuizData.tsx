@@ -4,18 +4,9 @@ import pagePaginateArrow from "../../assets/images/pagePaginate.svg";
 import pagePaginateArrowDisabled from "../../assets/images/pagePaginateDis.svg";
 import { colorPalette } from "../../util/UIstyle";
 import { useRoomContext } from "../../contexts/roomStyleContext";
-// import { quizData } from "../../pages/Room/Room";
-import loading from "../../assets/images/loading.gif";
-// import Button from "../Button";
 import { useUserContext } from "../../contexts/userStyleContext";
 import AnswerButton from "../AnswerButton";
 import { TemplateProps } from "../../pages/QuizTemplate/QuizTemplate";
-
-// interface QuizDataProps {
-//     data: quizData;
-//     result: string | undefined;
-//     setResult: (newResult: string) => void;
-// }
 
 export const QuizData: React.FC<Partial<TemplateProps>> = (props) => {
     const { data, result, setResult } = props;

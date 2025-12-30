@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Button from "../../Button";
 import { ListNumObj } from "../../../util/utils";
 import { TemplateProps } from "../../../pages/QuizTemplate/QuizTemplate";
 import { colorPalette } from "../../../util/UIstyle";

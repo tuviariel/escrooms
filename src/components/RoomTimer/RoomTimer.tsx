@@ -33,7 +33,7 @@ export const RoomTimer = ({
     useEffect(() => {
         // Load saved time from localStorage or start with default
         const savedTime = localStorage.getItem(timerKey);
-        if (savedTime) {
+        if (savedTime && savedTime !== "0") {
             const savedTimestamp = parseInt(savedTime);
             const elapsed = Math.floor((Date.now() - savedTimestamp) / 1000);
             const remaining = Math.max(0, 3600 - elapsed);
@@ -41,6 +41,7 @@ export const RoomTimer = ({
         } else {
             // Start new timer
             localStorage.setItem(timerKey, Date.now().toString());
+            setTimeRemaining(3600);
         }
 
         // Only run countdown if not completed
