@@ -5,9 +5,9 @@ import GameCard from "../../components/GameCard";
 import Loading from "../../assets/images/loading.gif";
 import { get_text } from "../../util/language";
 import dashboardBackground from "../../assets/images/dashboardBackground.png";
-import { fileStorage, quizService, roomsService } from "../../services/service";
+import { roomsService } from "../../services/service"; //fileStorage, quizService,
 import { useUserContext } from "../../contexts/userStyleContext";
-import { quizzes } from "../../services/dummyRoomData";
+// import { quizzes } from "../../services/dummyRoomData";
 
 export type RoomType = Schema["Room"]["type"];
 export interface ListObject {

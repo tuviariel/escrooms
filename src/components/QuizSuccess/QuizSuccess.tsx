@@ -3,8 +3,8 @@
 import openBox from "../../assets/images/openBox.gif";
 import closedBox from "../../assets/images/closedBox.png";
 import Button from "../Button";
-import useSound from "use-sound";
-import honkMP3 from "../../assets/sounds/honk.mp3";
+// import useSound from "use-sound";
+// import honkMP3 from "../../assets/sounds/honk.mp3";
 import { useEffect, useRef, useState } from "react";
 import { get_text } from "../../util/language";
 import { useSelector, useDispatch } from "react-redux";

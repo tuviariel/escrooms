@@ -60,7 +60,7 @@ export const Dialog: React.FC<DialogProps> = (props) => {
                     <div
                         onClick={() => setOpen(false)}
                         title={get_text("close", userLanguage)}
-                        className="absolute top-0 right-0 h-8 w-8 text-xl border-1 hover:border-2 rounded-lg border-black pl-2 pb-1 flex cursor-pointer font-bold">
+                        className="absolute top-0 right-0 h-8 w-8 text-xl border hover:border-2 rounded-lg border-black pl-2 pb-1 flex cursor-pointer font-bold">
                         X
                     </div>
                     <div className="flex flex-col h-full p-5 items-center">
