@@ -7,6 +7,34 @@ export const formatDate = (userLanguage: string, dateString: string) => {
     });
 };
 
+export const timeLeftFormat = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}m ${remainingSeconds}s`;
+};
+
+export const timeFormat = (userLanguage: string, timestamp: number) => {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    console.log("diff:", diff);
+    if (diff > 24 * 60 * 60 * 1000) {
+        // return formatDate(userLanguage, timestamp.toString());
+        return date.toLocaleDateString(userLanguage === "he" ? "he-IL" : "en-US", {
+            month: "2-digit",
+            day: "2-digit",
+            year: "numeric",
+        });
+    } else {
+        console.log("lessThanDay");
+        return date.toLocaleTimeString(userLanguage === "he" ? "he-IL" : "en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+        });
+    }
+};
+
 interface literalObject {
     width: number;
     points: number[][];

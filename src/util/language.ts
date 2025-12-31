@@ -217,6 +217,8 @@ const appContext: Translations = {
         he: "הנחיה: פירצו את {count} המוקדים הנעולים",
         ar: "",
     },
+    last_played: { en: "Stoped played at", he: "המשחק נעצר ב", ar: "" },
+    time_left: { en: "Time left", he: "זמן שנותר", ar: "" },
 };
 
 export const get_text = (name: string, lang: string) => {
