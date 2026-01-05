@@ -96,47 +96,6 @@ export const DigitalNumber = (props: DigitalNumberProps) => {
         `M 40 255 L 60 275 L 60 425 L 40 445 L 20 425 L 20 275 Z`,
         `M 260 255 L 280 275 L 280 425 L 260 445 L 240 425 L 240 275 Z`,
         `M 65 433 L 235 433 L 255 453 L 235 473 L 65 473 L 45 453 Z`,
-        // // Segment 0: Top horizontal
-        // `M ${(viewBoxWidth - segmentLength) / 2} ${SEGMENT_WIDTH / 2}
-        //  L ${(viewBoxWidth + segmentLength) / 2} ${SEGMENT_WIDTH / 2}
-        //  L ${(viewBoxWidth + segmentLength) / 2 - SEGMENT_WIDTH} ${SEGMENT_WIDTH * 1.5}
-        //  L ${(viewBoxWidth - segmentLength) / 2 + SEGMENT_WIDTH} ${SEGMENT_WIDTH * 1.5} Z`,
-
-        // // Segment 1: Top-left vertical
-        // `M ${SEGMENT_WIDTH / 2} ${SEGMENT_WIDTH * 2}
-        //  L ${SEGMENT_WIDTH * 1.5} ${SEGMENT_WIDTH * 2}
-        //  L ${SEGMENT_WIDTH * 1.5} ${SEGMENT_WIDTH * 2 + segmentHeight}
-        //  L ${SEGMENT_WIDTH / 2} ${SEGMENT_WIDTH * 2 + segmentHeight} Z`,
-
-        // // Segment 2: Top-right vertical
-        // `M ${viewBoxWidth - SEGMENT_WIDTH * 1.5} ${SEGMENT_WIDTH * 2}
-        //  L ${viewBoxWidth - SEGMENT_WIDTH / 2} ${SEGMENT_WIDTH * 2}
-        //  L ${viewBoxWidth - SEGMENT_WIDTH / 2} ${SEGMENT_WIDTH * 2 + segmentHeight}
-        //  L ${viewBoxWidth - SEGMENT_WIDTH * 1.5} ${SEGMENT_WIDTH * 2 + segmentHeight} Z`,
-
-        // // Segment 3: Middle horizontal
-        // `M ${(viewBoxWidth - segmentLength) / 2} ${viewBoxHeight / 2 - SEGMENT_WIDTH / 2}
-        //  L ${(viewBoxWidth + segmentLength) / 2} ${viewBoxHeight / 2 - SEGMENT_WIDTH / 2}
-        //  L ${(viewBoxWidth + segmentLength) / 2 - SEGMENT_WIDTH} ${viewBoxHeight / 2 + SEGMENT_WIDTH / 2}
-        //  L ${(viewBoxWidth - segmentLength) / 2 + SEGMENT_WIDTH} ${viewBoxHeight / 2 + SEGMENT_WIDTH / 2} Z`,
-
-        // // Segment 4: Bottom-left vertical
-        // `M ${SEGMENT_WIDTH / 2} ${viewBoxHeight / 2 + SEGMENT_WIDTH * 1.5}
-        //  L ${SEGMENT_WIDTH * 1.5} ${viewBoxHeight / 2 + SEGMENT_WIDTH * 1.5}
-        //  L ${SEGMENT_WIDTH * 1.5} ${viewBoxHeight / 2 + SEGMENT_WIDTH * 1.5 + segmentHeight}
-        //  L ${SEGMENT_WIDTH / 2} ${viewBoxHeight / 2 + SEGMENT_WIDTH * 1.5 + segmentHeight} Z`,
-
-        // // Segment 5: Bottom-right vertical
-        // `M ${viewBoxWidth - SEGMENT_WIDTH * 1.5} ${viewBoxHeight / 2 + SEGMENT_WIDTH * 1.5}
-        //  L ${viewBoxWidth - SEGMENT_WIDTH / 2} ${viewBoxHeight / 2 + SEGMENT_WIDTH * 1.5}
-        //  L ${viewBoxWidth - SEGMENT_WIDTH / 2} ${viewBoxHeight / 2 + SEGMENT_WIDTH * 1.5 + segmentHeight}
-        //  L ${viewBoxWidth - SEGMENT_WIDTH * 1.5} ${viewBoxHeight / 2 + SEGMENT_WIDTH * 1.5 + segmentHeight} Z`,
-
-        // // Segment 6: Bottom horizontal
-        // `M ${(viewBoxWidth - segmentLength) / 2} ${viewBoxHeight - SEGMENT_WIDTH * 1.5}
-        //  L ${(viewBoxWidth + segmentLength) / 2} ${viewBoxHeight - SEGMENT_WIDTH * 1.5}
-        //  L ${(viewBoxWidth + segmentLength) / 2 - SEGMENT_WIDTH} ${viewBoxHeight - SEGMENT_WIDTH / 2}
-        //  L ${(viewBoxWidth - segmentLength) / 2 + SEGMENT_WIDTH} ${viewBoxHeight - SEGMENT_WIDTH / 2} Z`,
     ];
 
     return (

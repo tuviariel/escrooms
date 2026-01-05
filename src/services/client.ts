@@ -1,7 +1,6 @@
 import { generateClient } from "aws-amplify/data";
 import type { Schema } from "../../amplify/data/resource";
 import { fetchAuthSession } from "aws-amplify/auth";
-import { createAIHooks } from "@aws-amplify/ui-react-ai";
 
 export async function getClient() {
     const session = await fetchAuthSession();
@@ -19,6 +18,3 @@ export async function isAdmin() {
     }
     return false;
 }
-
-const client = generateClient<Schema>({ authMode: "userPool" });
-export const { useAIConversation, useAIGeneration } = createAIHooks(client);

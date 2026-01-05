@@ -6,8 +6,10 @@ import { roomsService } from "../../../services/service";
 import { useSelector } from "react-redux";
 import { userType } from "../../../components/Login/Login";
 import { fieldsOfStudy } from "../../../util/utils";
-import { useAIGeneration } from "../../../services/client";
-import { Flex, TextAreaField, Loader, Text, View, Button } from "@aws-amplify/ui-react";
+import { aiService } from "../../../services/service";
+import { schema } from "../../../util/schemas";
+// import { useAIGeneration } from "../../../services/client";
+// import { Flex, TextAreaField, Loader, Text, View, Button } from "@aws-amplify/ui-react";
 
 type RoomInfo = {
     roomType: string;
@@ -18,6 +20,8 @@ type RoomInfo = {
     roomStyle: string; // a background image url
     roomColor: string; // hex * 3 (light, dark, bright)
     roomFont: string; // font-family
+    roomMainImage: string; // main image url
+    roomCoverImage: string; // cover image url
 };
 type RoomInfoProps = {
     setStep: (index: number) => void;
@@ -39,6 +43,8 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
         roomStyle: "realistic", // Default style, will be set based on color selection
         roomColor: COLOR_GROUPS[0],
         roomFont: FONT_OPTIONS[0],
+        roomMainImage: "",
+        roomCoverImage: "",
     });
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState<string>("starter");
@@ -90,19 +96,27 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
             }
         }
     }, [roomInfo]);
-    const [{ data, isLoading }, generateRoom] = useAIGeneration("generateRoom");
+    // const [{ data, isLoading }, generateRoom] = useAIGeneration("generateRoom");
     const handleGenerateRoom = async () => {
-        let prompt =
-            `You MUST respond with valid JSON only. No text, no markdown, no explanation. Schema: { "name": string, "subTopics": string[] }` +
-            `\n\nDescription: ${roomInfo.roomDescription}` +
-            `Generate a JSON object for an escape room topic. Return exactly the schema defined and nothing else.`;
-        console.log(prompt);
-        const res = generateRoom({ description: prompt });
-        // if (res && res.data) {
-        //     setRoomInfo((prev) => ({ ...prev, ...res.data }));
-        // }
-        console.log(res);
+        try {
+            let prompt =
+                `You MUST respond with valid JSON only. No text, no markdown, no explanation.` +
+                `\n\nCreating an escape room on the topic of "${roomInfo.roomTopic}"` +
+                `\n\nGenerate a list of 8 sub-topics for the room quizzes. Each sub-topic of ${roomInfo.roomTopic} should be a string and should be unique.`;
+            console.log(prompt);
+            const res = await aiService.generateQuiz(prompt, schema.room);
+            // const res = generateRoom({ description: prompt });
+            console.log(res);
+            if (res) {
+                console.log(res);
+
+                // setRoomInfo((prev) => ({ ...prev, ...res.data }));
+            }
+        } catch (err) {
+            console.error(err);
+        }
     };
+
     const update = (patch: Partial<RoomInfo>) => {
         setRoomInfo((s) => ({ ...s, ...patch }));
     };
@@ -178,16 +192,16 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                 </select>
             </div> */}
             <button onClick={handleGenerateRoom}>Generate Room info</button>
-            {isLoading ? (
+            {/* {isLoading ? (
                 <Loader variation="linear" />
             ) : (
                 <>
                     <Text fontWeight="bold">{data?.name}</Text>
-                    {/* <Text>{data?.description}</Text> */}
+                    {/* <Text>{data?.description}</Text> 
                     <Text>{data?.subTopics?.join(", ")}</Text>
-                    {/* <Text>{data?.categorizingQuizTopics?.join(", ")}</Text> */}
+                     <Text>{data?.categorizingQuizTopics?.join(", ")}</Text> 
                 </>
-            )}
+            )} */}
             {/* Field */}
             <div className="mb-3">
                 <label className="flex text-lg mb-1.5 text-white">
@@ -424,6 +438,8 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                             roomStyle: "realistic",
                             roomColor: COLOR_GROUPS[0],
                             roomFont: FONT_OPTIONS[0],
+                            roomMainImage: "",
+                            roomCoverImage: "",
                         });
                         setStatus("Draft cleared");
                     }}

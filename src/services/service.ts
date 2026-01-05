@@ -1,7 +1,6 @@
 import { getClient, isAdmin } from "./client";
 import { fetchUserAttributes } from "aws-amplify/auth";
 import { uploadData, getUrl, remove } from "aws-amplify/storage";
-import { createAIHooks } from "@aws-amplify/ui-react-ai";
 
 /**
  * Rooms routes:
@@ -159,5 +158,11 @@ export const fileStorage = {
         }
     },
 };
-const client = await getClient();
-export const { useAIConversation, useAIGeneration } = createAIHooks(client);
+
+export const aiService = {
+    async generateQuiz(prompt: string, schema: any) {
+        const client = await getClient();
+        const result = await client.queries.generateQuiz({ prompt, schema });
+        return result.data;
+    },
+};
