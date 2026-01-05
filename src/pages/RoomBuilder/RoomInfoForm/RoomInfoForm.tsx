@@ -6,6 +6,11 @@ import { roomsService } from "../../../services/service";
 import { useSelector } from "react-redux";
 import { userType } from "../../../components/Login/Login";
 import { fieldsOfStudy } from "../../../util/utils";
+import { aiService } from "../../../services/service";
+import { schema } from "../../../util/schemas";
+// import { useAIGeneration } from "../../../services/client";
+// import { Flex, TextAreaField, Loader, Text, View, Button } from "@aws-amplify/ui-react";
+
 type RoomInfo = {
     roomType: string;
     roomField: string;
@@ -15,6 +20,8 @@ type RoomInfo = {
     roomStyle: string; // a background image url
     roomColor: string; // hex * 3 (light, dark, bright)
     roomFont: string; // font-family
+    roomMainImage: string; // main image url
+    roomCoverImage: string; // cover image url
 };
 type RoomInfoProps = {
     setStep: (index: number) => void;
@@ -36,6 +43,8 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
         roomStyle: "realistic", // Default style, will be set based on color selection
         roomColor: COLOR_GROUPS[0],
         roomFont: FONT_OPTIONS[0],
+        roomMainImage: "",
+        roomCoverImage: "",
     });
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState<string>("starter");
@@ -87,6 +96,26 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
             }
         }
     }, [roomInfo]);
+    // const [{ data, isLoading }, generateRoom] = useAIGeneration("generateRoom");
+    const handleGenerateRoom = async () => {
+        try {
+            let prompt =
+                `You MUST respond with valid JSON only. No text, no markdown, no explanation.` +
+                `\n\nCreating an escape room on the topic of "${roomInfo.roomTopic}"` +
+                `\n\nGenerate a list of 8 sub-topics for the room quizzes. Each sub-topic of ${roomInfo.roomTopic} should be a string and should be unique.`;
+            console.log(prompt);
+            const res = await aiService.generateQuiz(prompt, schema.room);
+            // const res = generateRoom({ description: prompt });
+            console.log(res);
+            if (res) {
+                console.log(res);
+
+                // setRoomInfo((prev) => ({ ...prev, ...res.data }));
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
     const update = (patch: Partial<RoomInfo>) => {
         setRoomInfo((s) => ({ ...s, ...patch }));
@@ -162,6 +191,17 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                     <option value="educational">{get_text("educational", userLanguage)}</option>
                 </select>
             </div> */}
+            <button onClick={handleGenerateRoom}>Generate Room info</button>
+            {/* {isLoading ? (
+                <Loader variation="linear" />
+            ) : (
+                <>
+                    <Text fontWeight="bold">{data?.name}</Text>
+                    {/* <Text>{data?.description}</Text> 
+                    <Text>{data?.subTopics?.join(", ")}</Text>
+                     <Text>{data?.categorizingQuizTopics?.join(", ")}</Text> 
+                </>
+            )} */}
             {/* Field */}
             <div className="mb-3">
                 <label className="flex text-lg mb-1.5 text-white">
@@ -398,6 +438,8 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                             roomStyle: "realistic",
                             roomColor: COLOR_GROUPS[0],
                             roomFont: FONT_OPTIONS[0],
+                            roomMainImage: "",
+                            roomCoverImage: "",
                         });
                         setStatus("Draft cleared");
                     }}
@@ -410,3 +452,44 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
         </div>
     );
 };
+
+// import { useState } from 'react';
+// import { Flex, TextAreaField, Loader, Text, View, Button } from "@aws-amplify/ui-react";
+
+// export default function App() {
+//     const [description, setDescription] = useState<string>("");
+//     const [{ data, isLoading }, generateRoom] = useAIGeneration("generateRoom");
+
+//     const handleClick = async () => {
+//         generateRoom({ description });
+//     };
+
+//     return (
+//         <Flex direction="column">
+//             <Flex direction="row">
+//                 <TextAreaField
+//                     autoResize
+//                     value={description}
+//                     onChange={(e) => setDescription(e.target.value)}
+//                     label="Description"
+//                 />
+//                 <Button onClick={handleClick}>Generate recipe</Button>
+//             </Flex>
+//             {isLoading ? (
+//                 <Loader variation="linear" />
+//             ) : (
+//                 <>
+//                     <Text fontWeight="bold">{data?.name}</Text>
+//                     <View as="ul">
+//                         {data?.cardSortingQuizTopics?.map((ingredient) => (
+//                             <View as="li" key={ingredient}>
+//                                 {ingredient}
+//                             </View>
+//                         ))}
+//                     </View>
+//                     {/* <Text>{data?.instructions}</Text> */}
+//                 </>
+//             )}
+//         </Flex>
+//     );
+// }

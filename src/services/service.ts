@@ -1,6 +1,7 @@
 import { getClient, isAdmin } from "./client";
 import { fetchUserAttributes } from "aws-amplify/auth";
 import { uploadData, getUrl, remove } from "aws-amplify/storage";
+
 /**
  * Rooms routes:
  * @returns the response data
@@ -155,5 +156,13 @@ export const fileStorage = {
         } catch (error) {
             console.error("Delete failed:", error);
         }
+    },
+};
+
+export const aiService = {
+    async generateQuiz(prompt: string, schema: any) {
+        const client = await getClient();
+        const result = await client.queries.generateQuiz({ prompt, schema });
+        return result.data;
     },
 };
