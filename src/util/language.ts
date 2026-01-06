@@ -312,6 +312,7 @@ const appContext: Translations = {
     join_our_community: { en: "Join Our Community", he: "הצטרפו לקהילתנו", ar: "" },
     get_free_escape_room: { en: "Get Free Escape Room", he: "קבלו חדר בריחה חינמי", ar: "" },
     contact_support: { en: "Contact Support", he: "יצירת קשר", ar: "" },
+    subscribe_to_delete_room: { en: "Subscribe to delete room", he: "הירשם למחיקת חדר", ar: "" },
 };
 
 export const get_text = (name: string, lang: string) => {

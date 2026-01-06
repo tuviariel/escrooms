@@ -25,12 +25,12 @@ export const ProgressBar: React.FC<Props> = ({ step, setStep, stepInfo, classNam
 
     const progressPercent = (current / denom) * 100;
 
-    const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
-        if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            setStep(index);
-        }
-    };
+    // const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
+    //     if (e.key === "Enter" || e.key === " ") {
+    //         e.preventDefault();
+    //         setStep(index);
+    //     }
+    // };
 
     return (
         <div
@@ -56,9 +56,9 @@ export const ProgressBar: React.FC<Props> = ({ step, setStep, stepInfo, classNam
                     return (
                         <button
                             key={i}
-                            className={`absolute top-2 -translate-x-1/2 w-6 h-6 rounded-xl border-none p-0 flex items-center justify-center cursor-pointer ${isActive ? "bg-cyan-500" : "bg-[#ffffff]"}`}
-                            onClick={() => completed && setStep(i)}
-                            onKeyDown={(e) => handleKeyDown(e, i)}
+                            className={`absolute top-2 -translate-x-1/2 w-6 h-6 rounded-xl border-none p-0 flex items-center justify-center ${isActive ? "bg-cyan-500" : "bg-[#ffffff]"}`}
+                            // onClick={() => completed && setStep(i)}
+                            // onKeyDown={(e) => handleKeyDown(e, i)}
                             aria-current={isActive ? "step" : undefined}
                             aria-label={`Go to step ${i + 1}: ${info.name}`}
                             style={{
