@@ -134,6 +134,91 @@ const appContext: Translations = {
         he: "נושא ממוקד (מומלץ לפרט ולדייק)",
         ar: "",
     },
+    topic_and_data: {
+        en: "Topic and Data",
+        he: "נושא ונתונים",
+        ar: "",
+    },
+    sub_topic: {
+        en: "Sub-topic",
+        he: "תת-נושא",
+        ar: "",
+    },
+    enter_topic: {
+        en: "Enter the main topic",
+        he: "הזן את הנושא הראשי",
+        ar: "",
+    },
+    enter_sub_topic: {
+        en: "Enter a sub-topic (optional)",
+        he: "הזן תת-נושא (אופציונלי)",
+        ar: "",
+    },
+    upload_document: {
+        en: "Upload Document",
+        he: "העלה מסמך",
+        ar: "",
+    },
+    click_to_upload: {
+        en: "Click to upload",
+        he: "לחץ להעלאה",
+        ar: "",
+    },
+    docx_pdf_only: {
+        en: "DOCX or PDF files only",
+        he: "קבצי DOCX או PDF בלבד",
+        ar: "",
+    },
+    selected_file: {
+        en: "Selected:",
+        he: "נבחר:",
+        ar: "",
+    },
+    remove: {
+        en: "Remove",
+        he: "הסר",
+        ar: "",
+    },
+    processing: {
+        en: "Processing...",
+        he: "מעבד...",
+        ar: "",
+    },
+    clear: {
+        en: "Clear",
+        he: "נקה",
+        ar: "",
+    },
+    topic_required: {
+        en: "Topic is required",
+        he: "נושא הוא חובה",
+        ar: "",
+    },
+    file_required: {
+        en: "Please select a file",
+        he: "אנא בחר קובץ",
+        ar: "",
+    },
+    room_id_required: {
+        en: "Room ID is required. Please create a room first.",
+        he: "נדרש מזהה חדר. אנא צור חדר תחילה.",
+        ar: "",
+    },
+    document_processed: {
+        en: "Document processed successfully",
+        he: "המסמך עובד בהצלחה",
+        ar: "",
+    },
+    processing_failed: {
+        en: "Failed to process document",
+        he: "עיבוד המסמך נכשל",
+        ar: "",
+    },
+    invalid_file_type: {
+        en: "Please select a DOCX or PDF file",
+        he: "אנא בחר קובץ DOCX או PDF",
+        ar: "",
+    },
     room_name: { en: "Room name", he: "שם החדר בריחה", ar: "" },
     name: { en: "Name", he: "שם", ar: "" },
     room_desc: { en: "Short description for the room", he: "תיאור קצר של החדר בריחה", ar: "" },
@@ -149,6 +234,9 @@ const appContext: Translations = {
     preview: { en: "Preview", he: "תצוגה מקדימה", ar: "" },
     saving: { en: "Saving...", he: "שומר...", ar: "" },
     creating_room: { en: "Creating an Escape Room", he: "יצירת חדר בריחה", ar: "" },
+    creating_new_room: { en: "Creating New Room", he: "יצירת חדר חדש", ar: "" },
+    editing_room: { en: "Editing Room", he: "עריכת חדר", ar: "" },
+    viewing_room: { en: "Viewing Room", he: "צפייה בחדר", ar: "" },
     choose_room_type: { en: "Choose Room Type", he: "בחר סוג לחדר בריחה", ar: "" },
     room_type: { en: "Room Type", he: "סוג חדר בריחה", ar: "" },
     personal: {
@@ -219,6 +307,11 @@ const appContext: Translations = {
     },
     last_played: { en: "Stoped played at", he: "המשחק נעצר ב", ar: "" },
     time_left: { en: "Time left", he: "זמן שנותר", ar: "" },
+    view_room: { en: "Preview", he: "תצוגה מקדימה", ar: "" },
+    room_not_found: { en: "Room data not found", he: "נתוני החדר לא נמצאו", ar: "" },
+    join_our_community: { en: "Join Our Community", he: "הצטרפו לקהילתנו", ar: "" },
+    get_free_escape_room: { en: "Get Free Escape Room", he: "קבלו חדר בריחה חינמי", ar: "" },
+    contact_support: { en: "Contact Support", he: "יצירת קשר", ar: "" },
 };
 
 export const get_text = (name: string, lang: string) => {

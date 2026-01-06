@@ -112,6 +112,8 @@ export const Room = () => {
     const { setRoomColor, setRoomStyle, setRoomFont, roomColor } = useRoomContext();
 
     const id = location.pathname.split("/").pop();
+    const fromBuilder = location.search.includes("fromBuilder");
+    // console.log("fromBuilder:", fromBuilder);
     const quizLocation: { x: number; y: number }[] = [
         { x: 50, y: 50 },
         { x: 20, y: 30 },
@@ -393,7 +395,13 @@ export const Room = () => {
                                     colorPalette[roomColor as keyof typeof colorPalette].bright,
                             }}
                             title={get_text("exit_room", userLanguage)}
-                            onClick={() => (!completed ? setCheckLeave(true) : navigate("/"))}>
+                            onClick={() =>
+                                !completed && !fromBuilder
+                                    ? setCheckLeave(true)
+                                    : fromBuilder
+                                      ? navigate("/room-builder")
+                                      : navigate("/")
+                            }>
                             x
                         </div>
                     </div>

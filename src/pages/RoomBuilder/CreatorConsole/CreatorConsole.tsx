@@ -1,26 +1,33 @@
 import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight, Plus, Settings } from "lucide-react";
+import { ChevronLeft, ChevronRight, Gift, HelpCircle, MessageCircle, Plus } from "lucide-react";
 import { RoomType } from "../../Dashboard/Dashboard";
 import { userType } from "../../../components/Login/Login";
 import { roomsService } from "../../../services/service";
 import { get_text } from "../../../util/language";
 import { useUserContext } from "../../../contexts/userStyleContext";
 import RoomCard from "./RoomCard";
+import { RoomBuilderStatus } from "../RoomBuilder";
 
 type CreatorConsoleProps = {
     user: userType;
+    roomId: string;
     setSidebarOpen: (o: boolean) => void;
     sidebarOpen: boolean;
-    setStep: (i: number) => void;
-    step: number;
+    status: RoomBuilderStatus;
+    handleEditRoom: (id: string, name?: string) => void;
+    handleNewRoom: () => void;
+    handleViewRoom: (id: string, name?: string) => void;
 };
 
 export const CreatorConsole = ({
+    roomId,
     user,
     setSidebarOpen,
     sidebarOpen,
-    setStep,
-    step,
+    status,
+    handleEditRoom,
+    handleNewRoom,
+    handleViewRoom,
 }: CreatorConsoleProps) => {
     const [rooms, setRooms] = useState<RoomType[]>([]);
     const [openOptions, setOpenOptions] = useState<boolean[]>([]);
@@ -86,13 +93,13 @@ export const CreatorConsole = ({
             className={`fixed ${sidebarOpen ? "w-3/12" : "w-1/12"} bg-gray-800 transition-all duration-300 flex flex-col border-r h-full border-cyan-500/30`}>
             {/* Create New Room Button */}
             <div className="p-3 border-b border-gray-700 flex">
-                {step !== 0 && (
+                {status !== "creating" && (
                     <button
                         className={`ml-auto bg-cyan-500 text-white hover:bg-cyan-600 h-8 px-3 text-sm cursor-pointer items-center justify-center w-full flex gap-2 p-3 rounded-lg font-semibold transition-colors ${
                             !sidebarOpen && ""
                         }`}
                         onClick={() => {
-                            setStep(0);
+                            handleNewRoom();
                         }}>
                         <Plus size={20} />
                         {sidebarOpen && <span>{get_text("new_room", userLanguage)}</span>}
@@ -115,26 +122,41 @@ export const CreatorConsole = ({
             </div>
 
             {/* Room Cards */}
-            <div className="flex-1 overflow-y-auto px-3 py-4 space-y-3">
-                {rooms.map((room, i) => (
-                    <RoomCard
-                        key={room.id}
-                        room={room}
-                        i={i}
-                        sidebarOpen={sidebarOpen}
-                        openOptions={openOptions}
-                        handleOpenDots={handleOpenDots}
-                        handleDeleteRoom={handleDeleteRoom}
-                        publishRoom={publishRoom}
-                    />
-                ))}
+            <div className="flex-1 overflow-y-auto max-h-96 scrollbar overflow-x-hidden px-3 py-4 space-y-3">
+                {rooms.map((room, i) => {
+                    const isSelected = room.id === roomId;
+                    return (
+                        <RoomCard
+                            key={room.id}
+                            room={room}
+                            i={i}
+                            sidebarOpen={sidebarOpen}
+                            openOptions={openOptions}
+                            handleOpenDots={handleOpenDots}
+                            handleDeleteRoom={handleDeleteRoom}
+                            publishRoom={publishRoom}
+                            handleEditRoom={handleEditRoom}
+                            handleViewRoom={handleViewRoom}
+                            isSelected={isSelected}
+                        />
+                    );
+                })}
             </div>
 
             {/* User Options at Bottom */}
             <div className="p-3 border-t border-gray-700 space-y-2">
-                <button className="w-full flex items-center gap-2 hover:bg-gray-700 p-2 rounded-lg transition-colors text-sm text-white">
-                    <Settings size={18} />
-                    {sidebarOpen && <span>Settings</span>}
+                <button className="w-full flex items-center gap-2 hover:bg-green-600 p-2 rounded-lg transition-colors text-sm text-white cursor-pointer">
+                    {/* <Whatsapp size={18} /> */}
+                    <MessageCircle size={18} />
+                    {sidebarOpen && <span>{get_text("join_our_community", userLanguage)}</span>}
+                </button>
+                <button className="w-full flex items-center gap-2 hover:bg-gray-700 p-2 rounded-lg transition-colors text-sm text-white cursor-pointer">
+                    <Gift size={18} />
+                    {sidebarOpen && <span>{get_text("get_free_escape_room", userLanguage)}</span>}
+                </button>
+                <button className="w-full flex items-center gap-2 hover:bg-gray-700 p-2 rounded-lg transition-colors text-sm text-white cursor-pointer">
+                    <HelpCircle size={18} />
+                    {sidebarOpen && <span>{get_text("contact_support", userLanguage)}</span>}
                 </button>
             </div>
         </div>
