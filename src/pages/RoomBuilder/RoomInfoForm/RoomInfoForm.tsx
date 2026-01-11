@@ -24,8 +24,6 @@ type RoomInfo = {
     roomCoverImage: string; // cover image url
 };
 type RoomInfoProps = {
-    setStep: (index: number) => void;
-    setRoomId: (id: string) => void;
     roomId: string;
 };
 const LOCAL_KEY = "roomInfoData";
@@ -33,7 +31,7 @@ const LOCAL_KEY = "roomInfoData";
 const COLOR_GROUPS = Object.keys(colorPalette);
 const FONT_OPTIONS = Object.keys(fontFamily);
 
-export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
+export const RoomInfoForm = ({ roomId }: RoomInfoProps) => {
     const [roomInfo, setRoomInfo] = useState<RoomInfo>({
         roomType: "educational",
         roomField: "",
@@ -104,7 +102,11 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                 `\n\nCreating an escape room on the topic of "${roomInfo.roomTopic}"` +
                 `\n\nGenerate a list of 8 sub-topics for the room quizzes. Each sub-topic of ${roomInfo.roomTopic} should be a string and should be unique.`;
             console.log(prompt);
-            const res = await aiService.generateQuiz(prompt, schema.room);
+            const res = await aiService.openAIGenerateJson(
+                prompt,
+                "json",
+                JSON.stringify(schema.room)
+            );
             // const res = generateRoom({ description: prompt });
             console.log(res);
             if (res) {
@@ -151,14 +153,14 @@ export const RoomInfoForm = ({ setStep, setRoomId, roomId }: RoomInfoProps) => {
                     description: roomInfo.roomDescription,
                 });
                 if (res && res.id) {
-                    setRoomId(res.id);
+                    // setRoomId(res.id);
                 }
             }
             console.log("Room created:", res);
             // success: clear draft
             // localStorage.removeItem(LOCAL_KEY);
             setStatus("Saved successfully.");
-            setStep(1);
+            // setStep(1);
         } catch (err) {
             console.error(err);
             setStatus("Failed to save. Try again.");

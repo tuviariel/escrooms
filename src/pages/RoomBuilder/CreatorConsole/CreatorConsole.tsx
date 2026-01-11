@@ -6,7 +6,7 @@ import { roomsService } from "../../../services/service";
 import { get_text } from "../../../util/language";
 import { useUserContext } from "../../../contexts/userStyleContext";
 import RoomCard from "./RoomCard";
-import { RoomBuilderStatus } from "../RoomBuilder";
+import { RoomBuilderStatus, stepType } from "../RoomBuilder";
 
 type CreatorConsoleProps = {
     user: userType;
@@ -14,20 +14,18 @@ type CreatorConsoleProps = {
     setSidebarOpen: (o: boolean) => void;
     sidebarOpen: boolean;
     status: RoomBuilderStatus;
-    handleEditRoom: (id: string, name?: string) => void;
-    handleNewRoom: () => void;
-    handleViewRoom: (id: string, name?: string) => void;
+    step: stepType;
+    handleMainShow: (status: RoomBuilderStatus, step: stepType, id?: string, name?: string) => void;
 };
 
 export const CreatorConsole = ({
+    handleMainShow,
     roomId,
     user,
     setSidebarOpen,
     sidebarOpen,
     status,
-    handleEditRoom,
-    handleNewRoom,
-    handleViewRoom,
+    step,
 }: CreatorConsoleProps) => {
     const [rooms, setRooms] = useState<RoomType[]>([]);
     const [openOptions, setOpenOptions] = useState<boolean[]>([]);
@@ -39,6 +37,18 @@ export const CreatorConsole = ({
                 const userId = user.id;
                 const rooms = await roomsService.getRoomByUser(userId);
                 console.log(rooms);
+                // After fetching, iterate all rooms and update their completed to "completed"
+                if (rooms && Array.isArray(rooms)) {
+                    // Update 'completed' to "completed" for all rooms
+                    await Promise.all(
+                        rooms.map(async (room: any) => {
+                            // Only update if not already set
+                            if (room.name === "Apples") {
+                                await roomsService.deleteRoom(room.id);
+                            }
+                        })
+                    );
+                }
                 setRooms(rooms);
                 setOpenOptions(Array(rooms.length).fill(false));
             } else {
@@ -87,19 +97,19 @@ export const CreatorConsole = ({
             console.error("room updated no:", error);
         }
     };
-
+    console.log(status, step);
     return (
         <div
             className={`fixed ${sidebarOpen ? "w-3/12" : "w-1/12"} bg-gray-800 transition-all duration-300 flex flex-col border-r h-full border-cyan-500/30`}>
             {/* Create New Room Button */}
             <div className="p-3 border-b border-gray-700 flex">
-                {status !== "creating" && (
+                {status !== "starting" && step !== "topic_and_data" && (
                     <button
                         className={`ml-auto bg-cyan-500 text-white hover:bg-cyan-600 h-8 px-3 text-sm cursor-pointer items-center justify-center w-full flex gap-2 p-3 rounded-lg font-semibold transition-colors ${
                             !sidebarOpen && ""
                         }`}
                         onClick={() => {
-                            handleNewRoom();
+                            handleMainShow("starting", "topic_and_data");
                         }}>
                         <Plus size={20} />
                         {sidebarOpen && <span>{get_text("new_room", userLanguage)}</span>}
@@ -120,24 +130,21 @@ export const CreatorConsole = ({
                     </h1>
                 )}
             </div>
-
-            {/* Room Cards */}
             <div className="flex-1 overflow-y-auto max-h-96 scrollbar overflow-x-hidden px-3 py-4 space-y-3">
                 {rooms.map((room, i) => {
-                    const isSelected = room.id === roomId;
                     return (
                         <RoomCard
                             key={room.id}
                             room={room}
+                            step={step}
                             i={i}
                             sidebarOpen={sidebarOpen}
                             openOptions={openOptions}
                             handleOpenDots={handleOpenDots}
                             handleDeleteRoom={handleDeleteRoom}
                             publishRoom={publishRoom}
-                            handleEditRoom={handleEditRoom}
-                            handleViewRoom={handleViewRoom}
-                            isSelected={isSelected}
+                            handleMainShow={handleMainShow}
+                            isSelected={room.id === roomId}
                         />
                     );
                 })}

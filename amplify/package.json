@@ -2,6 +2,7 @@
     "type": "module",
     "dependencies": {
         "@aws-sdk/client-bedrock-runtime": "^3.962.0",
-        "@aws-sdk/client-textract": "^3.962.0"
+        "@aws-sdk/client-textract": "^3.962.0",
+        "openai": "^6.16.0"
     }
 }

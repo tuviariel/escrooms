@@ -1,24 +1,25 @@
 import React from "react";
 import { useUserContext } from "../../contexts/userStyleContext";
+import { stepInfoType, stepType } from "../../pages/RoomBuilder/RoomBuilder";
 
-type StepInfo = {
-    name: string;
-    isComplete?: boolean;
-};
+// type StepInfo = {
+//     name: string;
+//     isComplete?: boolean;
+// };
 
 type Props = {
-    step: number; // 0-based current step index
-    setStep: (index: number) => void;
-    stepInfo: StepInfo[];
+    step: stepType;
+    setStep: (step: stepType) => void;
+    stepInfo: stepInfoType;
     className?: string;
 };
 
 export const ProgressBar: React.FC<Props> = ({ step, setStep, stepInfo, className }) => {
     const { userLanguage } = useUserContext();
 
-    const steps = Math.max(1, stepInfo.length);
+    const steps = Object.keys(stepInfo).length;
     // clamp step to valid range
-    const current = Math.min(Math.max(0, step), steps - 1);
+    const current = Object.keys(stepInfo).indexOf(step);
 
     // When there's only one step avoid divide-by-zero
     const denom = steps > 1 ? steps - 1 : 1;
@@ -49,10 +50,10 @@ export const ProgressBar: React.FC<Props> = ({ step, setStep, stepInfo, classNam
                     }}
                 />
                 {/* Dots */}
-                {stepInfo.map((info, i) => {
+                {Object.keys(stepInfo).map((info, i) => {
                     const leftPercent = (i / denom) * 100;
-                    const completed = info.isComplete ?? i <= current;
-                    const isActive = i === current;
+                    const completed = stepInfo[info].isComplete ?? i <= current;
+                    const isActive = info === step;
                     return (
                         <button
                             key={i}
@@ -60,7 +61,7 @@ export const ProgressBar: React.FC<Props> = ({ step, setStep, stepInfo, classNam
                             // onClick={() => completed && setStep(i)}
                             // onKeyDown={(e) => handleKeyDown(e, i)}
                             aria-current={isActive ? "step" : undefined}
-                            aria-label={`Go to step ${i + 1}: ${info.name}`}
+                            aria-label={`Go to step ${i + 1}: ${stepInfo[info].name}`}
                             style={{
                                 left: `${leftPercent}%`,
                                 boxShadow: completed
@@ -81,13 +82,13 @@ export const ProgressBar: React.FC<Props> = ({ step, setStep, stepInfo, classNam
 
             {/* Labels under dots */}
             <div className="relative my-3 min-h-4">
-                {stepInfo.map((info, i) => {
+                {Object.keys(stepInfo).map((info, i) => {
                     const leftPercent = (i / denom) * 100;
-                    const completed = info.isComplete ?? i <= current;
+                    const completed = stepInfo[info].isComplete ?? i <= current;
                     return (
                         <div
                             key={i}
-                            onClick={() => completed && setStep(i)}
+                            onClick={() => completed && setStep(info as stepType)}
                             className="absolute -translate-x-1/2 text-center cursor-pointer w-32"
                             style={{
                                 left: `${leftPercent}%`,
@@ -99,7 +100,7 @@ export const ProgressBar: React.FC<Props> = ({ step, setStep, stepInfo, classNam
                                     whiteSpace: "nowrap",
                                     textOverflow: "ellipsis",
                                 }}>
-                                {info.name}
+                                {stepInfo[info].name}
                             </div>
                         </div>
                     );

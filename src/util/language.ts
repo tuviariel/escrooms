@@ -219,6 +219,61 @@ const appContext: Translations = {
         he: "אנא בחר קובץ DOCX או PDF",
         ar: "",
     },
+    data_input: {
+        en: "Data Input",
+        he: "קלט נתונים",
+        ar: "",
+    },
+    upload_file: {
+        en: "Upload File",
+        he: "העלה קובץ",
+        ar: "",
+    },
+    enter_text: {
+        en: "Enter Text",
+        he: "הזן טקסט",
+        ar: "",
+    },
+    enter_url: {
+        en: "Enter URL",
+        he: "הזן כתובת אתר",
+        ar: "",
+    },
+    enter_text_placeholder: {
+        en: "Enter or paste your text content here...",
+        he: "הזן או הדבק את תוכן הטקסט כאן...",
+        ar: "",
+    },
+    text_input_hint: {
+        en: "Enter the text content you want to use for generating the escape room",
+        he: "הזן את תוכן הטקסט שברצונך להשתמש בו ליצירת חדר הבריחה",
+        ar: "",
+    },
+    url_input_hint: {
+        en: "Enter a URL to extract content from a webpage",
+        he: "הזן כתובת אתר לחילוץ תוכן מדף אינטרנט",
+        ar: "",
+    },
+    text_required: {
+        en: "Please enter text content",
+        he: "אנא הזן תוכן טקסט",
+        ar: "",
+    },
+    url_required: {
+        en: "Please enter a URL",
+        he: "אנא הזן כתובת אתר",
+        ar: "",
+    },
+    url_fetch_failed: {
+        en: "Failed to fetch content from URL",
+        he: "נכשל בחילוץ תוכן מכתובת האתר",
+        ar: "",
+    },
+    invalid_url: {
+        en: "Please enter a valid URL (e.g., https://example.com)",
+        he: "אנא הזן כתובת אתר תקינה (למשל, https://example.com)",
+        ar: "",
+    },
     room_name: { en: "Room name", he: "שם החדר בריחה", ar: "" },
     name: { en: "Name", he: "שם", ar: "" },
     room_desc: { en: "Short description for the room", he: "תיאור קצר של החדר בריחה", ar: "" },
@@ -313,6 +368,8 @@ const appContext: Translations = {
     get_free_escape_room: { en: "Get Free Escape Room", he: "קבלו חדר בריחה חינמי", ar: "" },
     contact_support: { en: "Contact Support", he: "יצירת קשר", ar: "" },
     subscribe_to_delete_room: { en: "Subscribe to delete room", he: "הירשם למחיקת חדר", ar: "" },
+    completed_rooms: { en: "Completed Rooms", he: "חדרים שהושלמו", ar: "" },
+    draft_rooms: { en: "Draft Rooms", he: "חדרים בתהליך יצירה", ar: "" },
 };
 
 export const get_text = (name: string, lang: string) => {

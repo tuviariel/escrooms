@@ -11,10 +11,11 @@ import { RoomType } from "../../Dashboard/Dashboard";
 import { useUserContext } from "../../../contexts/userStyleContext";
 // import { quizData } from "../../Room/Room";
 import { get_text } from "../../../util/language";
+import { stepType } from "../RoomBuilder";
 
 type RoomEditorProps = {
     roomId: string;
-    setStep: (step: number) => void;
+    setStep: (step: stepType) => void;
     setRoomId: (id: string) => void;
 };
 

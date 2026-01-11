@@ -160,9 +160,21 @@ export const fileStorage = {
 };
 
 export const aiService = {
-    async generateQuiz(prompt: string, schema: any) {
+    async openAIGenerateJson(prompt: string, type: string, schema: any) {
+        console.log(prompt, type, schema);
         const client = await getClient();
-        const result = await client.queries.generateQuiz({ prompt, schema });
-        return result.data;
+        // Ensure schema is a valid JSON object (not a string)
+        // const schemaObj = typeof schema === "string" ? JSON.parse(schema) : schema;
+        const result = await client.queries.generateQuiz({
+            prompt,
+            type,
+            schema: JSON.stringify(schema),
+        });
+        return result;
     },
+    // async extractDocument(document: string, topic: string, subTopic: string, schema: any) {
+    //     const client = await getClient();
+    //     const result = await client.queries.extractDocument({ document, topic, subTopic, schema });
+    //     return result.data;
+    // },
 };

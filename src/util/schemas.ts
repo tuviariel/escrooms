@@ -1,11 +1,8 @@
 export const schema = {
-    room: {
-        // name: "string",
-        // description: "string",
-        options: ["string"],
-        // image: "string",
-        // quizzes: ["string"],
+    topicAndData: {
+        subTopics: [{ key: "string", value: "string" }],
     },
+    room: ["string"],
     quiz: {
         question: "string",
         answer: "string",

@@ -12,78 +12,138 @@ import { get_text } from "../../util/language";
 import { useUserContext } from "../../contexts/userStyleContext";
 import { userType } from "../../components/Login/Login";
 import { useSelector } from "react-redux";
-type stepInfo = {
-    key: number;
-    name: string;
-    isComplete: boolean;
-    component: JSX.Element;
+
+export type stepType =
+    | "topic_and_data"
+    | "room_info"
+    | "generating_main_image"
+    | "create_quizzes"
+    | "preview_publish"
+    | "completed";
+export type stepInfoType = {
+    [key: string]: {
+        key: number;
+        name: string;
+        isComplete: boolean;
+        component: JSX.Element;
+    };
 };
 
-export type RoomBuilderStatus = "creating" | "viewing" | "editing";
+export type RoomBuilderStatus = "creating" | "viewing" | "editing" | "starting";
 
 export const RoomBuilder = () => {
-    const [step, setStep] = useState<number>(0);
+    const [step, setStep] = useState<stepType>("topic_and_data");
     const { userLanguage } = useUserContext();
     const userRedux: any = useSelector((state: { user: userType }) => state.user);
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [roomId, setRoomId] = useState<string>("");
     const [roomName, setRoomName] = useState<string>("");
     const [status, setStatus] = useState<RoomBuilderStatus>("creating");
-    const [stepInfo, setStepInfo] = useState<stepInfo[]>([
-        {
+    const [stepInfo, setStepInfo] = useState<stepInfoType>({
+        topic_and_data: {
             key: 0,
             name: get_text("topic_and_data", userLanguage),
             isComplete: false,
-            component: <TopicAndData setStep={setStep} setRoomId={setRoomId} roomId={roomId} />,
+            component: <TopicAndData setStep={setStep} setRoomId={setRoomId} />,
         },
-        {
+        room_info: {
             key: 1,
             name: get_text("room_info", userLanguage),
             isComplete: false,
-            component: <RoomInfoForm setRoomId={setRoomId} roomId={roomId} setStep={setStep} />,
+            component: <RoomInfoForm roomId={roomId} />,
         },
-        {
+        generating_main_image: {
             key: 2,
             name: get_text("gen_image", userLanguage),
             isComplete: false,
             component: <GeneratingMainImage />,
         },
-        {
+        create_quizzes: {
             key: 3,
             name: get_text("create_quizzes", userLanguage),
             isComplete: false,
             component: <CreateQuizzes />,
         },
-        {
+        preview_publish: {
             key: 4,
             name: get_text("preview_publish", userLanguage),
             isComplete: false,
             component: <PreviewPublish />,
         },
-    ]);
-
+    });
+    const handleMainShow = (
+        status: RoomBuilderStatus,
+        step: stepType,
+        id?: string,
+        name?: string
+    ) => {
+        console.log(
+            "in handleMainShow: status-" +
+                status +
+                ", step-" +
+                step +
+                ", id-" +
+                id +
+                ", name-" +
+                name
+        );
+        if (status === "starting") {
+            setStep("topic_and_data");
+            setStatus("creating");
+        } else {
+            setStatus(status);
+            setStepInfo((prev: stepInfoType) => {
+                // Mark current step as complete
+                const updatedStepInfo = {
+                    ...prev,
+                    [step]: {
+                        ...prev[step],
+                        isComplete: true,
+                    },
+                };
+                // Find the key of the next step
+                const currentKey = prev[step].key;
+                // Find next step name by key
+                const nextStepName = Object.keys(updatedStepInfo).find(
+                    (k) => updatedStepInfo[k as stepType].key === currentKey + 1
+                ) as stepType | undefined;
+                if (nextStepName) {
+                    setStep(nextStepName);
+                }
+                return updatedStepInfo;
+            });
+            setRoomId(id || "");
+            setRoomName(name || "");
+        }
+    };
     // Handle viewing an existing room
-    const handleViewRoom = (id: string, name?: string) => {
-        setRoomId(id);
-        setRoomName(name || "");
-        setStatus("viewing");
-    };
+    // const handleViewRoom = (id: string, name?: string) => {
+    //     setRoomId(id);
+    //     setRoomName(name || "");
+    //     setStatus("viewing");
+    // };
 
-    // Handle editing an existing room
-    const handleEditRoom = (id: string, name?: string) => {
-        setRoomId(id);
-        setRoomName(name || "");
-        setStatus("editing");
-        setStep(0); // Start from the first step when editing
-    };
+    // // Handle editing an existing room
+    // const handleEditRoom = (id: string, name?: string) => {
+    //     setRoomId(id);
+    //     setRoomName(name || "");
+    //     setStatus("editing");
+    //     setStep(0);
+    // };
 
-    // Handle creating a new room
-    const handleNewRoom = () => {
-        setRoomId("");
-        setRoomName("");
-        setStatus("creating");
-        setStep(0);
-    };
+    // // Handle creating a new room
+    // const handleNewRoom = () => {
+    //     setRoomId("");
+    //     setRoomName("");
+    //     setStatus("creating");
+    //     setStep(0);
+    // };
+
+    // const handleBuildRoom = (id: string, step: number) => {
+    //     setRoomId(id);
+    //     setStatus("creating");
+    //     setStep(step);
+    // };
 
     useEffect(() => {
         if (document.exitFullscreen) {
@@ -93,12 +153,15 @@ export const RoomBuilder = () => {
     }, []);
     useEffect(() => {
         setStepInfo((prev) => {
-            return prev.map((item, idx) => ({
-                ...item,
-                isComplete: idx < step,
-            }));
+            return {
+                ...prev,
+                [step]: {
+                    ...prev[step],
+                    isComplete: true,
+                },
+            };
         });
-    }, [step]);
+    }, [step, roomId]);
 
     return (
         <div className="flex w-full bg-gray-900 min-h-screen pt-16 overflow-x-hidden">
@@ -108,9 +171,8 @@ export const RoomBuilder = () => {
                     setSidebarOpen={setSidebarOpen}
                     sidebarOpen={sidebarOpen}
                     status={status}
-                    handleEditRoom={handleEditRoom}
-                    handleNewRoom={handleNewRoom}
-                    handleViewRoom={handleViewRoom}
+                    step={step}
+                    handleMainShow={handleMainShow}
                     roomId={roomId}
                 />
             </div>
