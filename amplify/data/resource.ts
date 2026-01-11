@@ -1,5 +1,6 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
-import { bedrockJsonClaude35HaikuFn as generateQuiz } from "../functions/bedrockJsonClaude35Haiku/resource";
+import { aiFunction as generateQuiz } from "../function/aiHandler/resource";
+
 const schema = a.schema({
     // USER PROFILE
     UserProfile: a
@@ -36,6 +37,11 @@ const schema = a.schema({
             public: a.boolean().default(false),
             topic: a.string(),
             field: a.string(),
+            completed: a.string(),
+            showTime: a.boolean().default(true),
+            withGrade: a.boolean().default(false),
+            difficultyLevel: a.string(),
+            numberOfQuizzes: a.integer().default(6),
             type: a.string(),
             quizzes: a.hasMany("Quiz", "roomId"), // A room has many quizzes (FK = roomId)
         })
@@ -73,11 +79,24 @@ const schema = a.schema({
         .query()
         .arguments({
             prompt: a.string(),
+            type: a.string(),
             schema: a.json(),
         })
         .returns(a.json())
         .authorization((allow) => [allow.authenticated()])
         .handler(a.handler.function(generateQuiz)),
+
+    // extractDocument: a
+    //     .query()
+    //     .arguments({
+    //         document: a.string(),
+    //         topic: a.string(),
+    //         subTopic: a.string(),
+    //         schema: a.json(),
+    //     })
+    //     .returns(a.json())
+    //     .authorization((allow) => [allow.authenticated()])
+    //     .handler(a.handler.function(extractDocument)),
 
     // // GENERATE ROOM
     // generateRoom: a
