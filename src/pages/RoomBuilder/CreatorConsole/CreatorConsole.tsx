@@ -37,18 +37,18 @@ export const CreatorConsole = ({
                 const userId = user.id;
                 const rooms = await roomsService.getRoomByUser(userId);
                 console.log(rooms);
-                // After fetching, iterate all rooms and update their completed to "completed"
-                if (rooms && Array.isArray(rooms)) {
-                    // Update 'completed' to "completed" for all rooms
-                    await Promise.all(
-                        rooms.map(async (room: any) => {
-                            // Only update if not already set
-                            if (room.name === "Apples") {
-                                await roomsService.deleteRoom(room.id);
-                            }
-                        })
-                    );
-                }
+                // After fetching, iterate all rooms and update something about them
+                // if (rooms && Array.isArray(rooms)) {
+                //     // Update 'completed' to "completed" for all rooms
+                //     await Promise.all(
+                //         rooms.map(async (room: any) => {
+                //             // Only update if not already set
+                //             if (room.name === "Apples") {
+                //                 await roomsService.deleteRoom(room.id);
+                //             }
+                //         })
+                //     );
+                // }
                 setRooms(rooms);
                 setOpenOptions(Array(rooms.length).fill(false));
             } else {
