@@ -1,5 +1,6 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
-import { aiFunction as generateQuiz } from "../function/aiHandler/resource";
+// import { aiFunction } from "../function/aiHandler/resource";
+// import { aiTrigger } from "../function/aiTrigger/resource";
 
 const schema = a.schema({
     // USER PROFILE
@@ -27,6 +28,7 @@ const schema = a.schema({
             creatorId: a.id().required(),
             creator: a.belongsTo("UserProfile", "creatorId"), // Each room belongs to a user
 
+            sourceData: a.json(),
             name: a.string().required(),
             mainImage: a.string(),
             coverImage: a.string(),
@@ -75,16 +77,44 @@ const schema = a.schema({
             allow.guest().to(["read"]),
         ]),
 
-    generateQuiz: a
-        .query()
-        .arguments({
-            prompt: a.string(),
-            type: a.string(),
-            schema: a.json(),
+    // AI JOB
+    AIJob: a
+        .model({
+            id: a.id(),
+            status: a.string(), // PENDING | RUNNING | DONE | ERROR
+            result: a.json(),
+            error: a.string(),
         })
-        .returns(a.json())
-        .authorization((allow) => [allow.authenticated()])
-        .handler(a.handler.function(generateQuiz)),
+        .authorization((allow) => [allow.authenticated()]),
+
+    // aiTrigger: a
+    //     .mutation()
+    //     .arguments({
+    //         prompt: a.string(),
+    //         type: a.string(),
+    //         schema: a.string(),
+    //     })
+    //     .returns(a.json())
+    //     .authorization((allow) => [allow.authenticated()])
+    //     .handler(a.handler.function(aiTrigger)),
+
+    // getAIJob: a
+    //     .query()
+    //     .arguments({ id: a.id() })
+    //     .returns(a.ref("AIJob"))
+    //     .authorization((allow) => [allow.authenticated()]),
+
+    // aiFunction: a
+    //     .query()
+    //     .arguments({
+    //         prompt: a.string(),
+    //         type: a.string(),
+    //         schema: a.string(),
+    //         job: a.string(),
+    //     })
+    //     .returns(a.json())
+    //     .authorization((allow) => [allow.authenticated()])
+    //     .handler(a.handler.function(aiFunction)),
 
     // extractDocument: a
     //     .query()
