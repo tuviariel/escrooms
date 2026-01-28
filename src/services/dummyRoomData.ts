@@ -310,7 +310,7 @@ const data = {
     ],
 };
 
-export const quizzes = [
+export const dummyQuizzes = [
     {
         roomId: "",
         type: "7segments",

@@ -1,0 +1,1 @@
+export { QuizInfo as default } from "./QuizInfo";

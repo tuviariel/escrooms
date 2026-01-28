@@ -6,6 +6,33 @@ export const formatDate = (userLanguage: string, dateString: string) => {
         year: "numeric",
     });
 };
+export const parseStringToObject = (d: any) => {
+    if (typeof d === "object" && d !== null) {
+        console.log("1", d);
+        return d;
+    }
+    const parsed1 = JSON.parse(d);
+    if (typeof parsed1 === "object" && parsed1 !== null) {
+        // console.log("2", parsed1);
+        return parsed1;
+    } else if (typeof parsed1 === "string" && parsed1 !== "") {
+        const parsed2 = JSON.parse(parsed1);
+        if (typeof parsed2 === "object" && parsed2 !== null) {
+            // console.log("3", parsed2);
+            return parsed2;
+        } else if (typeof parsed2 === "string" && parsed2 !== "") {
+            // console.log("4", parsed2);
+            const parsed3 = JSON.parse(parsed2);
+            if (typeof parsed3 === "object" && parsed3 !== null) {
+                // console.log("3", parsed2);
+                return parsed3;
+            } else if (typeof parsed3 === "string" && parsed3 !== "") {
+                // console.log("4", parsed2);
+                return JSON.parse(parsed3);
+            }
+        }
+    }
+};
 
 export const timeLeftFormat = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);

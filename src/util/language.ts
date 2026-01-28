@@ -370,6 +370,158 @@ const appContext: Translations = {
     subscribe_to_delete_room: { en: "Subscribe to delete room", he: "הירשם למחיקת חדר", ar: "" },
     completed_rooms: { en: "Completed Rooms", he: "חדרים שהושלמו", ar: "" },
     draft_rooms: { en: "Draft Rooms", he: "חדרים בתהליך יצירה", ar: "" },
+    no_quiz_found: { en: "No quiz found", he: "לא נמצאה חידה", ar: "" },
+    no_room_found: { en: "No escape room found", he: "לא נמצא חדר בריחה", ar: "" },
+    no_subtopics_found: {
+        en: "No subtopics found. Please add more text to the document, or try a different topic to define the topic with more presision.",
+        he: "לא נמצאו תתי-נושאים. אנא הוסיפו יותר טקסט למסמך, או נסו להגדיר את הנושא בפרטים מדוייקים יותר.",
+        ar: "",
+    },
+    failed_to_create_room: {
+        en: "Failed to create room. Please try again.",
+        he: "יצירת החדר נכשלה. אנא נסה שנית.",
+        ar: "",
+    },
+    create_quiz_failed: {
+        en: "Failed to create quiz. Please try again.",
+        he: "יצירת חידה נכשלה. אנא נסה שנית.",
+        ar: "",
+    },
+    not_enough_quizzes: {
+        en: "Not enough quizzes. Please create at least 4 quizzes.",
+        he: "לא נמצאו מספיק חידות. אנא צור לפחות 4 חידות.",
+        ar: "",
+    },
+    physical_object_selection: {
+        en: "Physical Object Selection {quiz_of}",
+        he: "{quiz_of} בחירת עצמים פיזיים",
+        ar: "",
+    },
+    event_to_category_matching: {
+        en: "Category to Event Matching {quiz_of}",
+        he: "{quiz_of} התאמת קטגוריה לאירוע",
+        ar: "",
+    },
+    logical_or_chronological_ordering: {
+        en: "Logical or Chronological Ordering {quiz_of}",
+        he: "{quiz_of} סדר לוגי או סדר זמני",
+        ar: "",
+    },
+    true_false_fact_questions: {
+        en: "True or False Fact Questions {quiz_of}",
+        he: "{quiz_of} שאלות נכון או לא נכון",
+        ar: "",
+    },
+    sub_topics: {
+        en: "Sub-topics to create quizzes from",
+        he: "תתי-נושאים ליצירת חידות מהם",
+        ar: "",
+    },
+    created_quizzes: {
+        en: "Created Quizzes",
+        he: "חידות שנוצרו",
+        ar: "",
+    },
+    create_quiz_about: {
+        en: "Create {quiz_type} about",
+        he: "יצירת {quiz_type} אודות",
+        ar: "",
+    },
+    show_quiz: {
+        en: "Show Quiz",
+        he: "הצג חידה",
+        ar: "",
+    },
+    saving_quizzes: {
+        en: "Saving Quizzes...",
+        he: "שומר חידות...",
+        ar: "",
+    },
+    save_quizzes: {
+        en: "Save Quizzes",
+        he: "שמור חידות",
+        ar: "",
+    },
+    should_be_completed_in_seconds: {
+        en: "Should be completed in {seconds} seconds",
+        he: "אמור להסתיים תוך {seconds} שניות",
+        ar: "",
+    },
+    from_the_text: {
+        en: "From the Text",
+        he: "מהטקסט",
+        ar: "",
+    },
+    enter_answer: {
+        en: "Enter Answer",
+        he: "הזן תשובה",
+        ar: "",
+    },
+    answer_required: {
+        en: "Answer is required",
+        he: "נדרשת תשובה",
+        ar: "",
+    },
+    the_quiz_answer: {
+        en: "The Quiz Answer",
+        he: "התשובה לחידה",
+        ar: "",
+    },
+    answer_limitations: {
+        en: "Answer Limitations",
+        he: "מגבלות תשובה",
+        ar: "",
+    },
+    "3-4_digits": {
+        en: "3-4 digits",
+        he: "3-4 ספרות",
+        ar: "",
+    },
+    "3-5_digits_letters": {
+        en: "3-5 digits or letters in Hebrew or English",
+        he: "3-5 ספרות או אותיות בעברית או באנגלית",
+        ar: "",
+    },
+    "1-3_digits": {
+        en: "1-3 digits",
+        he: "1-3 ספרות",
+        ar: "",
+    },
+    "2-5_digits": {
+        en: "2-5 digits",
+        he: "2-5 ספרות",
+        ar: "",
+    },
+    show_sub_topic: {
+        en: "Show Sub-topic",
+        he: "הצג תת-נושא",
+        ar: "",
+    },
+    used_sub_topic: {
+        en: "Used to create quiz",
+        he: "נושא שנוצר ממנו חידה",
+        ar: "",
+    },
+    close_all_sub_topics: {
+        en: "Close All Sub-topics",
+        he: "סגור את כל התתי-נושאים",
+        ar: "",
+    },
+    close_all_quizzes: {
+        en: "Close All Quizzes",
+        he: "סגור את כל החידות",
+        ar: "",
+    },
+    sub_topics_to_create_quizzes_from: {
+        en: "Sub-topics to create quizzes from",
+        he: "תתי-נושאים ליצירת חידות",
+        ar: "",
+    },
+    quiz_of: {
+        en: " quiz",
+        he: "חידת ",
+        ar: "",
+    },
 };
 
 export const get_text = (name: string, lang: string) => {

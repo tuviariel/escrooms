@@ -17,6 +17,7 @@ import { useUserContext } from "../../contexts/userStyleContext";
 import { RoomType } from "../Dashboard/Dashboard";
 import { CheckCircle2, Lock, Activity, Smartphone } from "lucide-react";
 import RoomTimer from "../../components/RoomTimer";
+import { parseStringToObject } from "../../util/utils";
 
 export interface quizDataProps {
     data: {
@@ -165,8 +166,8 @@ export const Room = () => {
             const quizzes = await roomDataFromServer[0].quizzes();
             // console.log("Fetched quizzes for room:", quizzes);
             const cleanQuizzes = quizzes.data.map((quiz: any) => {
-                const updatedHints = parseQuizData(quiz.hints);
-                const updatedQuiz = parseQuizData(quiz.quiz);
+                const updatedHints = parseStringToObject(quiz.hints);
+                const updatedQuiz = parseStringToObject(quiz.quiz);
                 return {
                     ...quiz,
                     hints: updatedHints.hints,
@@ -192,26 +193,6 @@ export const Room = () => {
             setRoomStyle(roomDataFromServer[0].imageStyle || "");
             setRoomColor(roomDataFromServer[0].colorPalette || "");
             setRoomFont(roomDataFromServer[0].fontFamily || "");
-        };
-        const parseQuizData = (d: any) => {
-            if (typeof d === "object" && d !== null) {
-                // console.log("1");
-                return d;
-            }
-            const parsed1 = JSON.parse(d);
-            if (typeof parsed1 === "object" && parsed1 !== null) {
-                // console.log("2", parsed1);
-                return parsed1;
-            } else if (typeof parsed1 === "string" && parsed1 !== "") {
-                const parsed2 = JSON.parse(parsed1);
-                if (typeof parsed2 === "object" && parsed2 !== null) {
-                    // console.log("3", parsed2);
-                    return parsed2;
-                } else if (typeof parsed2 === "string" && parsed2 !== "") {
-                    // console.log("4", parsed2);
-                    return JSON.parse(parsed2);
-                }
-            }
         };
         setRoom();
     }, []);

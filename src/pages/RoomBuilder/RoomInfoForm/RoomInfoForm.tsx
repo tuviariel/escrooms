@@ -25,13 +25,15 @@ type RoomInfo = {
 };
 type RoomInfoProps = {
     roomId: string;
+    subTopics: { name: string; content: string; quizType: string }[];
 };
 const LOCAL_KEY = "roomInfoData";
 
 const COLOR_GROUPS = Object.keys(colorPalette);
 const FONT_OPTIONS = Object.keys(fontFamily);
 
-export const RoomInfoForm = ({ roomId }: RoomInfoProps) => {
+export const RoomInfoForm = ({ roomId, subTopics }: RoomInfoProps) => {
+    console.log(subTopics);
     const [roomInfo, setRoomInfo] = useState<RoomInfo>({
         roomType: "educational",
         roomField: "",
@@ -105,7 +107,8 @@ export const RoomInfoForm = ({ roomId }: RoomInfoProps) => {
             const res = await aiService.openAIGenerateJson(
                 prompt,
                 "json",
-                JSON.stringify(schema.room)
+                JSON.stringify(schema.room),
+                "startJob"
             );
             // const res = generateRoom({ description: prompt });
             console.log(res);

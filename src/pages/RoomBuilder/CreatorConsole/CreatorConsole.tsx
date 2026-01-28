@@ -30,6 +30,7 @@ export const CreatorConsole = ({
     const [rooms, setRooms] = useState<RoomType[]>([]);
     const [openOptions, setOpenOptions] = useState<boolean[]>([]);
     const { userLanguage } = useUserContext();
+
     useEffect(() => {
         const getUserRooms = async () => {
             console.log(user);
@@ -56,7 +57,7 @@ export const CreatorConsole = ({
             }
         };
         getUserRooms();
-    }, []);
+    }, [roomId]);
     const handleDeleteRoom = async (id: string) => {
         try {
             const result = await roomsService.deleteRoom(id);
@@ -125,12 +126,12 @@ export const CreatorConsole = ({
             <div className="flex items-center justify-between p-4">
                 {sidebarOpen && (
                     <h1
-                        className={`text-xl font-bold text-white ${userLanguage === "en" ? "text-left" : "text-right"}`}>
+                        className={`text-xl font-bold text-white ${userLanguage === "en" ? "mr-auto" : "ml-auto"}`}>
                         {get_text("my_rooms", userLanguage)}
                     </h1>
                 )}
             </div>
-            <div className="flex-1 overflow-y-auto max-h-96 scrollbar overflow-x-hidden px-3 py-4 space-y-3">
+            <div className="flex-1 overflow-y-auto max-h-96 scrollbar overflow-x-hidden px-3 py-2 space-y-3">
                 {rooms.map((room, i) => {
                     return (
                         <RoomCard

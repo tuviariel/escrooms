@@ -1,6 +1,10 @@
 import { getClient, isAdmin } from "./client";
 import { fetchUserAttributes } from "aws-amplify/auth";
 import { uploadData, getUrl, remove } from "aws-amplify/storage";
+import axios from "axios";
+// import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
+// import { fetchAuthSession } from "aws-amplify/auth";
+// import outputs from "../../amplify_outputs.json";
 
 /**
  * Rooms routes:
@@ -11,6 +15,7 @@ export const roomsService = {
     async listRooms() {
         try {
             const client = await getClient();
+            console.log("client:", client);
             const rooms = await client.models.Room.list({
                 filter: { public: { eq: true } },
                 selectionSet: ["id", "name", "description", "coverImage", "updatedAt"],
@@ -95,7 +100,10 @@ export const userService = {
             const newProfile = await client.models.UserProfile.create({
                 id: user.userId,
                 email: attributes.email || user.signInDetails.loginId,
-                displayName: attributes.name || user.signInDetails.loginId.split("@")[0],
+                displayName:
+                    attributes.name ||
+                    user?.signInDetails?.loginId?.split("@")[0] ||
+                    attributes?.email?.split("@")[0],
                 avatar: attributes.picture || user.avatar || "",
                 roomsLeft: 1,
                 subscription: (await isAdmin()) ? "admin" : "free",
@@ -145,7 +153,7 @@ export const fileStorage = {
     },
     async getFileUrl(pathname: string) {
         const url = await getUrl({ path: pathname });
-        console.log("Got file URL:", url);
+        // console.log("Got file URL:", url);
         return url.url.href;
     },
     async deleteFile(pathname: string) {
@@ -160,21 +168,12 @@ export const fileStorage = {
 };
 
 export const aiService = {
-    async openAIGenerateJson(prompt: string, type: string, schema: any) {
-        console.log(prompt, type, schema);
-        const client = await getClient();
-        // Ensure schema is a valid JSON object (not a string)
-        // const schemaObj = typeof schema === "string" ? JSON.parse(schema) : schema;
-        const result = await client.queries.generateQuiz({
+    async openAI(prompt: string, type: string) {
+        console.log("prompt:", prompt, "type:", type);
+        const res = await axios.post("http://16.170.202.228/generate", {
             prompt,
             type,
-            schema: JSON.stringify(schema),
         });
-        return result;
+        return JSON.parse(res.data.content);
     },
-    // async extractDocument(document: string, topic: string, subTopic: string, schema: any) {
-    //     const client = await getClient();
-    //     const result = await client.queries.extractDocument({ document, topic, subTopic, schema });
-    //     return result.data;
-    // },
 };

@@ -5,9 +5,9 @@ import GameCard from "../../components/GameCard";
 import Loading from "../../assets/images/loading.gif";
 import { get_text } from "../../util/language";
 import dashboardBackground from "../../assets/images/dashboardBackground.png";
-import { roomsService } from "../../services/service"; //fileStorage, quizService,
+import { roomsService, fileStorage, quizService } from "../../services/service"; //fileStorage, quizService,
 import { useUserContext } from "../../contexts/userStyleContext";
-// import { quizzes } from "../../services/dummyRoomData";
+import { dummyQuizzes as quizzes } from "../../services/dummyRoomData";
 
 export type RoomType = Schema["Room"]["type"];
 export interface ListObject {
@@ -154,50 +154,53 @@ export const Dashboard = () => {
     //     }
     // };
 
-    // const createRoom = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     //auto creating a full first-aid room with quizzes from dummy data by uploading the main image:
-    //     try {
-    //         const result = await roomsService.createRoom({
-    //             creatorId: "403cc9cc-d011-7073-5948-fd2fd17a9b28",
-    //             name: "עזרה ראשונה",
-    //             mainImage: "", //make sure image begins with "main"
-    //             coverImage: "", //make sure image begins with "cover"
-    //             colorPalette: "blueToRed",
-    //             imageStyle: "realistic",
-    //             fontFamily: "sansSerif",
-    //             description: "משחק חינוכי ללימוד על עזרה ראשונה",
-    //         });
-    //         console.log("Room created:", result);
-    //         if (result && result.id && e.target.files && e.target.files.length > 0) {
-    //             // Upload multiple files
-    //             const filesArray = Array.from(e.target.files);
-    //             const res = await fileStorage.uploadFiles(filesArray, result.id);
-    //             console.log("Files uploaded successfully:", res);
-    //             if (res && res.length > 0) {
-    //                 // uploading 2 files as images- one beginning with "main" and one beginning with "cover"...
-    //                 const result2 = await roomsService.updateRoom(result.id, {
-    //                     mainImage: `images/${result.id}/${filesArray.find((file) => file.name.startsWith("main"))?.name}`,
-    //                     coverImage: `images/${result.id}/${filesArray.find((file) => file.name.startsWith("cover"))?.name}`,
-    //                 });
-    //                 console.log("updated room:", result2);
-    //                 for (const q of quizzes) {
-    //                     q.roomId = result.id;
-    //                     const cleanQuiz = JSON.stringify(q.quiz);
-    //                     q.quiz = cleanQuiz as any;
-    //                     const cleanHints = JSON.stringify(q.hints);
-    //                     q.hints = cleanHints as any;
-    //                     const responseQuiz = await quizService.createQuiz(q);
-    //                     console.log("Creating quiz with data:", q);
-    //                     if (responseQuiz) {
-    //                         console.log("Quiz created:", responseQuiz);
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     } catch (error) {
-    //         console.error("Error creating room:", error);
-    //     }
-    // };
+    const createRoom = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        //auto creating a full first-aid room with quizzes from dummy data by uploading the main image:
+        console.log("creating room...");
+        try {
+            const result = await roomsService.createRoom({
+                creatorId: "403cc9cc-d011-7073-5948-fd2fd17a9b28",
+                name: "עזרה ראשונה",
+                mainImage: "", //make sure image begins with "main"
+                coverImage: "", //make sure image begins with "cover"
+                colorPalette: "blueToRed",
+                imageStyle: "realistic",
+                fontFamily: "sansSerif",
+                public: true,
+                completed: "completed",
+                description: "משחק חינוכי ללימוד על עזרה ראשונה",
+            });
+            console.log("Room created:", result);
+            if (result && result.id && e.target.files && e.target.files.length > 0) {
+                // Upload multiple files
+                const filesArray = Array.from(e.target.files);
+                const res = await fileStorage.uploadFiles(filesArray, result.id);
+                console.log("Files uploaded successfully:", res);
+                if (res && res.length > 0) {
+                    // uploading 2 files as images- one beginning with "main" and one beginning with "cover"...
+                    const result2 = await roomsService.updateRoom(result.id, {
+                        mainImage: `images/${result.id}/${filesArray.find((file) => file.name.startsWith("main"))?.name}`,
+                        coverImage: `images/${result.id}/${filesArray.find((file) => file.name.startsWith("cover"))?.name}`,
+                    });
+                    console.log("updated room:", result2);
+                    for (const q of quizzes) {
+                        q.roomId = result.id;
+                        const cleanQuiz = JSON.stringify(q.quiz);
+                        q.quiz = cleanQuiz as any;
+                        const cleanHints = JSON.stringify(q.hints);
+                        q.hints = cleanHints as any;
+                        const responseQuiz = await quizService.createQuiz(q);
+                        console.log("Creating quiz with data:", q);
+                        if (responseQuiz) {
+                            console.log("Quiz created:", responseQuiz);
+                        }
+                    }
+                }
+            }
+        } catch (error) {
+            console.error("Error creating room:", error);
+        }
+    };
 
     // uploading file- image:
     // const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -239,7 +242,7 @@ export const Dashboard = () => {
                         dir={userLanguage === "he" ? "rtl" : "ltr"}>
                         {get_text("hero_title", userLanguage)}
                     </h3>
-                    {/* <input type="file" multiple onChange={createRoom} /> */}
+                    <input type="file" multiple onChange={createRoom} className="" />
                     <p
                         className="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto"
                         dir={userLanguage === "he" ? "rtl" : "ltr"}>

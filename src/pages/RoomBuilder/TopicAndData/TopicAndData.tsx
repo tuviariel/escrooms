@@ -1,38 +1,46 @@
 import { useEffect, useState } from "react";
 import { get_text } from "../../../util/language";
 import { useUserContext } from "../../../contexts/userStyleContext";
-// import { fileStorage, roomsService } from "../../../services/service";
-import { aiService } from "../../../services/service";
+// import { fileStorage } from "../../../services/service";
+import { aiService, roomsService } from "../../../services/service";
 import { useSelector } from "react-redux";
 import { userType } from "../../../components/Login/Login";
 import { stepType } from "../RoomBuilder";
 import { schema } from "../../../util/schemas";
-
+// import { parseStringToObject } from "../../../util/utils";
 // import { fieldsOfStudy } from "../../../util/utils";
+import loadingSpinner from "../../../assets/images/loading.gif";
+import { TimerReset } from "lucide-react";
 
 type TopicAndDataProps = {
     setStep: (step: stepType) => void;
     setRoomId: (id: string) => void;
+    setSubTopics: (subTopics: any[]) => void;
+    setParentLoading: (loading: boolean) => void;
 };
 
 const LOCAL_KEY = "topicAndData";
 
 type InputType = "file" | "text" | "url";
 
-export const TopicAndData = ({ setStep, setRoomId }: TopicAndDataProps) => {
+export const TopicAndData = ({
+    setStep,
+    setRoomId,
+    setSubTopics,
+    setParentLoading,
+}: TopicAndDataProps) => {
     const [topic, setTopic] = useState<string>("");
     const [subTopic, setSubTopic] = useState<string>("");
-    const [inputType, setInputType] = useState<InputType>("file");
+    const [inputType, setInputType] = useState<InputType>("text");
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [textContent, setTextContent] = useState<string>("");
     const [urlContent, setUrlContent] = useState<string>("");
-    const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState<string>("");
     const [error, setError] = useState<string>("");
     const [first, setFirst] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(false);
     const { userLanguage } = useUserContext();
     const userRedux: any = useSelector((state: { user: userType }) => state.user);
-    console.log(schema.room, userRedux.user.id, setStep, setRoomId);
     // Save draft on every change
     useEffect(() => {
         if (first) {
@@ -59,7 +67,7 @@ export const TopicAndData = ({ setStep, setRoomId }: TopicAndDataProps) => {
     useEffect(() => {
         try {
             const raw = localStorage.getItem(LOCAL_KEY);
-            console.log(raw);
+            // console.log(raw);
             if (raw) {
                 const parsed = JSON.parse(raw);
                 setTopic(parsed.topic || "");
@@ -95,7 +103,6 @@ export const TopicAndData = ({ setStep, setRoomId }: TopicAndDataProps) => {
             setError(get_text("topic_required", userLanguage) || "Topic is required");
             return;
         }
-
         // Validate input based on selected type
         if (inputType === "file" && !selectedFile) {
             setError(get_text("file_required", userLanguage) || "Please select a file");
@@ -122,11 +129,13 @@ export const TopicAndData = ({ setStep, setRoomId }: TopicAndDataProps) => {
             }
         }
 
+        setParentLoading(true);
         setLoading(true);
         setError("");
         setStatus("");
 
         try {
+            // for option if needed to create room before generating subtopics (for file upload with room.id):
             // let currentRoomId: string;
             // const newRoom = await roomsService.createRoom({
             //     creatorId: userRedux.user.id,
@@ -145,7 +154,6 @@ export const TopicAndData = ({ setStep, setRoomId }: TopicAndDataProps) => {
             // }
 
             let documentInput: string = "";
-
             if (inputType === "file") {
                 // Upload file to storage and send the file path
                 // const uploadResult = await fileStorage.uploadFile(selectedFile!, currentRoomId);
@@ -161,40 +169,57 @@ export const TopicAndData = ({ setStep, setRoomId }: TopicAndDataProps) => {
                 // Send URL directly (handler will detect it's a URL and scrape it)
                 documentInput = urlContent;
             }
-            console.log("documentInput:", documentInput);
-            // Call extractDocument service
-            // Handler will detect the type: file path, URL, or plain text
-            // Ensure schema is a plain object for Amplify validation
-            // const schemaObj = JSON.parse(JSON.stringify(schema.room));
-            // console.log("schemaObj:", schemaObj);
-            const result = await aiService.openAIGenerateJson(
-                documentInput,
-                // topic,
-                // subTopic || "",
-                "json",
-                schema.room
-            );
-            console.log("result:", result);
+            // console.log("documentInput:", documentInput);
 
-            if (result) {
-                setStatus(
-                    get_text("document_processed", userLanguage) ||
-                        "Document processed successfully"
-                );
-                // Move to next step
-                // localStorage.removeItem(LOCAL_KEY);
-                // setTimeout(() => {
-                //     setStep("room_info");
-                // }, 1000);
+            // creating Prompt for AI:
+            const prompt = `Take the following text, assuming it's title is ${topic} ${subTopic ? `and it's specific goal is ${subTopic}` : ""},
+            and assuming that the user is a teacher or a lecturer, and the text is a lecture, a lesson, or a summary of a course, with an introduction and a conclusion.
+            Analyze the text by dividing it into distinct subtopics according to the logical text structures and the paragraph structures.
+            Return the output in JSON format, where each subtopic is represented as an object with the following fields structured like the schema: ${schema.topicAndData}.
+            Text to analyze: """${documentInput}"""`;
+            const data: any = await aiService.openAI(prompt, "json");
+            console.log("data:", data);
+            if (!data || data.sub_topics.length === 0) {
+                setError(get_text("no_subtopics_found", userLanguage) || "No subtopics found");
+                return;
+            } else if (Array.isArray(data.sub_topics) && data.sub_topics.length > 0) {
+                // Add a 'used' field (initialized to false) to each subtopic object
+                data.sub_topics = data.sub_topics.map((sub: any) => ({
+                    ...sub,
+                    used: false,
+                }));
+                setSubTopics(data.sub_topics);
+                // Create room in the database:
+                const newRoom = await roomsService.createRoom({
+                    creatorId: userRedux.user.id,
+                    name: topic || "New Room",
+                    sourceData: JSON.stringify(data),
+                    topic: topic,
+                    field: "general",
+                    type: "educational",
+                    description: "",
+                    completed: "topic_and_data",
+                });
+                if (!newRoom || !newRoom.id) {
+                    setError(
+                        get_text("failed_to_create_room", userLanguage) || "Failed to create room"
+                    );
+                    return;
+                } else {
+                    setRoomId(newRoom.id);
+                    localStorage.removeItem(LOCAL_KEY);
+                    setStep("create_quizzes"); //room_info
+                }
             }
         } catch (err: any) {
             console.log("Error processing document:", err);
             setError(err.message || get_text("processing_failed", userLanguage));
         } finally {
+            setParentLoading(false);
             setLoading(false);
         }
     };
-
+    // console.log(loading);
     return (
         <div
             className="max-w-3xl mt-0 mx-20 py-4 text-white"
@@ -299,7 +324,7 @@ export const TopicAndData = ({ setStep, setRoomId }: TopicAndDataProps) => {
             {/* Optional Sub-topic Input */}
             <div className="mb-6">
                 <label className="flex text-lg mb-1.5 text-white">
-                    {get_text("sub_topic", userLanguage) || "Sub-topic"} (Optional)
+                    {get_text("sub_topic", userLanguage) || "Sub-topic"}
                 </label>
                 <input
                     type="text"
@@ -331,7 +356,9 @@ export const TopicAndData = ({ setStep, setRoomId }: TopicAndDataProps) => {
                             setInputType("file");
                             setError("");
                         }}
-                        className={`px-4 py-2 text-sm font-medium transition-colors ${
+                        disabled={true}
+                        title={get_text("coming_soon", userLanguage) || "Coming soon"}
+                        className={`cursor-not-allowed px-4 py-2 text-sm font-medium transition-colors ${
                             inputType === "file"
                                 ? "text-cyan-400 border-b-2 border-cyan-400"
                                 : "text-gray-400 hover:text-gray-300"
@@ -357,7 +384,9 @@ export const TopicAndData = ({ setStep, setRoomId }: TopicAndDataProps) => {
                             setInputType("url");
                             setError("");
                         }}
-                        className={`px-4 py-2 text-sm font-medium transition-colors ${
+                        disabled={true}
+                        title={get_text("coming_soon", userLanguage) || "Coming soon"}
+                        className={`cursor-not-allowed px-4 py-2 text-sm font-medium transition-colors ${
                             inputType === "url"
                                 ? "text-cyan-400 border-b-2 border-cyan-400"
                                 : "text-gray-400 hover:text-gray-300"
@@ -468,7 +497,7 @@ export const TopicAndData = ({ setStep, setRoomId }: TopicAndDataProps) => {
             )}
 
             {/* Actions */}
-            <div className="flex gap-2.5 items-center">
+            <div className="flex gap-2.5 items-center relative">
                 <button
                     onClick={handleSubmit}
                     disabled={
@@ -478,10 +507,20 @@ export const TopicAndData = ({ setStep, setRoomId }: TopicAndDataProps) => {
                         (inputType === "text" && !textContent.trim()) ||
                         (inputType === "url" && !urlContent.trim())
                     }
-                    className="text-white bg-cyan-500 hover:bg-cyan-600 border-0 py-2.5 px-3.5 rounded-lg cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    className="relative text-white bg-cyan-500 hover:bg-cyan-600 border-0 py-2.5 px-3.5 rounded-lg cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                     {loading
                         ? get_text("processing", userLanguage) || "Processing..."
                         : get_text("next_page", userLanguage) || "Next"}
+                    <span
+                        className="flex absolute top-0 -right-10 -translate-x-1/2 -translate-y-1/2"
+                        title={
+                            get_text("should_be_completed_in_seconds", userLanguage)?.replace(
+                                "{seconds}",
+                                "60"
+                            ) || "Should be completed in 60 seconds"
+                        }>
+                        <TimerReset className="w-6 h-6" />- 60s
+                    </span>
                 </button>
                 <button
                     onClick={() => {
@@ -495,10 +534,23 @@ export const TopicAndData = ({ setStep, setRoomId }: TopicAndDataProps) => {
                         setStatus("");
                         setError("");
                     }}
-                    disabled={loading}
+                    disabled={
+                        loading ||
+                        (!topic.trim() &&
+                            ((inputType === "file" && !selectedFile) ||
+                                (inputType === "text" && !textContent.trim()) ||
+                                (inputType === "url" && !urlContent.trim())))
+                    }
                     className="bg-gray-700 hover:bg-gray-600 border border-gray-600 text-white py-2.5 px-3 rounded-lg cursor-pointer transition-colors">
                     {get_text("clear", userLanguage) || "Clear"}
                 </button>
+                {loading && (
+                    <img
+                        src={loadingSpinner}
+                        alt="loading"
+                        className="w-10 h-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                    />
+                )}
             </div>
         </div>
     );

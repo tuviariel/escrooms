@@ -1,8 +1,8 @@
-import { JSX, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ProgressBar from "../../components/ProgressBar";
 import { TopicAndData } from "./TopicAndData/TopicAndData";
-import RoomInfoForm from "./RoomInfoForm";
-import GeneratingMainImage from "./GeneratingMainImage";
+// import RoomInfoForm from "./RoomInfoForm";
+// import GeneratingMainImage from "./GeneratingMainImage";
 import CreateQuizzes from "./CreateQuizzes";
 import PreviewPublish from "./PreviewPublish";
 import CreatorConsole from "./CreatorConsole";
@@ -25,50 +25,63 @@ export type stepInfoType = {
         key: number;
         name: string;
         isComplete: boolean;
-        component: JSX.Element;
+        duration: number;
     };
 };
 
 export type RoomBuilderStatus = "creating" | "viewing" | "editing" | "starting";
 
+export type subTopicsType = {
+    name: string;
+    mysterious_name: string;
+    content: string;
+    quiz_type: string;
+    explanation: string;
+    used: boolean;
+}[];
+
 export const RoomBuilder = () => {
     const [step, setStep] = useState<stepType>("topic_and_data");
     const { userLanguage } = useUserContext();
     const userRedux: any = useSelector((state: { user: userType }) => state.user);
-    const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
     const [roomId, setRoomId] = useState<string>("");
     const [roomName, setRoomName] = useState<string>("");
     const [status, setStatus] = useState<RoomBuilderStatus>("creating");
+    const [subTopics, setSubTopics] = useState<subTopicsType>([]);
+    const [loading, setLoading] = useState<boolean>(false);
     const [stepInfo, setStepInfo] = useState<stepInfoType>({
         topic_and_data: {
             key: 0,
             name: get_text("topic_and_data", userLanguage),
             isComplete: false,
-            component: <TopicAndData setStep={setStep} setRoomId={setRoomId} />,
+            duration: 60,
         },
-        room_info: {
-            key: 1,
-            name: get_text("room_info", userLanguage),
-            isComplete: false,
-            component: <RoomInfoForm roomId={roomId} />,
-        },
-        generating_main_image: {
-            key: 2,
-            name: get_text("gen_image", userLanguage),
-            isComplete: false,
-            component: <GeneratingMainImage />,
-        },
+        // room_info: {
+        //     key: 1,
+        //     name: get_text("room_info", userLanguage),
+        //     isComplete: false,
+        //     duration: 60,
+        //     component: <RoomInfoForm roomId={roomId} subTopics={subTopics} />,
+        // },
+        // generating_main_image: {
+        //     key: 2,
+        //     duration: 60,
+        //     name: get_text("gen_image", userLanguage),
+        //     isComplete: false,
+        //     component: <GeneratingMainImage />,
+        // },
         create_quizzes: {
-            key: 3,
+            key: 1,
             name: get_text("create_quizzes", userLanguage),
             isComplete: false,
-            component: <CreateQuizzes />,
+            duration: 0,
         },
         preview_publish: {
-            key: 4,
+            key: 2,
             name: get_text("preview_publish", userLanguage),
             isComplete: false,
-            component: <PreviewPublish />,
+            duration: 60,
         },
     });
     const handleMainShow = (
@@ -90,6 +103,19 @@ export const RoomBuilder = () => {
         if (status === "starting") {
             setStep("topic_and_data");
             setStatus("creating");
+            setRoomId("");
+            setRoomName("");
+            setSubTopics([]);
+            setStepInfo((prev: stepInfoType) => {
+                const resetStepInfo: stepInfoType = {} as stepInfoType;
+                Object.keys(prev).forEach((k) => {
+                    resetStepInfo[k as stepType] = {
+                        ...prev[k as stepType],
+                        isComplete: false,
+                    };
+                });
+                return resetStepInfo;
+            });
         } else {
             setStatus(status);
             setStepInfo((prev: stepInfoType) => {
@@ -116,34 +142,6 @@ export const RoomBuilder = () => {
             setRoomName(name || "");
         }
     };
-    // Handle viewing an existing room
-    // const handleViewRoom = (id: string, name?: string) => {
-    //     setRoomId(id);
-    //     setRoomName(name || "");
-    //     setStatus("viewing");
-    // };
-
-    // // Handle editing an existing room
-    // const handleEditRoom = (id: string, name?: string) => {
-    //     setRoomId(id);
-    //     setRoomName(name || "");
-    //     setStatus("editing");
-    //     setStep(0);
-    // };
-
-    // // Handle creating a new room
-    // const handleNewRoom = () => {
-    //     setRoomId("");
-    //     setRoomName("");
-    //     setStatus("creating");
-    //     setStep(0);
-    // };
-
-    // const handleBuildRoom = (id: string, step: number) => {
-    //     setRoomId(id);
-    //     setStatus("creating");
-    //     setStep(step);
-    // };
 
     useEffect(() => {
         if (document.exitFullscreen) {
@@ -162,6 +160,7 @@ export const RoomBuilder = () => {
             };
         });
     }, [step, roomId]);
+    console.log("subTopics:", subTopics);
 
     return (
         <div className="flex w-full bg-gray-900 min-h-screen pt-16 overflow-x-hidden">
@@ -181,7 +180,7 @@ export const RoomBuilder = () => {
                 dir={userLanguage === "he" ? "rtl" : "ltr"}>
                 {/* Status indicator */}
                 <h5
-                    className={`mt-8 text-center text-2xl font-bold mb-4 text-white ${userLanguage === "he" ? "text-right mr-14" : "text-left ml-14"}`}
+                    className={`${status === "creating" ? "mt-22" : "mt-8"} text-center text-2xl font-bold mb-4 text-white ${userLanguage === "he" ? "text-right mr-14" : "text-left ml-14"}`}
                     dir={userLanguage === "he" ? "rtl" : "ltr"}>
                     <span
                         className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium ${
@@ -216,13 +215,41 @@ export const RoomBuilder = () => {
                 {/* Conditional rendering based on status */}
                 {status === "creating" && (
                     <>
-                        <ProgressBar step={step} setStep={setStep} stepInfo={stepInfo} />
+                        <div
+                            className={`${sidebarOpen ? "w-9/12" : "w-11/12"} fixed top-16 z-10 bg-gray-900`}>
+                            <ProgressBar
+                                step={step}
+                                setStep={setStep}
+                                stepInfo={stepInfo}
+                                loading={loading}
+                                roomId={roomId}
+                            />
+                        </div>
                         <h5
                             className={`mt-8 text-center text-2xl font-bold mb-4 text-white ${userLanguage === "he" ? "text-right mr-14" : "text-left ml-14"}`}
                             dir={userLanguage === "he" ? "rtl" : "ltr"}>
                             {stepInfo[step].name}
                         </h5>
-                        <div className="w-full">{stepInfo[step].component}</div>
+                        <div className="w-full">{stepInfo[step].name === get_text("create_quizzes", userLanguage)
+                            ? <CreateQuizzes
+                                setStep={setStep}
+                                roomId={roomId}
+                                roomName={roomName}
+                                subTopics={subTopics}
+                                setSubTopics={setSubTopics}
+                                setParentLoading={setLoading}
+                            />
+                            : stepInfo[step].name === get_text("topic_and_data", userLanguage)
+                            ? <TopicAndData
+                                setStep={setStep}
+                                setRoomId={setRoomId}
+                                setSubTopics={setSubTopics}
+                                setParentLoading={setLoading}
+                            />
+                            : stepInfo[step].name === get_text("preview_publish", userLanguage)
+                            ? <PreviewPublish />
+                            : null}
+                    </div>
                     </>
                 )}
 
