@@ -172,7 +172,7 @@ export const TopicAndData = ({
             // console.log("documentInput:", documentInput);
 
             // creating Prompt for AI:
-            const prompt = `Take the following text, assuming it's title is ${topic} ${subTopic ? `and it's specific goal is ${subTopic}` : ""},
+            const prompt = `Take the following text, assuming it's title is ${topic} ${subTopic ? `and it's specific goal or description is ${subTopic}` : ""},
             and assuming that the user is a teacher or a lecturer, and the text is a lecture, a lesson, or a summary of a course, with an introduction and a conclusion.
             Analyze the text by dividing it into distinct subtopics according to the logical text structures and the paragraph structures.
             Return the output in JSON format, where each subtopic is represented as an object with the following fields structured like the schema: ${schema.topicAndData}.
@@ -192,6 +192,9 @@ export const TopicAndData = ({
                 // Create room in the database:
                 const newRoom = await roomsService.createRoom({
                     creatorId: userRedux.user.id,
+                    colorPalette: "blueToRed",
+                    imageStyle: "realistic",
+                    fontFamily: "sansSerif",
                     name: topic || "New Room",
                     sourceData: JSON.stringify(data),
                     topic: topic,
@@ -455,7 +458,7 @@ export const TopicAndData = ({
                                 get_text("enter_text_placeholder", userLanguage) ||
                                 "Enter or paste your text content here..."
                             }
-                            className="w-full h-64 p-3 rounded-lg border border-gray-600 bg-gray-800 text-white placeholder-gray-400 resize-none focus:outline-none focus:border-cyan-500"
+                            className="w-full h-64 p-3 rounded-lg border border-gray-600 bg-gray-800 text-white placeholder-gray-400 resize-none focus:outline-none focus:border-cyan-500 scrollbar"
                         />
                         <p className="mt-2 text-sm text-gray-400">
                             {get_text("text_input_hint", userLanguage) ||

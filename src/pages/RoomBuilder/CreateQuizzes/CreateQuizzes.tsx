@@ -12,6 +12,8 @@ import { dummyQuizzes } from "../../../services/dummyRoomData";
 import { parseStringToObject } from "../../../util/utils";
 import { Check, PanelTopOpen, SquareStack } from "lucide-react";
 import QuizInfo from "./QuizInfo";
+import TimerLine from "../../../components/TimerLine";
+import { useNavigate } from "react-router";
 
 type CreateQuizzesProps = {
     setStep: (step: stepType) => void;
@@ -60,9 +62,9 @@ const dependentQuizTypes: Record<string, {
         quizImg: dummyQuizzes[2].quizImg,
         hints: dummyQuizzes[2].hints,
         types: "colorChange",
-        answerLimitations: "1-3_digits",
-        // 1-3 digits only
-        limitCheck: /^\d{1,3}$/
+        answerLimitations: "5_digits",
+        // 5 digits only
+        limitCheck: /^\d{5}$/
     },
     logical_or_chronological_ordering: {
         quizImg: dummyQuizzes[3].quizImg,
@@ -89,13 +91,16 @@ export const CreateQuizzes = ({
     const [answers, setAnswers] = useState<string[]>([]);
     const [showQuiz, setShowQuiz] = useState<number>(-1);
     const [showSubTopic, setShowSubTopic] = useState<number>(-1);
+    const [showSubTopicCreation, setShowSubTopicCreation] = useState<number>(-1);
     const [errorAnswers, setErrorAnswers] = useState<string[]>([]);
     const [status, setStatus] = useState<string>("");
     const [error, setError] = useState<string>("");
     const [first, setFirst] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(false);
+    const [completed, setCompleted] = useState<boolean>(false);
     const { userLanguage } = useUserContext();
     // const userRedux: any = useSelector((state: { user: userType }) => state.user);
+    const navigate = useNavigate();
     useEffect(() => {
         if(roomId !== localRoomId) {
             localStorage.removeItem(LOCAL_KEY+localRoomId);
@@ -150,17 +155,19 @@ export const CreateQuizzes = ({
                 setShowQuiz(-1);
                 setShowSubTopic(-1);
                 setErrorAnswers(Array(localSubTopics.length).fill(""));
-                setAnswers(Array(localSubTopics.length).fill(""));   
+                setAnswers(Array(localSubTopics.length).fill(""));
             } catch (err) {
                 console.log("error getting data from DB", err);
             }
         };
-        console.log("subTopics:", subTopics);
 
-        // if (subTopics.length > 0) {
-        //     console.log("subTopics already loaded");
-        //     return;
-        // } else {
+        console.log("subTopics:", subTopics);
+        if (subTopics.length > 0) {
+            setShowSubTopic(-1);
+            setShowSubTopicCreation(-1);
+            setShowQuiz(-1);
+            autoRunQuizzes();
+        } else {
             try {
                 console.log("loading draft from localStorage");
                 const raw = localStorage.getItem(LOCAL_KEY+(localRoomId !== "" ? localRoomId : roomId));
@@ -172,6 +179,10 @@ export const CreateQuizzes = ({
                     } else {
                         setQuizzes(parsed.quizzes || []);
                         setSubTopics(parsed.subTopics || []);
+                        setShowSubTopic(-1);
+                        setShowSubTopicCreation(-1);
+                        setShowQuiz(-1);
+                        autoRunQuizzes();
                     }
                 } else if (roomId) {
                     getSubTopicsFromDB(roomId);
@@ -182,16 +193,90 @@ export const CreateQuizzes = ({
                 console.log("error getting data from DB", err);
                 setError(get_text("error_getting_data_from_db", userLanguage) || "Error getting data from DB");
             }
-        // } 
+        } 
     }, [localRoomId]);
 
+    const autoRunQuizzes = async () => {
+        try {
+            setLoading(true);
+            setParentLoading(true);
+            // Fill answers array with random 4-digit numbers as strings
+            setAnswers(Array.from({ length: subTopics.length }, () => Math.floor(1000 + Math.random()*9000).toString()));
+            // INSERT_YOUR_CODE
+            // If there are fewer than 5 subTopics, just create them all as usual
+            if (subTopics.length < 5) {
+                for (let i = 0; i < subTopics.length; i++) {
+                    if (!subTopics[i].used) {
+                        await CreateQuiz(i, subTopics[i].quiz_type);
+                    }
+                }
+            } else {
+                // First, find the first unused quiz for each type
+                const quizTypes = [
+                    "physical_object_selection",
+                    "event_to_category_matching",
+                    "logical_or_chronological_ordering",
+                    "true_false_fact_questions"
+                ];
+                // Keep track of created quiz types
+                const doneTypes: Set<string> = new Set();
+
+                // First pass: create one quiz for each type if present among subTopics
+                for (const quizType of quizTypes) {
+                    const index = subTopics.findIndex(
+                        (sub) => sub.quiz_type === quizType && !sub.used
+                    );
+                    if (index !== -1 && !doneTypes.has(quizType)) {
+                        await CreateQuiz(index, quizType);
+                        doneTypes.add(quizType);
+                    } else {
+                        console.log("no more quizzes to create for type:", quizType);
+                        CreateQuiz(subTopics.length-1, quizType);
+                    }
+                }
+
+                // Second: create 2 more quizzes (of any kind, just the next unused)
+                // let extraCreated = 0;
+                // for (let i = 0; i < subTopics.length && extraCreated < 2; i++) {
+                //     if (!subTopics[i].used) {
+                //         // Skip those already handled in the first pass
+                //         // (skip if this subTopic index/type was already used as the "first of its type")
+                //         // if (
+                //         //     quizTypes.includes(subTopics[i].quiz_type) &&
+                //         //     doneTypes.has(subTopics[i].quiz_type)
+                //         // ) {
+                //             await CreateQuiz(i, subTopics[i].quiz_type);
+                //             extraCreated++;
+                //         // }
+                //     }
+                // }
+            }
+        } catch (err) {
+            console.log("error auto running quizzes", err);
+        } finally {
+            setLoading(false);
+            setParentLoading(false);
+            setShowSubTopic(-1);
+            setShowSubTopicCreation(-1);
+            setShowQuiz(-1);
+            const responseRoom = await roomsService.updateRoom(roomId, {completed: "completed", public: true});
+            if (responseRoom) {
+                console.log("Room updated:", responseRoom);
+                setCompleted(true);                // navigate(`/room/${roomId}`);
+            } else {
+                console.log("Failed to update room");
+            }
+        }
+    }
     const CreateQuiz = async (index: number, type: string) => {
         if (!answers[index]) {
             setErrorAnswers(prev=> prev.map((err, idx) => idx === index ? get_text("answer_required", userLanguage) || "Answer is required" : err));
             return;
         }
-        setParentLoading(true);
-        setLoading(true);
+        setShowSubTopic(index);
+        setShowSubTopicCreation(index);
+        // setParentLoading(true);
+        // setLoading(true);
         setError("");
         setStatus("");
 
@@ -242,7 +327,8 @@ export const CreateQuizzes = ({
                             console.error("Failed to update sourceData.sub_topics:", updateErr);
                         }
                     }
-                    setQuizzes([...quizzes, responseQuiz]);
+                    setQuizzes((prev: QuizSchemaType[]): QuizSchemaType[] => [...prev, responseQuiz as QuizSchemaType]);
+                    setShowQuiz(prev => prev + 1);
                 }
             }
         } catch (err: any) {
@@ -253,16 +339,22 @@ export const CreateQuizzes = ({
                     "Failed to create quiz"
             );
         } finally {
-            setParentLoading(false);
-            setLoading(false);
+            // setParentLoading(false);
+            // setLoading(false);
         }
     };
+    useEffect(() => {
+        if (completed) {
+            handleSubmit();
+        }
+    }, [completed]);
     const handleSubmit = async () => {
         console.log("handleSubmitClicked");
         if (quizzes.length < 4) {
             setError(get_text("not_enough_quizzes", userLanguage) || "Not enough quizzes");
             return;
         }
+        navigate(`/room/${roomId}?fromBuilder`);
         setStep("preview_publish");
     };
     // console.log("quizzes:", quizzes);
@@ -273,131 +365,136 @@ export const CreateQuizzes = ({
             className="max-w-3xl mt-0 mx-20 py-4 text-white"
             dir={userLanguage === "he" ? "rtl" : "ltr"}>
             {/* Created Quizzes */}
-            {quizzes.length > 0 && (
-                <h2 className={`flex text-2xl font-bold ${userLanguage === "he" ? "text-right" : "text-left"}`}>
-                    {get_text("created_quizzes", userLanguage) || "Created Quizzes"}:
-                    <span className="text-green-500 text-lg mx-2">({quizzes.length})</span>
-                    {showQuiz !== -1 && <div className="cursor-pointer mr-auto my-auto" 
-                        onClick={() => setShowQuiz(-1)}
-                        title={get_text("close_all_quizzes", userLanguage) || "Close All Quizzes"}>
-                            <SquareStack size={16} color="white" />
-                    </div>}
-                </h2>
-            )}
-            {quizzes.map((quiz, index) => {
-                return (
-                    <div
-                        key={index}
-                        className={`p-3 bg-gray-900/50 border border-gray-500 rounded-lg text-gray-200 mb-1 transition-all duration-500 ease-in-out scrollbar cursor-pointer ${showQuiz===index ? "max-h-screen opacity-100 overflow-auto" : "max-h-12 opacity-60 overflow-hidden"}`}
-                            style={{
-                                transitionProperty: 'max-height, opacity',
-                            }}
-                            onClick={() => setShowQuiz(index)}>
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-lg font-bold">{quiz.name} - {" "}
-                            <span>{(get_text(Object.entries(dependentQuizTypes).find(
-                                ([, val]) => val.types === quiz.type
-                            )?.[0] as string, userLanguage) || quiz.type).replace("{quiz_of}", get_text("quiz_of", userLanguage) || "quiz")}</span></h3>
-                            {showQuiz !==index && <div className="cursor-pointer" title={get_text("show_quiz", userLanguage) || "Show Quiz"}><PanelTopOpen size={16} color="white" /></div>}
-                        </div>
-                        {showQuiz===index && <QuizInfo {...quiz as QuizSchemaType} />}
-                        {/* <button onClick={() => DeleteQuiz(quiz.id)}>{get_text("delete_quiz", userLanguage) || "Delete Quiz"}</button> */}
-                        {/* <button onClick={() => EditQuiz(quiz.id)}>{get_text("edit_quiz", userLanguage) || "Edit Quiz"}</button> */}
-                    </div>
-                );
-            })}
-            {/* Sub-topics to create quizzes from */}
-            <h2 className={`flex text-2xl font-bold ${userLanguage === "he" ? "text-right" : "text-left"}`}>
+            <div className="flex gap-2.5">
+                <div className="flex flex-col w-1/2">{quizzes.length > 0 && (
+                    <h2 className={`flex text-2xl font-bold ${userLanguage === "he" ? "text-right" : "text-left"}`}>
+                        {get_text("created_quizzes", userLanguage) || "Created Quizzes"}:
+                        <span className="text-green-500 text-lg mx-2">({quizzes.length})</span>
+                        {showQuiz !== -1 && <div className="cursor-pointer mr-auto my-auto" 
+                            // onClick={() => setShowQuiz(-1)}
+                            title={get_text("close_all_quizzes", userLanguage) || "Close All Quizzes"}>
+                                <SquareStack size={16} color="white" />
+                        </div>}
+                    </h2>
+                    )}
+                    {quizzes.map((quiz, index) => {
+                        return (
+                            <div
+                                key={index}
+                                className={`p-3 bg-gray-900/50 border border-gray-500 rounded-lg text-gray-200 mb-1 transition-all duration-500 ease-in-out scrollbar cursor-pointer ${showQuiz===index ? "max-h-screen opacity-100 overflow-auto" : "max-h-12 opacity-60 overflow-hidden"}`}
+                                    style={{
+                                        transitionProperty: 'max-height, opacity',
+                                    }}
+                                    // onClick={() => setShowQuiz(index)}
+                                    >
+                                <div className="flex items-center justify-between">
+                                    <h3 className="text-lg font-bold">{quiz.name} - {" "}
+                                    <span>{(get_text(Object.entries(dependentQuizTypes).find(
+                                        ([, val]) => val.types === quiz.type
+                                    )?.[0] as string, userLanguage) || quiz.type).replace("{quiz_of}", get_text("quiz_of", userLanguage) || "quiz")}</span></h3>
+                                    {showQuiz !==index && <div className="cursor-pointer" title={get_text("show_quiz", userLanguage) || "Show Quiz"}><PanelTopOpen size={16} color="white" /></div>}
+                                </div>
+                                {showQuiz===index && <QuizInfo {...quiz as QuizSchemaType} />}
+                                {/* <button onClick={() => DeleteQuiz(quiz.id)}>{get_text("delete_quiz", userLanguage) || "Delete Quiz"}</button> */}
+                                {/* <button onClick={() => EditQuiz(quiz.id)}>{get_text("edit_quiz", userLanguage) || "Edit Quiz"}</button> */}
+                            </div>
+                        );
+                    })}
+                </div>
+                {/* Sub-topics to create quizzes from */}
+                <div className="flex flex-col w-1/2">
+                    <h2 className={`flex text-2xl font-bold ${userLanguage === "he" ? "text-right" : "text-left"}`}>
                     {get_text("sub_topics_to_create_quizzes_from", userLanguage) || "Sub-topics to create quizzes from"}:
                     <span className="text-green-500 text-lg mx-2">({subTopics.length})</span>
                     {showSubTopic !== -1 && <div className="cursor-pointer mr-auto my-auto" 
-                        onClick={() => setShowSubTopic(-1)}
+                        // onClick={() => setShowSubTopic(-1)}
                         title={get_text("close_all_sub_topics", userLanguage) || "Close All Sub-topics"}>
                             <SquareStack size={16} color="white" />
                     </div>}
-            </h2>
-            {subTopics.length > 0 &&
-                subTopics.map((subTopic, index) => {
-                    return (
-                        <div
-                            key={index}
-                            // Animate expand/collapse using transition on max-height and opacity.
-                            className={`p-3 bg-gray-900/50 border border-gray-500 rounded-lg text-gray-200 mb-1 transition-all duration-500 ease-in-out scrollbar cursor-pointer ${showSubTopic===index ? "max-h-screen opacity-100 overflow-auto" : "max-h-12 opacity-60 overflow-hidden"}`}
-                            style={{
-                                transitionProperty: 'max-height, opacity',
-                            }}
-                            onClick={() =>
-                                setShowSubTopic(index)
-                            }>
-                        <div className="flex items-center justify-between">
-                            <button
+                </h2>
+                {subTopics.length > 0 &&
+                    subTopics.map((subTopic, index) => {
+                        return (
+                            <div
+                                key={index}
+                                // Animate expand/collapse using transition on max-height and opacity.
+                                className={`p-3 bg-gray-900/50 border border-gray-500 rounded-lg text-gray-200 mb-1 transition-all duration-500 ease-in-out scrollbar cursor-pointer ${showSubTopic===index ? "max-h-screen opacity-100 overflow-auto" : "max-h-12 opacity-60 overflow-hidden"}`}
+                                style={{
+                                    transitionProperty: 'max-height, opacity',
+                                }}
                                 // onClick={() =>
-                                //     setShowSubTopic((prev) =>
-                                //         prev.map((show, idx) => idx === index ? false : show)
-                                //     )
+                                //     setShowSubTopic(index)
                                 // }
-                                title={get_text("show_sub_topic", userLanguage) || "Show Sub-topic"}
-                                className="inline-block mr-2 ml-auto cursor-pointer"
-                            >
-                                {subTopic.used ? <Check size={16} color="green" /> : showSubTopic !==index && <PanelTopOpen size={16} color="white" />}
-                            </button>
-                            <h3 className="text-lg font-bold mb-2">{subTopic.mysterious_name} ({subTopic.name})</h3>
-                        </div>
-                            <p className="mb-2">{get_text("from_the_text", userLanguage) || "From the Text"}: "{subTopic.content}"</p>
-                            <p className={`mb-2 text-sm ${userLanguage === "he" && subTopic.used ? "text-right" : "text-left"}`}>
-                                {(get_text(subTopic.quiz_type, userLanguage) || subTopic.quiz_type).replace("{quiz_of}", get_text("quiz_of", userLanguage) || "quiz")} - {subTopic.used ? <span className="text-green-500">({get_text("used_sub_topic", userLanguage) || "Used to create quiz"})</span> : subTopic.explanation}
-                            </p>
-                            {!subTopic.used && <>
-                                <label className="flex text-lg mb-1.5 text-white">
-                                    {get_text("the_quiz_answer", userLanguage)}{" "}
-                                    <span
-                                        className="text-red-400 cursor-pointer"
-                                        title={get_text("mandatory_field", userLanguage)}>
-                                        *
-                                    </span>
-                                    <span className={`text-sm mt-1 ${userLanguage === "he" ? "mr-2" : "ml-2"} ${errorAnswers[index] ? "text-red-500" : "text-white"}`}>({get_text(dependentQuizTypes[subTopic.quiz_type].answerLimitations, userLanguage) || dependentQuizTypes[subTopic.quiz_type].answerLimitations})</span>
-                                    {errorAnswers[index] && <span className="text-sm mt-1 text-red-500">-{errorAnswers[index]}</span>}
-                                </label>
-                                <input
-                                    type="text"
-                                    placeholder={get_text("enter_answer", userLanguage) || "Enter Answer"}
-                                    className={`w-full p-2 rounded-lg border text-white bg-gray-800 ${errorAnswers[index] ? "border-red-500" : "border-[#e5e7eb]"}`}
-                                    value={answers[index] || ""}
-                                    onChange={(e) => {
-                                        const newValue = e.target.value;
-                                        setAnswers(prev => {
-                                            const newAnswers = [...prev];
-                                            newAnswers[index] = newValue;
-                                            return newAnswers;
-                                        });
-                                        if (newValue.length > 2 && dependentQuizTypes[subTopic.quiz_type].limitCheck.test(newValue)) {
-                                            setErrorAnswers(prev => prev.map((err, idx) => idx === index ? "" : err));
-                                        } else {
-                                            setErrorAnswers(prev => prev.map((err, idx) => idx === index ? get_text("answer_limitations", userLanguage) || "Answer limitations" : err));
-                                        }
-                                    }}
-                                    onBlur={(e) => {
-                                        if (dependentQuizTypes[subTopic.quiz_type].limitCheck.test(e.target.value)) {
-                                            setErrorAnswers(prev => prev.map((err, idx) => idx === index ? "" : err));
-                                        } else {
-                                            setErrorAnswers(prev => prev.map((err, idx) => idx === index ? get_text("answer_limitations", userLanguage) || "Answer limitations" : err));
-                                        }
-                                    }}
-                                />
-                                <button
-                                    key={index}
-                                    onClick={() => CreateQuiz(index, subTopic.quiz_type)}
-                                    disabled={!answers[index] || errorAnswers[index] !== "" ? true : false}
-                                    className={`mt-2 text-white bg-cyan-500 hover:bg-cyan-600 border-0 py-2.5 px-3.5 rounded-lg cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
                                 >
-                                    {(get_text("create_quiz_about", userLanguage) || "Create Quiz about")
-                                        .replace("{quiz_type}", get_text(subTopic.quiz_type, userLanguage) || subTopic.quiz_type).replace("{quiz_of}", get_text("quiz_of", userLanguage) || "quiz")}
-                                    : {subTopic.name || subTopic.mysterious_name}
+                            <div className="flex items-center justify-between">
+                                <button
+                                    title={get_text("show_sub_topic", userLanguage) || "Show Sub-topic"}
+                                    className="inline-block mr-2 ml-auto cursor-pointer"
+                                >
+                                    {subTopic.used ? <Check size={16} color="green" /> : showSubTopic !==index && <PanelTopOpen size={16} color="white" />}
                                 </button>
-                            </>}
-                        </div>
-                    );
-                })}
+                                <div className="flex flex-col">
+                                    <h3 className="text-lg font-bold mb-2">{subTopic.mysterious_name} ({subTopic.name})</h3>
+                                    {showSubTopicCreation === index && <TimerLine duration={14000} />}
+                                </div>
+                            </div>
+                                <p className="mb-2">{get_text("from_the_text", userLanguage) || "From the Text"}: "{subTopic.content}"</p>
+                                <p className={`mb-2 text-sm ${userLanguage === "he" && subTopic.used ? "text-right" : "text-left"}`}>
+                                    {(get_text(subTopic.quiz_type, userLanguage) || subTopic.quiz_type).replace("{quiz_of}", get_text("quiz_of", userLanguage) || "quiz")} - {subTopic.used ? <span className="text-green-500">({get_text("used_sub_topic", userLanguage) || "Used to create quiz"})</span> : subTopic.explanation}
+                                </p>
+                                {!subTopic.used || 1!==1 && <> {/* TODO: remove this once the quizzes are created manually */}
+                                    <label className="flex text-lg mb-1.5 text-white">
+                                        {get_text("the_quiz_answer", userLanguage)}{" "}
+                                        <span
+                                            className="text-red-400 cursor-pointer"
+                                            title={get_text("mandatory_field", userLanguage)}>
+                                            *
+                                        </span>
+                                        <span className={`text-sm mt-1 ${userLanguage === "he" ? "mr-2" : "ml-2"} ${errorAnswers[index] ? "text-red-500" : "text-white"}`}>({get_text(dependentQuizTypes[subTopic.quiz_type].answerLimitations, userLanguage) || dependentQuizTypes[subTopic.quiz_type].answerLimitations})</span>
+                                        {errorAnswers[index] && <span className="text-sm mt-1 text-red-500">-{errorAnswers[index]}</span>}
+                                    </label>
+                                    <input
+                                        type="text"
+                                        placeholder={get_text("enter_answer", userLanguage) || "Enter Answer"}
+                                        className={`w-full p-2 rounded-lg border text-white bg-gray-800 ${errorAnswers[index] ? "border-red-500" : "border-[#e5e7eb]"}`}
+                                        value={answers[index] || ""}
+                                        onChange={(e) => {
+                                            const newValue = e.target.value;
+                                            setAnswers(prev => {
+                                                const newAnswers = [...prev];
+                                                newAnswers[index] = newValue;
+                                                return newAnswers;
+                                            });
+                                            if (newValue.length > 2 && dependentQuizTypes[subTopic.quiz_type].limitCheck.test(newValue)) {
+                                                setErrorAnswers(prev => prev.map((err, idx) => idx === index ? "" : err));
+                                            } else {
+                                                setErrorAnswers(prev => prev.map((err, idx) => idx === index ? get_text("answer_limitations", userLanguage) || "Answer limitations" : err));
+                                            }
+                                        }}
+                                        onBlur={(e) => {
+                                            if (dependentQuizTypes[subTopic.quiz_type].limitCheck.test(e.target.value)) {
+                                                setErrorAnswers(prev => prev.map((err, idx) => idx === index ? "" : err));
+                                            } else {
+                                                setErrorAnswers(prev => prev.map((err, idx) => idx === index ? get_text("answer_limitations", userLanguage) || "Answer limitations" : err));
+                                            }
+                                        }}
+                                    />
+                                    <button
+                                        key={index}
+                                        onClick={() => CreateQuiz(index, subTopic.quiz_type)}
+                                        disabled={!answers[index] || errorAnswers[index] !== "" ? true : false}
+                                        className={`mt-2 text-white bg-cyan-500 hover:bg-cyan-600 border-0 py-2.5 px-3.5 rounded-lg cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
+                                    >
+                                        {(get_text("create_quiz_about", userLanguage) || "Create Quiz about")
+                                            .replace("{quiz_type}", get_text(subTopic.quiz_type, userLanguage) || subTopic.quiz_type).replace("{quiz_of}", get_text("quiz_of", userLanguage) || "quiz")}
+                                        : {subTopic.name || subTopic.mysterious_name}
+                                    </button>
+                                </>}
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
             {/* Error Message */}
             {error && (
                 <div className="mb-4 p-3 bg-red-900/50 border border-red-500 rounded-lg text-red-200">
@@ -414,35 +511,13 @@ export const CreateQuizzes = ({
 
             {/* Actions */}
             <div className="flex gap-2.5 items-center relative">
-                <button
+                {/* <button
                     onClick={() => handleSubmit()}
                     disabled={loading || quizzes.length < 4}
                     className="text-white bg-cyan-500 hover:bg-cyan-600 border-0 py-2.5 px-3.5 rounded-lg cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                     {loading
                         ? get_text("saving_quizzes", userLanguage) || "Saving Quizzes..."
                         : get_text("save_quizzes", userLanguage) || "Save Quizzes"}
-                </button>
-                {/* <button
-                    onClick={() => {
-                        localStorage.removeItem(LOCAL_KEY);
-                        setTopic("");
-                        setSubTopic("");
-                        setInputType("file");
-                        setSelectedFile(null);
-                        setTextContent("");
-                        setUrlContent("");
-                        setStatus("");
-                        setError("");
-                    }}
-                    disabled={
-                        loading ||
-                        (!topic.trim() &&
-                            ((inputType === "file" && !selectedFile) ||
-                                (inputType === "text" && !textContent.trim()) ||
-                                (inputType === "url" && !urlContent.trim())))
-                    }
-                    className="bg-gray-700 hover:bg-gray-600 border border-gray-600 text-white py-2.5 px-3 rounded-lg cursor-pointer transition-colors">
-                    {get_text("clear", userLanguage) || "Clear"}
                 </button> */}
                 {loading && (
                     <img

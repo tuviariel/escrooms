@@ -46,7 +46,7 @@ export const ProgressBar: React.FC<Props> = ({
     // Get duration from the step we're transitioning FROM (the one before loading started)
     // If loading, use the step that was active when loading started, otherwise use current step
     const transitionFromStep = stepWhenLoadingStartedRef.current || step;
-    const transitionFromStepDuration = stepInfo[transitionFromStep]?.duration || 0;
+    const transitionFromStepDuration = stepInfo[transitionFromStep]?.duration * stepInfo[transitionFromStep]?.sections || 0;
     const transitionDuration =
         transitionFromStepDuration > 0 ? `${transitionFromStepDuration}s` : "300ms";
 

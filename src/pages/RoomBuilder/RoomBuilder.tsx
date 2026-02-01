@@ -26,6 +26,7 @@ export type stepInfoType = {
         name: string;
         isComplete: boolean;
         duration: number;
+        sections: number;
     };
 };
 
@@ -56,6 +57,7 @@ export const RoomBuilder = () => {
             name: get_text("topic_and_data", userLanguage),
             isComplete: false,
             duration: 60,
+            sections: 1,
         },
         // room_info: {
         //     key: 1,
@@ -75,14 +77,16 @@ export const RoomBuilder = () => {
             key: 1,
             name: get_text("create_quizzes", userLanguage),
             isComplete: false,
-            duration: 0,
+            duration: 15,
+            sections: 6,
         },
-        preview_publish: {
-            key: 2,
-            name: get_text("preview_publish", userLanguage),
-            isComplete: false,
-            duration: 60,
-        },
+        // preview_publish: {
+        //     key: 2,
+        //     name: get_text("preview_publish", userLanguage),
+        //     isComplete: false,
+        //     duration: 0,
+        //     sections: 1,
+        // },
     });
     const handleMainShow = (
         status: RoomBuilderStatus,

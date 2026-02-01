@@ -18,6 +18,7 @@ import { RoomType } from "../Dashboard/Dashboard";
 import { CheckCircle2, Lock, Activity, Smartphone } from "lucide-react";
 import RoomTimer from "../../components/RoomTimer";
 import { parseStringToObject } from "../../util/utils";
+import defaultMainImage from "../../assets/images/defaultMainImage.png";
 
 export interface quizDataProps {
     data: {
@@ -276,7 +277,7 @@ export const Room = () => {
                                 <motion.div
                                     className={`absolute inset-0 w-full h-full bg-cover bg-center z-0`}
                                     style={{
-                                        backgroundImage: `url(${URLMainImage})`,
+                                        backgroundImage: roomData?.mainImage ? `url(${URLMainImage})` : `url(${defaultMainImage})`,
                                         x: bgX,
                                         y: bgY,
                                         scale: bgScale,

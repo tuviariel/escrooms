@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useUserContext } from "../../contexts/userStyleContext";
 // import { Edit } from "lucide-react";
 import { formatDate, timeFormat, timeLeftFormat } from "../../util/utils";
-
+import defaultCoverImage from "../../assets/images/defaultCoverImage.png";
 export const GameCard = (props: any) => {
     const { data } = props;
     const { userLanguage } = useUserContext();
@@ -21,9 +21,9 @@ export const GameCard = (props: any) => {
             console.log("Getting URL for image:", mainImage);
             const url = await fileStorage.getFileUrl(mainImage);
             console.log("Got URL for image:", url);
-            setURL(url);
+            setURL(url );
         };
-        getUrl(data.coverImage);
+        getUrl(data.coverImage || "");
         if (localStorage.getItem(`roomTimer_${data.id}`)) {
             const { remaining, timestamp } = JSON.parse(
                 localStorage.getItem(`roomTimer_${data.id}`) || "{}"
@@ -41,12 +41,9 @@ export const GameCard = (props: any) => {
                 navigate("/room/" + data.id);
             }}>
             {/* Image */}
-            {data.coverImage && URL && (
-                <div className="relative h-48 w-full overflow-hidden">
-                    <img src={URL} alt="game image" className="w-full h-full object-cover" />
-                </div>
-            )}
-
+            <div className="relative h-48 w-full overflow-hidden">
+                <img src={data.coverImage ? URL : defaultCoverImage} alt="game image" className="w-full h-full object-cover" />
+            </div>
             {/* Content */}
             <div className="flex-1 p-4 flex flex-col">
                 <h3 className="text-xl font-bold text-white mb-2">{data.name}</h3>
