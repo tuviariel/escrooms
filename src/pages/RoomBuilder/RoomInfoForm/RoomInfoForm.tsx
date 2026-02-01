@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { userType } from "../../../components/Login/Login";
 import { fieldsOfStudy } from "../../../util/utils";
 import { aiService } from "../../../services/service";
-import { schema } from "../../../util/schemas";
+// import { schema } from "../../../util/schemas";
 // import { useAIGeneration } from "../../../services/client";
 // import { Flex, TextAreaField, Loader, Text, View, Button } from "@aws-amplify/ui-react";
 
@@ -104,11 +104,9 @@ export const RoomInfoForm = ({ roomId, subTopics }: RoomInfoProps) => {
                 `\n\nCreating an escape room on the topic of "${roomInfo.roomTopic}"` +
                 `\n\nGenerate a list of 8 sub-topics for the room quizzes. Each sub-topic of ${roomInfo.roomTopic} should be a string and should be unique.`;
             console.log(prompt);
-            const res = await aiService.openAIGenerateJson(
+            const res = await aiService.openAI(
                 prompt,
                 "json",
-                JSON.stringify(schema.room),
-                "startJob"
             );
             // const res = generateRoom({ description: prompt });
             console.log(res);
