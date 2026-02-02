@@ -14,9 +14,9 @@ export const schema = {
             - "mysterious_name": a name that expresses the subtopic in a mysterious context
             - "content": the full text of the paragraph related to that subtopic, without summarizing or omitting any part, and it must include at least 30 words.
             - "quiz_type": the most suitable quiz type for this subtopic, chosen from the following list:
-                1. "physical_object_selection" - for text that describes concrete items, tools, materials, or physical entities that can be identified or distinguished from one another.
+                1. "physical_object_selection" - for text that describes concrete items, tools, materials, or physical entities that can be identified or distinguished from one another using text-icons.
                 2. "event_to_category_matching" - for text that contains multiple events, actions, or concepts that naturally fall into distinct categories or themes.
-                3. "logical_or_chronological_ordering" - for text that includes sequences, processes, steps, timelines, or any content that implies an order.
+                3. "logical_or_chronological_ordering" - for text that includes sequences, processes, steps, timelines, ordered physical layouts or any content that implies an order.
                 4. "true_false_fact_questions" - for text that presents standalone facts, statements, descriptions, or informational content that can be turned into correctness-based questions.
             - "explanation": an explanation of why that quiz type is the most suitable for the subtopic, in the user language, in 100 words or less.
             The output should be an array of such objects, ordered according to the original structure of the text and includes at least 2 objects for each one of the four quiz types.
@@ -33,12 +33,14 @@ export const schema = {
                     }
                 ],
                 quizInstructions: "string",
-            }, where each question is an object with the following fields:
-                - "situationAndAction": the situation and action to be performed or the fact to be checked
-                - "correctIcon": a unique icon that is not used in this quiz for the correct answer - should be logically related to the situation and action
-                - "incorrectIcon": a unique icon that is not used in this quiz for the incorrect answer - should be logically related to not performing the situation and action
-                - "hint": a hint that can imply the correct action or the correct fact for the question
-                - "is_correct_action": "true" if the action or fact is correct, "false" if otherwise
+            }. This quiz is a list of either Yes or No questions or statements or facts that are either correct or incorrect 
+            (the user must choose the correct answer for each question- either Yes/correct or No/incorrect by selecting the correct icon).
+            Each element in the array is an object with the following fields:
+                - "situationAndAction": the situation and action to be performed or a fact to be checked or a yes-or-no question with a clear yes or no answer.
+                - "correctIcon": a unique icon that should be logically related to the situation or action.
+                - "incorrectIcon": a unique icon that should be logically related to not performing the situation or action.
+                - "hint": a hint that can imply the correct action or the correct fact for the question.
+                - "is_correct_action": "true" if the action or fact is correct, "false" if otherwise.
                 there must be at least 10 objects in the array`,
     physical_object_selection: `{
                 "questions": [
@@ -56,9 +58,11 @@ export const schema = {
                     ],
                 ],
                 quizInstructions: "string",
-            }, where in the first array there are 10 unique objects of physical objects that appear or are related to the text
-            and in the second array there are 10 unique objects of physical objects that are not related in any way to the text.
-            In each the "icon" should be a unique icon string that represents the object and the "title" should be the name of the object`,
+            }. This quiz includes two arrays of icon objects, 
+            where in the first array there are 10 objects with unique text-icons that appear in or are related to the text,
+            and in the second array there are 10 objects with unique text-icons that are not related in any way to the text 
+            (the user must choose the related objects from a grid that includes both related and unrelated objects).
+            In each object the "icon" should be a unique icon string that represents the object and the "title" should be the name of the object`,
     event_to_category_matching: `{
                 "questions": [
                 {
@@ -75,12 +79,15 @@ export const schema = {
                 }
             ],
             quizInstructions: "string",
-        }, where each question is an object with the following fields:
-            - "title": the title of the event or situation
-            - "desc": a short description of the event or situation
-            - "status": an object with up to 4 key-value pairs where in each object the key is the topic of the description (to be generated by you, the AI) and the value is the precise descriptive value of that event for that topic.
-            - "answer": an object with two key-value pairs where in both objects the key is the topic of the category (to be generated by you, the AI) and the value is the correct answer for that category to the event or situation. In the first key value pair, the correct value should be an option of one out of two options, and in the second key value pair, the correct value should be an option of one out of three options.
-            - "image": an empty string for now.
+        }. This quiz is a list of events or situations or objects that can be categorized to the same subject (the user must choose the right value in each category for each event or situation or object).
+        Each event or situation or object is represented by an object with the following fields:
+            - "title": the title of the event or situation or object.
+            - "desc": a short description of the event or situation or object.
+            - "status": an object with up to 4 key-value pairs where in each object the key is the subject of the description (to be generated by you, the AI) and the value is the precise descriptive value of that event or situation or object for that subject.
+            - "answer": an object with two key-value pairs where in both objects the key is the subject of the category (to be generated by you, the AI) and the value is the correct answer for that category in the event or situation or object. 
+            In the first key value pair, the correct value should be an option out of only two options that relate to all the events or situations or objects this quiz is about,
+            and in the second key value pair, the correct value should be an option out of only three options that relate to all the events or situations or objects this quiz is about.
+            - "image": is a text-icon that represents the event or situation or object.
             There must be at least 5 objects in the array`,
     logical_or_chronological_ordering: `{
                 "questions": [
@@ -92,10 +99,13 @@ export const schema = {
                 }
             ],
             quizInstructions: "string",
-        }, where each question is an object with the following fields:
-            - "title": the title of the event or action
-            - "content": the content of the event or action
-            - "explanation": an explanation of how to perform the event or action
-            - "interesting_insights": an interesting insight about the event or action that is not obvious
-            The objects must be in the correct order of the events or actions logical or chronological order`,
+        }. This quiz is a list or a sequence of events or actions that must be performed or has been performed in a specific logical or chronological order
+         or a physical layout that has a specific logical structured order (the user must sort the events or actions or items in the correct order).
+        Each event or action is represented by an object with the following fields:
+            - "title": the title of the event or action or item.
+            - "content": the content or description of the event or action or item.
+            - "explanation": an explanation of how to perform the event or action or about the item's position.
+            - "interesting_insights": an interesting insight about the event or action or item that is not obvious
+            Each object represents a single event or action or item that fit in to a logical or chronological order, 
+            and must be in the correct order of the events or actions or items in the logical or chronological order`,
 };

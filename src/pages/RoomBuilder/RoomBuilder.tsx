@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router";
 import ProgressBar from "../../components/ProgressBar";
 import { TopicAndData } from "./TopicAndData/TopicAndData";
 // import RoomInfoForm from "./RoomInfoForm";
@@ -12,6 +13,7 @@ import { get_text } from "../../util/language";
 import { useUserContext } from "../../contexts/userStyleContext";
 import { userType } from "../../components/Login/Login";
 import { useSelector } from "react-redux";
+import loadingSpinner from "../../assets/images/loading.gif";
 
 export type stepType =
     | "topic_and_data"
@@ -42,11 +44,12 @@ export type subTopicsType = {
 }[];
 
 export const RoomBuilder = () => {
-    const [step, setStep] = useState<stepType>("topic_and_data");
+    const location = useLocation();
+    const [roomId, setRoomId] = useState<string>(location.search.includes("roomId") ? location.search.split("roomId=")[1] : "");
+    const [step, setStep] = useState<stepType>(location.search.includes("roomId") ? "create_quizzes" : "topic_and_data");
     const { userLanguage } = useUserContext();
     const userRedux: any = useSelector((state: { user: userType }) => state.user);
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
-    const [roomId, setRoomId] = useState<string>("");
     const [roomName, setRoomName] = useState<string>("");
     const [status, setStatus] = useState<RoomBuilderStatus>("creating");
     const [subTopics, setSubTopics] = useState<subTopicsType>([]);
@@ -218,7 +221,7 @@ export const RoomBuilder = () => {
 
                 {/* Conditional rendering based on status */}
                 {status === "creating" && (
-                    <>
+                    <div className="relative">
                         <div
                             className={`${sidebarOpen ? "w-9/12" : "w-11/12"} fixed top-16 z-10 bg-gray-900`}>
                             <ProgressBar
@@ -241,20 +244,32 @@ export const RoomBuilder = () => {
                                 roomName={roomName}
                                 subTopics={subTopics}
                                 setSubTopics={setSubTopics}
-                                setParentLoading={setLoading}
+                                setLoading={setLoading}
+                                loading={loading}
                             />
                             : stepInfo[step].name === get_text("topic_and_data", userLanguage)
                             ? <TopicAndData
                                 setStep={setStep}
                                 setRoomId={setRoomId}
                                 setSubTopics={setSubTopics}
-                                setParentLoading={setLoading}
+                                setLoading={setLoading}
+                                loading={loading}
                             />
                             : stepInfo[step].name === get_text("preview_publish", userLanguage)
                             ? <PreviewPublish />
                             : null}
+                        </div>
+                        {loading && (
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 h-full w-full flex items-center justify-center">
+                                <img
+                                    src={loadingSpinner}
+                                    alt="loading"
+                                    title="Loading..."
+                                    className="w-32 h-32 m-auto animate-spin"
+                                />
+                            </div>
+                        )}
                     </div>
-                    </>
                 )}
 
                 {status === "viewing" && roomId && (

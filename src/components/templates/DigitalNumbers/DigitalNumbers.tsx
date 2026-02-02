@@ -159,11 +159,6 @@ export const DigitalNumbers = (props: TemplateProps) => {
             });
         });
     };
-
-    const func = () => {
-        console.log("finished");
-    };
-
     // console.log(roomColor);
     return (
         <div
@@ -177,13 +172,13 @@ export const DigitalNumbers = (props: TemplateProps) => {
                 backgroundPosition: "center center",
             }}>
             <div
-                className={`h-full max-h-96 sm:max-h-24 lg:max-h-72 w-3/4 lg:w-3/5 mx-auto overflow-y-auto`}
+                className={`h-full max-h-96 sm:max-h-24 lg:max-h-72 w-3/4 lg:w-3/5 mx-auto overflow-y-auto no-scrollbar`}
                 style={{
                     perspective: "1000px",
                     transformStyle: "preserve-3d",
                 }}>
                 <table
-                    className="table-auto w-full h-full text-right border-amber-50 text-medium overflow-y-scroll no-scrollbar border-4"
+                    className="table-auto w-full h-full text-right border-amber-50 text-medium overflow-y-scroll border-4"
                     style={{
                         borderColor: colorPalette[roomColor as keyof typeof colorPalette].dark,
                         transform: "rotateX(20deg)",
@@ -283,11 +278,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
                                   key={i}
                                   position={i}
                                   number={number}
-                                  toggleSegment={
-                                      result !== get_text("success", userLanguage)
-                                          ? toggleSegment
-                                          : func
-                                  }
+                                  toggleSegment={toggleSegment}
                                   amount={active.length}
                               />
                           );

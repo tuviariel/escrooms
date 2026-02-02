@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Gift, HelpCircle, MessageCircle, Plus } from "lucide-react";
 import { RoomType } from "../../Dashboard/Dashboard";
 import { userType } from "../../../components/Login/Login";
@@ -30,7 +30,8 @@ export const CreatorConsole = ({
     const [rooms, setRooms] = useState<RoomType[]>([]);
     const [openOptions, setOpenOptions] = useState<boolean[]>([]);
     const { userLanguage } = useUserContext();
-
+    const currentRoomRef = useRef<HTMLDivElement>(null);
+   
     useEffect(() => {
         const getUserRooms = async () => {
             console.log(user);
@@ -38,7 +39,7 @@ export const CreatorConsole = ({
                 const userId = user.id;
                 const rooms = await roomsService.getRoomByUser(userId);
                 console.log(rooms);
-                // After fetching, iterate all rooms and update something about them
+                // After fetching, iterate all rooms and update something about them to manually change users rooms collection in the database:
                 // if (rooms && Array.isArray(rooms)) {
                 //     // Update 'completed' to "completed" for all rooms
                 //     await Promise.all(
@@ -56,8 +57,18 @@ export const CreatorConsole = ({
                 console.log(user);
             }
         };
-        getUserRooms();
-    }, [roomId]);
+        if ((roomId && rooms.length > 0 && rooms.findIndex(room => room.id === roomId) === -1) || rooms.length === 0) {
+            getUserRooms();
+        }
+    }, [user, roomId]);
+    // Auto scroll to show the roomCard of the roomId if it exists
+    useEffect(() => {
+        const currentIndex = rooms.findIndex(room => room.id === roomId);
+        if (currentIndex !== -1 && currentRoomRef.current) {
+            currentRoomRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+    }, [rooms, roomId]);
+
     const handleDeleteRoom = async (id: string) => {
         try {
             const result = await roomsService.deleteRoom(id);
@@ -134,19 +145,20 @@ export const CreatorConsole = ({
             <div className="flex-1 overflow-y-auto max-h-96 scrollbar overflow-x-hidden px-3 py-2 space-y-3">
                 {rooms.map((room, i) => {
                     return (
-                        <RoomCard
-                            key={room.id}
-                            room={room}
-                            step={step}
-                            i={i}
-                            sidebarOpen={sidebarOpen}
-                            openOptions={openOptions}
-                            handleOpenDots={handleOpenDots}
-                            handleDeleteRoom={handleDeleteRoom}
-                            publishRoom={publishRoom}
-                            handleMainShow={handleMainShow}
-                            isSelected={room.id === roomId}
-                        />
+                        <div key={room.id} ref={room.id === roomId ? currentRoomRef : null}>
+                            <RoomCard
+                                room={room}
+                                step={step}
+                                i={i}
+                                sidebarOpen={sidebarOpen}
+                                openOptions={openOptions}
+                                handleOpenDots={handleOpenDots}
+                                handleDeleteRoom={handleDeleteRoom}
+                                publishRoom={publishRoom}
+                                handleMainShow={handleMainShow}
+                                isSelected={room.id === roomId}
+                            />
+                        </div>
                     );
                 })}
             </div>

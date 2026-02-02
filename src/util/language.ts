@@ -522,6 +522,16 @@ const appContext: Translations = {
         he: "חידת ",
         ar: "",
     },
+    show_colors: {
+        en: "Show Colors",
+        he: "הצג צבעים",
+        ar: "",
+    },
+    hide_colors: {
+        en: "Hide Colors",
+        he: "הסתר צבעים",
+        ar: "",
+    },
 };
 
 export const get_text = (name: string, lang: string) => {

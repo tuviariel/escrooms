@@ -62,7 +62,7 @@ export const RoomCard = ({
     return (
         <div
             key={room.id}
-            className={`bg-gray-700 hover:bg-gray-600 rounded-lg p-3 transition-colors ${isSelected ? "bg-cyan-500/20 border border-cyan-500/30" : ""} ${
+            className={`bg-gray-700 hover:bg-gray-600 rounded-lg p-3 transition-colors ${isSelected ? "bg-cyan-400/20 border border-cyan-500/30" : ""} ${
                 !sidebarOpen ? "flex justify-center" : ""
             } ${step !== "completed" ? "cursor-pointer" : ""}`}
             onClick={() =>

@@ -6,7 +6,6 @@ import { aiService, quizService, roomsService } from "../../../services/service"
 // import { userType } from "../../../components/Login/Login";
 import { stepType, subTopicsType } from "../RoomBuilder";
 import { schema } from "../../../util/schemas";
-import loadingSpinner from "../../../assets/images/loading.gif";
 import type { Schema } from "../../../../amplify/data/resource";
 import { dummyQuizzes } from "../../../services/dummyRoomData";
 import { parseStringToObject } from "../../../util/utils";
@@ -21,7 +20,8 @@ type CreateQuizzesProps = {
     roomName: string;
     subTopics: subTopicsType;
     setSubTopics: Dispatch<SetStateAction<subTopicsType>>;
-    setParentLoading: (loading: boolean) => void;
+    setLoading: (loading: boolean) => void;
+    loading: boolean;
 };
 export type QuizSchemaType = Schema["Quiz"]["type"];
 type QuizType = {
@@ -69,7 +69,7 @@ const dependentQuizTypes: Record<string, {
     logical_or_chronological_ordering: {
         quizImg: dummyQuizzes[3].quizImg,
         hints: dummyQuizzes[3].hints,
-        types: "borderOrder",
+        types: "orderBorder",
         answerLimitations: "2-5_digits",
         // 2-5 digits only
         limitCheck: /^\d{2,5}$/
@@ -83,7 +83,8 @@ export const CreateQuizzes = ({
     roomName,
     subTopics,
     setSubTopics,
-    setParentLoading,
+    setLoading,
+    loading,
 }: CreateQuizzesProps) => {
     // Import Quiz type directly from resource schema
     const [localRoomId, setLocalRoomId] = useState<string>("");
@@ -95,9 +96,9 @@ export const CreateQuizzes = ({
     const [errorAnswers, setErrorAnswers] = useState<string[]>([]);
     const [status, setStatus] = useState<string>("");
     const [error, setError] = useState<string>("");
-    const [first, setFirst] = useState<boolean>(true);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [first, setFirst] = useState<boolean>(true); 
     const [completed, setCompleted] = useState<boolean>(false);
+    const [automaticCreation] = useState<boolean>(true);
     const { userLanguage } = useUserContext();
     // const userRedux: any = useSelector((state: { user: userType }) => state.user);
     const navigate = useNavigate();
@@ -199,7 +200,6 @@ export const CreateQuizzes = ({
     const autoRunQuizzes = async () => {
         try {
             setLoading(true);
-            setParentLoading(true);
             // Fill answers array with random 4-digit numbers as strings
             setAnswers(Array.from({ length: subTopics.length }, () => Math.floor(1000 + Math.random()*9000).toString()));
             // INSERT_YOUR_CODE
@@ -230,8 +230,8 @@ export const CreateQuizzes = ({
                         await CreateQuiz(index, quizType);
                         doneTypes.add(quizType);
                     } else {
-                        console.log("no more quizzes to create for type:", quizType);
-                        CreateQuiz(subTopics.length-1, quizType);
+                        console.log("no quizzes to create for type:", quizType);
+                        await CreateQuiz(subTopics.length-1, quizType);
                     }
                 }
 
@@ -250,26 +250,25 @@ export const CreateQuizzes = ({
                 //         // }
                 //     }
                 // }
+                setLoading(false);
+                setShowSubTopic(-1);
+                setShowSubTopicCreation(-1);
+                setShowQuiz(-1);
+                const responseRoom = await roomsService.updateRoom(roomId, {completed: "completed", public: true});
+                if (responseRoom) {
+                    console.log("Room updated:", responseRoom);
+                    setTimeout(() => setCompleted(true), 1000);                // navigate(`/room/${roomId}`);
+                } else {
+                    console.log("Failed to update room");
+                }
             }
         } catch (err) {
             console.log("error auto running quizzes", err);
-        } finally {
-            setLoading(false);
-            setParentLoading(false);
-            setShowSubTopic(-1);
-            setShowSubTopicCreation(-1);
-            setShowQuiz(-1);
-            const responseRoom = await roomsService.updateRoom(roomId, {completed: "completed", public: true});
-            if (responseRoom) {
-                console.log("Room updated:", responseRoom);
-                setCompleted(true);                // navigate(`/room/${roomId}`);
-            } else {
-                console.log("Failed to update room");
-            }
         }
     }
+
     const CreateQuiz = async (index: number, type: string) => {
-        if (!answers[index]) {
+        if (!automaticCreation && !answers[index]) {
             setErrorAnswers(prev=> prev.map((err, idx) => idx === index ? get_text("answer_required", userLanguage) || "Answer is required" : err));
             return;
         }
@@ -282,14 +281,15 @@ export const CreateQuizzes = ({
 
         try {
             // creating Prompt for AI:
-            const prompt = `Based on the text, create a JSON of data for the quiz about ${subTopics[index].name} of ${roomName}.
+            const prompt = `Based on the following text, create a JSON of data for the quiz about ${subTopics[index].name} of ${roomName}.
             Return the output in JSON format, where each section is represented as an object with the following fields structured like the 
             schema: ${schema[subTopics[index].quiz_type as keyof typeof schema]},
             ${subTopics[index].quiz_type === "logical_or_chronological_ordering" && 
-                "and there must be exactly "+(answers[index].length*2)+" objects in the array."}
-            All the generated values (strings) must be in the same language as the text to analyze.
+                "and there must be exactly "+(answers[index] ? answers[index].length : 4)*2+" objects in the array."}
             The quizInstructions should be a string to instruct the user how to solve the quiz in the user's language 
             (${userLanguage === "he" ? "Hebrew" : "English"}).
+            All the generated values (strings) must be in the same language as the following text. 
+            Make sure not to mix up the generated values with characters from any other languages.
             Text to analyze: """${subTopics[index].content}"""`;
             const data: any = await aiService.openAI(prompt, "json");
             console.log("data:", data);
@@ -297,13 +297,45 @@ export const CreateQuizzes = ({
                 setError(get_text("no_quiz_found", userLanguage) || "No quiz found");
                 return;
             } else if (data.questions) {
+                let answer = "";
+                if (type === "event_to_category_matching" && data.questions[0].answer) {
+                    console.log("category answers:", data.questions.answer);
+                    let counts: any = {};
+                    let ans2: string[] = [],
+                        ans3: string[] = [];
+                    let answerCounts: string = "";
+                    let keys = Object.keys(data?.quiz[0].answer);
+                    data?.quiz.map((card: any) => {
+                        if (ans2.includes(card.answer[keys[0]])) {
+                            counts[card.answer[keys[0]]]++;
+                        } else {
+                            counts[card.answer[keys[0]]] = 1;
+                            ans2.push(card.answer[keys[0]])
+                        }
+                        if (ans3.includes(card.answer[keys[1]])) {
+                            counts[card.answer[keys[1]]]++;
+                        } else {
+                            counts[card.answer[keys[1]]] = 1;
+                            ans3.push(card.answer[keys[1]])
+                        }
+                    });
+                    ans2.map((item) => {
+                        answerCounts += counts[item];
+                    });
+                    ans3.map((item) => {
+                        answerCounts += counts[item];
+                    });
+                    answer = answerCounts;
+                } else {
+                    answer = Math.floor(1000 + Math.random()*9000).toString();
+                }
                 const quizData: QuizType = {
                     roomId: roomId,
                     type: dependentQuizTypes[type].types,
                     name: subTopics[index].mysterious_name,
-                    answer: answers[index], //request answer from user per quiz depending on the quiz type,
+                    answer: answer, //request answer from user per quiz depending on the quiz type,
                     quiz: JSON.stringify(data), //get quiz from AI response,
-                    quizImg: dependentQuizTypes[type].quizImg, //Graph as default for now,
+                    quizImg: dependentQuizTypes[type].quizImg, //from dummyData.ts as default for now,
                     quizText: data.quizInstructions, //gen instructions for the quiz,
                     hints: JSON.stringify(dependentQuizTypes[type].hints), //get hints by quiz type for now,
                 };
@@ -355,23 +387,24 @@ export const CreateQuizzes = ({
             return;
         }
         navigate(`/room/${roomId}?fromBuilder`);
-        setStep("preview_publish");
+        // setStep("preview_publish");
+        console.log(setStep);
     };
     // console.log("quizzes:", quizzes);
     // console.log("subTopics:", subTopics);
     // console.log("errorAnswers:", errorAnswers);
     return (
         <div
-            className="max-w-3xl mt-0 mx-20 py-4 text-white"
+            className="relative max-w-3xl mt-0 mx-20 py-4 text-white"
             dir={userLanguage === "he" ? "rtl" : "ltr"}>
             {/* Created Quizzes */}
-            <div className="flex gap-2.5">
+            <div className="flex flex-row-reverse gap-2.5">
                 <div className="flex flex-col w-1/2">{quizzes.length > 0 && (
                     <h2 className={`flex text-2xl font-bold ${userLanguage === "he" ? "text-right" : "text-left"}`}>
                         {get_text("created_quizzes", userLanguage) || "Created Quizzes"}:
                         <span className="text-green-500 text-lg mx-2">({quizzes.length})</span>
-                        {showQuiz !== -1 && <div className="cursor-pointer mr-auto my-auto" 
-                            // onClick={() => setShowQuiz(-1)}
+                        {!automaticCreation && showQuiz !== -1 && <div className="cursor-pointer mr-auto my-auto" 
+                            onClick={() => setShowQuiz(-1)}
                             title={get_text("close_all_quizzes", userLanguage) || "Close All Quizzes"}>
                                 <SquareStack size={16} color="white" />
                         </div>}
@@ -400,19 +433,21 @@ export const CreateQuizzes = ({
                             </div>
                         );
                     })}
+                {completed && !loading && <div className="text-green-500" onClick={() => navigate(`/room/${roomId}?fromBuilder`)}>Show Room</div>}
+
                 </div>
                 {/* Sub-topics to create quizzes from */}
                 <div className="flex flex-col w-1/2">
                     <h2 className={`flex text-2xl font-bold ${userLanguage === "he" ? "text-right" : "text-left"}`}>
                     {get_text("sub_topics_to_create_quizzes_from", userLanguage) || "Sub-topics to create quizzes from"}:
                     <span className="text-green-500 text-lg mx-2">({subTopics.length})</span>
-                    {showSubTopic !== -1 && <div className="cursor-pointer mr-auto my-auto" 
-                        // onClick={() => setShowSubTopic(-1)}
+                    {!automaticCreation && showSubTopic !== -1 && <div className="cursor-pointer mr-auto my-auto" 
+                        onClick={() => setShowSubTopic(-1)}
                         title={get_text("close_all_sub_topics", userLanguage) || "Close All Sub-topics"}>
                             <SquareStack size={16} color="white" />
                     </div>}
-                </h2>
-                {subTopics.length > 0 &&
+                    </h2>
+                    {subTopics.length > 0 &&
                     subTopics.map((subTopic, index) => {
                         return (
                             <div
@@ -442,7 +477,7 @@ export const CreateQuizzes = ({
                                 <p className={`mb-2 text-sm ${userLanguage === "he" && subTopic.used ? "text-right" : "text-left"}`}>
                                     {(get_text(subTopic.quiz_type, userLanguage) || subTopic.quiz_type).replace("{quiz_of}", get_text("quiz_of", userLanguage) || "quiz")} - {subTopic.used ? <span className="text-green-500">({get_text("used_sub_topic", userLanguage) || "Used to create quiz"})</span> : subTopic.explanation}
                                 </p>
-                                {!subTopic.used || 1!==1 && <> {/* TODO: remove this once the quizzes are created manually */}
+                                {subTopic.quiz_type !== "event_to_category_matching" && !subTopic.used && !automaticCreation && <> {/* TODO: remove this once the quizzes are created manually */}
                                     <label className="flex text-lg mb-1.5 text-white">
                                         {get_text("the_quiz_answer", userLanguage)}{" "}
                                         <span
@@ -482,7 +517,7 @@ export const CreateQuizzes = ({
                                     <button
                                         key={index}
                                         onClick={() => CreateQuiz(index, subTopic.quiz_type)}
-                                        disabled={!answers[index] || errorAnswers[index] !== "" ? true : false}
+                                        disabled={!answers[index] || errorAnswers[index] !== ""}
                                         className={`mt-2 text-white bg-cyan-500 hover:bg-cyan-600 border-0 py-2.5 px-3.5 rounded-lg cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
                                     >
                                         {(get_text("create_quiz_about", userLanguage) || "Create Quiz about")
@@ -519,13 +554,6 @@ export const CreateQuizzes = ({
                         ? get_text("saving_quizzes", userLanguage) || "Saving Quizzes..."
                         : get_text("save_quizzes", userLanguage) || "Save Quizzes"}
                 </button> */}
-                {loading && (
-                    <img
-                        src={loadingSpinner}
-                        alt="loading"
-                        className="w-10 h-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-                    />
-                )}
             </div>
         </div>
     );

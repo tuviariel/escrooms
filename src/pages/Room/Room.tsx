@@ -125,6 +125,10 @@ export const Room = () => {
         { x: 50, y: 80 },
         { x: 70, y: 25 },
         { x: 40, y: 65 },
+        { x: 85, y: 35 },
+        { x: 50, y: 65 },
+        { x: 70, y: 60 },
+        { x: 40, y: 35 },
     ];
 
     // Motion values for mouse position
@@ -381,7 +385,7 @@ export const Room = () => {
                                 !completed && !fromBuilder
                                     ? setCheckLeave(true)
                                     : fromBuilder
-                                      ? navigate("/room-builder")
+                                      ? navigate("/room-builder?roomId=" + id)
                                       : navigate("/")
                             }>
                             x

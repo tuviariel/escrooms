@@ -9,14 +9,15 @@ import { stepType } from "../RoomBuilder";
 import { schema } from "../../../util/schemas";
 // import { parseStringToObject } from "../../../util/utils";
 // import { fieldsOfStudy } from "../../../util/utils";
-import loadingSpinner from "../../../assets/images/loading.gif";
+// import loadingSpinner from "../../../assets/images/loading.gif";
 import { TimerReset } from "lucide-react";
 
 type TopicAndDataProps = {
     setStep: (step: stepType) => void;
     setRoomId: (id: string) => void;
     setSubTopics: (subTopics: any[]) => void;
-    setParentLoading: (loading: boolean) => void;
+    setLoading: (loading: boolean) => void;
+    loading: boolean;
 };
 
 const LOCAL_KEY = "topicAndData";
@@ -27,7 +28,8 @@ export const TopicAndData = ({
     setStep,
     setRoomId,
     setSubTopics,
-    setParentLoading,
+    setLoading,
+    loading,
 }: TopicAndDataProps) => {
     const [topic, setTopic] = useState<string>("");
     const [subTopic, setSubTopic] = useState<string>("");
@@ -38,7 +40,6 @@ export const TopicAndData = ({
     const [status, setStatus] = useState<string>("");
     const [error, setError] = useState<string>("");
     const [first, setFirst] = useState<boolean>(true);
-    const [loading, setLoading] = useState<boolean>(false);
     const { userLanguage } = useUserContext();
     const userRedux: any = useSelector((state: { user: userType }) => state.user);
     // Save draft on every change
@@ -128,8 +129,6 @@ export const TopicAndData = ({
                 return;
             }
         }
-
-        setParentLoading(true);
         setLoading(true);
         setError("");
         setStatus("");
@@ -218,7 +217,6 @@ export const TopicAndData = ({
             console.log("Error processing document:", err);
             setError(err.message || get_text("processing_failed", userLanguage));
         } finally {
-            setParentLoading(false);
             setLoading(false);
         }
     };
@@ -544,16 +542,9 @@ export const TopicAndData = ({
                                 (inputType === "text" && !textContent.trim()) ||
                                 (inputType === "url" && !urlContent.trim())))
                     }
-                    className="bg-gray-700 hover:bg-gray-600 border border-gray-600 text-white py-2.5 px-3 rounded-lg cursor-pointer transition-colors">
+                    className="bg-gray-700 hover:bg-gray-600 border border-gray-600 text-white py-2.5 px-3 rounded-lg cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                     {get_text("clear", userLanguage) || "Clear"}
                 </button>
-                {loading && (
-                    <img
-                        src={loadingSpinner}
-                        alt="loading"
-                        className="w-10 h-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-                    />
-                )}
             </div>
         </div>
     );

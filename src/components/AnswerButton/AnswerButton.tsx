@@ -18,7 +18,8 @@ export const AnswerButton = (props: AnswerButtonProps) => {
             className={`${active.length < 4 ? "ts:flex" : "ph:flex"} absolute bottom-2 lg:bottom-6 left-1/2 -translate-x-1/2 z-20 hidden flex-col-reverse items-center justify-center`}>
             {result ? (
                 <div
-                    className="w-fit py-1 px-4 rounded-xl text-center border-2 text-xl lg:text-3xl"
+                    onClick={() => onClick()}
+                    className="w-fit py-1 px-4 rounded-xl text-center border-2 text-xl lg:text-3xl cursor-pointer"
                     style={{
                         color: colorPalette[roomColor as keyof typeof colorPalette].light,
                         borderColor: colorPalette[roomColor as keyof typeof colorPalette].light,
