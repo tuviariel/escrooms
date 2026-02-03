@@ -532,6 +532,15 @@ const appContext: Translations = {
         he: "הסתר צבעים",
         ar: "",
     },
+    login_required: {
+        en: "Login Required",
+        he: "כניסה נדרשת",
+        ar: "",
+    },
+    login_to_access_room_builder: {
+        en: "Please login to access the Room Builder",
+        he: "אנא התחברו לכניסה ליצירת חדר בריחה",
+    },
 };
 
 export const get_text = (name: string, lang: string) => {

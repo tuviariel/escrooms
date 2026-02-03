@@ -165,19 +165,23 @@ export const CreatorConsole = ({
 
             {/* User Options at Bottom */}
             <div className="p-3 border-t border-gray-700 space-y-2">
-                <button className="w-full flex items-center gap-2 hover:bg-green-600 p-2 rounded-lg transition-colors text-sm text-white cursor-pointer">
-                    {/* <Whatsapp size={18} /> */}
-                    <MessageCircle size={18} />
-                    {sidebarOpen && <span>{get_text("join_our_community", userLanguage)}</span>}
-                </button>
+                <a href="https://chat.whatsapp.com/IpUsLQiRGnTBgLnF02xLzs" target="_blank" rel="noopener noreferrer">
+                    <button className="w-full flex items-center gap-2 hover:bg-green-600 p-2 rounded-lg transition-colors text-sm text-white cursor-pointer">
+                        {/* <Whatsapp size={18} /> */}
+                        <MessageCircle size={18} />
+                        {sidebarOpen && <span>{get_text("join_our_community", userLanguage)}</span>}
+                    </button>
+                </a>
                 <button className="w-full flex items-center gap-2 hover:bg-gray-700 p-2 rounded-lg transition-colors text-sm text-white cursor-pointer">
                     <Gift size={18} />
                     {sidebarOpen && <span>{get_text("get_free_escape_room", userLanguage)}</span>}
                 </button>
-                <button className="w-full flex items-center gap-2 hover:bg-gray-700 p-2 rounded-lg transition-colors text-sm text-white cursor-pointer">
-                    <HelpCircle size={18} />
-                    {sidebarOpen && <span>{get_text("contact_support", userLanguage)}</span>}
-                </button>
+                <a href="https://wa.me/+972509315511" target="_blank" rel="noopener noreferrer">
+                    <button className="w-full flex items-center gap-2 hover:bg-gray-700 p-2 rounded-lg transition-colors text-sm text-white cursor-pointer">
+                        <HelpCircle size={18} />
+                        {sidebarOpen && <span>{get_text("contact_support", userLanguage)}</span>}
+                    </button>
+                </a>
             </div>
         </div>
 

@@ -8,6 +8,8 @@ import NavBar from "../components/Navbar";
 import { RoomContextProvider } from "../contexts/roomStyleContext";
 import { UserContextProvider } from "../contexts/userStyleContext";
 import { route_paths } from "../util/config";
+import ProtectedRoute from "../components/ProtectedRoute";
+import NavigationGuard from "../components/NavigationGuard";
 // import { ContextProvider } from "./contexts/context";
 import { Provider } from "react-redux";
 import store from "../reduxStor/index";
@@ -30,13 +32,21 @@ export default function AppRoutes() {
             <Suspense fallback={<div>Loading...</div>}>
                 <UserContextProvider>
                     <Provider store={store}>
+                        <NavigationGuard />
                         <Routes>
                             <Route path="/" element={<NavBar />}>
                                 <Route index element={<Dashboard />} />
                                 <Route path={HOME} element={<Dashboard />} />
                                 <Route path={SUBSCRIPTION} element={<Subscription />} />
                                 <Route path={PROFILE} element={<Profile />} />
-                                <Route path={ROOMBUILDER} element={<RoomBuilder />} />
+                                <Route
+                                    path={ROOMBUILDER}
+                                    element={
+                                        <ProtectedRoute>
+                                            <RoomBuilder />
+                                        </ProtectedRoute>
+                                    }
+                                />
                             </Route>
                             <Route
                                 path={ROOM}

@@ -3,7 +3,7 @@ import { get_text } from "../../util/language";
 interface DialogProps {
     open: boolean;
     setOpen: (e: boolean) => void;
-    size: string;
+    size: "small" | "medium" | "large" | "xLarge" | "";
     data: string;
     disableOverlayClose: boolean;
     children: ReactElement;
@@ -20,7 +20,7 @@ export const Dialog: React.FC<DialogProps> = (props) => {
         open,
         setOpen,
         children,
-        size = "large",
+        size = "",
         disableOverlayClose = false,
         data = "",
     } = props;
@@ -38,21 +38,25 @@ export const Dialog: React.FC<DialogProps> = (props) => {
 
     return (
         <div
-            className={open ? "fixed z-70 inset-0 w-screen h-screen" : "hidden"}
+            className={open ? "fixed z-70 inset-0 w-screen h-screen bg-gray-800/30 backdrop-blur-lg" : "hidden"}
             // Overlay click closes only if NOT disabled
             onClick={disableOverlayClose ? (e) => e.stopPropagation() : () => setOpen(false)}>
-            <div className={`fixed inset-0 w-full h-full bg-white/30 backdrop-blur-lg z-0`} />
-            <div className="fixed inset-0 flex items-center justify-center z-10">
+            <div className={`fixed inset-0 w-full h-full bg-gray-800/30 backdrop-blur-lg z-0`} />
+            <div className="fixed inset-0 flex items-center justify-center z-10 bg-gray-800/30 backdrop-blur-lg">
                 <div
-                    className={`relative bg-white shadow-xl rounded-md border-2 border-solid border-blue-100 p-1
+                    className={`relative bg-gray-800 text-white shadow-xl rounded-md border-2 border-solid border-blue-100 p-1
                         ${
                             size === "small"
                                 ? "max-w-lg w-full max-h-[90vh]"
+                                : size === "medium"
+                                  ? "w-[50vw] h-[60vh] max-w-2xl max-h-[90vh]"
                                 : size === "large"
                                   ? "w-[75vw] h-[75vh] max-w-6xl max-h-[90vh]"
                                   : size === "xLarge"
                                     ? "w-[90vw] h-[90vh] max-w-8xl max-h-[90vh]"
-                                    : ""
+                                    : data === "login"
+                                      ? "w-[50vw] h-[90vh] max-w-2xl max-h-[90vh]"
+                                      : ""
                         }
                         flex flex-col overflow-hidden transition-all duration-300 ease-out
                     `}

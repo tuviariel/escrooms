@@ -38,7 +38,7 @@ export function Login() {
     const popupRef = useRef<HTMLDivElement | null>(null);
 
     const handleMouseLeave = (e: React.MouseEvent) => {
-        const related = (e as any).relatedTarget as Node | null;
+        const related = (e as any).relatedTarget as HTMLElement | null;
 
         // If moving to an element inside the popup, ignore
         if (related && popupRef.current?.contains(related)) return;

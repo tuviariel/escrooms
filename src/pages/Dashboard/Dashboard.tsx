@@ -311,7 +311,7 @@ export const Dashboard = () => {
                         </div>
                     </div>
                     <div className="flex justify-center gap-4 mb-6">
-                        <a href="#" className="text-cyan-400 hover:text-cyan-300">
+                        <a href="https://chat.whatsapp.com/IpUsLQiRGnTBgLnF02xLzs" className="text-cyan-400 hover:text-cyan-300">
                             <span className="text-2xl">📘</span>
                         </a>
                         <a href="#" className="text-cyan-400 hover:text-cyan-300">
