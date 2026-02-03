@@ -367,7 +367,7 @@ export const Color: React.FC<TemplateProps> = (props) => {
                                                                 answerData &&
                                                                 colorChange(answerData[0][0])
                                                             }
-                                                            className={`absolute top-2 -left-4 w-fit py-1 px-2 min-w-10 h-10 z-20 cursor-pointer whitespace-nowrap bg-amber-500 rounded-full flex items-center justify-center text-white border border-black`}>
+                                                            className={`absolute top-0 -left-4 w-fit py-1 px-2 min-w-10 h-10 z-20 cursor-pointer whitespace-nowrap bg-amber-500 rounded-full flex items-center justify-center text-white border border-black`}>
                                                             {answerData && answerData[0][0]}
                                                         </div>
                                                         <div
@@ -424,7 +424,7 @@ export const Color: React.FC<TemplateProps> = (props) => {
                                                                 answerData &&
                                                                 colorChange(answerData[1][0])
                                                             }
-                                                            className={`absolute top-2 -left-4 w-fit min-w-10 h-10 cursor-pointer whitespace-nowrap bg-emerald-500 rounded-lg flex items-center justify-center text-white border border-black z-20`}>
+                                                            className={`absolute top-0 -left-4 w-fit px-2 min-w-10 h-10 cursor-pointer whitespace-nowrap bg-emerald-500 rounded-lg flex items-center justify-center text-white border border-black z-20`}>
                                                             {answerData && answerData[1][0]}
                                                         </div>
                                                         <div
@@ -432,7 +432,7 @@ export const Color: React.FC<TemplateProps> = (props) => {
                                                                 answerData &&
                                                                 colorChange(answerData[1][1])
                                                             }
-                                                            className={`absolute -top-12 -left-4 w-fit min-w-10 h-10 cursor-pointer whitespace-nowrap bg-pink-500 rounded-lg flex items-center justify-center text-white border border-black z-20`}>
+                                                            className={`absolute -top-12 -left-4 w-fit px-2 min-w-10 h-10 cursor-pointer whitespace-nowrap bg-pink-500 rounded-lg flex items-center justify-center text-white border border-black z-20`}>
                                                             {answerData && answerData[1][1]}
                                                         </div>
                                                         <div
@@ -440,7 +440,7 @@ export const Color: React.FC<TemplateProps> = (props) => {
                                                                 answerData &&
                                                                 colorChange(answerData[1][2])
                                                             }
-                                                            className={`absolute -top-24 -left-4 w-fit min-w-10 h-10 cursor-pointer whitespace-nowrap bg-cyan-500 rounded-lg flex items-center justify-center text-white border border-black z-20`}>
+                                                            className={`absolute -top-24 -left-4 w-fit px-2 min-w-10 h-10 cursor-pointer whitespace-nowrap bg-cyan-500 rounded-lg flex items-center justify-center text-white border border-black z-20`}>
                                                             {answerData && answerData[1][2]}
                                                         </div>
                                                     </>

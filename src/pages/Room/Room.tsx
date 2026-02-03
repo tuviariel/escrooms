@@ -254,7 +254,7 @@ export const Room = () => {
                                     className="cursor-pointer h-8 lg:h-16 w-8 lg:w-16 z-70 md:h-12 md:w-12 fixed left-10 lg:left-19 bottom-0 lg:bottom-24 p-1 rounded-full bg-gray-100 border-2 hover:border-amber-700"
                                     onClick={() => setQuizNumber(-1)}
                                 />
-                                <QuizTemplate data={roomQuizzes[quizNumber]} />
+                                {roomQuizzes.length > 0 && roomQuizzes[quizNumber] && <QuizTemplate data={roomQuizzes[quizNumber]} />}
                             </div>
                         )}
 

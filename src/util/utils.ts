@@ -44,7 +44,7 @@ export const timeFormat = (userLanguage: string, timestamp: number) => {
     const date = new Date(timestamp);
     const now = new Date();
     const diff = now.getTime() - date.getTime();
-    console.log("diff:", diff);
+    // console.log("diff:", diff);
     if (diff > 24 * 60 * 60 * 1000) {
         // return formatDate(userLanguage, timestamp.toString());
         return date.toLocaleDateString(userLanguage === "he" ? "he-IL" : "en-US", {
@@ -53,7 +53,7 @@ export const timeFormat = (userLanguage: string, timestamp: number) => {
             year: "numeric",
         });
     } else {
-        console.log("lessThanDay");
+        // console.log("lessThanDay");
         return date.toLocaleTimeString(userLanguage === "he" ? "he-IL" : "en-US", {
             hour: "2-digit",
             minute: "2-digit",
