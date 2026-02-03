@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate, useLocation } from "react-router";
+import { useLocation } from "react-router";
 import { useSelector } from "react-redux";
 import { userType } from "../Login/Login";
 import { fetchAuthSession } from "aws-amplify/auth";
@@ -10,7 +10,7 @@ import { route_paths } from "../../util/config";
  * and shows auth dialog if user is not logged in
  */
 export const NavigationGuard = () => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const location = useLocation();
     const userRedux: any = useSelector((state: { user: userType }) => state.user);
     const protectedRoute = route_paths["ROOMBUILDER"];

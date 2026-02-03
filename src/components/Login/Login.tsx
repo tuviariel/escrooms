@@ -11,7 +11,7 @@ import { get_text } from "../../util/language";
 import { useLocation, useNavigate } from "react-router";
 import { useUserContext } from "../../contexts/userStyleContext";
 import Language from "../Language";
-import { Gem, Settings } from "lucide-react";
+import { Gem, Languages, LogOut, Settings } from "lucide-react";
 
 export interface userType {
     id: string;
@@ -38,17 +38,16 @@ export function Login() {
     const popupRef = useRef<HTMLDivElement | null>(null);
 
     const handleMouseLeave = (e: React.MouseEvent) => {
-        const related = (e as any).relatedTarget as HTMLElement | null;
-
+        if(!userRedux?.user) {
+            const related = (e as any).relatedTarget as HTMLElement | null;
         // If moving to an element inside the popup, ignore
         if (related && popupRef.current?.contains(related)) return;
-
         // Some browser UI (autofill / external UI) set relatedTarget to null.
         // If relatedTarget is null but an element inside the popup currently has focus,
         // treat this as "still inside" (user interacting with inputs/autofill).
         const active = document.activeElement;
         if (!related && popupRef.current?.contains(active)) return;
-
+        }
         // Otherwise treat as a real leave
         setUserOpen(false);
     };
@@ -114,8 +113,9 @@ export function Login() {
                         setLocalUser(user);
                         return (
                             <main
-                                className="flex flex-col z-40"
+                                className="flex flex-col z-40 text-white bg-gray-800 border border-gray-700 rounded-lg p-2"
                                 ref={popupRef}
+                                dir={userLanguage === "he" ? "rtl" : "ltr"}
                                 onMouseLeave={handleMouseLeave}>
                                 <div className="border-b border-gray-300">
                                     {get_text("hello", userLanguage)}{" "}
@@ -124,19 +124,19 @@ export function Login() {
                                         user?.userId}
                                 </div>
                                 <button
-                                    className={`flex items-center gap-2 p-2 rounded mx-auto ${location.pathname === "/profile" ? "font-bold text-cyan-600" : "font-normal text-gray-600 cursor-pointer hover:text-cyan-400 hover:border-cyan-700 hover:border"}`}
+                                    className={`flex items-center gap-2 p-2 rounded mx-auto border border-gray-800 w-full ${location.pathname === "/profile" ? "font-bold text-cyan-600" : "font-normal text-gray-600 cursor-pointer hover:text-cyan-400 hover:border-cyan-700"}`}
                                     onClick={() => {
                                         navigate("/profile");
                                         setUserOpen(false);
                                     }}>
                                     <Settings size={14} /> {get_text("edit_profile", userLanguage)}
                                 </button>
-                                <div className="flex mx-auto font-normal text-gray-600 cursor-pointer hover:border-cyan-700 hover:border">
-                                    <Language />
+                                <div className="flex items-center gap-2 p-2 rounded mx-auto font-normal text-gray-600 cursor-pointer border border-gray-800 w-full hover:text-cyan-400 hover:border-cyan-700">
+                                    <Languages size={14} /> <Language />
                                 </div>
                                 {userRedux?.user?.["subscription"] === "free" && (
                                     <button
-                                        className={`flex items-center gap-2 p-2 rounded mx-auto ${location.pathname === "/subscription" ? "font-bold text-cyan-600" : "font-normal text-gray-600 cursor-pointer hover:text-cyan-400 hover:border-cyan-700 hover:border"}`}
+                                        className={`flex items-center gap-2 p-2 rounded mx-auto border border-gray-800 w-full ${location.pathname === "/subscription" ? "font-bold text-cyan-600" : "font-normal text-gray-600 cursor-pointer hover:text-cyan-400 hover:border-cyan-700"}`}
                                         onClick={() => {
                                             navigate("/subscription");
                                             setUserOpen(false);
@@ -145,14 +145,14 @@ export function Login() {
                                     </button>
                                 )}
                                 <div
-                                    className="my-2 border-t border-gray-300 cursor-pointer hover:text-red-400"
+                                    className="flex items-center gap-2 p-2 border-t border-gray-300 cursor-pointer text-gray-600 hover:text-red-400"
                                     onClick={() => {
                                         setUser(undefined);
                                         signOut && signOut();
                                         setUserOpen(false);
                                         navigate("/home");
                                     }}>
-                                    {get_text("sign_out", userLanguage)}
+                                    <LogOut size={14} /> {get_text("sign_out", userLanguage)}
                                 </div>
                                 {/* <Component {...pageProps} /> */}
                             </main>
