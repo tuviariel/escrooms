@@ -541,6 +541,41 @@ const appContext: Translations = {
         en: "Please login to access the Room Builder",
         he: "אנא התחברו לכניסה ליצירת חדר בריחה",
     },
+    coming_soon: {
+        en: "Coming Soon",
+        he: "בקרוב",
+        ar: "",
+    },
+    generate_content: {
+        en: "Generate Content",
+        he: "ג'ינרוט תוכן",
+        ar: "",
+    },
+    generate_content_explanation: {
+        en: `Generating content with AI: Notice that there is no warranty on the accuracy of the content. You can edit the content after the generation and it is recommended to review the content.`,
+        he: `ג'ינרוט תוכן עם בינה מלאכותית: שימו לב שאין אחריות על מהימנות התוכן. תתאפשר עריכת התוכן לאחר הג'ינרוט וראוי לעבור על התוכן כדי לבדוק אותו.`,
+        ar: "",
+    },
+    generate_title: {
+        en: "Generate content with AI",
+        he: "ג'ינרוט תוכן עם AI",
+        ar: "",
+    },
+    more_instructions: {
+        en: "More Instructions",
+        he: "נתונים נוספים ביחס לנושא",
+        ar: "",
+    },
+    enter_more_instructions: {
+        en: "Enter more instructions (optional)",
+        he: "הזן נתונים נוספים (אופציונלי)",
+        ar: "",
+    },
+    add_to_content: {
+        en: "Add to current content",
+        he: "הוסף לתוכן הנוכחי",
+        ar: "",
+    },
 };
 
 export const get_text = (name: string, lang: string) => {

@@ -38,13 +38,13 @@ export const Dialog: React.FC<DialogProps> = (props) => {
 
     return (
         <div
-            className={open ? "fixed z-70 inset-0 w-screen h-screen bg-gray-800/30 backdrop-blur-lg" : "hidden"}
+            className={open ? (`fixed z-70 inset-0 w-screen h-screen ${data !== "article" ? "bg-gray-800/30 backdrop-blur-lg" : ""}`) : "hidden"}
             // Overlay click closes only if NOT disabled
             onClick={disableOverlayClose ? (e) => e.stopPropagation() : () => setOpen(false)}>
-            <div className={`fixed inset-0 w-full h-full bg-gray-800/30 backdrop-blur-lg z-0`} />
-            <div className="fixed inset-0 flex items-center justify-center z-10 bg-gray-800/30 backdrop-blur-lg">
+            <div className={`fixed inset-0 w-full h-full ${data !== "article" ? "bg-gray-800/30 backdrop-blur-lg" : ""} z-0`} />
+            <div className={`fixed inset-0 flex items-center justify-center z-10 ${data !== "article" ? "bg-gray-800/30 backdrop-blur-lg" : ""}`}>
                 <div
-                    className={`relative bg-gray-800 text-white shadow-xl rounded-md border-2 border-solid border-blue-100 p-1
+                    className={`scrollbar overflow-y-auto relative bg-gray-800 text-white shadow-xl rounded-md border-2 border-solid border-blue-100 p-1
                         ${
                             size === "small"
                                 ? "max-w-lg w-full max-h-[90vh]"

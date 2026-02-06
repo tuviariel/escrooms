@@ -1,9 +1,8 @@
-import { useEffect, useState, Dispatch, SetStateAction } from "react";
+import { useEffect, useState, Dispatch, SetStateAction, useRef } from "react";
+import { useLocation, useNavigate } from "react-router";
 import { get_text } from "../../../util/language";
 import { useUserContext } from "../../../contexts/userStyleContext";
 import { aiService, quizService, roomsService } from "../../../services/service";
-// import { useSelector } from "react-redux";
-// import { userType } from "../../../components/Login/Login";
 import { stepType, subTopicsType } from "../RoomBuilder";
 import { schema } from "../../../util/schemas";
 import type { Schema } from "../../../../amplify/data/resource";
@@ -12,7 +11,6 @@ import { parseStringToObject } from "../../../util/utils";
 import { Check, PanelTopOpen, SquareStack } from "lucide-react";
 import QuizInfo from "./QuizInfo";
 import TimerLine from "../../../components/TimerLine";
-import { useNavigate } from "react-router";
 
 type CreateQuizzesProps = {
     setStep: (step: stepType) => void;
@@ -22,6 +20,7 @@ type CreateQuizzesProps = {
     setSubTopics: Dispatch<SetStateAction<subTopicsType>>;
     setLoading: (loading: boolean) => void;
     loading: boolean;
+    status: string;
 };
 export type QuizSchemaType = Schema["Quiz"]["type"];
 type QuizType = {
@@ -85,8 +84,9 @@ export const CreateQuizzes = ({
     setSubTopics,
     setLoading,
     loading,
+    status,
 }: CreateQuizzesProps) => {
-    // Import Quiz type directly from resource schema
+    const location = useLocation();
     const [localRoomId, setLocalRoomId] = useState<string>("");
     const [quizzes, setQuizzes] = useState<QuizSchemaType[]>([]);
     const [answers, setAnswers] = useState<string[]>([]);
@@ -94,19 +94,22 @@ export const CreateQuizzes = ({
     const [showSubTopic, setShowSubTopic] = useState<number>(-1);
     const [showSubTopicCreation, setShowSubTopicCreation] = useState<number>(-1);
     const [errorAnswers, setErrorAnswers] = useState<string[]>([]);
-    const [status, setStatus] = useState<string>("");
     const [error, setError] = useState<string>("");
     const [first, setFirst] = useState<boolean>(true); 
     const [completed, setCompleted] = useState<boolean>(false);
-    const [automaticCreation] = useState<boolean>(true);
+    const [automaticCreation, setAutomaticCreation] = useState<boolean>(!location.search.includes("roomId") || status === "creating" ? true : false);
+    useEffect(() => {
+        setAutomaticCreation(!location.search.includes("roomId") || status === "creating" ? true : false);
+    }, [location.search, status]);
     const { userLanguage } = useUserContext();
-    // const userRedux: any = useSelector((state: { user: userType }) => state.user);
+    const autoRunQuizzesCalled = useRef<boolean | null>(null);
+
     const navigate = useNavigate();
     useEffect(() => {
+        autoRunQuizzesCalled.current = false;
         if(roomId !== localRoomId) {
             localStorage.removeItem(LOCAL_KEY+localRoomId);
             setLocalRoomId(roomId);
-
         }
     }, [roomId]);
     // Save draft on every change in localStorage
@@ -142,21 +145,24 @@ export const CreateQuizzes = ({
                 setSubTopics(localSubTopics);
                 const quizzes = await roomDataFromServer[0].quizzes();
                 console.log("Fetched quizzes for room:", quizzes.data);
-                const cleanQuizzes = quizzes.data.map((quiz: any) => {
-                    const updatedHints = parseStringToObject(quiz.hints);
-                    const updatedQuiz = parseStringToObject(quiz.quiz);
-                    return {
-                        ...quiz,
-                        hints: updatedHints.hints,
-                        quiz: updatedQuiz.questions,
-                        room: "",
-                    };
-                });
-                setQuizzes(cleanQuizzes);
+                if (quizzes.data.length > 0) {
+                    const cleanQuizzes = quizzes.data.map((quiz: any) => {
+                        const updatedHints = parseStringToObject(quiz.hints);
+                        const updatedQuiz = parseStringToObject(quiz.quiz);
+                        return {
+                            ...quiz,
+                            hints: updatedHints.hints,
+                            quiz: updatedQuiz.questions,
+                            room: "",
+                        };
+                    });
+                    setQuizzes(cleanQuizzes);
+                }
                 setShowQuiz(-1);
                 setShowSubTopic(-1);
                 setErrorAnswers(Array(localSubTopics.length).fill(""));
                 setAnswers(Array(localSubTopics.length).fill(""));
+                automaticCreation && await autoRunQuizzes();
             } catch (err) {
                 console.log("error getting data from DB", err);
             }
@@ -167,7 +173,8 @@ export const CreateQuizzes = ({
             setShowSubTopic(-1);
             setShowSubTopicCreation(-1);
             setShowQuiz(-1);
-            autoRunQuizzes();
+            console.log("here");
+            automaticCreation && (async () => { await autoRunQuizzes(); })();
         } else {
             try {
                 console.log("loading draft from localStorage");
@@ -183,7 +190,7 @@ export const CreateQuizzes = ({
                         setShowSubTopic(-1);
                         setShowSubTopicCreation(-1);
                         setShowQuiz(-1);
-                        autoRunQuizzes();
+                        automaticCreation && (async () => { await autoRunQuizzes(); })();
                     }
                 } else if (roomId) {
                     getSubTopicsFromDB(roomId);
@@ -198,11 +205,15 @@ export const CreateQuizzes = ({
     }, [localRoomId]);
 
     const autoRunQuizzes = async () => {
+        console.log("autoRunQuizzes called (should be called only once)");
+        if (!autoRunQuizzesCalled.current || !automaticCreation) return;
+        autoRunQuizzesCalled.current = true;
         try {
             setLoading(true);
             // Fill answers array with random 4-digit numbers as strings
             setAnswers(Array.from({ length: subTopics.length }, () => Math.floor(1000 + Math.random()*9000).toString()));
-            // INSERT_YOUR_CODE
+            // Track which subTopic indices have been used to avoid duplicates
+            const usedIndices = new Set<number>();
             // If there are fewer than 5 subTopics, just create them all as usual
             if (subTopics.length < 5) {
                 for (let i = 0; i < subTopics.length; i++) {
@@ -211,59 +222,65 @@ export const CreateQuizzes = ({
                     }
                 }
             } else {
-                // First, find the first unused quiz for each type
+                // Define the 4 quiz types we want to create (exactly one of each)
                 const quizTypes = [
                     "physical_object_selection",
                     "event_to_category_matching",
                     "logical_or_chronological_ordering",
                     "true_false_fact_questions"
-                ];
-                // Keep track of created quiz types
-                const doneTypes: Set<string> = new Set();
-
-                // First pass: create one quiz for each type if present among subTopics
+                ];  
+                // Create exactly one quiz for each of the 4 types
                 for (const quizType of quizTypes) {
+                    // Find the first unused subTopic that matches this quiz type
                     const index = subTopics.findIndex(
-                        (sub) => sub.quiz_type === quizType && !sub.used
+                        (sub, idx) => sub.quiz_type === quizType && !sub.used && !usedIndices.has(idx)
                     );
-                    if (index !== -1 && !doneTypes.has(quizType)) {
+                    if (index !== -1) {
+                        // Found a matching unused subTopic, create the quiz
                         await CreateQuiz(index, quizType);
-                        doneTypes.add(quizType);
+                        usedIndices.add(index);
+                        console.log(`Created quiz for type: ${quizType} using subTopic at index: ${index}`);
                     } else {
-                        console.log("no quizzes to create for type:", quizType);
-                        await CreateQuiz(subTopics.length-1, quizType);
+                        // No unused subTopic found for this type - log warning but don't create
+                        console.warn(`No unused subTopic found for quiz type: ${quizType}`);
                     }
                 }
-
+                console.log("usedIndices:", usedIndices, "length:", usedIndices.size);
                 // Second: create 2 more quizzes (of any kind, just the next unused)
-                // let extraCreated = 0;
-                // for (let i = 0; i < subTopics.length && extraCreated < 2; i++) {
-                //     if (!subTopics[i].used) {
-                //         // Skip those already handled in the first pass
-                //         // (skip if this subTopic index/type was already used as the "first of its type")
-                //         // if (
-                //         //     quizTypes.includes(subTopics[i].quiz_type) &&
-                //         //     doneTypes.has(subTopics[i].quiz_type)
-                //         // ) {
-                //             await CreateQuiz(i, subTopics[i].quiz_type);
-                //             extraCreated++;
-                //         // }
-                //     }
-                // }
-                setLoading(false);
-                setShowSubTopic(-1);
-                setShowSubTopicCreation(-1);
-                setShowQuiz(-1);
+                    // let extraCreated = 0;
+                    // for (let i = 0; i < subTopics.length && extraCreated < 2; i++) {
+                    //     if (!subTopics[i].used) {
+                    //         // Skip those already handled in the first pass
+                    //         // (skip if this subTopic index/type was already used as the "first of its type")
+                    //         // if (
+                    //         //     quizTypes.includes(subTopics[i].quiz_type) &&
+                    //         //     doneTypes.has(subTopics[i].quiz_type)
+                    //         // ) {
+                    //             await CreateQuiz(i, subTopics[i].quiz_type);
+                    //             extraCreated++;
+                    //         // }
+                    //     }
+                    // }
+            }
+            setLoading(false);
+            setShowSubTopic(-1);
+            setShowSubTopicCreation(-1);
+            setShowQuiz(-1);
+            if (usedIndices.size < 4) {
+                setError(get_text("not_enough_quizzes", userLanguage) || "Not enough quizzes");
+                return;
+            } else {
                 const responseRoom = await roomsService.updateRoom(roomId, {completed: "completed", public: true});
                 if (responseRoom) {
                     console.log("Room updated:", responseRoom);
-                    setTimeout(() => setCompleted(true), 1000);                // navigate(`/room/${roomId}`);
+                    setTimeout(() => setCompleted(true), 1000);
                 } else {
                     console.log("Failed to update room");
                 }
             }
         } catch (err) {
             console.log("error auto running quizzes", err);
+            setLoading(false);
         }
     }
 
@@ -277,7 +294,6 @@ export const CreateQuizzes = ({
         // setParentLoading(true);
         // setLoading(true);
         setError("");
-        setStatus("");
 
         try {
             // creating Prompt for AI:
@@ -370,15 +386,10 @@ export const CreateQuizzes = ({
                     err.message ||
                     "Failed to create quiz"
             );
-        } finally {
-            // setParentLoading(false);
-            // setLoading(false);
         }
     };
     useEffect(() => {
-        if (completed) {
-            handleSubmit();
-        }
+        completed === true && handleSubmit();
     }, [completed]);
     const handleSubmit = async () => {
         console.log("handleSubmitClicked");
@@ -393,6 +404,7 @@ export const CreateQuizzes = ({
     // console.log("quizzes:", quizzes);
     // console.log("subTopics:", subTopics);
     // console.log("errorAnswers:", errorAnswers);
+    console.log("automaticCreation:", automaticCreation);
     return (
         <div
             className="relative max-w-3xl mt-0 mx-20 py-4 text-white"
@@ -534,13 +546,6 @@ export const CreateQuizzes = ({
             {error && (
                 <div className="mb-4 p-3 bg-red-900/50 border border-red-500 rounded-lg text-red-200">
                     {error}
-                </div>
-            )}
-
-            {/* Status Message */}
-            {status && (
-                <div className="mb-4 p-3 bg-green-900/50 border border-green-500 rounded-lg text-green-200">
-                    {status}
                 </div>
             )}
 

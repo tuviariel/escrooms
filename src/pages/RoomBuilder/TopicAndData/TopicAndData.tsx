@@ -10,7 +10,8 @@ import { schema } from "../../../util/schemas";
 // import { parseStringToObject } from "../../../util/utils";
 // import { fieldsOfStudy } from "../../../util/utils";
 // import loadingSpinner from "../../../assets/images/loading.gif";
-import { TimerReset } from "lucide-react";
+import { Sparkles } from "lucide-react";
+import { Dialog } from "../../../components/Dialog/Dialog";
 
 type TopicAndDataProps = {
     setStep: (step: stepType) => void;
@@ -33,13 +34,16 @@ export const TopicAndData = ({
 }: TopicAndDataProps) => {
     const [topic, setTopic] = useState<string>("");
     const [subTopic, setSubTopic] = useState<string>("");
+    const [moreInstructions, setMoreInstructions] = useState<string>("");
     const [inputType, setInputType] = useState<InputType>("text");
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [textContent, setTextContent] = useState<string>("");
     const [urlContent, setUrlContent] = useState<string>("");
     const [status, setStatus] = useState<string>("");
     const [error, setError] = useState<string>("");
+    const [addToContent, setAddToContent] = useState<boolean>(false);
     const [first, setFirst] = useState<boolean>(true);
+    const [openDialogArticle, setOpenDialogArticle] = useState<boolean>(false);
     const { userLanguage } = useUserContext();
     const userRedux: any = useSelector((state: { user: userType }) => state.user);
     // Save draft on every change
@@ -73,7 +77,7 @@ export const TopicAndData = ({
                 const parsed = JSON.parse(raw);
                 setTopic(parsed.topic || "");
                 setSubTopic(parsed.subTopic || "");
-                setInputType(parsed.inputType || "file");
+                setInputType(parsed.inputType || "text");
                 setTextContent(parsed.textContent || "");
                 setUrlContent(parsed.urlContent || "");
             }
@@ -220,7 +224,30 @@ export const TopicAndData = ({
             setLoading(false);
         }
     };
-    // console.log(loading);
+    const generateContent = async () => {
+        setLoading(true);
+        try {
+            const prompt = `Generate an article about ${topic} ${subTopic ? `and specifically relate to ${subTopic}` : ""}
+            ${moreInstructions ? `and the content of the article should be according to the following instructions: ${moreInstructions}` : ""}.
+            The article must be at least 1500 words long, must relay on real facts and information, and must be written in ${userLanguage === "he" ? "Hebrew" : "English"} language.
+            Return the output in JSON format structured like the schema: ${schema.article}.`;
+            const data: any = await aiService.openAI(prompt, "json");
+            console.log("data:", data);
+            if (!data || !data.article) {
+                setError(get_text("no_content_found", userLanguage) || "No content found");
+                return;
+            } else if (data.article) {
+                addToContent ? setTextContent(prev => prev + "\n\n" + data.article) : setTextContent(data.article);
+                setOpenDialogArticle(false);
+            }
+        } catch (err: any) {
+            console.log("Error generating content:", err.message);
+            setError(err.message || get_text("generating_content_failed", userLanguage));
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return (
         <div
             className="max-w-3xl mt-0 mx-20 py-4 text-white"
@@ -354,17 +381,14 @@ export const TopicAndData = ({
                     <button
                         type="button"
                         onClick={() => {
-                            setInputType("file");
                             setError("");
+                            setOpenDialogArticle(true);
                         }}
-                        disabled={true}
-                        title={get_text("coming_soon", userLanguage) || "Coming soon"}
-                        className={`cursor-not-allowed px-4 py-2 text-sm font-medium transition-colors ${
-                            inputType === "file"
-                                ? "text-cyan-400 border-b-2 border-cyan-400"
-                                : "text-gray-400 hover:text-gray-300"
-                        }`}>
-                        {get_text("upload_file", userLanguage) || "Upload File"}
+                        title={get_text("generate_title", userLanguage) || "Generate content with AI"}
+                        className={`flex gap-2 px-4 py-2 text-sm font-medium transition-colors text-gray-400 hover:text-cyan-400`}
+                        >
+                        <Sparkles size={12} />
+                        {get_text("generate_content", userLanguage) || "Generate content"}
                     </button>
                     <button
                         type="button"
@@ -378,6 +402,21 @@ export const TopicAndData = ({
                                 : "text-gray-400 hover:text-gray-300"
                         }`}>
                         {get_text("enter_text", userLanguage) || "Enter Text"}
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            setInputType("file");
+                            setError("");
+                        }}
+                        disabled={true}
+                        title={get_text("coming_soon", userLanguage) || "Coming soon"}
+                        className={`cursor-not-allowed px-4 py-2 text-sm font-medium transition-colors ${
+                            inputType === "file"
+                                ? "text-cyan-400 border-b-2 border-cyan-400"
+                                : "text-gray-400 hover:text-gray-300"
+                        }`}>
+                        {get_text("upload_file", userLanguage) || "Upload File"}
                     </button>
                     <button
                         type="button"
@@ -520,7 +559,6 @@ export const TopicAndData = ({
                                 "60"
                             ) || "Should be completed in 60 seconds"
                         }>
-                        <TimerReset className="w-6 h-6" />- 60s
                     </span>
                 </button>
                 <button
@@ -528,7 +566,7 @@ export const TopicAndData = ({
                         localStorage.removeItem(LOCAL_KEY);
                         setTopic("");
                         setSubTopic("");
-                        setInputType("file");
+                        setInputType("text");
                         setSelectedFile(null);
                         setTextContent("");
                         setUrlContent("");
@@ -546,6 +584,86 @@ export const TopicAndData = ({
                     {get_text("clear", userLanguage) || "Clear"}
                 </button>
             </div>
+            {/* Generate Content Dialog */}
+            <Dialog open={openDialogArticle} setOpen={setOpenDialogArticle} size="large" disableOverlayClose={false} data="article">
+                <div className="p-4 overflow-y-auto scrollbar" dir={userLanguage === "he" ? "rtl" : "ltr"}>
+                    <h2 className={`text-xl ${userLanguage === "he" ? "text-right" : "text-left"} text-white font-bold`}>{get_text("generate_content", userLanguage) || "Generate Content"}</h2>
+                    <p className={`text-sm ${userLanguage === "he" ? "text-right" : "text-left"} text-gray-200`}>{get_text("generate_content_explanation", userLanguage) || "Generate Content Explanation"}</p>
+                    <div className="my-4">
+                        <label className="flex text-lg mb-1.5 text-white">
+                            {get_text("topic", userLanguage)}{" "}
+                            <span
+                                className="text-red-400 cursor-pointer"
+                                title={get_text("mandatory_field", userLanguage)}>
+                                *
+                            </span>
+                        </label>
+                        <input
+                            type="text"
+                            value={topic}
+                            onChange={(e) => setTopic(e.target.value)}
+                            placeholder={get_text("enter_topic", userLanguage) || "Enter the main topic"}
+                            className="w-full p-2 rounded-lg border border-gray-600 bg-gray-800 text-white placeholder-gray-400"
+                        />
+                    </div>
+
+                    {/* Optional Sub-topic Input */}
+                    <div className="mb-4">
+                        <label className="flex text-lg mb-1.5 text-white">
+                            {get_text("sub_topic", userLanguage) || "Sub-topic"}
+                        </label>
+                        <input
+                            type="text"
+                            value={subTopic}
+                            onChange={(e) => setSubTopic(e.target.value)}
+                            placeholder={
+                                get_text("enter_sub_topic", userLanguage) || "Enter a sub-topic (optional)"
+                            }
+                            className="w-full p-2 rounded-lg border border-gray-600 bg-gray-800 text-white placeholder-gray-400"
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="flex text-lg mb-1.5 text-white">
+                            {get_text("more_instructions", userLanguage) || "More Instructions"}
+                        </label>
+                        <textarea
+                            value={moreInstructions}
+                            onChange={(e) => setMoreInstructions(e.target.value)}
+                            placeholder={get_text("enter_more_instructions", userLanguage) || "Enter more instructions (optional)"}
+                            className="w-full h-20 p-3 rounded-lg border border-gray-600 bg-gray-800 text-white placeholder-gray-400 resize-none focus:outline-none focus:border-white scrollbar"
+                        />
+                    </div>
+                    <div className="flex justify-between">
+                        {textContent.trim() !== "" && (
+                            <div className="flex items-center gap-2 mb-4">
+                                <input type="checkbox" onClick={() => setAddToContent(prev=>!prev)} className="bg-gray-700 hover:bg-gray-600 border border-gray-600 text-white py-2.5 px-3 rounded-lg cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"/>
+                                <label className="flex text-white text-lg">
+                                    {get_text("add_to_content", userLanguage) || "Add to current content"}
+                                </label>
+                            </div>
+                        )}
+                        <div className="flex items-center gap-2">
+                            <button onClick={() => {
+                                setOpenDialogArticle(false);
+                                setInputType("text")
+                            }} className="bg-gray-700 hover:bg-gray-600 border border-gray-600 text-white py-2.5 px-3 rounded-lg cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                {get_text("cancel", userLanguage) || "Cancel"}
+                            </button>
+                            <button 
+                                onClick={() => {
+                                    setInputType("text")
+                                    generateContent();
+                                }} 
+                                disabled={loading}
+                                className="bg-cyan-500 hover:bg-cyan-600 border-0 py-2.5 px-3.5 rounded-lg cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                {loading
+                                    ? get_text("processing", userLanguage) || "Processing..."
+                                    : get_text("generate_content", userLanguage) || "Generate Content"}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </Dialog>
         </div>
     );
 };

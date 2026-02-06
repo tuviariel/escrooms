@@ -99,7 +99,7 @@ const deleteAllRooms = async () => {
                 });
             }
         } catch (error) {
-            console.error("room deleted no:", error);
+            console.error("no room deleted:", error);
         }
     };
     const handleOpenDots = (index: number) => {

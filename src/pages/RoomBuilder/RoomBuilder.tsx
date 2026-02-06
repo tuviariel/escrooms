@@ -165,7 +165,11 @@ export const RoomBuilder = () => {
                     isComplete: true,
                 },
             };
-        });
+        }); 
+        // Remove query params from the URL when entering the "topic_and_data" step
+        if (location.search.includes("roomId")) {
+            window.history.replaceState({}, '', location.pathname);
+        }
     }, [step, roomId]);
     console.log("subTopics:", subTopics);
 
@@ -246,6 +250,7 @@ export const RoomBuilder = () => {
                                 setSubTopics={setSubTopics}
                                 setLoading={setLoading}
                                 loading={loading}
+                                status={status}
                             />
                             : stepInfo[step].name === get_text("topic_and_data", userLanguage)
                             ? <TopicAndData
@@ -260,7 +265,7 @@ export const RoomBuilder = () => {
                             : null}
                         </div>
                         {loading && (
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 h-full w-full flex items-center justify-center">
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-80 h-full w-full flex items-center justify-center ">
                                 <img
                                     src={loadingSpinner}
                                     alt="loading"

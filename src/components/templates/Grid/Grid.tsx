@@ -172,7 +172,7 @@ export const Grid = (props: TemplateProps) => {
                                                               ].bright,
                                                     }}
                                                     onClick={() => toggleSegment(i, j)}
-                                                    title={box.elem.title}>
+                                                    title={box.elem.title || ""}>
                                                     {box.elem.icon}
                                                 </div>
                                             );

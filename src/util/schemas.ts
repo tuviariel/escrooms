@@ -1,4 +1,7 @@
 export const schema = {
+    article: `{
+        "article": "string",
+    }`,
     topicAndData: `{
                 "sub_topics": [
                     {
