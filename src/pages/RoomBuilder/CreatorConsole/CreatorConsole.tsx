@@ -31,25 +31,24 @@ export const CreatorConsole = ({
     const [openOptions, setOpenOptions] = useState<boolean[]>([]);
     const { userLanguage } = useUserContext();
     const currentRoomRef = useRef<HTMLDivElement>(null);
-   
+
     useEffect(() => {
         const getUserRooms = async () => {
             console.log(user);
             if (user.id !== "") {
-                const userId = user.id;
-                const rooms = await roomsService.getRoomByUser(userId);
+                const rooms = await roomsService.getRoomByUser(user.id);
                 console.log(rooms);
                 // After fetching, iterate all rooms and update something about them to manually change users rooms collection in the database:
                 // if (rooms && Array.isArray(rooms)) {
                 //     // Update 'completed' to "completed" for all rooms
-                    // await Promise.all(
-                    //     rooms.map(async (room: any) => {
-                    //         // Only update if not already set
-                    //         // if (room.name === "Apples") {
-                    //             await roomsService.deleteRoom(room.id);
-                    //         // }
-                    //     })
-                    // );
+                // await Promise.all(
+                //     rooms.map(async (room: any) => {
+                //         // Only update if not already set
+                //         // if (room.name === "Apples") {
+                //             await roomsService.deleteRoom(room.id);
+                //         // }
+                //     })
+                // );
                 // }
                 setRooms(rooms);
                 setOpenOptions(Array(rooms.length).fill(false));
@@ -57,33 +56,41 @@ export const CreatorConsole = ({
                 console.log(user);
             }
         };
-        if ((roomId && rooms.length > 0 && rooms.findIndex(room => room.id === roomId) === -1) || rooms.length === 0) {
+        console.log(user, user.id, !roomId, rooms, rooms.length);
+        if (
+            (user && !roomId && rooms && rooms.length === 0) ||
+            (roomId &&
+                ((rooms &&
+                    rooms.length > 0 &&
+                    rooms.findIndex((room) => room.id === roomId) === -1) ||
+                    rooms.length === 0))
+        ) {
             getUserRooms();
         }
     }, [user, roomId]);
     // Auto scroll to show the roomCard of the roomId if it exists
     useEffect(() => {
-        const currentIndex = rooms.findIndex(room => room.id === roomId);
+        const currentIndex = rooms.findIndex((room) => room.id === roomId);
         if (currentIndex !== -1 && currentRoomRef.current) {
             currentRoomRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
         }
     }, [rooms, roomId]);
 
-const deleteAllRooms = async () => {
-    try {
-        await Promise.all(
-            rooms.map(async (room: any) => {
-                // Only update if not already set
-                // if (room.name === "Apples") {
+    const deleteAllRooms = async () => {
+        try {
+            await Promise.all(
+                rooms.map(async (room: any) => {
+                    // Only update if not already set
+                    // if (room.name === "Apples") {
                     await roomsService.deleteRoom(room.id);
-                // }
-            })
-        );
-        console.log("rooms deleted");
-    } catch (error) {
-        console.error("rooms deleted no:", error);
-    }
-};
+                    // }
+                }),
+            );
+            console.log("rooms deleted");
+        } catch (error) {
+            console.error("rooms deleted no:", error);
+        }
+    };
 
     const handleDeleteRoom = async (id: string) => {
         try {
@@ -117,7 +124,7 @@ const deleteAllRooms = async () => {
             if (result) {
                 setRooms((prev) => {
                     return prev.map((room) =>
-                        room.id === roomId ? { ...room, public: isPublic } : room
+                        room.id === roomId ? { ...room, public: isPublic } : room,
                     );
                 });
             }
@@ -156,8 +163,10 @@ const deleteAllRooms = async () => {
                         dir={userLanguage === "he" ? "rtl" : "ltr"}
                         className={`font-bold text-white lg:text-xl text-lg ${userLanguage === "en" ? "mr-auto" : "ml-auto"}`}>
                         {get_text("my_rooms", userLanguage)}
-                        <span className="text-green-600">{" "}({rooms.length}){" "}</span>
-                        <span className="" onClick={deleteAllRooms}>:</span>
+                        <span className="text-green-600"> ({rooms.length}) </span>
+                        <span className="" onClick={deleteAllRooms}>
+                            :
+                        </span>
                     </h1>
                 )}
             </div>
@@ -184,7 +193,10 @@ const deleteAllRooms = async () => {
 
             {/* User Options at Bottom */}
             <div className="p-3 border-t border-gray-700 space-y-2">
-                <a href="https://chat.whatsapp.com/IpUsLQiRGnTBgLnF02xLzs" target="_blank" rel="noopener noreferrer">
+                <a
+                    href="https://chat.whatsapp.com/IpUsLQiRGnTBgLnF02xLzs"
+                    target="_blank"
+                    rel="noopener noreferrer">
                     <button className="w-full flex items-center gap-2 hover:bg-green-600 p-2 rounded-lg transition-colors text-sm text-white cursor-pointer">
                         {/* <Whatsapp size={18} /> */}
                         <MessageCircle size={18} />
@@ -198,10 +210,12 @@ const deleteAllRooms = async () => {
                     </button>
                 </a>
                 {user.subscription === "free" && (
-                <button className="w-full flex items-center gap-2 hover:bg-gray-700 p-2 rounded-lg transition-colors text-sm text-white cursor-pointer">
-                    <Gift size={18} />
-                    {sidebarOpen && <span>{get_text("get_free_escape_room", userLanguage)}</span>}
-                </button>
+                    <button className="w-full flex items-center gap-2 hover:bg-gray-700 p-2 rounded-lg transition-colors text-sm text-white cursor-pointer">
+                        <Gift size={18} />
+                        {sidebarOpen && (
+                            <span>{get_text("get_free_escape_room", userLanguage)}</span>
+                        )}
+                    </button>
                 )}
             </div>
         </div>

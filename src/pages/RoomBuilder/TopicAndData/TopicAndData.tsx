@@ -12,6 +12,7 @@ import { schema } from "../../../util/schemas";
 // import loadingSpinner from "../../../assets/images/loading.gif";
 import { Sparkles } from "lucide-react";
 import { Dialog } from "../../../components/Dialog/Dialog";
+import ErrorMessage from "../../../components/ErrorMessage";
 
 type TopicAndDataProps = {
     setStep: (step: stepType) => void;
@@ -39,7 +40,6 @@ export const TopicAndData = ({
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [textContent, setTextContent] = useState<string>("");
     const [urlContent, setUrlContent] = useState<string>("");
-    const [status, setStatus] = useState<string>("");
     const [error, setError] = useState<string>("");
     const [addToContent, setAddToContent] = useState<boolean>(false);
     const [first, setFirst] = useState<boolean>(true);
@@ -50,6 +50,7 @@ export const TopicAndData = ({
     useEffect(() => {
         if (first) {
             setFirst(false);
+            window.scrollTo(0, 0);
             return;
         }
         try {
@@ -61,7 +62,7 @@ export const TopicAndData = ({
                     inputType,
                     textContent,
                     urlContent,
-                })
+                }),
             );
         } catch {
             // ignore storage errors
@@ -96,7 +97,7 @@ export const TopicAndData = ({
             } else {
                 setError(
                     get_text("invalid_file_type", userLanguage) ||
-                        "Please select a DOCX or PDF file"
+                        "Please select a DOCX or PDF file",
                 );
                 setSelectedFile(null);
             }
@@ -128,15 +129,13 @@ export const TopicAndData = ({
             } catch {
                 setError(
                     get_text("invalid_url", userLanguage) ||
-                        "Please enter a valid URL (e.g., https://example.com)"
+                        "Please enter a valid URL (e.g., https://example.com)",
                 );
                 return;
             }
         }
         setLoading(true);
         setError("");
-        setStatus("");
-
         try {
             // for option if needed to create room before generating subtopics (for file upload with room.id):
             // let currentRoomId: string;
@@ -182,10 +181,7 @@ export const TopicAndData = ({
             Text to analyze: """${documentInput}"""`;
             const data: any = await aiService.openAI(prompt, "json");
             console.log("data:", data);
-            if (!data || data.sub_topics.length === 0) {
-                setError(get_text("no_subtopics_found", userLanguage) || "No subtopics found");
-                return;
-            } else if (Array.isArray(data.sub_topics) && data.sub_topics.length > 0) {
+            if (Array.isArray(data.sub_topics) && data.sub_topics.length > 1) {
                 // Add a 'used' field (initialized to false) to each subtopic object
                 data.sub_topics = data.sub_topics.map((sub: any) => ({
                     ...sub,
@@ -208,7 +204,7 @@ export const TopicAndData = ({
                 });
                 if (!newRoom || !newRoom.id) {
                     setError(
-                        get_text("failed_to_create_room", userLanguage) || "Failed to create room"
+                        get_text("failed_to_create_room", userLanguage) || "Failed to create room",
                     );
                     return;
                 } else {
@@ -216,6 +212,9 @@ export const TopicAndData = ({
                     localStorage.removeItem(LOCAL_KEY);
                     setStep("create_quizzes"); //room_info
                 }
+            } else {
+                setError(get_text("no_subtopics_found", userLanguage) || "No subtopics found");
+                return;
             }
         } catch (err: any) {
             console.log("Error processing document:", err);
@@ -237,7 +236,9 @@ export const TopicAndData = ({
                 setError(get_text("no_content_found", userLanguage) || "No content found");
                 return;
             } else if (data.article) {
-                addToContent ? setTextContent(prev => prev + "\n\n" + data.article) : setTextContent(data.article);
+                addToContent
+                    ? setTextContent((prev) => prev + "\n\n" + data.article)
+                    : setTextContent(data.article);
                 setOpenDialogArticle(false);
             }
         } catch (err: any) {
@@ -246,7 +247,7 @@ export const TopicAndData = ({
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     return (
         <div
@@ -384,9 +385,10 @@ export const TopicAndData = ({
                             setError("");
                             setOpenDialogArticle(true);
                         }}
-                        title={get_text("generate_title", userLanguage) || "Generate content with AI"}
-                        className={`flex gap-2 px-4 py-2 text-sm font-medium transition-colors text-gray-400 hover:text-cyan-400`}
-                        >
+                        title={
+                            get_text("generate_title", userLanguage) || "Generate content with AI"
+                        }
+                        className={`flex gap-2 px-4 py-2 text-sm font-medium transition-colors text-gray-400 hover:text-cyan-400`}>
                         <Sparkles size={12} />
                         {get_text("generate_content", userLanguage) || "Generate content"}
                     </button>
@@ -498,7 +500,16 @@ export const TopicAndData = ({
                             className="w-full h-64 p-3 rounded-lg border border-gray-600 bg-gray-800 text-white placeholder-gray-400 resize-none focus:outline-none focus:border-cyan-500 scrollbar"
                         />
                         <p className="mt-2 text-sm text-gray-400">
-                            {get_text("text_input_hint", userLanguage) ||
+                            {get_text("text_input_hint", userLanguage).replace(
+                                "{action}",
+                                userLanguage === "he"
+                                    ? textContent.trim() !== ""
+                                        ? "ערכו"
+                                        : "הזנו"
+                                    : textContent.trim() !== ""
+                                      ? "Edit"
+                                      : "Enter",
+                            ) ||
                                 "Enter the text content you want to use for generating the escape room"}
                         </p>
                     </div>
@@ -523,18 +534,7 @@ export const TopicAndData = ({
             </div>
 
             {/* Error Message */}
-            {error && (
-                <div className="mb-4 p-3 bg-red-900/50 border border-red-500 rounded-lg text-red-200">
-                    {error}
-                </div>
-            )}
-
-            {/* Status Message */}
-            {status && (
-                <div className="mb-4 p-3 bg-green-900/50 border border-green-500 rounded-lg text-green-200">
-                    {status}
-                </div>
-            )}
+            {error && <ErrorMessage message={error} userLanguage={userLanguage} />}
 
             {/* Actions */}
             <div className="flex gap-2.5 items-center relative">
@@ -556,10 +556,9 @@ export const TopicAndData = ({
                         title={
                             get_text("should_be_completed_in_seconds", userLanguage)?.replace(
                                 "{seconds}",
-                                "60"
+                                "60",
                             ) || "Should be completed in 60 seconds"
-                        }>
-                    </span>
+                        }></span>
                 </button>
                 <button
                     onClick={() => {
@@ -570,7 +569,6 @@ export const TopicAndData = ({
                         setSelectedFile(null);
                         setTextContent("");
                         setUrlContent("");
-                        setStatus("");
                         setError("");
                     }}
                     disabled={
@@ -585,10 +583,24 @@ export const TopicAndData = ({
                 </button>
             </div>
             {/* Generate Content Dialog */}
-            <Dialog open={openDialogArticle} setOpen={setOpenDialogArticle} size="large" disableOverlayClose={false} data="article">
-                <div className="p-4 overflow-y-auto scrollbar" dir={userLanguage === "he" ? "rtl" : "ltr"}>
-                    <h2 className={`text-xl ${userLanguage === "he" ? "text-right" : "text-left"} text-white font-bold`}>{get_text("generate_content", userLanguage) || "Generate Content"}</h2>
-                    <p className={`text-sm ${userLanguage === "he" ? "text-right" : "text-left"} text-gray-200`}>{get_text("generate_content_explanation", userLanguage) || "Generate Content Explanation"}</p>
+            <Dialog
+                open={openDialogArticle}
+                setOpen={setOpenDialogArticle}
+                size="large"
+                disableOverlayClose={false}
+                data="article">
+                <div
+                    className="p-4 overflow-y-auto scrollbar"
+                    dir={userLanguage === "he" ? "rtl" : "ltr"}>
+                    <h2
+                        className={`text-xl ${userLanguage === "he" ? "text-right" : "text-left"} text-white font-bold`}>
+                        {get_text("generate_content", userLanguage) || "Generate Content"}
+                    </h2>
+                    <p
+                        className={`text-sm ${userLanguage === "he" ? "text-right" : "text-left"} text-gray-200`}>
+                        {get_text("generate_content_explanation", userLanguage) ||
+                            "Generate Content Explanation"}
+                    </p>
                     <div className="my-4">
                         <label className="flex text-lg mb-1.5 text-white">
                             {get_text("topic", userLanguage)}{" "}
@@ -602,7 +614,9 @@ export const TopicAndData = ({
                             type="text"
                             value={topic}
                             onChange={(e) => setTopic(e.target.value)}
-                            placeholder={get_text("enter_topic", userLanguage) || "Enter the main topic"}
+                            placeholder={
+                                get_text("enter_topic", userLanguage) || "Enter the main topic"
+                            }
                             className="w-full p-2 rounded-lg border border-gray-600 bg-gray-800 text-white placeholder-gray-400"
                         />
                     </div>
@@ -617,7 +631,8 @@ export const TopicAndData = ({
                             value={subTopic}
                             onChange={(e) => setSubTopic(e.target.value)}
                             placeholder={
-                                get_text("enter_sub_topic", userLanguage) || "Enter a sub-topic (optional)"
+                                get_text("enter_sub_topic", userLanguage) ||
+                                "Enter a sub-topic (optional)"
                             }
                             className="w-full p-2 rounded-lg border border-gray-600 bg-gray-800 text-white placeholder-gray-400"
                         />
@@ -629,36 +644,47 @@ export const TopicAndData = ({
                         <textarea
                             value={moreInstructions}
                             onChange={(e) => setMoreInstructions(e.target.value)}
-                            placeholder={get_text("enter_more_instructions", userLanguage) || "Enter more instructions (optional)"}
+                            placeholder={
+                                get_text("enter_more_instructions", userLanguage) ||
+                                "Enter more instructions (optional)"
+                            }
                             className="w-full h-20 p-3 rounded-lg border border-gray-600 bg-gray-800 text-white placeholder-gray-400 resize-none focus:outline-none focus:border-white scrollbar"
                         />
                     </div>
                     <div className="flex justify-between">
                         {textContent.trim() !== "" && (
                             <div className="flex items-center gap-2 mb-4">
-                                <input type="checkbox" onClick={() => setAddToContent(prev=>!prev)} className="bg-gray-700 hover:bg-gray-600 border border-gray-600 text-white py-2.5 px-3 rounded-lg cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"/>
+                                <input
+                                    type="checkbox"
+                                    onClick={() => setAddToContent((prev) => !prev)}
+                                    className="bg-gray-700 hover:bg-gray-600 border border-gray-600 text-white py-2.5 px-3 rounded-lg cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                />
                                 <label className="flex text-white text-lg">
-                                    {get_text("add_to_content", userLanguage) || "Add to current content"}
+                                    {get_text("add_to_content", userLanguage) ||
+                                        "Add to current content"}
                                 </label>
                             </div>
                         )}
                         <div className="flex items-center gap-2">
-                            <button onClick={() => {
-                                setOpenDialogArticle(false);
-                                setInputType("text")
-                            }} className="bg-gray-700 hover:bg-gray-600 border border-gray-600 text-white py-2.5 px-3 rounded-lg cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                            <button
+                                onClick={() => {
+                                    setOpenDialogArticle(false);
+                                    setInputType("text");
+                                }}
+                                className="bg-gray-700 hover:bg-gray-600 border border-gray-600 text-white py-2.5 px-3 rounded-lg cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                                 {get_text("cancel", userLanguage) || "Cancel"}
                             </button>
-                            <button 
+                            <button
                                 onClick={() => {
-                                    setInputType("text")
+                                    setInputType("text");
                                     generateContent();
-                                }} 
+                                }}
                                 disabled={loading}
                                 className="bg-cyan-500 hover:bg-cyan-600 border-0 py-2.5 px-3.5 rounded-lg cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                                 {loading
                                     ? get_text("processing", userLanguage) || "Processing..."
-                                    : get_text("generate_content", userLanguage) || "Generate Content"}
+                                    : get_text("generate_content", userLanguage) ||
+                                      "Generate Content"}
                             </button>
                         </div>
                     </div>

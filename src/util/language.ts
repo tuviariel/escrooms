@@ -245,8 +245,8 @@ const appContext: Translations = {
         ar: "",
     },
     text_input_hint: {
-        en: "Enter the text content you want to use for generating the escape room",
-        he: "הזן את תוכן הטקסט שברצונך להשתמש בו ליצירת חדר הבריחה",
+        en: "{action} the text content you want to use for generating the escape room",
+        he: "{action} את תוכן הטקסט שברצונך להשתמש בו ליצירת חדר הבריחה",
         ar: "",
     },
     url_input_hint: {

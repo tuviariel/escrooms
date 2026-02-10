@@ -8,7 +8,7 @@ import CreateQuizzes from "./CreateQuizzes";
 import PreviewPublish from "./PreviewPublish";
 import CreatorConsole from "./CreatorConsole";
 import RoomViewer from "./RoomViewer";
-import RoomEditor from "./RoomEditor";
+// import RoomEditor from "./RoomEditor";
 import { get_text } from "../../util/language";
 import { useUserContext } from "../../contexts/userStyleContext";
 import { userType } from "../../components/Login/Login";
@@ -45,13 +45,19 @@ export type subTopicsType = {
 
 export const RoomBuilder = () => {
     const location = useLocation();
-    const [roomId, setRoomId] = useState<string>(location.search.includes("roomId") ? location.search.split("roomId=")[1] : "");
-    const [step, setStep] = useState<stepType>(location.search.includes("roomId") ? "create_quizzes" : "topic_and_data");
+    const [roomId, setRoomId] = useState<string>(
+        location.search.includes("roomId") ? location.search.split("roomId=")[1] : "",
+    );
+    const [step, setStep] = useState<stepType>(
+        location.search.includes("roomId") ? "create_quizzes" : "topic_and_data",
+    );
     const { userLanguage } = useUserContext();
     const userRedux: any = useSelector((state: { user: userType }) => state.user);
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
     const [roomName, setRoomName] = useState<string>("");
-    const [status, setStatus] = useState<RoomBuilderStatus>("creating");
+    const [status, setStatus] = useState<RoomBuilderStatus>(
+        location.search.includes("roomId") ? "editing" : "creating",
+    );
     const [subTopics, setSubTopics] = useState<subTopicsType>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [stepInfo, setStepInfo] = useState<stepInfoType>({
@@ -95,7 +101,7 @@ export const RoomBuilder = () => {
         status: RoomBuilderStatus,
         step: stepType,
         id?: string,
-        name?: string
+        name?: string,
     ) => {
         console.log(
             "in handleMainShow: status-" +
@@ -105,7 +111,7 @@ export const RoomBuilder = () => {
                 ", id-" +
                 id +
                 ", name-" +
-                name
+                name,
         );
         if (status === "starting") {
             setStep("topic_and_data");
@@ -138,7 +144,7 @@ export const RoomBuilder = () => {
                 const currentKey = prev[step].key;
                 // Find next step name by key
                 const nextStepName = Object.keys(updatedStepInfo).find(
-                    (k) => updatedStepInfo[k as stepType].key === currentKey + 1
+                    (k) => updatedStepInfo[k as stepType].key === currentKey + 1,
                 ) as stepType | undefined;
                 if (nextStepName) {
                     setStep(nextStepName);
@@ -147,6 +153,7 @@ export const RoomBuilder = () => {
             });
             setRoomId(id || "");
             setRoomName(name || "");
+            setSubTopics([]);
         }
     };
 
@@ -165,13 +172,13 @@ export const RoomBuilder = () => {
                     isComplete: true,
                 },
             };
-        }); 
+        });
         // Remove query params from the URL when entering the "topic_and_data" step
         if (location.search.includes("roomId")) {
-            window.history.replaceState({}, '', location.pathname);
+            window.history.replaceState({}, "", location.pathname);
         }
-    }, [step, roomId]);
-    console.log("subTopics:", subTopics);
+    }, [step]);
+    // console.log("subTopics:", subTopics);
 
     return (
         <div className="flex w-full bg-gray-900 min-h-screen pt-16 overflow-x-hidden">
@@ -241,28 +248,30 @@ export const RoomBuilder = () => {
                             dir={userLanguage === "he" ? "rtl" : "ltr"}>
                             {stepInfo[step].name}
                         </h5>
-                        <div className="w-full">{stepInfo[step].name === get_text("create_quizzes", userLanguage)
-                            ? <CreateQuizzes
-                                setStep={setStep}
-                                roomId={roomId}
-                                roomName={roomName}
-                                subTopics={subTopics}
-                                setSubTopics={setSubTopics}
-                                setLoading={setLoading}
-                                loading={loading}
-                                status={status}
-                            />
-                            : stepInfo[step].name === get_text("topic_and_data", userLanguage)
-                            ? <TopicAndData
-                                setStep={setStep}
-                                setRoomId={setRoomId}
-                                setSubTopics={setSubTopics}
-                                setLoading={setLoading}
-                                loading={loading}
-                            />
-                            : stepInfo[step].name === get_text("preview_publish", userLanguage)
-                            ? <PreviewPublish />
-                            : null}
+                        <div className="w-full">
+                            {stepInfo[step].name === get_text("create_quizzes", userLanguage) ? (
+                                <CreateQuizzes
+                                    // setStep={setStep}
+                                    roomId={roomId}
+                                    roomName={roomName}
+                                    subTopics={subTopics}
+                                    setSubTopics={setSubTopics}
+                                    setLoading={setLoading}
+                                    loading={loading}
+                                    status={status}
+                                />
+                            ) : stepInfo[step].name === get_text("topic_and_data", userLanguage) ? (
+                                <TopicAndData
+                                    setStep={setStep}
+                                    setRoomId={setRoomId}
+                                    setSubTopics={setSubTopics}
+                                    setLoading={setLoading}
+                                    loading={loading}
+                                />
+                            ) : stepInfo[step].name ===
+                              get_text("preview_publish", userLanguage) ? (
+                                <PreviewPublish />
+                            ) : null}
                         </div>
                         {loading && (
                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-80 h-full w-full flex items-center justify-center ">
@@ -285,7 +294,17 @@ export const RoomBuilder = () => {
 
                 {status === "editing" && roomId && (
                     <div className="w-full">
-                        <RoomEditor roomId={roomId} setStep={setStep} setRoomId={setRoomId} />
+                        <CreateQuizzes
+                            // setStep={setStep}
+                            roomId={roomId}
+                            roomName={roomName}
+                            subTopics={subTopics}
+                            setSubTopics={setSubTopics}
+                            setLoading={setLoading}
+                            loading={loading}
+                            status={status}
+                        />
+                        {/* <RoomEditor roomId={roomId} setStep={setStep} setRoomId={setRoomId} /> */}
                     </div>
                 )}
             </div>
