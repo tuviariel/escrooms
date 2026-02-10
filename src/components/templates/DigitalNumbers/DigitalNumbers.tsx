@@ -21,8 +21,9 @@ export const DigitalNumbers = (props: TemplateProps) => {
     const digitsRef = useRef<HTMLDivElement>(null);
     const [nextLine, setNextLine] = useState(1);
     const [disabled, setDisabled] = useState(true);
+    const [changed, setChanged] = useState(false);
     const [isInitialized, setIsInitialized] = useState(false);
-
+    const [openStatus, setOpenStatus] = useState(-1);
     // Initialize active state from localStorage or create default
     const initializeActive = () => {
         const check = localStorage.getItem(data?.id);
@@ -110,7 +111,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
                 index: number;
                 icon: string;
             };
-        }[][]
+        }[][],
     ) => {
         let finished = true;
         Array.from(data.answer.toString()).map((number, i) => {
@@ -134,18 +135,32 @@ export const DigitalNumbers = (props: TemplateProps) => {
     };
 
     const toggleSegment = (position: number, index: number) => {
-        // console.log("Toggling segment:", position, index);
+        console.log("Toggling segment:", position, index);
         disabled && setDisabled(false);
         result && setResult("");
-        setActive((prevActive) => {
-            const updatedActive = [...prevActive];
-            updatedActive[position] = [...updatedActive[position]];
-            updatedActive[position][index] = {
-                ...updatedActive[position][index],
-                status: !updatedActive[position][index].status,
-            };
-            return updatedActive;
-        });
+        if (position === -1 && index === -1) {
+            setActive((prevActive) => {
+                const updatedActive = [...prevActive];
+                updatedActive.map((pos) => {
+                    pos.map((elem) => {
+                        elem.status = false;
+                    });
+                });
+                return updatedActive;
+            });
+            setChanged(false);
+        } else {
+            setActive((prevActive) => {
+                const updatedActive = [...prevActive];
+                updatedActive[position] = [...updatedActive[position]];
+                updatedActive[position][index] = {
+                    ...updatedActive[position][index],
+                    status: !updatedActive[position][index].status,
+                };
+                return updatedActive;
+            });
+            !changed && setChanged(true);
+        }
     };
 
     const toggleFromTable = (icon: string, index: number) => {
@@ -177,6 +192,13 @@ export const DigitalNumbers = (props: TemplateProps) => {
                     perspective: "1000px",
                     transformStyle: "preserve-3d",
                 }}>
+                {changed && (
+                    <div
+                        className="absolute top-1 left-5 bg-red-500 w-fit h-5 z-90 cursor-pointer text-center px-1 rounded-lg"
+                        onClick={() => toggleSegment(-1, -1)}>
+                        {get_text("reset", userLanguage) || "reset"}
+                    </div>
+                )}
                 <table
                     className="table-auto w-full h-full text-right border-amber-50 text-medium overflow-y-scroll border-4"
                     style={{
@@ -215,7 +237,31 @@ export const DigitalNumbers = (props: TemplateProps) => {
                                         key={i}
                                         className=""
                                         ref={i === nextLine ? nextLineRef : null}>
-                                        <td className="border border-amber-50 px-2">
+                                        <td className="border border-amber-50 pl-2 pr-4 flex relative">
+                                            <div className="absolute top-0 -right-2">
+                                                <div
+                                                    className={`-ml-10 p-auto rounded-full ${openStatus === i ? "bg-emerald-300" : "bg-amber-300"} w-5 h-5 text-center cursor-pointer relative`}
+                                                    onClick={() => {
+                                                        setOpenStatus((prev) =>
+                                                            prev !== i ? i : -1,
+                                                        );
+                                                    }}
+                                                    onMouseLeave={() => setOpenStatus(-1)}
+                                                    title={get_text("hint", userLanguage) + "..."}>
+                                                    ?
+                                                    {openStatus === i && (
+                                                        <div
+                                                            className="absolute right-6 bottom-0 flex flex-col bg-opacity-80 p-2 rounded-lg border-2 border-amber-400 text-right z-30 bg-gray-900 w-56"
+                                                            dir={
+                                                                userLanguage === "he"
+                                                                    ? "rtl"
+                                                                    : "ltr"
+                                                            }>
+                                                            {q.hint || "No hint available"}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
                                             {q.situationAndAction}
                                         </td>
                                         <td
