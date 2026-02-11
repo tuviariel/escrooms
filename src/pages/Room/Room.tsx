@@ -68,7 +68,7 @@ export const Room = () => {
                     y: number;
                 }[];
             };
-        }) => state.quizList
+        }) => state.quizList,
     );
     const quizList = quizL?.list;
     const setQuizList = (list: any[]) => {
@@ -203,7 +203,7 @@ export const Room = () => {
     }, []);
 
     const [orientation, setOrientation] = useState(
-        window.matchMedia("(orientation: portrait)").matches ? "portrait" : "landscape"
+        window.matchMedia("(orientation: portrait)").matches ? "portrait" : "landscape",
     );
     useEffect(() => {
         if (document.documentElement.requestFullscreen) {
@@ -251,10 +251,12 @@ export const Room = () => {
                                     }}
                                     alt={get_text("back_to_main", userLanguage)}
                                     title={get_text("back_to_main", userLanguage)}
-                                    className="cursor-pointer h-8 lg:h-16 w-8 lg:w-16 z-70 md:h-12 md:w-12 fixed left-10 lg:left-19 bottom-0 lg:bottom-24 p-1 rounded-full bg-gray-100 border-2 hover:border-amber-700"
+                                    className="cursor-pointer h-8 lg:h-18 w-8 lg:w-18 z-70 md:h-12 md:w-12 fixed left-10 lg:left-18 bottom-0 lg:bottom-6 p-1 rounded-full bg-gray-100 border-2 hover:border-amber-700"
                                     onClick={() => setQuizNumber(-1)}
                                 />
-                                {roomQuizzes.length > 0 && roomQuizzes[quizNumber] && <QuizTemplate data={roomQuizzes[quizNumber]} />}
+                                {roomQuizzes.length > 0 && roomQuizzes[quizNumber] && (
+                                    <QuizTemplate data={roomQuizzes[quizNumber]} />
+                                )}
                             </div>
                         )}
 
@@ -281,7 +283,9 @@ export const Room = () => {
                                 <motion.div
                                     className={`absolute inset-0 w-full h-full bg-cover bg-center z-0`}
                                     style={{
-                                        backgroundImage: roomData?.mainImage ? `url(${URLMainImage})` : `url(${defaultMainImage})`,
+                                        backgroundImage: roomData?.mainImage
+                                            ? `url(${URLMainImage})`
+                                            : `url(${defaultMainImage})`,
                                         x: bgX,
                                         y: bgY,
                                         scale: bgScale,
@@ -577,12 +581,12 @@ function DustParticle({ mouseX, mouseY }: { mouseX: any; mouseY: any }) {
     const x = useTransform(
         mouseX,
         [-0.5, 0.5],
-        [`${-30 * (Math.random() + 0.5)}px`, `${30 * (Math.random() + 0.5)}px`]
+        [`${-30 * (Math.random() + 0.5)}px`, `${30 * (Math.random() + 0.5)}px`],
     );
     const y = useTransform(
         mouseY,
         [-0.5, 0.5],
-        [`${-30 * (Math.random() + 0.5)}px`, `${30 * (Math.random() + 0.5)}px`]
+        [`${-30 * (Math.random() + 0.5)}px`, `${30 * (Math.random() + 0.5)}px`],
     );
 
     return (

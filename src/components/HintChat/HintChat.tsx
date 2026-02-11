@@ -78,12 +78,12 @@ export const HintChat = (props: hintChatProps) => {
 
     return (
         <div
-            className="fixed right-9 lg:right-18 bottom-1 lg:bottom-24 z-20"
+            className="fixed right-9 lg:right-16 bottom-1 lg:bottom-6 z-20"
             dir={userLanguage === "he" ? "rtl" : "ltr"}>
             <div className="relative flex">
                 <div
-                    className={`bg-amber-500 rounded-full w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 p-auto text-black md:text-3xl text-xl lg:text-5xl text-center cursor-pointer border-2 border-black ${
-                        open ? "border-amber-600" : "border-amber-900"
+                    className={`rounded-full w-8 h-8 md:w-12 md:h-12 lg:w-18 lg:h-18 p-auto text-black md:text-3xl text-xl lg:text-6xl text-center cursor-pointer border-4 ${
+                        open ? "border-green-600" : "border-gray-900"
                     }`}
                     style={{
                         backgroundColor: open
@@ -99,14 +99,14 @@ export const HintChat = (props: hintChatProps) => {
                     ?
                 </div>
                 {open && (
-                    <div className="absolute md:bottom-14 bottom-10 right-0 rounded-3xl bg-amber-300 md:h-88 h-72 w-64 flex flex-col p-2 md:text-base text-sm">
-                        <div className="overflow-auto scrollbar flex flex-col">
+                    <div className="absolute lg:bottom-20 md:bottom-14 bottom-10 right-0 rounded-3xl bg-gray-900 md:h-88 h-72 w-64 flex flex-col p-2 md:text-base text-sm text-white border-2 border-gray-700">
+                        <div className="overflow-auto scrollbar flex flex-col border-b-2 border-gray-700">
                             {chat.map((item, i) => {
                                 if (item.user === "bot")
                                     return (
                                         <div
                                             key={i}
-                                            className="flex mr-5 ml-1 text-right bg-amber-400 p-1 rounded-2xl mb-0.5"
+                                            className="flex mr-5 ml-1 text-right bg-gray-700 p-1 rounded-2xl mb-0.5"
                                             dir="rtl"
                                             ref={
                                                 i === chat.length - 1 && !botTyping
@@ -120,7 +120,7 @@ export const HintChat = (props: hintChatProps) => {
                                     return (
                                         <div
                                             key={i}
-                                            className="flex ml-5 mr-1 text-right bg-amber-500 p-1 rounded-2xl mb-0.5"
+                                            className="flex ml-5 mr-1 text-right bg-green-900 p-1 rounded-2xl mb-0.5"
                                             dir="rtl"
                                             ref={
                                                 i === chat.length - 1 && !botTyping
@@ -160,7 +160,7 @@ export const HintChat = (props: hintChatProps) => {
                                 <div
                                     dir="rtl"
                                     onClick={() => userSend(get_text("give_hint", userLanguage))}
-                                    className={`bg-amber-600 rounded-2xl md:p-2 p-1 md:h-10 h-8 md:mt-2 mt-4 cursor-pointer border-black border-b-2`}>
+                                    className={`bg-green-900 rounded-2xl md:p-2 p-1 md:h-10 h-8 md:mt-2 mt-4 cursor-pointer border-green-600 border-2 hover:border-green-500 hover:scale-105 transition-all duration-300`}>
                                     {get_text("give_hint", userLanguage)}
                                 </div>
                             )}
