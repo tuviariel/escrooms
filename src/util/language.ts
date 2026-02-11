@@ -316,7 +316,7 @@ const appContext: Translations = {
     public: { en: "Escape room is Public", he: "החדר בריחה ציבורי", ar: "" },
     private: { en: "Escape room is Private", he: "החדר בריחה פרטי", ar: "" },
     room_progress: { en: "Escape room Progress", he: "התקדמות בחדר בריחה", ar: "" },
-    reset: { en: "Reset", he: "איפוס", ar: "" },
+    reset: { en: "Reset chosen answers", he: "איפוס תשובות נבחרות", ar: "" },
     current_objective: { en: "Current Objective:", he: "משימה נוכחית:", ar: "" },
     find_quiz_num: { en: "Find Quiz #", he: "מצא חידה #", ar: "" },
     room_field: { en: "Field of Studies", he: "תחום לימודים עיקרי", ar: "" },

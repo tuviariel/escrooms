@@ -135,7 +135,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
     };
 
     const toggleSegment = (position: number, index: number) => {
-        console.log("Toggling segment:", position, index);
+        // console.log("Toggling segment:", position, index);
         disabled && setDisabled(false);
         result && setResult("");
         if (position === -1 && index === -1) {
@@ -194,7 +194,7 @@ export const DigitalNumbers = (props: TemplateProps) => {
                 }}>
                 {changed && (
                     <div
-                        className="absolute top-1 left-5 bg-red-500 w-fit h-5 z-90 cursor-pointer text-center px-1 rounded-lg"
+                        className="absolute top-0 left-5 lg:left-7 flex items-center justify-center bg-red-500 w-fit h-5 border-2 border-red-900 z-10 cursor-pointer text-center pb-1 px-2 rounded-lg"
                         onClick={() => toggleSegment(-1, -1)}>
                         {get_text("reset", userLanguage) || "reset"}
                     </div>

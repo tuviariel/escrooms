@@ -22,6 +22,7 @@ export const Grid = (props: TemplateProps) => {
         }[][]
     >([]);
     const [disabled, setDisabled] = useState(true);
+    const [changed, setChanged] = useState(false);
     const { roomColor } = useRoomContext();
     useEffect(() => {
         const setGrid = () => {
@@ -58,12 +59,12 @@ export const Grid = (props: TemplateProps) => {
                     for (let charI = 0; charI < rightAnswer.length; charI++) {
                         let char: string = rightAnswer[charI];
                         const arr = new Array(
-                            charI === 0 ? GridCharObj[char].width : 1 + GridCharObj[char].width
+                            charI === 0 ? GridCharObj[char].width : 1 + GridCharObj[char].width,
                         )
                             .fill(null)
                             .map((_, IInChar) => {
                                 const isCorrect = GridCharObj[char].points[levelI].includes(
-                                    charI === 0 ? levelI * 4 + IInChar + 1 : levelI * 4 + IInChar
+                                    charI === 0 ? levelI * 4 + IInChar + 1 : levelI * 4 + IInChar,
                                 );
                                 isCorrect
                                     ? correctI === correctMax
@@ -115,13 +116,29 @@ export const Grid = (props: TemplateProps) => {
     const toggleSegment = (position: number, index: number) => {
         disabled && setDisabled(false);
         result && setResult("");
-        const updatedActive = [...active];
-        updatedActive[position] = [...updatedActive[position]];
-        updatedActive[position][index] = {
-            ...updatedActive[position][index],
-            status: !updatedActive[position][index].status,
-        };
-        setActive(updatedActive);
+        if (position === -1 && index === -1) {
+            setActive((prevActive) => {
+                const updatedActive = [...prevActive];
+                updatedActive.map((pos) => {
+                    pos.map((elem) => {
+                        elem.status = false;
+                    });
+                });
+                return updatedActive;
+            });
+            setChanged(false);
+        } else {
+            setActive((prevActive) => {
+                const updatedActive = [...prevActive];
+                updatedActive[position] = [...updatedActive[position]];
+                updatedActive[position][index] = {
+                    ...updatedActive[position][index],
+                    status: !updatedActive[position][index].status,
+                };
+                return updatedActive;
+            });
+            !changed && setChanged(true);
+        }
     };
     console.log(active);
     return (
@@ -145,6 +162,13 @@ export const Grid = (props: TemplateProps) => {
                 }}
                 dir="rtl">
                 <>
+                    {changed && (
+                        <div
+                            className="absolute top-0 left-1/3 -translate-x-1/2 flex items-center justify-center bg-red-500 w-fit h-5 border-2 border-red-900 z-10 cursor-pointer text-center pb-1 px-2 rounded-lg"
+                            onClick={() => toggleSegment(-1, -1)}>
+                            {get_text("reset", userLanguage) || "reset"}
+                        </div>
+                    )}
                     {active.length > 0 ? (
                         <div
                             className=" border-4 border-amber-800"
