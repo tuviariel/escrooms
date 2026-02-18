@@ -46,6 +46,7 @@ export const roomsService = {
     async getRoomByUser(userId: string) {
         const client = await getClient();
         console.log(userId);
+        if (!userId) return [];
         const rooms = await client.models.Room.list({
             filter: { creatorId: { eq: userId } },
         });
@@ -141,7 +142,7 @@ export const fileStorage = {
                     uploadData({
                         path: `images/${roomId}/${file.name}`,
                         data: file,
-                    }).result
+                    }).result,
             );
             const results = await Promise.all(uploadPromises);
             console.log("Uploaded all files:", results);

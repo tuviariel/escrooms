@@ -1,5 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, Gift, HelpCircle, MessageCircle, Plus } from "lucide-react";
+import {
+    ArrowRight,
+    ChevronLeft,
+    ChevronRight,
+    Gift,
+    HelpCircle,
+    MessageCircle,
+    Plus,
+} from "lucide-react";
 import { RoomType } from "../../Dashboard/Dashboard";
 import { userType } from "../../../components/Login/Login";
 import { roomsService } from "../../../services/service";
@@ -7,9 +15,9 @@ import { get_text } from "../../../util/language";
 import { useUserContext } from "../../../contexts/userStyleContext";
 import RoomCard from "./RoomCard";
 import { RoomBuilderStatus, stepType } from "../RoomBuilder";
+import { useSelector } from "react-redux";
 
 type CreatorConsoleProps = {
-    user: userType;
     roomId: string;
     setSidebarOpen: (o: boolean) => void;
     sidebarOpen: boolean;
@@ -21,7 +29,6 @@ type CreatorConsoleProps = {
 export const CreatorConsole = ({
     handleMainShow,
     roomId,
-    user,
     setSidebarOpen,
     sidebarOpen,
     status,
@@ -29,45 +36,59 @@ export const CreatorConsole = ({
 }: CreatorConsoleProps) => {
     const [rooms, setRooms] = useState<RoomType[]>([]);
     const [openOptions, setOpenOptions] = useState<boolean[]>([]);
+    const [message, setMessage] = useState<string>("");
     const { userLanguage } = useUserContext();
+    const userRedux: any = useSelector((state: { user: userType }) => state.user);
     const currentRoomRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const getUserRooms = async () => {
-            console.log(user);
-            if (user.id !== "") {
-                const rooms = await roomsService.getRoomByUser(user.id);
-                console.log(rooms);
-                // After fetching, iterate all rooms and update something about them to manually change users rooms collection in the database:
-                // if (rooms && Array.isArray(rooms)) {
-                //     // Update 'completed' to "completed" for all rooms
-                // await Promise.all(
-                //     rooms.map(async (room: any) => {
-                //         // Only update if not already set
-                //         // if (room.name === "Apples") {
-                //             await roomsService.deleteRoom(room.id);
-                //         // }
-                //     })
-                // );
-                // }
-                setRooms(rooms);
-                setOpenOptions(Array(rooms.length).fill(false));
+        const getUserRooms = async (userId: string) => {
+            console.log(userId);
+            if (userId && userId !== "") {
+                try {
+                    const rooms = await roomsService.getRoomByUser(userId);
+                    console.log(rooms);
+                    // After fetching, iterate all rooms and update something about them to manually change users rooms collection in the database:
+                    // if (rooms && Array.isArray(rooms)) {
+                    //     // Update 'completed' to "completed" for all rooms
+                    // await Promise.all(
+                    //     rooms.map(async (room: any) => {
+                    //         // Only update if not already set
+                    //         // if (room.name === "Apples") {
+                    //             await roomsService.deleteRoom(room.id);
+                    //         // }
+                    //     })
+                    // );
+                    // }
+                    if (rooms && rooms.length === 0) {
+                        setMessage(get_text("no_escape_rooms", userLanguage));
+                    } else {
+                        setRooms(rooms);
+                        setOpenOptions(Array(rooms.length).fill(false));
+                        setMessage("");
+                    }
+                } catch (error) {
+                    console.error("Error fetching rooms:", error);
+                    setMessage(get_text("error_fetching_rooms", userLanguage));
+                }
             } else {
-                console.log(user);
+                console.log(userRedux.user);
             }
         };
-        console.log(user, user.id, !roomId, rooms, rooms.length);
+        console.log(userRedux.user, userRedux.user.id, !roomId, rooms, rooms.length);
         if (
-            (user && !roomId && rooms && rooms.length === 0) ||
-            (roomId &&
+            (userRedux.user && userRedux.user.id && !roomId && rooms && rooms.length === 0) ||
+            (userRedux.user &&
+                userRedux.user.id &&
+                roomId &&
                 ((rooms &&
                     rooms.length > 0 &&
                     rooms.findIndex((room) => room.id === roomId) === -1) ||
                     rooms.length === 0))
         ) {
-            getUserRooms();
+            getUserRooms(userRedux.user.id);
         }
-    }, [user, roomId]);
+    }, [userRedux.user, roomId]);
     // Auto scroll to show the roomCard of the roomId if it exists
     useEffect(() => {
         const currentIndex = rooms.findIndex((room) => room.id === roomId);
@@ -171,24 +192,36 @@ export const CreatorConsole = ({
                 )}
             </div>
             <div className="flex-1 overflow-y-auto lg:max-h-96 max-h-44 scrollbar overflow-x-hidden px-3 py-2 space-y-3">
-                {rooms.map((room, i) => {
-                    return (
-                        <div key={room.id} ref={room.id === roomId ? currentRoomRef : null}>
-                            <RoomCard
-                                room={room}
-                                step={step}
-                                i={i}
-                                sidebarOpen={sidebarOpen}
-                                openOptions={openOptions}
-                                handleOpenDots={handleOpenDots}
-                                handleDeleteRoom={handleDeleteRoom}
-                                publishRoom={publishRoom}
-                                handleMainShow={handleMainShow}
-                                isSelected={room.id === roomId}
-                            />
-                        </div>
-                    );
-                })}
+                {rooms && rooms.length > 0 ? (
+                    rooms.map((room, i) => {
+                        return (
+                            <div key={room.id} ref={room.id === roomId ? currentRoomRef : null}>
+                                <RoomCard
+                                    room={room}
+                                    step={step}
+                                    i={i}
+                                    sidebarOpen={sidebarOpen}
+                                    openOptions={openOptions}
+                                    handleOpenDots={handleOpenDots}
+                                    handleDeleteRoom={handleDeleteRoom}
+                                    publishRoom={publishRoom}
+                                    handleMainShow={handleMainShow}
+                                    isSelected={room.id === roomId}
+                                />
+                            </div>
+                        );
+                    })
+                ) : (
+                    <div className="text-white text-center">
+                        ({message})
+                        {message === get_text("no_escape_rooms", userLanguage) && (
+                            <div className="relative mt-4 flex items-center justify-center">
+                                {get_text("begin_create_room", userLanguage)}
+                                <ArrowRight size={30} className="absolute -right-4 " />
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
 
             {/* User Options at Bottom */}
@@ -209,7 +242,7 @@ export const CreatorConsole = ({
                         {sidebarOpen && <span>{get_text("contact_support", userLanguage)}</span>}
                     </button>
                 </a>
-                {user.subscription === "free" && (
+                {userRedux.user && userRedux.user.subscription === "free" && (
                     <button className="w-full flex items-center gap-2 hover:bg-gray-700 p-2 rounded-lg transition-colors text-sm text-white cursor-pointer">
                         <Gift size={18} />
                         {sidebarOpen && (

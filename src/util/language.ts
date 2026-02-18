@@ -593,6 +593,21 @@ const appContext: Translations = {
         he: "חדר בריחה - {room_name}",
         ar: "",
     },
+    no_escape_rooms: {
+        en: "No Escape-Rooms found",
+        he: "לא נמצאו חדרי בריחה",
+        ar: "",
+    },
+    error_fetching_rooms: {
+        en: "Error fetching Escape-Rooms",
+        he: "שגיאה בטעינת חדרי בריחה",
+        ar: "",
+    },
+    begin_create_room: {
+        en: "Begin by creating your first room",
+        he: "התחל ליצור את החדר הראשון שלך",
+        ar: "",
+    },
 };
 
 export const get_text = (name: string, lang: string) => {

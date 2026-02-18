@@ -39,13 +39,13 @@ export const Dashboard = () => {
                 const rooms = await roomsService.listRooms();
                 console.log("Fetched rooms:", rooms);
                 if (rooms?.length === 0) {
-                    setErrorMessage("No Escape-Rooms found");
+                    setErrorMessage(get_text("no_escape_rooms", userLanguage));
                 } else {
                     setRoomsList(rooms);
                 }
             } catch (errors) {
                 console.error("Error fetching rooms:", errors);
-                setErrorMessage("Error fetching Escape-Rooms");
+                setErrorMessage(get_text("error_fetching_rooms", userLanguage));
             }
         };
         getRooms();

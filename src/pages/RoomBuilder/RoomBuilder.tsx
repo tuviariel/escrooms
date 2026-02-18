@@ -11,8 +11,6 @@ import RoomViewer from "./RoomViewer";
 // import RoomEditor from "./RoomEditor";
 import { get_text } from "../../util/language";
 import { useUserContext } from "../../contexts/userStyleContext";
-import { userType } from "../../components/Login/Login";
-import { useSelector } from "react-redux";
 import loadingSpinner from "../../assets/images/loading.gif";
 
 export type stepType =
@@ -52,7 +50,6 @@ export const RoomBuilder = () => {
         location.search.includes("roomId") ? "create_quizzes" : "topic_and_data",
     );
     const { userLanguage } = useUserContext();
-    const userRedux: any = useSelector((state: { user: userType }) => state.user);
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
     const [roomName, setRoomName] = useState<string>("");
     const [status, setStatus] = useState<RoomBuilderStatus>(
@@ -158,7 +155,7 @@ export const RoomBuilder = () => {
     };
 
     useEffect(() => {
-        if (document.exitFullscreen) {
+        if (document.exitFullscreen && location.search.includes("roomId")) {
             document.exitFullscreen();
         }
         document.title = get_text("escape_room_builder", userLanguage);
@@ -184,7 +181,6 @@ export const RoomBuilder = () => {
         <div className="flex w-full bg-gray-900 min-h-screen pt-16 overflow-x-hidden">
             <div className={`${sidebarOpen ? "w-3/12" : "w-1/12"}`}>
                 <CreatorConsole
-                    user={userRedux}
                     setSidebarOpen={setSidebarOpen}
                     sidebarOpen={sidebarOpen}
                     status={status}
