@@ -115,7 +115,7 @@ export const Dashboard = () => {
                         dir={userLanguage === "he" ? "rtl" : "ltr"}>
                         {get_text("hero_title", userLanguage)}
                     </h3>
-                    {/* <input type="file" multiple onChange={createRoom} className="" /> */}
+                    <input type="file" multiple onChange={createRoom} className="hidden" />
                     <p
                         className="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto"
                         dir={userLanguage === "he" ? "rtl" : "ltr"}>
