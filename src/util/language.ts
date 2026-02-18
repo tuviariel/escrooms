@@ -530,8 +530,8 @@ const appContext: Translations = {
         ar: "",
     },
     hide_colors: {
-        en: "Hide Colors",
-        he: "הסתר צבעים",
+        en: "Show Quiz Info",
+        he: "הצג נתוני החידה",
         ar: "",
     },
     login_required: {
@@ -576,6 +576,21 @@ const appContext: Translations = {
     add_to_content: {
         en: "Add to current content",
         he: "הוסף לתוכן הנוכחי",
+        ar: "",
+    },
+    ai_escape_rooms: {
+        en: "AI Escape Rooms",
+        he: "חדרי בריחה מג'ונרטים",
+        ar: "",
+    },
+    escape_room_builder: {
+        en: "Escape Room Builder - Private Page",
+        he: "בונה חדר בריחה - דף פרטי",
+        ar: "",
+    },
+    escape_room: {
+        en: "Escape Room - {room_name}",
+        he: "חדר בריחה - {room_name}",
         ar: "",
     },
 };

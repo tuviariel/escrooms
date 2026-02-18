@@ -227,6 +227,12 @@ export const Room = () => {
         };
         getUrl(roomData.mainImage || "");
     }, [roomData]);
+    useEffect(() => {
+        document.title = get_text("escape_room", userLanguage).replace(
+            "{room_name}",
+            roomData?.name || "",
+        );
+    }, [userLanguage]);
     console.log("activeModuleId:", activeModuleId, quizList);
     return (
         <>

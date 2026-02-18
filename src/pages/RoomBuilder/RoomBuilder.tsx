@@ -161,8 +161,8 @@ export const RoomBuilder = () => {
         if (document.exitFullscreen) {
             document.exitFullscreen();
         }
-        // getting all room data if in middle of creating room:
-    }, []);
+        document.title = get_text("escape_room_builder", userLanguage);
+    }, [userLanguage]);
     useEffect(() => {
         setStepInfo((prev) => {
             return {
