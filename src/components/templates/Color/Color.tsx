@@ -539,7 +539,7 @@ export const Color: React.FC<TemplateProps> = (props) => {
                                                         : "?"}
                                                 </div>
                                                 <div
-                                                    className={`relative lg:w-20 w-16 lg:h-12 h-10 flex flex-col content-center rounded-xl my-auto py-auto items-center justify-center text-white cursor-pointer overflow-hidden
+                                                    className={`relative lg:w-20 w-16 lg:h-12 h-10 flex flex-col content-center rounded-xl my-auto py-auto items-center justify-center text-white overflow-hidden
                                                             ${
                                                                 answerData &&
                                                                 answerData[1][0] ===
@@ -588,7 +588,13 @@ export const Color: React.FC<TemplateProps> = (props) => {
             )}
             {canCount && (
                 <button
-                    className="absolute lg:bottom-52 bottom-18 lg:right-14 right-10 z-20 px-3 h-10 rounded-lg text-white text-2xl bg-gray-500"
+                    className="absolute lg:bottom-52 bottom-18 lg:right-14 right-10 z-20 px-3 h-10 rounded-lg text-white text-2xl bg-gray-500 cursor-pointer border"
+                    style={{
+                        borderImage:
+                            "linear-gradient(90deg, #f59e42 0%, #a78bfa 25%, #34d399 50%, #ec4899 75%, #06b6d4 100%) 1",
+                        borderStyle: "solid",
+                        borderWidth: "6px",
+                    }}
                     onClick={() => {
                         setShowColors((prev) => !prev);
                     }}>
