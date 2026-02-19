@@ -2,6 +2,7 @@ import { getClient, isAdmin } from "./client";
 import { fetchUserAttributes } from "aws-amplify/auth";
 import { uploadData, getUrl, remove } from "aws-amplify/storage";
 import axios from "axios";
+import { config } from "../util/config";
 // import { LambdaClient, InvokeCommand } from "@aws-sdk/client-lambda";
 // import { fetchAuthSession } from "aws-amplify/auth";
 // import outputs from "../../amplify_outputs.json";
@@ -171,7 +172,7 @@ export const fileStorage = {
 export const aiService = {
     async openAI(prompt: string, type: string) {
         console.log("prompt:", prompt, "type:", type);
-        const res = await axios.post("http://16.170.202.228/generate", {
+        const res = await axios.post(`${config["AI_GEN_URL"]}/generate`, {
             prompt,
             type,
         });
